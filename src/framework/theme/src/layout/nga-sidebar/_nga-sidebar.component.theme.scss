@@ -1,0 +1,14 @@
+@import '../../core/style/_nga.global.scss';
+@import '../../core/theming/_nga.theming.scss';
+
+//@mixin nga-layout-theme($nga-theme) {
+//  $global: map-get($nga-theme, global);
+//
+//  $background: map-get($global, background);
+//  $foreground: map-get($global, foreground);
+//
+//  /deep/ nga-layout {
+//    background: $background;
+//    color: $foreground;
+//  }
+//}

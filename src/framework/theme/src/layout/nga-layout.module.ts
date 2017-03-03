@@ -12,6 +12,9 @@ import { NgaLayoutComponent } from './nga-layout/nga-layout.component';
 import { NgaLayoutSidebarComponent } from './nga-layout/nga-layout-sidebar/nga-layout-sidebar.component';
 import { NgaLayoutContentComponent } from './nga-layout/nga-layout-content/nga-layout-content.component';
 
+// nga-sidebar
+import { NgaSidebarComponent } from './nga-sidebar/nga-sidebar.component';
+
 const NGA_LAYOUT_COMPONENTS = [
   NgaCardComponent,
   NgaCardHeaderComponent,
@@ -20,6 +23,7 @@ const NGA_LAYOUT_COMPONENTS = [
   NgaLayoutComponent,
   NgaLayoutSidebarComponent,
   NgaLayoutContentComponent,
+  NgaSidebarComponent,
 ];
 
 @NgModule({

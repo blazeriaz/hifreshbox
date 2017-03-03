@@ -28,3 +28,10 @@
 ///deep/ nga-app-root {
 //  @include nga-theme($nga-theme);
 //}
+
+
+// TODO: think where the global style like this would go
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
