@@ -33,6 +33,7 @@ import {
   NgaMenuItem4Component,
 } from './menu-test/menu-test.component';
 import { NgaUserTestComponent } from './user-test/user-test.component';
+import { NgaBootstrapTestComponent } from './bootstrap-test/bootstrap-test.component';
 
 export const routes: Routes = [
   {
@@ -166,6 +167,10 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: 'framework/auth/auth.module#NgaAuthModule',
+  },
+  {
+    path: 'bootstrap',
+    component: NgaBootstrapTestComponent,
   },
   {
     path: '**',

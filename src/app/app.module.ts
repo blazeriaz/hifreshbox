@@ -50,6 +50,8 @@ import {
 import { NgaUserTestComponent } from './user-test/user-test.component';
 import { NgaAuthModule } from '../framework/auth';
 import { NgaDummyAuthProvider, NgaEmailPassAuthProvider } from '../framework/auth';
+import { NgaBootstrapModule } from '../framework/bootstrap/bootstrap.module';
+import { NgaBootstrapTestComponent } from './bootstrap-test/bootstrap-test.component';
 
 import { routes } from './app.routes';
 
@@ -79,6 +81,7 @@ const NGA_TEST_COMPONENTS = [
   NgaMenuItem4Component,
   NgaUserTestComponent,
   NgaThemeChangeTestComponent,
+  NgaBootstrapTestComponent,
 ];
 
 @NgModule({
@@ -137,6 +140,7 @@ const NGA_TEST_COMPONENTS = [
         },
       },
     }),
+    NgaBootstrapModule.forRoot(),
   ],
   declarations: [
     ...NGA_TEST_COMPONENTS,
