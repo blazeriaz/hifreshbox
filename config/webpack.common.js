@@ -27,7 +27,7 @@ const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
   title: 'ng2-admin - Angular 2 Admin Template',
   description: 'Free Angular 2 and Bootstrap 4 Admin Template',
-  baseUrl: '/',
+  baseUrl: '/ng2-admin/',
   isDevServer: helpers.isWebpackDevServer()
 };
 
