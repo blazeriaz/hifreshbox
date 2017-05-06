@@ -10,9 +10,10 @@
   "repository": "git+https://github.com/akveo/ng2-admin.git",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:hmr": "ng serve --hmr",
-    "start:aot": "ng serve --aot",
+    "start": "ng serve --app playground",
+    "start:hmr": "ng serve  --app playground --hmr",
+    "start:aot": "ng serve  --app playground --aot",
+    "docs:serve": "ng serve --app docs",
     "build": "rimraf dist && ng build",
     "build:prod": "npm run build -- --prod",
     "build:prod:aot": "npm run build -- --aot",
