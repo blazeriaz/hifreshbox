@@ -8,6 +8,7 @@ import { Injectable, Optional, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { List } from 'immutable';
 import 'rxjs/add/operator/publish';
 
@@ -23,6 +24,7 @@ export class NgaMenuService {
   private itemClick$ = new Subject();
   private addItems$ = new Subject();
   private navigateHome$ = new Subject();
+  private getSelectedItem$ = new Subject();
 
   private stack = List<NgaMenuItem>();
   private items = List<NgaMenuItem>();
@@ -67,6 +69,14 @@ export class NgaMenuService {
     this.navigateHome$.next({ tag });
   }
 
+  getSelectedItem(tag?: string) {
+    const listener = new BehaviorSubject<{ tag: string, item: NgaMenuItem }>(null);
+
+    this.getSelectedItem$.next({ tag, listener });
+
+    return listener.asObservable();
+  }
+
   onItemsChanges(): Observable<{ tag: string, items: List<NgaMenuItem> }> {
     return this.itemsChanges$.publish().refCount();
   }
@@ -81,6 +91,10 @@ export class NgaMenuService {
 
   onNavigateHome(): Observable<{ tag: string }> {
     return this.navigateHome$.publish().refCount();
+  }
+
+  onGetSelectedItem(): Observable<{ tag: string, listener: BehaviorSubject<{ tag: string, item: NgaMenuItem }> }> {
+    return this.getSelectedItem$.publish().refCount();
   }
 
   private setParent(parent: NgaMenuItem) {
