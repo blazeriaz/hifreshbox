@@ -19,10 +19,8 @@ export class NgaSuperSearchService {
 
   constructor(private themeService: NgaThemeService) { }
 
-  onActivateSearch(searchType: string) {
-    this.themeService.appendLayoutClass(searchType);
-    setTimeout(() => this.themeService.appendLayoutClass('with-search'), 1);
-    this.searchActivations$.next(searchType);
+  activate(tag?: string) {
+    this.searchActivations$.next({tag: tag});
   }
 
   onDeactivateSearch(searchType) {
@@ -35,7 +33,7 @@ export class NgaSuperSearchService {
     this.searchTerms$.next(term);
   }
 
-  searchActivations(): Observable<any> {
+  onActivate(): Observable<any> {
     return this.searchActivations$.share();
   }
 

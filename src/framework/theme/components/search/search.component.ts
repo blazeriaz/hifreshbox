@@ -155,6 +155,8 @@ export class NgaSearchComponent implements AfterViewInit, OnDestroy {
   attachedSearchField: boolean = false;
 
   @Input() placeholder: string = 'akveo';
+  @Input() tag: string = '';
+
   @ViewChild('attachedSearchField', { read: ViewContainerRef }) attachedSearchContainer: ViewContainerRef;
 
   private searchFieldComponentRef: ComponentRef<any> = null;
@@ -162,7 +164,26 @@ export class NgaSearchComponent implements AfterViewInit, OnDestroy {
 
   constructor(private searchService: NgaSuperSearchService,
               private themeService: NgaThemeService,
-              private componentFactoryResolver: ComponentFactoryResolver) {}
+              private componentFactoryResolver: ComponentFactoryResolver) {
+
+    this.searchService.onActivate()
+      .subscribe((data: { tag: string }) => {
+        if (!this.tag || this.tag === data.tag) {
+
+          this.themeService.appendLayoutClass(this.searchType);
+
+          Observable.of(null).delay(1).subscribe(() => {
+            this.themeService.appendLayoutClass('with-search');
+
+            this.showSearch = true;
+            this.searchFieldComponentRef.instance.showSearch = true;
+            this.searchFieldComponentRef.instance.inputElement.nativeElement.focus();
+            this.searchFieldComponentRef.changeDetectorRef.detectChanges();
+          });
+
+        }
+      });
+  }
 
   @HostBinding('class.simple-search')
   get simpleSearch() {
@@ -178,13 +199,7 @@ export class NgaSearchComponent implements AfterViewInit, OnDestroy {
   }
 
   openSearch() {
-    this.showSearch = true;
-    setTimeout(() => {
-      this.searchFieldComponentRef.instance.showSearch = true;
-      this.searchFieldComponentRef.instance.inputElement.nativeElement.focus();
-      this.searchFieldComponentRef.changeDetectorRef.detectChanges();
-    }, 1);
-    this.searchService.onActivateSearch(this.searchType);
+    this.searchService.activate(this.tag);
   }
 
   closeSearch() {
