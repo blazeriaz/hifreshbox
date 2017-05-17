@@ -75,6 +75,7 @@ export class NgaSidebarFooterComponent {
  *
  * Example of fixed sidebar located on the left side, initially collapsed.
  *
+ *
  * <nga-sidebar left fixed state="collapsed">
  *  <nga-sidebar-header>Header</nga-sidebar-header>
  *  <nga-sidebar-content>
@@ -125,6 +126,7 @@ export class NgaSidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Places sidebar on the left side
+   *
    * @type boolean
    */
   @Input()
@@ -134,6 +136,7 @@ export class NgaSidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Places sidebar on the right side
+   *
    * @type boolean
    */
   @Input()
@@ -143,6 +146,7 @@ export class NgaSidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Makes sidebar fixed (shown above the layout content)
+   *
    * @type boolean
    */
   @Input()
@@ -152,6 +156,7 @@ export class NgaSidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Initial sidebar state, expanded|collapsed|compacted
+   *
    * @type string
    */
   @Input()

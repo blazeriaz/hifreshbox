@@ -8,17 +8,4 @@ import { List } from 'immutable';
 import { List } from 'immutable';
 import { NgaMenuItem } from '../../src/framework/theme';
 
-export const menus: List<NgaMenuItem> = List([
-  {
-    title: 'Components',
-    group: true,
-  },
-  {
-    title: 'Layout',
-    link: '/component/layout',
-  },
-  {
-    title: 'Card',
-    link: '/component/card',
-  },
-]);
+export const menus: List<NgaMenuItem> = List([]);

@@ -19,6 +19,8 @@ import {
 import { NgdAppComponent } from './app.component';
 import { routes } from './app.routes';
 import { menus } from './app.menu';
+import { NgdPageComponent } from './components/page/page.component';
+import { NgdBlockGeneratedComponent } from './components/block-generated/block-generated.component';
 
 @NgModule({
   imports: [
@@ -35,6 +37,8 @@ import { menus } from './app.menu';
   ],
   declarations: [
     NgdAppComponent,
+    NgdPageComponent,
+    NgdBlockGeneratedComponent,
   ],
   entryComponents: [
   ],

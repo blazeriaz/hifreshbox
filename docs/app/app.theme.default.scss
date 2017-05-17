@@ -5,7 +5,7 @@
  */
 
 // @nga/theme module styles
-@import '../../src/framework/theme/styles/themes/nga.theme.default';
+@import '../../src/framework/theme/styles/themes/nga.theme.light';
 @include nga-theme('default') {
   nga-layout-column.left {
     flex: 0 0 300px !important;

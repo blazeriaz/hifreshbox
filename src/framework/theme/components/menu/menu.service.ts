@@ -13,6 +13,9 @@ import 'rxjs/add/operator/publish';
 
 import { NgaMenuOptions, NgaMenuItem, ngaMenuOptionsToken } from './menu.options';
 
+// TODO: getSelected method
+// TODO: cannot push elements in constructor
+
 @Injectable()
 export class NgaMenuService {
 

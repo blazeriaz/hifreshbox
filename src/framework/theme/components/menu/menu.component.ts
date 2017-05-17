@@ -79,7 +79,8 @@ export class NgaMenuComponent implements OnInit, OnDestroy {
   @Output() hoverItem = new EventEmitter<any>();
   @Output() toggleSubMenu = new EventEmitter<any>();
 
-  menuItems: List<NgaMenuItem>;
+  // TODO: can we allow user to push arrays into the menu and convert into immutables ourselves?
+  menuItems: List<NgaMenuItem> = List([]);
 
   private stack = List<NgaMenuItem>();
 
@@ -104,6 +105,7 @@ export class NgaMenuComponent implements OnInit, OnDestroy {
         if (!data.tag || data.tag === this.tag) {
           this.menuItems = this.menuItems.push(...data.items.toJS());
 
+          console.log('here', this.menuItems);
           this.menuService.prepareItems(this.menuItems);
         }
       });

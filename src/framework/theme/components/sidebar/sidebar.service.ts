@@ -9,6 +9,11 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/publish';
 
+/**
+ * Global app service for sidebar control.
+ *
+ * Allows to control sidebar(s) state and also listen to subscribe events.
+ */
 @Injectable()
 export class NgaSidebarService {
 

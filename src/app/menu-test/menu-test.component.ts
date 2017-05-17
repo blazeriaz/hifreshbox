@@ -188,6 +188,7 @@ export class NgaMenuTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    // TODO: really?))
     this.menuService.addItems(this.menuItems, 'firstMenu');
   }
 
