@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
   selector: 'ngd-methods-block',
   template: `
     <h5>Methods</h5>
-    <table class="table" *ngIf="klass?.methods?.length > 0">
+    <table class="table table-striped" *ngIf="klass?.methods?.length > 0">
       <thead>
         <tr>
           <td>Name</td>

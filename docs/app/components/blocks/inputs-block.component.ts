@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
   selector: 'ngd-inputs-block',
   template: `
     <h5>Inputs</h5>
-    <table class="table" *ngIf="klass?.inputs?.length > 0">
+    <table class="table table-striped" *ngIf="klass?.inputs?.length > 0">
       <thead>
         <tr>
           <td>Name</td>
