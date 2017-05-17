@@ -21,6 +21,12 @@ import { routes } from './app.routes';
 import { menus } from './app.menu';
 import { NgdPageComponent } from './components/page/page.component';
 import { NgdAppService } from './app.service';
+import { NgdDescriptionBlockComponent } from './components/blocks/description-block.component';
+import { NgdExamplesBlockComponent } from './components/blocks/examples-block.component';
+import { NgdInputsBlockComponent } from './components/blocks/inputs-block.component';
+import { NgdMethodsBlockComponent } from './components/blocks/methods-block.component';
+import { NgdOutputsBlockComponent } from './components/blocks/outputs-block.component';
+import { NgdThemeBlockComponent } from './components/blocks/theme-block.component';
 
 @NgModule({
   imports: [
@@ -38,6 +44,12 @@ import { NgdAppService } from './app.service';
   declarations: [
     NgdAppComponent,
     NgdPageComponent,
+    NgdDescriptionBlockComponent,
+    NgdExamplesBlockComponent,
+    NgdInputsBlockComponent,
+    NgdMethodsBlockComponent,
+    NgdOutputsBlockComponent,
+    NgdThemeBlockComponent,
   ],
   entryComponents: [
   ],

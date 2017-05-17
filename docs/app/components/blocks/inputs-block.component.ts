@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'ngd-inputs-block',
   template: `
-    <h6>Inputs</h6>
+    <h5>Inputs</h5>
     <table class="table" *ngIf="klass?.inputs?.length > 0">
       <thead>
         <tr>

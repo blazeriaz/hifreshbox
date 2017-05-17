@@ -19,7 +19,7 @@ import 'style-loader!./app.theme.default.scss';
     <nga-layout>
       <nga-layout-header></nga-layout-header>
       <nga-sidebar left>
-        <nga-menu></nga-menu>
+        <nga-menu tag="leftMenu" inverse></nga-menu>
       </nga-sidebar>
       <nga-layout-column>
         <router-outlet></router-outlet>
@@ -38,6 +38,6 @@ export class NgdAppComponent {
   ngAfterViewInit() {
     this.structure = this.service.getPreparedStructure();
     this.menuItems = this.service.getPreparedMenu();
-    this.menuService.addItems(this.menuItems);
+    this.menuService.addItems(this.menuItems, 'leftMenu');
   }
 }

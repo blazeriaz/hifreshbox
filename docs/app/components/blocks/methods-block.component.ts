@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'ngd-methods-block',
   template: `
-    <h6>Methods</h6>
+    <h5>Methods</h5>
     <table class="table" *ngIf="klass?.methods?.length > 0">
       <thead>
         <tr>

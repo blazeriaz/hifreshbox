@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'ngd-theme-block',
   template: `
-    <h6>Theme Variables</h6>
+    <h5>Theme Variables</h5>
     <code [innerHtml]="klass?.theme"></code>
   `,
 })

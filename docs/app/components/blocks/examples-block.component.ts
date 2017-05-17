@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'ngd-examples-block',
   template: `
-    <h6>Examples</h6>
+    <h5>Examples</h5>
     <code [innerHtml]="klass?.example"></code>
   `,
 })

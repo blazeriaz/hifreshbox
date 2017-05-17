@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'ngd-outputs-block',
   template: `
-    <h6>Outputs</h6>
+    <h5>Outputs</h5>
     <table class="table" *ngIf="klass?.outputs?.length > 0">
       TODO
     </table>
