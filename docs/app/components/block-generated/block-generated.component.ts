@@ -5,7 +5,6 @@
  */
 
 import { Component, Input } from '@angular/core';
-var DOCS: any = require('../../../docs.json');
 
 @Component({
   selector: 'ngd-block-generated',
@@ -87,7 +86,7 @@ export class NgdBlockGeneratedComponent {
   doc: any;
 
   ngOnInit() {
-    this.doc = this.findComponent(this.item.klass, DOCS.children);
+    //this.doc = this.findComponent(this.item.klass, DOCS.children);
   }
 
   findComponent(name, items) {

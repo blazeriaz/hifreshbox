@@ -7,28 +7,26 @@
 import { Component } from '@angular/core';
 
 import { NgaMenuService } from '../../../../src/framework/theme';
-import { STRUCTURE } from '../../../structure';
 
 @Component({
   selector: 'ngd-page',
   template: `
     <nga-card>
-      <nga-card-header>{{ currentItem.name }}</nga-card-header>
+      <!--<nga-card-header>{{ currentItem.name }}</nga-card-header>-->
       <nga-card-body>
-        <ng-container *ngFor="let block of currentItem.blocks">
-           
-        <ng-container [ngSwitch]="block.type">
-          <ngd-block-generated *ngSwitchCase="'generated'" [item]="block"></ngd-block-generated>
-        </ng-container>
-          
-      </ng-container>
+        <!--<ng-container *ngFor="let block of currentItem.blocks">-->
+           <!---->
+        <!--<ng-container [ngSwitch]="block.type">-->
+          <!--<ngd-block-generated *ngSwitchCase="'generated'" [item]="block"></ngd-block-generated>-->
+        <!--</ng-container>-->
+          <!---->
+      <!--</ng-container>-->
       </nga-card-body>
     </nga-card>
   `,
 })
 export class NgdPageComponent {
 
-  docs: any[] = STRUCTURE;
   currentItem: any;
 
   constructor(private menuService: NgaMenuService) {
@@ -36,8 +34,8 @@ export class NgdPageComponent {
 
   ngOnInit() {
     // TODO: get current item from menu!!!
-    this.currentItem = this.docs[1].children[1];
-    console.log(this.currentItem);
+    //this.currentItem = this.docs[1].children[1];
+    //console.log(this.currentItem);
   }
 
 }

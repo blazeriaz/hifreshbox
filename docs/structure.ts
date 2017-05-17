@@ -6,9 +6,10 @@ export const STRUCTURE = [
       {
         type: 'page',
         name: 'Installation',
-        blocks: [
+        children: [
           {
-            type: 'markdown',
+            type: 'block',
+            block: 'markdown',
             source: 'pages/installation.md'
           }
         ]
@@ -22,37 +23,38 @@ export const STRUCTURE = [
       {
         type: 'page',
         name: 'Layout',
-        blocks: [
+        children: [
           {
-            type: 'generated',
-            tag: 'description',
+            type: 'block',
+            block: 'class-description',
             klass: 'NgaLayoutComponent',
           },
           {
-            type: 'generated',
-            tag: 'inputs',
+            type: 'block',
+            block: 'class-inputs',
             klass: 'NgaLayoutComponent',
           },
           {
-            type: 'generated',
-            tag: 'outputs',
+            type: 'block',
+            block: 'class-outputs',
             klass: 'NgaLayoutComponent',
           },
           {
-            type: 'generated',
-            tag: 'examples',
+            type: 'block',
+            block: 'class-examples',
             klass: 'NgaLayoutComponent',
           },
 
           // we may have a couple of custom components like header, text, html (or do we?)
           {
-            type: 'header',
+            type: 'type',
+            block: 'header',
             text: 'Children components containers',
           },
           // tag: component will render all of the above (description, inputs, outputs, examples, runnable examples)
           {
-            type: 'generated',
-            tag: 'component',
+            type: 'block',
+            block: 'class-component',
             klass: 'NgaLayoutColumnComponent',
           },
         ],
@@ -60,57 +62,58 @@ export const STRUCTURE = [
       {
         type: 'page',
         name: 'Sidebar',
-        blocks: [
+        children: [
           {
-            type: 'generated',
-            tag: 'description',
+            type: 'block',
+            block: 'class-description',
             klass: 'NgaSidebarComponent',
           },
           {
-            type: 'generated',
-            tag: 'inputs',
+            type: 'block',
+            block: 'class-inputs',
             klass: 'NgaSidebarComponent',
           },
           {
-            type: 'generated',
-            tag: 'outputs',
+            type: 'block',
+            block: 'class-outputs',
             klass: 'NgaSidebarComponent',
           },
           {
-            type: 'generated',
-            tag: 'examples',
+            type: 'block',
+            block: 'class-examples',
             klass: 'NgaSidebarComponent',
           },
           {
-            type: 'generated',
-            tag: 'theme',
+            type: 'block',
+            block: 'class-theme',
             klass: 'NgaSidebarComponent',
           },
 
           // we may have a couple of custom components like header, text, html (or do we?)
           {
-            type: 'header',
+            type: 'block',
+            block: 'header',
             text: 'Children components',
           },
           // tag: component will render all of the above (description, inputs, outputs, examples, runnable examples)
           {
-            type: 'generated',
-            tag: 'description',
+            type: 'block',
+            block: 'class-description',
             klass: 'NgaSidebarHeaderComponent',
           },
           {
-            type: 'generated',
-            tag: 'description',
+            type: 'block',
+            block: 'class-description',
             klass: 'NgaSidebarFooterComponent',
           },
           {
-            type: 'generated',
-            tag: 'description',
+            type: 'block',
+            block: 'class-description',
             klass: 'NgaSidebarService',
           },
           {
-            type: 'generated',
-            tag: 'methods',
+            type: 'block',
+            block: 'class-methods',
             klass: 'NgaSidebarService',
           },
         ],
