@@ -18891,7 +18891,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.component.ts",
-									"line": 213,
+									"line": 214,
 									"character": 10
 								}
 							]
@@ -18923,7 +18923,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.component.ts",
-									"line": 227,
+									"line": 228,
 									"character": 9
 								}
 							]
@@ -18955,7 +18955,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.component.ts",
-									"line": 220,
+									"line": 221,
 									"character": 8
 								}
 							]
@@ -19062,7 +19062,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.component.ts",
-									"line": 236,
+									"line": 237,
 									"character": 8
 								}
 							]
@@ -19530,6 +19530,10 @@
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "Collapses the sidebar (sidebar entity is selected by the tag)",
+										"returns": "void\n"
+									},
 									"parameters": [
 										{
 											"id": 885,
@@ -19538,6 +19542,9 @@
 											"kindString": "Parameter",
 											"flags": {
 												"isOptional": true
+											},
+											"comment": {
+												"text": "string"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -19554,7 +19561,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.service.ts",
-									"line": 44,
+									"line": 73,
 									"character": 10
 								}
 							]
@@ -19574,6 +19581,10 @@
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "Expandes the sidebar (sidebar entity is selected by the tag)",
+										"returns": "void\n"
+									},
 									"parameters": [
 										{
 											"id": 882,
@@ -19582,6 +19593,9 @@
 											"kindString": "Parameter",
 											"flags": {
 												"isOptional": true
+											},
+											"comment": {
+												"text": "string"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -19598,7 +19612,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.service.ts",
-									"line": 40,
+									"line": 64,
 									"character": 8
 								}
 							]
@@ -19618,6 +19632,10 @@
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "Collapsed event observable",
+										"returns": "Observable<{tag :string}>\n"
+									},
 									"type": {
 										"type": "reference",
 										"name": "Observable",
@@ -19640,7 +19658,7 @@
 															"sources": [
 																{
 																	"fileName": "theme/components/sidebar/sidebar.service.ts",
-																	"line": 32,
+																	"line": 44,
 																	"character": 32
 																}
 															],
@@ -19662,7 +19680,7 @@
 													"sources": [
 														{
 															"fileName": "theme/components/sidebar/sidebar.service.ts",
-															"line": 32,
+															"line": 44,
 															"character": 27
 														}
 													]
@@ -19675,7 +19693,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.service.ts",
-									"line": 32,
+									"line": 44,
 									"character": 12
 								}
 							]
@@ -19695,6 +19713,10 @@
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "Expanded event observable",
+										"returns": "Observable<{tag :string}>\n"
+									},
 									"type": {
 										"type": "reference",
 										"name": "Observable",
@@ -19717,7 +19739,7 @@
 															"sources": [
 																{
 																	"fileName": "theme/components/sidebar/sidebar.service.ts",
-																	"line": 28,
+																	"line": 36,
 																	"character": 30
 																}
 															],
@@ -19733,6 +19755,106 @@
 															"kind": 32,
 															"children": [
 																871
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "theme/components/sidebar/sidebar.service.ts",
+															"line": 36,
+															"character": 25
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "theme/components/sidebar/sidebar.service.ts",
+									"line": 36,
+									"character": 10
+								}
+							]
+						},
+						{
+							"id": 863,
+							"name": "onToggle",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 864,
+									"name": "onToggle",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"comment": {
+										"shortText": "Toggle event observable",
+										"returns": "Observable<{tag :string}>\n"
+									},
+									"type": {
+										"type": "reference",
+										"name": "Observable",
+										"typeArguments": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 865,
+													"name": "__type",
+													"kind": 65536,
+													"kindString": "Type literal",
+													"flags": {},
+													"children": [
+														{
+															"id": 866,
+															"name": "compact",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "theme/components/sidebar/sidebar.service.ts",
+																	"line": 28,
+																	"character": 34
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															}
+														},
+														{
+															"id": 867,
+															"name": "tag",
+															"kind": 32,
+															"kindString": "Variable",
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "theme/components/sidebar/sidebar.service.ts",
+																	"line": 28,
+																	"character": 48
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Variables",
+															"kind": 32,
+															"children": [
+																866,
+																867
 															]
 														}
 													],
@@ -19758,102 +19880,6 @@
 							]
 						},
 						{
-							"id": 863,
-							"name": "onToggle",
-							"kind": 2048,
-							"kindString": "Method",
-							"flags": {
-								"isExported": true
-							},
-							"signatures": [
-								{
-									"id": 864,
-									"name": "onToggle",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "Observable",
-										"typeArguments": [
-											{
-												"type": "reflection",
-												"declaration": {
-													"id": 865,
-													"name": "__type",
-													"kind": 65536,
-													"kindString": "Type literal",
-													"flags": {},
-													"children": [
-														{
-															"id": 866,
-															"name": "compact",
-															"kind": 32,
-															"kindString": "Variable",
-															"flags": {},
-															"sources": [
-																{
-																	"fileName": "theme/components/sidebar/sidebar.service.ts",
-																	"line": 24,
-																	"character": 34
-																}
-															],
-															"type": {
-																"type": "intrinsic",
-																"name": "boolean"
-															}
-														},
-														{
-															"id": 867,
-															"name": "tag",
-															"kind": 32,
-															"kindString": "Variable",
-															"flags": {},
-															"sources": [
-																{
-																	"fileName": "theme/components/sidebar/sidebar.service.ts",
-																	"line": 24,
-																	"character": 48
-																}
-															],
-															"type": {
-																"type": "intrinsic",
-																"name": "string"
-															}
-														}
-													],
-													"groups": [
-														{
-															"title": "Variables",
-															"kind": 32,
-															"children": [
-																866,
-																867
-															]
-														}
-													],
-													"sources": [
-														{
-															"fileName": "theme/components/sidebar/sidebar.service.ts",
-															"line": 24,
-															"character": 25
-														}
-													]
-												}
-											}
-										]
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "theme/components/sidebar/sidebar.service.ts",
-									"line": 24,
-									"character": 10
-								}
-							]
-						},
-						{
 							"id": 876,
 							"name": "toggle",
 							"kind": 2048,
@@ -19868,6 +19894,10 @@
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
+									"comment": {
+										"shortText": "Toggles sidebar state (expanded|collapsed|compacted)",
+										"returns": "void\n"
+									},
 									"parameters": [
 										{
 											"id": 878,
@@ -19875,6 +19905,9 @@
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
+											"comment": {
+												"text": "boolean If true, then sidebar state will be changed between expanded & compacted,\n       otherwise - between expanded & collapsed. False by default."
+											},
 											"type": {
 												"type": "intrinsic",
 												"name": "boolean"
@@ -19888,6 +19921,9 @@
 											"kindString": "Parameter",
 											"flags": {
 												"isOptional": true
+											},
+											"comment": {
+												"text": "string"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -19904,7 +19940,7 @@
 							"sources": [
 								{
 									"fileName": "theme/components/sidebar/sidebar.service.ts",
-									"line": 36,
+									"line": 55,
 									"character": 8
 								}
 							]

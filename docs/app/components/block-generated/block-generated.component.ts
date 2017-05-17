@@ -10,59 +10,74 @@ var DOCS: any = require('../../../docs.json');
 @Component({
   selector: 'ngd-block-generated',
   template: `
-    <nga-card>
-      <nga-card-body>
-        <ng-container [ngSwitch]="item.tag">
-          <ng-container *ngSwitchCase="'description'">
-            <nga-card-header>Description</nga-card-header>
-            <nga-card-body>
-              <strong>{{ doc?.comment?.shortText }}</strong>
-              <p>{{ doc?.comment?.text }}</p>
-            </nga-card-body>
-          </ng-container>
-          
-          <ng-container *ngSwitchCase="'inputs'">
-            <nga-card-header>Inputs</nga-card-header>
-            <nga-card-body>
-              <table class="table" *ngIf="doc?.inputs?.length > 0">
-                <thead>
-                  <tr>
-                    <td>Name</td>
-                    <td>Type</td>
-                    <td>Description</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let input of doc?.inputs">
-                    <td>{{ input.name }}</td>
-                    <td>{{ input.type?.name }}</td>
-                    <td>{{ input.comment?.shortText }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </nga-card-body>
-          </ng-container>
-          
-          <ng-container *ngSwitchCase="'outputs'">
-            <nga-card-header>Outputs</nga-card-header>
-          </ng-container>
-          
-          <ng-container *ngSwitchCase="'examples'">
-            <nga-card-header>Examples</nga-card-header>
-            <nga-card-body>
-              <code [innerHtml]="doc?.example"></code>
-            </nga-card-body>
-          </ng-container> 
-                   
-          <ng-container *ngSwitchCase="'theme'">
-            <nga-card-header>Theme Variables</nga-card-header>
-            <nga-card-body>
-              <code [innerHtml]="doc?.theme"></code>
-            </nga-card-body>
-          </ng-container>
-        </ng-container>
-      </nga-card-body>
-    </nga-card>
+    <ng-container [ngSwitch]="item.tag">
+      <ng-container *ngSwitchCase="'description'">
+        <h4>{{ doc?.name }} <ng-container *ngIf="doc?.decorator?.selector">({{ doc?.decorator?.selector }})</ng-container></h4>
+        <div>
+          <strong>{{ doc?.comment?.shortText }}</strong>
+          <p>{{ doc?.comment?.text }}</p>
+        </div>
+      </ng-container>
+      
+      <ng-container *ngSwitchCase="'inputs'">
+        <h5>Inputs</h5>
+        <table class="table" *ngIf="doc?.inputs?.length > 0">
+            <thead>
+              <tr>
+                <td>Name</td>
+                <td>Type</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let input of doc?.inputs">
+                <td>{{ input.name }}</td>
+                <td>{{ input.type?.name }}</td>
+                <td>{{ input.comment?.shortText }}</td>
+              </tr>
+            </tbody>
+          </table>
+      </ng-container>
+      
+      <ng-container *ngSwitchCase="'outputs'">
+        <h5>Outputs</h5>
+      </ng-container>
+      
+      <ng-container *ngSwitchCase="'methods'">
+        <h5>Methods</h5>
+        <table class="table" *ngIf="doc?.methods?.length > 0">
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Parameters</td>
+              <td>Returns</td>
+              <td>Description</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let method of doc?.methods">
+              <td>{{ method.name }}</td>
+              <td>
+                <ng-container *ngFor="let param of method.parameters">{{param.name}}: {{param.type.name}}<br></ng-container>
+              </td>
+              <td>{{ method.comment?.returns }}</td>
+              <td>{{ method.comment?.shortText }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      
+      <ng-container *ngSwitchCase="'examples'">
+        <h5>Examples</h5>
+        <code [innerHtml]="doc?.example"></code>
+      </ng-container> 
+               
+      <ng-container *ngSwitchCase="'theme'">
+        <h5>Theme Variables</h5>
+        <code [innerHtml]="doc?.theme"></code>
+      </ng-container>
+      
+    </ng-container>    
   `,
 })
 export class NgdBlockGeneratedComponent {
@@ -73,7 +88,6 @@ export class NgdBlockGeneratedComponent {
 
   ngOnInit() {
     this.doc = this.findComponent(this.item.klass, DOCS.children);
-    console.log(this.doc);
   }
 
   findComponent(name, items) {
@@ -96,7 +110,8 @@ export class NgdBlockGeneratedComponent {
           };
         });
         result.outputs = this.findDecorators(result.children, 'Output') || [];
-        result.component = result.decorators.find((decorator: any) => decorator.name === 'Component');
+        let component = result.decorators.find((decorator: any) => decorator.name === 'Component');
+        result.decorator = component && component.arguments.obj ? eval(`(${component.arguments.obj})`) : null;
 
         let example = result.comment && result.comment.tags && result.comment.tags.find((tag: any) => tag.tag === 'example');
         result.example = example ? example.text.replace(/&/g, "&amp;")
@@ -107,6 +122,11 @@ export class NgdBlockGeneratedComponent {
 
         let theme = result.comment && result.comment.tags && result.comment.tags.find((tag: any) => tag.tag === 'theme');
         result.theme = theme ? theme.text.replace(/\n/g, "<br>") : '';
+
+        let methods = result.children && result.children.filter((item) => item.kindString === 'Method');
+        result.methods = methods && methods.map((method: any) => method.signatures[0]);
+
+        console.log(result);
         break;
       }
     }
@@ -115,7 +135,7 @@ export class NgdBlockGeneratedComponent {
 
   findDecorators(items, name) {
     return items && items.filter((item: any) => {
-      return item.decorators && item.decorators.find((decorator: any) => decorator.name === name);
-    });
+        return item.decorators && item.decorators.find((decorator: any) => decorator.name === name);
+      });
   }
 }

@@ -207,6 +207,7 @@ export class NgaSidebarComponent implements OnInit, OnDestroy {
     this.collapseSubscription.unsubscribe();
   }
 
+  // TODO: these methods won't trigger events in the service
   /**
    * Collapses the sidebar
    */

@@ -108,6 +108,11 @@ export const STRUCTURE = [
             tag: 'description',
             klass: 'NgaSidebarService',
           },
+          {
+            type: 'generated',
+            tag: 'methods',
+            klass: 'NgaSidebarService',
+          },
         ],
       },
 

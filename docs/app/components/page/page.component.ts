@@ -12,14 +12,18 @@ import { STRUCTURE } from '../../../structure';
 @Component({
   selector: 'ngd-page',
   template: `
-    <h1>{{ currentItem.name }}</h1>
-    <ng-container *ngFor="let block of currentItem.blocks">
-         
-      <ng-container [ngSwitch]="block.type">
-        <ngd-block-generated *ngSwitchCase="'generated'" [item]="block"></ngd-block-generated>
+    <nga-card>
+      <nga-card-header>{{ currentItem.name }}</nga-card-header>
+      <nga-card-body>
+        <ng-container *ngFor="let block of currentItem.blocks">
+           
+        <ng-container [ngSwitch]="block.type">
+          <ngd-block-generated *ngSwitchCase="'generated'" [item]="block"></ngd-block-generated>
+        </ng-container>
+          
       </ng-container>
-        
-    </ng-container>
+      </nga-card-body>
+    </nga-card>
   `,
 })
 export class NgdPageComponent {
