@@ -6,8 +6,34 @@
   },
   "apps": [
     {
+      "name":"admin",
       "root": "src",
-      "outDir": "dist",
+      "outDir": "dist/admin",
+      "assets": ["assets"],
+      "index": "index.html",
+      "main": "admin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "admin",
+      "styles": [
+        "scss/style.scss"
+      ],
+      "scripts": [
+        "../node_modules/chart.js/dist/Chart.bundle.min.js",
+        "../node_modules/chart.js/dist/Chart.min.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"app",
+      "root": "src",
+      "outDir": "dist/app",
       "assets": ["assets"],
       "index": "index.html",
       "main": "main.ts",
