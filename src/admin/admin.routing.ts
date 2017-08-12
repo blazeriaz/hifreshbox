@@ -4,16 +4,18 @@ import { Routes, RouterModule } from '@angular/router';
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
+import { AuthService } from "services/auth.service";
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'pages/login',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {
     path: '',
     component: FullLayoutComponent,
+    canActivate: [AuthService],
     data: {
       title: 'Home'
     },
@@ -21,19 +23,27 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
+      },
+      {
+        path: 'users',
+        loadChildren: './users/users.module#UsersModule'
+      },
+      {
+        path: 'recipes',
+        loadChildren: './recipes/recipes.module#RecipesModule'
       }
     ]
   },
   {
-    path: 'pages',
+    path: 'auth',
     component: SimpleLayoutComponent,
     data: {
-      title: 'Pages'
+      title: 'Auth'
     },
     children: [
       {
         path: '',
-        loadChildren: './pages/pages.module#PagesModule',
+        loadChildren: './auth/auth.module#AuthModule',
       }
     ]
   }

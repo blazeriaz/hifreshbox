@@ -8,6 +8,7 @@ export class FullLayoutComponent implements OnInit {
 
     constructor() { }
 
+    public footerShow:boolean = false;
     public disabled:boolean = false;
     public status:{isopen:boolean} = {isopen: false};
 

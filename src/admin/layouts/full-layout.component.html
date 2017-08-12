@@ -9,6 +9,9 @@
     <li class="nav-item px-3">
       <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
     </li>
+    <li class="nav-item px-3">
+      <a class="nav-link" [routerLink]="['/users']">Users</a>
+    </li>
   </ul>
   <ul class="nav navbar-nav ml-auto">
     <li class="nav-item dropdown" dropdown placement="bottom right">
@@ -67,8 +70,8 @@
   </main>
 </div>
 
-<footer class="app-footer">
-  <a href="https://genesisui.com">Prime</a> &copy; 2017 creativeLabs.
+<footer class="app-footer" *ngIf="footerShow">
+  <a href="">Prime</a> &copy; 2017 creativeLabs.
   <span class="float-right">
     Powered by <a href="https://genesisui.com">GenesisUI</a>
   </span>

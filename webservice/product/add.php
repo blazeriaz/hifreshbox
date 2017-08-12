@@ -1,6 +1,6 @@
 <?php
-$userData = array("username" => "admin", "password" => "admin@123");
-$ch = curl_init("http://localhost/magento/index.php/rest/V1/integration/admin/token");
+$userData = array("username" => "admin", "password" => "Admin@123");
+$ch = curl_init("http://localhost/freshbox/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

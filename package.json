@@ -10,7 +10,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "admin": "ng serve --app admin",
+    "admin": "ng serve --app admin --port 4201 --open",
+    "app": "ng serve --app app --port 4200 --open",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
