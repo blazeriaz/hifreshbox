@@ -4,6 +4,7 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-list"></i> Recipes
+          <div  class="pull-right"><button type="button" class="btn btn-primary">Add</button></div>
         </div>
         <div class="card-block">
           <div class="row py-2">
@@ -13,8 +14,20 @@
             <div class="col-md-3">Created By</div>
           </div>
 
-          <div class="row py-2">
-            <div class="col-md-3">Receipe</div>
+          <div class="row py-2" *ngFor="let recipe of recipes">
+            <div class="col-md-1">
+              <div class="avatar">
+                <img class="img-avatar" [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'">
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              {{recipe.name}}
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-link pl-0">Edit</button>
+                <button type="button" class="btn btn-link px-0">Delete</button>
+              </div>
+            </div>
             <div class="col-md-3">Serving Size</div>
             <div class="col-md-3">Cook Time</div>
             <div class="col-md-3">Created By</div>

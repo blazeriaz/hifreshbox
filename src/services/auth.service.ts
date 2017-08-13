@@ -6,20 +6,18 @@ import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { GlobalVariable } from "../global";
+import * as GlobalVariable from "../global";
 
 
 @Injectable()
 export class AuthService {
-  public authToken;
 
   constructor(private http: Http, 
               private router: Router) {
-    
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('currentUser')) {
+    if (localStorage.getItem('token')) {
         // logged in so return true
         return true;
     }
@@ -42,7 +40,7 @@ export class AuthService {
         let token = response.json();
         if (token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(token));
+          localStorage.setItem('token', token);
         }
 
         return token;
@@ -51,7 +49,7 @@ export class AuthService {
 
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
   }
 
 }

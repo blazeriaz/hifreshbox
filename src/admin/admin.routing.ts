@@ -14,22 +14,24 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: FullLayoutComponent,
-    canActivate: [AuthService],
+    component: FullLayoutComponent,    
     data: {
       title: 'Home'
     },
     children: [
       {
         path: 'dashboard',
+        canActivate: [AuthService],
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
       {
         path: 'users',
+        canActivate: [AuthService],
         loadChildren: './users/users.module#UsersModule'
       },
       {
         path: 'recipes',
+        canActivate: [AuthService],
         loadChildren: './recipes/recipes.module#RecipesModule'
       }
     ]

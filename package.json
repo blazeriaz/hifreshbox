@@ -11,7 +11,9 @@
     "ng": "ng",
     "start": "ng serve",
     "admin": "ng serve --app admin --port 4201 --open",
+    "admin1": "ng serve --app admin --port 4201 --open --proxy-config proxy.conf.json",
     "app": "ng serve --app app --port 4200 --open",
+    "buildAdmin": "ng build --app admin",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -32,8 +32,10 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
-  login() {console.log(this.loginForm);
+  login() {
+    this.alert.clear();
     if (this.loginForm.dirty && this.loginForm.valid) {
+      this.loading = true;
       this.auth.login(this.loginForm.value.username, this.loginForm.value
         .password)
         .subscribe(
@@ -41,9 +43,15 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([this.returnUrl]);
             },
             error => {
-                this.alert.error(error.message);
-                this.loading = false;
+              if(error.status == 401) {
+                this.alert.error("Please check the login details");
+              } else {
+                this.alert.error("Server Error");
+              }
+              this.loading = false;
             });
+    } else {
+      this.alert.error('Please enter username and password');
     }
   }
 

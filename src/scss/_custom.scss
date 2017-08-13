@@ -1,1 +1,12 @@
 // Here you can add other styles
+body {
+    background-image: url(../img/bg.jpg);
+    background-repeat: no-repeat;
+    background-color: #ffffff;
+    background-size: contain;
+    background-position: center;
+}
+
+.card {
+    opacity: 0.9;
+}
