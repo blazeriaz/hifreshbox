@@ -1,0 +1,51 @@
+<form [formGroup]="userAccountForm" (submit)="saveUser()" novalidate>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-user"></i> Add User
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="user_first_name" class="col-md-2 col-sm-4 form-control-label">First Name</label>
+            <div class="col-md-4 col-sm-8">
+              <input type="text" class="form-control" id="user_first_name" 
+                  [ngModel]="user.firstname" formControlName="firstname" /></div>
+            <label for="user_last_name" class="col-md-2 col-sm-4 form-control-label">Last Name</label>
+            <div class="col-md-4 col-sm-8">
+              <input type="text" class="form-control" id="user_last_name" 
+                  [ngModel]="user.lastname" formControlName="lastname" /></div>
+          </div>
+          <div class="form-group row">
+            <label for="user_email" class="col-md-2 col-sm-4 form-control-label">Email</label>
+            <div class="col-md-10 col-sm-8">
+              <input type="email" class="form-control" id="user_email" 
+                  [ngModel]="user.email" formControlName="email"/></div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-sm-4 form-control-label">Gender</label>
+            <div class="col-md-10 col-sm-8">
+              <div class="btn-group">
+                <input type="hidden" id="user_gender" [ngModel]="user.gender" formControlName="gender" />
+                <button type="button" class="btn" 
+                  (click)="user.gender=1" 
+                  [ngClass]="{'btn-secondary' : !user.gender || user.gender==2, 'btn-primary' : user.gender && user.gender==1}">
+                  <i class="fa fa-male"></i> Male</button>
+                <button type="button" class="btn" 
+                  (click)="user.gender=2" 
+                  [ngClass]="{'btn-secondary' : !user.gender || user.gender==1, 'btn-primary' : user.gender && user.gender==2}">
+                  <i class="fa fa-female"></i> Female</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></form>

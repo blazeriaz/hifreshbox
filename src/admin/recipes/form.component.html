@@ -7,12 +7,62 @@
         </div>
         <div class="card-block">
           <div class="form-group row">
-            <label for="recipe_name" class="col-md-3 form-control-label">Recipe Name</label>
-            <input type="text" class="col-md-9 form-control" id="recipe_name" />
+            <label for="recipe_name" class="col-md-2 form-control-label">Recipe Name</label>
+            <input type="text" class="col-md-10 form-control" id="recipe_name" />
           </div>
           <div class="form-group row">
-            <label for="recipe_desc" class="col-md-3 form-control-label">Description</label>
-            <textarea class="col-md-9 form-control" rows="5" id="recipe_desc"></textarea>
+            <label for="recipe_desc" class="col-md-2 form-control-label">Description</label>
+            <textarea class="col-md-10 form-control" rows="5" id="recipe_desc"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="recipe_chef" class="col-md-2 form-control-label">Created By</label>
+            <input type="text" class="col-md-10 form-control" id="recipe_chef" />
+          </div>
+          <div class="form-group row">
+            <label for="recipe_serving" class="col-md-2 form-control-label">Serving Size</label>
+            <input type="text" class="col-md-4 form-control" id="recipe_serving" />
+            <label for="recipe_prep" class="col-md-2 form-control-label">Prep. Time</label>
+            <input type="text" class="col-md-4 form-control" id="recipe_prep" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Food Nutrition
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="recipe_calories" class="col-md-1 form-control-label">Calories</label>
+            <div class="input-group col-md-2">
+              <input type="text" class="form-control" id="recipe_calories" />
+            </div>
+            <label for="recipe_protein" class="col-md-1 form-control-label">Protein</label>
+            <div class="input-group col-md-2">
+              <input type="text" class="form-control" id="recipe_protein" />
+              <span class="input-group-addon">g</span>
+            </div>
+            <label for="recipe_carb" class="col-md-1 form-control-label">Carb</label>
+            <div class="input-group col-md-2">
+              <input type="text" class="form-control" id="recipe_carb" />
+              <span class="input-group-addon">g</span>
+            </div>
+            <label for="recipe_fat" class="col-md-1 form-control-label">Fat</label>
+            <div class="input-group col-md-2">
+              <input type="text" class="form-control" id="recipe_fat" />
+              <span class="input-group-addon">g</span>
+            </div>
           </div>
         </div>
       </div>
@@ -87,7 +137,7 @@
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <textarea type="text" class="form-control"></textarea>
+                <textarea type="text" class="form-control" rows="5"></textarea>
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="button">Add</button>
                 </span>

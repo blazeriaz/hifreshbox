@@ -4,11 +4,32 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-users"></i> Users
+          <div  class="pull-right"><a [routerLink]="'add'" class="btn btn-primary">Add</a></div>
         </div>
         <div class="card-block">
-          <div class="row">
+          <div class="row py-2 bg-info">
             <div class="col-md-3">Name</div>
             <div class="col-md-3">Email</div>
+            <div class="col-md-3">Phone</div>
+            <div class="col-md-3">Region</div>
+          </div>
+
+          <div class="row py-2" [ngClass]="{'bg-faded': odd}" *ngFor="let user of users; let odd= odd;">
+            <div class="col-md-3">
+              <i class="fa fa-male" *ngIf="user.gender == 1"></i>
+              <i class="fa fa-female" *ngIf="user.gender == 2"></i>
+              {{user.firstname}} {{user.lastname}}
+            </div>
+            <div class="col-md-3">
+              {{user.email}}</div>
+            <div class="col-md-3">{{user.default_shipping.telephone}}</div>
+            <div class="col-md-3">{{user.default_shipping.region.region}}, {{user.default_shipping.country_id}}</div>
+            <div class="col-md-12">              
+              <div class="btn-group btn-group-sm">
+                <a [routerLink]="['edit', user.id]" class="btn btn-link pl-0">Edit</a>
+                <button type="button" class="btn btn-link px-0">Delete</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
