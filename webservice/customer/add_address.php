@@ -68,7 +68,7 @@ $data_address_new = array(
 							)
 						);
 
-$ch = curl_init("http://localhost/magento/index.php/rest/V1/customers/4");
+$ch = curl_init("http://localhost/magento/index.php/rest/V1/customers/".$customer_id);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data_address_new));
