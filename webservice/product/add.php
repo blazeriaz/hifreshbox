@@ -46,6 +46,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
 $result = curl_exec($ch);
 
 // Adding Images to the Product
+
 $base_64_image_content = base64_encode(file_get_contents('sample.png'));
 $image_array = array('entry'=>array(
 								'media_type'=>'image',
@@ -64,13 +65,14 @@ $image_array = array('entry'=>array(
 								
  $imageData = json_encode($image_array);
  
+ 
  $ch = curl_init("http://127.0.0.1/magento/index.php/rest/V1/products/".$sku."/media");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch,CURLOPT_POSTFIELDS, $imageData);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
  
-$image_result = curl_exec($ch);
+$image_result = curl_exec($ch); 
 
 echo '<pre>';
 print_r(json_decode($result)); 
