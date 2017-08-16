@@ -7,10 +7,11 @@ import { UsersService } from "services";
 import { UserFormComponent, customerEditResolve } from "./form.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { emptyLayoutComponent } from "../layouts/empty-layout.component";
+import {SelectModule} from 'ng2-select';
 
 @NgModule({
     imports: [
-        UsersRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
+        SelectModule, UsersRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
     ],
     declarations: [ UsersListComponent, UserFormComponent, emptyLayoutComponent ],
     providers: [UsersService, customerEditResolve, customerListResolve]

@@ -50,4 +50,15 @@ export class UsersService {
       ).map((response: Response) => response.json());
   }
 
+  getCountries() {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    let options = new RequestOptions({ headers: headers });
+    
+    return this.http.get(
+        GlobalVariable.BASE_API_URL + 'directory/countries',
+        options
+      ).map((response: Response) => response.json());
+  }
+
 }

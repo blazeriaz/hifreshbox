@@ -10,39 +10,30 @@ import { emptyLayoutComponent } from "../layouts/empty-layout.component";
 const routes: Routes = [
     {
         path: '',
-        component: emptyLayoutComponent,
+        component: UsersListComponent,
+        resolve: {
+            users: customerListResolve
+        },
         data: {
             title: 'Users'
+        }
+    },
+    {
+        path: 'add',
+        component: UserFormComponent,
+        data: {
+            title: 'Add'
+        }
+    },
+    {
+        path: 'edit/:id',
+        component: UserFormComponent,
+        resolve: {
+            user: customerEditResolve
         },
-        children: [
-            {
-                path: '',
-                component: UsersListComponent,
-                resolve: {
-                    users: customerListResolve
-                },
-                data: {
-                    title: 'List'
-                }
-            },
-            {
-                path: 'add',
-                component: UserFormComponent,
-                data: {
-                    title: 'Add'
-                }
-            },
-            {
-                path: 'edit/:id',
-                component: UserFormComponent,
-                resolve: {
-                    user: customerEditResolve
-                },
-                data: {
-                    title: 'Edit'
-                }
-            }
-        ]
+        data: {
+            title: 'Edit'
+        }
     }
     
 ];

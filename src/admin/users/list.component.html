@@ -22,8 +22,11 @@
             </div>
             <div class="col-md-3">
               {{user.email}}</div>
-            <div class="col-md-3">{{user.default_shipping.telephone}}</div>
-            <div class="col-md-3">{{user.default_shipping.region.region}}, {{user.default_shipping.country_id}}</div>
+            <div class="col-md-3">
+              <span *ngIf="user.default_shipping">{{user.default_shipping.telephone}}</span></div>
+            <div class="col-md-3">
+              <span *ngIf="user.default_shipping && user.default_shipping.region.region">{{user.default_shipping.region.region}}, </span>
+              <span *ngIf="user.default_shipping">{{user.default_shipping.country_id}}</span></div>
             <div class="col-md-12">              
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['edit', user.id]" class="btn btn-link pl-0">Edit</a>

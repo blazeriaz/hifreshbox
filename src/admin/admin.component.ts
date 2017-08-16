@@ -21,6 +21,8 @@ export class AdminComponent {
   // Sets initial value to true to show loading spinner on first load
   loading = true
 
+  time;
+
   constructor(private router: Router) {
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
@@ -30,9 +32,13 @@ export class AdminComponent {
   // Shows and hides the loading spinner during RouterEvent changes
   navigationInterceptor(event: RouterEvent): void {
     if (event instanceof NavigationStart) { 
+      console.log("Nav start");
+      this.time = Date.now();
       this.loading = true
     }
     if (event instanceof NavigationEnd) {
+      console.log("Nav End");
+      console.log(( Date.now() - this.time));
       this.loading = false
     }
 
