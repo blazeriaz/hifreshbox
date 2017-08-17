@@ -1,0 +1,37 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/ingredients/:ingredientId" method="GET">
+        <service class="Freshbox\Ingredients\Api\IngredientRepositoryInterface" method="getById"/>
+        <resources>
+            <!-- <resource ref="anonymous" /> -->
+            <resource ref="Freshbox_Ingredients::ingredient" />
+        </resources>
+    </route>
+
+    <route url="/V1/ingredients/search" method="GET">
+        <service class="Freshbox\Ingredients\Api\IngredientRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	<route url="/V1/ingredients" method="POST">
+        <service class="Freshbox\Ingredients\Api\IngredientRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Freshbox_Ingredients::ingredient_save" />
+        </resources>
+    </route>
+	
+	<route url="/V1/ingredients/:ingredientId" method="PUT">
+        <service class="Freshbox\Ingredients\Api\IngredientRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Freshbox_Ingredients::ingredient_save"/>
+        </resources>
+    </route>
+
+    <route url="/V1/ingredients/:ingredientId" method="DELETE">
+        <service class="Freshbox\Ingredients\Api\ingredientRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Freshbox_Ingredients::ingredient_delete" />
+        </resources>
+    </route>
+</routes>

@@ -1,0 +1,4 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Recipes\Api\Data\RecipeInterface" type="Freshbox\Recipes\Model\Recipe" />
+    <preference for="Freshbox\Recipes\Api\RecipeRepositoryInterface" type="Freshbox\Recipes\Model\RecipeRepository" />
+</config>

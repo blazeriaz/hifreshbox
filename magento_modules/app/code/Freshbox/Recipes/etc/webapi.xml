@@ -1,0 +1,32 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/freshboxrecipes/:recipeId" method="GET">
+        <service class="Freshbox\Recipes\Api\RecipeRepositoryInterface" method="getById"/>
+        <resources>
+            <!-- <resource ref="anonymous" /> -->
+            <resource ref="Freshbox_Recipes::recipe" />
+        </resources>
+    </route>
+
+    <route url="/V1/freshboxrecipes/search" method="GET">
+        <service class="Freshbox\Recipes\Api\RecipeRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/freshboxrecipes" method="POST">
+        <service class="Freshbox\Recipes\Api\RecipeRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Freshbox_Recipes::recipe_save" />
+        </resources>
+    </route>
+	
+
+    <route url="/V1/freshboxrecipes/:recipeId" method="DELETE">
+        <service class="Freshbox\Recipes\Api\RecipeRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Freshbox_Recipes::recipe_delete" />
+        </resources>
+    </route>
+</routes>
