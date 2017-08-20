@@ -30,7 +30,7 @@
             <div class="col-md-12">              
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['edit', user.id]" class="btn btn-link pl-0">Edit</a>
-                <button type="button" class="btn btn-link px-0">Delete</button>
+                <button type="button" class="btn btn-link px-0" (click)="deleteUser(user.id)">Delete</button>
               </div>
             </div>
           </div>

@@ -44,9 +44,26 @@ export class UsersService {
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
     
-    return this.http.post(
-        GlobalVariable.BASE_API_URL + 'customers/' + userId,
-        data, options
+    if(userId) {
+      return this.http.put(
+          GlobalVariable.BASE_API_URL + 'customers/' + userId,
+          data, options
+        ).map((response: Response) => response.json());
+    } else {
+      return this.http.post(
+          GlobalVariable.BASE_API_URL + 'customers',
+          data, options
+        ).map((response: Response) => response.json());
+    }
+  }
+  
+  deleteUser(userId) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    let options = new RequestOptions({ headers: headers });
+    
+    return this.http.delete(
+        GlobalVariable.BASE_API_URL + 'customers/' + userId, options
       ).map((response: Response) => response.json());
   }
 
