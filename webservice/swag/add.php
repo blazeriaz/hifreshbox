@@ -33,7 +33,7 @@ $productData = array(
 	
     $productData = json_encode(array('product' => $productData));
  
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/products");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/default/V1/products");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch,CURLOPT_POSTFIELDS, $productData);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

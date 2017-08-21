@@ -8,7 +8,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
  
 $token = curl_exec($ch);
  
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/products?searchCriteria[pageSize]=10&searchCriteria[filter_groups][0][filters][0][field]=attribute_set_id&searchCriteria[filter_groups][0][filters][0][value]=17&searchCriteria[filter_groups][0][filters][0][condition_type]=eq" );
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/default/V1/products?searchCriteria[pageSize]=10&searchCriteria[filter_groups][0][filters][0][field]=attribute_set_id&searchCriteria[filter_groups][0][filters][0][value]=17&searchCriteria[filter_groups][0][filters][0][condition_type]=eq" );
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
