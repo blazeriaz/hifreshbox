@@ -51,6 +51,7 @@ export class RecipeFormComponent implements OnInit {
     private recipeSteps:any;
     private newRecipeStep:any;
     private submitted:any;
+    private image:any;
 
     constructor(
       private recipesService: ProductsService,
@@ -65,6 +66,7 @@ export class RecipeFormComponent implements OnInit {
       this.newIngredient = {};
       this.recipeSteps = [];
       this.ingredientsOptions = null;
+      this.image = {};
 
       this.recipesService.getIngredienOptions().subscribe(data => {
         this.ingredientsOptions = {};
@@ -211,6 +213,25 @@ export class RecipeFormComponent implements OnInit {
         if(invalid) return 'has-danger';
     }
 
+    changeListener($event) : void {
+      this.readThis($event.target);
+    }
+
+    readThis(inputValue: any): void {
+      var file:File = inputValue.files[0];
+      var myReader:FileReader = new FileReader();
+
+      this.image.filetype = file.type;
+      this.image.filename = file.name;
+      this.image.filesize = file.size;
+
+      myReader.onloadend = (e) => {
+        this.image.base64 = myReader.result;
+        console.log(this.image);
+      }
+      myReader.readAsDataURL(file);
+    }
+
     saveRecipe() {
       this.alert.clear();
       this.submitted = true;
@@ -233,8 +254,31 @@ export class RecipeFormComponent implements OnInit {
 
           this.recipesService.saveProduct(recipeSku, {product : sendData}).subscribe(
               data => {
+                if(this.image.base64) {
+                  let base64 = this.image.base64.split('base64,');
+                  let image_upload = {
+                    media_type: 'image',
+                    label: 'Product Image',
+                    position: 0,
+                    disabled: 0,
+                    types: ['image','small_image','thumbnail','swatch_image'],
+                    file: this.image.filename,
+                    content: {
+                      base64_encoded_data: base64[1],
+                      type: this.image.filetype,
+                      name: this.image.filename
+                    }                    
+                  };
+                  this.recipesService.saveProductImage(data.sku, image_upload).subscribe(
+                    data => {
+                      this.alert.success("The recipe details are saved successfully!", true);
+                      this.router.navigate(['recipes']);
+                    }
+                  );
+                } else {
                   this.alert.success("The recipe details are saved successfully!", true);
-                  this.router.navigate(['recipes']);                    
+                  this.router.navigate(['recipes']);
+                }                   
               },
               error => {
                   if(error.status == 401) {

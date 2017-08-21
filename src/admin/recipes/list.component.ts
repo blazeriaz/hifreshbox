@@ -43,8 +43,7 @@ export class RecipesListComponent implements OnInit {
         this.recipes = recipes.items;        
         // get pager object from service
         page = page?page:1;
-        this.pager = this.pagerService.getPager(recipes.total_count, page, pageSize);
-        console.log(this.pager);
+        this.pager = this.pagerService.getPager(recipes.total_count, page, pageSize);        
     }
 
     setPage(page) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
 // Import RxJs required methods
@@ -10,24 +10,19 @@ import * as GlobalVariable from "../global";
 
 
 @Injectable()
-export class ProductsService {
+export class RestService {
+  private module: string;
 
   constructor(private http: Http, 
               private router: Router) {
     
-  } 
-
-  getIngredienOptions() {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let options = new RequestOptions({ headers: headers });
-    return this.http.get(
-        GlobalVariable.BASE_API_URL + 'listselection', options
-    ).map((response: Response) => response.json());
   }
 
-  getProducts(page?, filterGroups?, pageSize?) {
+  setRestModule(module) {
+    this.module = module;
+  }
 
+  getItems(page?, filterGroups?, pageSize?) {
     let searchCriteria = {
       pageSize : pageSize?pageSize:10,
       currentPage : page?page:1,      
@@ -53,60 +48,50 @@ export class ProductsService {
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let options = new RequestOptions({ headers: headers, search : params });
-
+    let options = new RequestOptions({ headers: headers });
+    
     return this.http.get(
-        GlobalVariable.BASE_API_URL + 'products',
+        GlobalVariable.BASE_API_URL + this.module + '/search?' + params,
         options
       ).map((response: Response) => response.json());
   }
 
-  getProduct(Productsku) {
+  getItem(itemId) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(
-        GlobalVariable.BASE_API_URL + 'products/' + Productsku,
+        GlobalVariable.BASE_API_URL + this.module + '/' + itemId,
         options
-      ).map((response: Response) => response.json());    
+      ).map((response: Response) => response.json());
   }
   
-  saveProduct(Productsku, data) {
+  saveItem(itemId, data) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
     
-    if(Productsku) {
+    if(itemId) {
       return this.http.put(
-          GlobalVariable.BASE_API_URL + 'products/' + Productsku,
+          GlobalVariable.BASE_API_URL + this.module + '/' + itemId,
           data, options
         ).map((response: Response) => response.json());
     } else {
       return this.http.post(
-          GlobalVariable.BASE_API_URL + 'products',
+          GlobalVariable.BASE_API_URL + this.module,
           data, options
         ).map((response: Response) => response.json());
     }
   }
-
-  saveProductImage(Productsku, image) {
+  
+  deleteItem(itemId) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
     
-    return this.http.post(
-        GlobalVariable.BASE_API_URL + 'products/' + Productsku + '/media', {entry : image}, options
-      ).map((response: Response) => response.json());
-  }
-
-  deleteProduct(Productsku) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    let options = new RequestOptions({ headers: headers });
-
     return this.http.delete(
-        GlobalVariable.BASE_API_URL + 'products/' + Productsku, options
+        GlobalVariable.BASE_API_URL + this.module + '/' + itemId, options
       ).map((response: Response) => response.json());
   }
 

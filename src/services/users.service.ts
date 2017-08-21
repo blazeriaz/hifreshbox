@@ -17,13 +17,36 @@ export class UsersService {
     
   }
 
-  getUsers() {
+  getUsers(page?, filterGroups?, pageSize?) {
+    let searchCriteria = {
+      pageSize : pageSize?pageSize:10,
+      currentPage : page?page:1,      
+    };
+
+    let searchParams = [];
+    let pIndex = 0;
+    searchParams[pIndex++] = "searchCriteria[pageSize]=" + searchCriteria.pageSize;
+    searchParams[pIndex++] = "searchCriteria[currentPage]=" + searchCriteria.currentPage;
+
+    filterGroups = filterGroups?filterGroups:[];
+    filterGroups.map((data, index) => {
+      let key = "searchCriteria[filter_groups]["+index+"]";
+      data.filters.map((filter, i) => {
+        key += "[filters]["+i+"]";
+        searchParams[pIndex++] = key + "[field]=" + filter.field;
+        searchParams[pIndex++] = key + "[value]=" + filter.value;
+        searchParams[pIndex++] = key + "[condition_type]=" + filter.condition_type; 
+      })
+    });
+
+    let params = new URLSearchParams(searchParams.join("&"));
+
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(
-        GlobalVariable.BASE_API_URL + 'customers/search?searchCriteria[pageSize]=5&searchCriteria[currentPage]=1',
+        GlobalVariable.BASE_API_URL + 'customers/search?' + params,
         options
       ).map((response: Response) => response.json());
   }

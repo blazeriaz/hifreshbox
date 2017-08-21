@@ -1,6 +1,8 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService } from "services";
+import { UsersService, AlertService, PagerService } from "services";
+
+export const pageSize = 10;
 
 @Injectable()
 export class customerListResolve implements Resolve<any> {
@@ -8,7 +10,7 @@ export class customerListResolve implements Resolve<any> {
   constructor(private usersService: UsersService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    return this.usersService.getUsers();
+    return this.usersService.getUsers(1, [], pageSize);
   }
 }
 
@@ -17,9 +19,11 @@ export class customerListResolve implements Resolve<any> {
 })
 export class UsersListComponent implements OnInit {
     public users:any;
+    public pager: any;
 
     constructor(private usersService: UsersService, 
         private alert: AlertService,
+        private pagerService: PagerService,
         public route: ActivatedRoute,
         public router: Router ) { }
     
@@ -28,13 +32,21 @@ export class UsersListComponent implements OnInit {
         this.initUsersList(users);
     }
 
-    initUsersList(users) {
-        users = users.items;
-        for (let user of users){
+    initUsersList(users, page?) {
+        this.users = users.items;
+        for (let user of this.users){
             user.default_shipping = user.addresses.find(x => x.default_shipping == 1);
             user.default_billing = user.addresses.find(x => x.default_shipping == 1);
         }
-        this.users =  users;
+        // get pager object from service
+        page = page?page:1;
+        this.pager = this.pagerService.getPager(users.total_count, page, pageSize);
+    }
+
+    setPage(page) {
+        this.usersService.getUsers(page, [], pageSize).subscribe(users => {
+            this.initUsersList(users, page);
+        });
     }
 
     deleteUser(userId) {
@@ -45,8 +57,9 @@ export class UsersListComponent implements OnInit {
         this.usersService.deleteUser(userId).subscribe(data => {
             if(data) {
                 this.alert.success("The customer deleted successfully!", true);
-                this.usersService.getUsers().subscribe(users => {
-                    this.initUsersList(users);
+                let page = 1;
+                this.usersService.getUsers(page, [], pageSize).subscribe(users => {
+                    this.initUsersList(users, page);
                 });
             } else {
                 this.alert.error("The customer can't be deleted!", true);
