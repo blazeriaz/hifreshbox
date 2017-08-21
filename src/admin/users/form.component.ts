@@ -190,13 +190,13 @@ export class UserFormComponent implements OnInit {
     }
 
     setInputErrorClass(input) {
-        let invalid = this.userForm.get(input).invalid && this.userForm.get(input).touched;
-        if(invalid && this.submitted) return 'form-control-danger';
+        let invalid = this.userForm.get(input).invalid && this.submitted;
+        if(invalid) return 'form-control-danger';
     }
 
     setContainerErrorClass(input) {
-        let invalid = this.userForm.get(input).invalid && this.userForm.get(input).touched;
-        if(invalid && this.submitted) return 'has-danger';
+        let invalid = this.userForm.get(input).invalid && this.submitted;
+        if(invalid) return 'has-danger';
     }
 
     setAddressInputClass(input) {

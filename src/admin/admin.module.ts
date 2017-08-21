@@ -26,6 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, AlertService } from "services";
 import { AlertComponent } from "components";
 
+import {TooltipModule} from "ngx-tooltip";
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -35,7 +37,8 @@ import { AlertComponent } from "components";
     TabsModule.forRoot(),
     ChartsModule,
     HttpModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TooltipModule
   ],
   declarations: [
     AdminComponent,

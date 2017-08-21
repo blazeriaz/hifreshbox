@@ -1,0 +1,17 @@
+Here are the details.
+ 
+URL: freshbox.white-space-studio-dev.com
+ 
+CPanel:
+URL: white-space-studio-dev.com/cpanel
+username: whitespacestudio
+password: 0MgUAQ&87KJqhM
+ 
+FTP:
+IP: 160.153.91.70
+Username: freshbox@white-space-studio-dev.com
+password: 0q5!7J8f3%IJ
+ 
+DB:
+DB Name: freshbox
+Password: 0q5!7J8f3%IJ

@@ -1,18 +1,21 @@
 import { NgModule }                 from '@angular/core';
 
-import { RecipesListComponent }       from './list.component';
+import { RecipesListComponent, recipesListResolve } from './list.component';
 import { RecipesRoutingModule }   from './recipes-routing.module';
-import { RecipesService } from "services";
+import { ProductsService } from "services";
 import { CommonModule } from "@angular/common";
 import { mgCatalogAttribute } from "pipes";
-import { RecipeFormComponent } from "./form.component";
+import { RecipeFormComponent, recipeEditResolve } from "./form.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {SelectModule} from 'ng2-select';
+import { PagerService } from 'services/index'
 
 
 @NgModule({
     imports: [
-        RecipesRoutingModule, CommonModule
+        SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
     ],
     declarations: [ RecipesListComponent, RecipeFormComponent, mgCatalogAttribute ],
-    providers: [RecipesService]
+    providers: [ProductsService, recipesListResolve, recipeEditResolve, PagerService]
 })
 export class RecipesModule { }

@@ -1,4 +1,5 @@
 <div class="animated fadeIn">
+  <form [formGroup]="recipeForm" (submit)="saveRecipe()">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -8,11 +9,16 @@
         <div class="card-block">
           <div class="form-group row">
             <label for="recipe_name" class="col-md-2 form-control-label">Recipe Name</label>
-            <input type="text" class="col-md-10 form-control" id="recipe_name" />
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('name')">
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="recipe_name" formControlName="name" [ngClass]="setInputErrorClass('name')" />
+            </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" formArrayName="custom_attributes" 
+              *ngIf="getCustomAttributeIndex('description') >= 0">
             <label for="recipe_desc" class="col-md-2 form-control-label">Description</label>
-            <textarea class="col-md-10 form-control" rows="5" id="recipe_desc"></textarea>
+            <div class="col-md-10" [ngClass]="setAttrContainerErrorClass('description')" [formGroupName]="getCustomAttributeIndex('description')">
+              <textarea class="form-control" rows="5" id="recipe_desc" [ngClass]="setAttrInputErrorClass('description')" formControlName="value"></textarea>
+            </div>
           </div>
         </div>
       </div>
@@ -21,74 +27,139 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-block">
+        <div class="card-block" formArrayName="custom_attributes">
           <div class="form-group row">
             <label for="recipe_chef" class="col-md-2 form-control-label">Created By</label>
-            <input type="text" class="col-md-10 form-control" id="recipe_chef" />
+            <div class="col-md-10" [ngClass]="setAttrContainerErrorClass('chef_name')" [formGroupName]="getCustomAttributeIndex('chef_name')">
+              <input type="text" class="form-control" id="recipe_chef" [ngClass]="setAttrInputErrorClass('chef_name')" formControlName="value" />
+            </div>
           </div>
           <div class="form-group row">
             <label for="recipe_serving" class="col-md-2 form-control-label">Serving Size</label>
-            <input type="text" class="col-md-4 form-control" id="recipe_serving" />
+            <div class="col-md-4" [ngClass]="setAttrContainerErrorClass('servings')" [formGroupName]="getCustomAttributeIndex('servings')">
+              <input type="text" class="form-control" id="recipe_serving" [ngClass]="setAttrInputErrorClass('servings')" formControlName="value" /> 
+            </div>
             <label for="recipe_prep" class="col-md-2 form-control-label">Prep. Time</label>
-            <input type="text" class="col-md-4 form-control" id="recipe_prep" />
+            <div class="col-md-4" [ngClass]="setAttrContainerErrorClass('cooking_time')" [formGroupName]="getCustomAttributeIndex('cooking_time')">
+              <input type="text" class="form-control" id="recipe_prep" [ngClass]="setAttrInputErrorClass('cooking_time')"formControlName="value" />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           Food Nutrition
         </div>
-        <div class="card-block">
+        <div class="card-block" formArrayName="custom_attributes">
           <div class="form-group row">
-            <label for="recipe_calories" class="col-md-1 form-control-label">Calories</label>
-            <div class="input-group col-md-2">
-              <input type="text" class="form-control" id="recipe_calories" />
+            <label for="recipe_calories" class="col-md-4 form-control-label">Calories</label>
+            <div class="input-group col-md-8" [ngClass]="setAttrContainerErrorClass('calories')" [formGroupName]="getCustomAttributeIndex('calories')">
+              <input type="text" class="form-control" id="recipe_calories" [ngClass]="setAttrInputErrorClass('calories')" formControlName="value" />
             </div>
-            <label for="recipe_protein" class="col-md-1 form-control-label">Protein</label>
-            <div class="input-group col-md-2">
-              <input type="text" class="form-control" id="recipe_protein" />
+          </div>
+          <div class="form-group row">
+            <label for="recipe_protein" class="col-md-4 form-control-label">Protein</label>
+            <div class="input-group col-md-8" [ngClass]="setAttrContainerErrorClass('protein')" [formGroupName]="getCustomAttributeIndex('protein')">
+              <input type="text" class="form-control" id="recipe_protein" [ngClass]="setAttrInputErrorClass('protein')" formControlName="value" />
               <span class="input-group-addon">g</span>
             </div>
-            <label for="recipe_carb" class="col-md-1 form-control-label">Carb</label>
-            <div class="input-group col-md-2">
-              <input type="text" class="form-control" id="recipe_carb" />
+          </div>
+          <div class="form-group row">
+            <label for="recipe_carb" class="col-md-4 form-control-label">Carb</label>
+            <div class="input-group col-md-8" [ngClass]="setAttrContainerErrorClass('carb')" [formGroupName]="getCustomAttributeIndex('carb')">
+              <input type="text" class="form-control" id="recipe_carb" [ngClass]="setAttrInputErrorClass('carb')" formControlName="value" />
               <span class="input-group-addon">g</span>
             </div>
-            <label for="recipe_fat" class="col-md-1 form-control-label">Fat</label>
-            <div class="input-group col-md-2">
-              <input type="text" class="form-control" id="recipe_fat" />
+          </div>
+          <div class="form-group row">
+            <label for="recipe_fat" class="col-md-4 form-control-label">Fat</label>
+            <div class="input-group col-md-8" [ngClass]="setAttrContainerErrorClass('fat')" [formGroupName]="getCustomAttributeIndex('fat')">
+              <input type="text" class="form-control" id="recipe_fat" [ngClass]="setAttrInputErrorClass('fat')" formControlName="value" />
               <span class="input-group-addon">g</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           Ingredients
         </div>
         <div class="card-block">
-          <div class="form-group row">
+          <div class="form-group row mb-1" *ngIf="ingredientsOptions">
             <div class="col-md-12">
-              <div class="input-group">
-                <input type="text" class="form-control" />
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button">Add</button>
+              <ng-select [allowClear]="true" [multiple]="false"
+                [items]="ingredientsOptions.ingredients" 
+                (data)="refreshIngredientOptionValue($event)"
+                placeholder="No Integredient selected">
+              </ng-select>
+              <div class="input-group">                
+                <input class="form-control" type="number" [(ngModel)]="newIngredient.qty" [ngModelOptions]="{standalone: true}" />
+                <select class="form-control" [(ngModel)]="newIngredient.portion" [ngModelOptions]="{standalone: true}">
+                  <option></option>
+                  <option *ngFor="let portion of ingredientsOptions.portions" [ngValue]="portion">{{portion.text}}</option>
+                </select>
+                <span>
+                  <button class="btn btn-primary" type="button" [disabled]="ingredientDisable()" (click)="addIngredient()">Add</button>
                 </span>
               </div>
             </div>
           </div>
+          <ul class="list-group" *ngFor="let ingredient of ingredients; let index = index;">
+            <li class="list-group-item p-1">
+              <span>{{ingredient.ingredient.text}}</span> 
+              <span>{{ingredient.qty}}</span> 
+              <span *ngIf="ingredient.portion">{{ingredient.portion.text}}</span>
+              <span class="px-1">
+                <button class="btn btn-link p-0" type="button" (click)="removeIngredient(index)">
+                  <i class="fa fa-remove"></i> Remove
+                </button>
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Steps
+        </div>
+        <div class="card-block">         
+          <div class="form-group row mb-1">
+            <div class="col-md-12">
+              <div class="input-group">
+                <textarea type="text" class="form-control" rows="5" 
+                    [(ngModel)]="newRecipeStep" [ngModelOptions]="{standalone: true}"></textarea>
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="button" (click)="addRecipeStep()">Add</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <ul class="list-group" *ngFor="let step of recipeSteps; let index = index;">
+            <li class="list-group-item p-1">
+              {{step}}
+              <span class="px-1">
+                <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(index)">
+                  <i class="fa fa-remove"></i> Remove
+                </button>
+              </span>
+            </li>
+          </ul> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           what customer will need
@@ -107,7 +178,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
           Allergies
@@ -130,22 +201,14 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
-          Steps
-        </div>
-        <div class="card-block">
-          <div class="form-group row">
-            <div class="col-md-12">
-              <div class="input-group">
-                <textarea type="text" class="form-control" rows="5"></textarea>
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button">Add</button>
-                </span>
-              </div>
-            </div>
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" (click)="goToList()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  </form>
 </div>

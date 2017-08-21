@@ -8,7 +8,6 @@ export class customerListResolve implements Resolve<any> {
   constructor(private usersService: UsersService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    let userId = route.params['id'];
     return this.usersService.getUsers();
   }
 }
@@ -53,12 +52,5 @@ export class UsersListComponent implements OnInit {
                 this.alert.error("The customer can't be deleted!", true);
             }
         });
-    }
-
-    reload() {
-        this.router.navigate(['**'], {skipLocationChange: true});
-        setTimeout(function(){
-            this.router.navigate(['users']); 
-        }.bind(this), 50);
     }
 }

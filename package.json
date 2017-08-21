@@ -13,7 +13,7 @@
     "admin": "ng serve --app admin --port 4201 --open",
     "admin1": "ng serve --app admin --port 4201 --open --proxy-config proxy.conf.json",
     "app": "ng serve --app app --port 4200 --open",
-    "buildAdmin": "ng build --app admin",
+    "buildAdmin": "ng build --app admin --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -39,6 +39,7 @@
     "core-js": "2.4.1",
     "dragula": "3.7.2",
     "moment": "2.18.1",
+    "ng2-cache-service": "^1.1.1",
     "ng2-charts": "1.6.0",
     "ng2-dnd": "^4.2.0",
     "ng2-dragula": "1.5.0",
