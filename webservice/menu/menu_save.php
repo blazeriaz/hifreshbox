@@ -50,9 +50,7 @@ $result = curl_exec($ch);
 
 $product_result = json_decode($result);
 
-
-
-
+// add menu 
 						
 $slide_array = array('menu'=>array(
 							array(
