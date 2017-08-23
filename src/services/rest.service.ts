@@ -12,14 +12,18 @@ import * as GlobalVariable from "../global";
 @Injectable()
 export class RestService {
   private module: string;
+  private criteria: string;
 
   constructor(private http: Http, 
               private router: Router) {
-    
+    this.criteria = "criteria";
   }
 
   setRestModule(module) {
     this.module = module;
+  }
+  setRestCriteria(criteria) {
+    this.criteria = criteria;
   }
 
   getItems(page?, filterGroups?, pageSize?) {
@@ -30,12 +34,12 @@ export class RestService {
 
     let searchParams = [];
     let pIndex = 0;
-    searchParams[pIndex++] = "searchCriteria[pageSize]=" + searchCriteria.pageSize;
-    searchParams[pIndex++] = "searchCriteria[currentPage]=" + searchCriteria.currentPage;
+    searchParams[pIndex++] = this.criteria + "[pageSize]=" + searchCriteria.pageSize;
+    searchParams[pIndex++] = this.criteria + "[currentPage]=" + searchCriteria.currentPage;
 
     filterGroups = filterGroups?filterGroups:[];
     filterGroups.map((data, index) => {
-      let key = "searchCriteria[filter_groups]["+index+"]";
+      let key = this.criteria + "[filter_groups]["+index+"]";
       data.filters.map((filter, i) => {
         key += "[filters]["+i+"]";
         searchParams[pIndex++] = key + "[field]=" + filter.field;

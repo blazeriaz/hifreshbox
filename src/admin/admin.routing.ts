@@ -33,7 +33,12 @@ export const routes: Routes = [
         path: 'recipes',
         canActivate: [AuthService],
         loadChildren: './recipes/recipes.module#RecipesModule'
-      }
+      },
+      {
+        path: 'masters',
+        canActivate: [AuthService],
+        loadChildren: './masters/masters.module#MastersModule'
+      }      
     ]
   },
   {
