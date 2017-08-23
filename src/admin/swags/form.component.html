@@ -1,0 +1,68 @@
+<div class="animated fadeIn">
+  <form [formGroup]="swagForm" (submit)="saveSwag()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> Add Swag
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="swag_name" class="col-md-2 form-control-label">Swag Name</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('name')">
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="swag_name" formControlName="name" [ngClass]="setInputErrorClass('name')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="swag_name" class="col-md-2 form-control-label">Image</label>
+            <div class="col-md-5">
+              <input type="file" accept="image/*" (change)="changeListener($event)" />
+            </div>
+            <div class="col-md-5" ng-if="swag.sku">
+              <div class="avatar">
+                <img class="img-avatar" 
+                  [src]="swag.custom_attributes | mgCatalogAttribute:'thumbnail'"
+                  (error)="swag.imageHide=1" *ngIf="!swag.imageHide" />
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row" formArrayName="custom_attributes" 
+              *ngIf="getCustomAttributeIndex('description') >= 0">
+            <label for="swag_desc" class="col-md-2 form-control-label">Description</label>
+            <div class="col-md-10" [ngClass]="setAttrContainerErrorClass('description')" [formGroupName]="getCustomAttributeIndex('description')">
+              <textarea class="form-control" rows="5" id="swag_desc" [ngClass]="setAttrInputErrorClass('description')" formControlName="value"></textarea>
+            </div>
+          </div>
+          <div class="form-group row" formArrayName="custom_attributes" 
+              *ngIf="getCustomAttributeIndex('order_shipping') >= 0">
+            <label for="swag_order_shipping" class="col-md-2 form-control-label">Order Shipping</label>
+            <div class="col-md-10" [ngClass]="setAttrContainerErrorClass('order_shipping')" [formGroupName]="getCustomAttributeIndex('order_shipping')">
+              <textarea class="form-control" rows="5" id="swag_order_shipping" [ngClass]="setAttrInputErrorClass('order_shipping')" formControlName="value"></textarea>
+            </div>
+          </div>
+          <div class="form-group row" formArrayName="custom_attributes" 
+              *ngIf="getCustomAttributeIndex('return_policy') >= 0">
+            <label for="swag_return_policy" class="col-md-2 form-control-label">Return Policy</label>
+            <div class="col-md-10" [ngClass]="setAttrContainerErrorClass('return_policy')" [formGroupName]="getCustomAttributeIndex('return_policy')">
+              <textarea class="form-control" rows="5" id="swag_return_policy" [ngClass]="setAttrInputErrorClass('return_policy')" formControlName="value"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" (click)="goToList()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>

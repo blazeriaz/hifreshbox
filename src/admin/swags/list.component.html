@@ -1,0 +1,55 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> Swags
+          <div  class="pull-right"><a [routerLink]="'add'" class="btn btn-primary">Add</a></div>
+        </div>
+        <div class="card-block">
+          <div class="row py-2 bg-primary">
+            <div class="col-md-3">Receipe</div>
+            <div class="col-md-3">Serving Size</div>
+            <div class="col-md-3">Cook Time</div>
+            <div class="col-md-3">Created By</div>
+          </div>
+
+          <div class="row py-2" *ngFor="let swag of swags;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+            <div class="col-md-1">
+              <div class="avatar">
+                <img class="img-avatar" 
+                  [src]="swag.custom_attributes | mgCatalogAttribute:'thumbnail'"
+                  (error)="swag.imageHide=1" *ngIf="!swag.imageHide" />
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              {{swag.name}}
+              <div class="btn-group btn-group-sm">
+                <a [routerLink]="['edit', swag.sku]" class="btn btn-link pl-0">Edit</a>
+                <button type="button" class="btn btn-link px-0" (click)="deleteReceipe(swag.sku)">Delete</button>
+              </div>
+            </div>
+            <div class="col-md-3">{{swag.custom_attributes | mgCatalogAttribute: 'servings'}}</div>
+            <div class="col-md-3">{{swag.custom_attributes | mgCatalogAttribute: 'cooking_time'}}</div>
+            <div class="col-md-3">{{swag.custom_attributes | mgCatalogAttribute: 'chef_name'}}</div>
+          </div>
+
+          <div class="row mt-2"><div class="col-md-12">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

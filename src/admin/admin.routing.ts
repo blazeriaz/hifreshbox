@@ -35,6 +35,11 @@ export const routes: Routes = [
         loadChildren: './recipes/recipes.module#RecipesModule'
       },
       {
+        path: 'swags',
+        canActivate: [AuthService],
+        loadChildren: './swags/swags.module#SwagsModule'
+      },
+      {
         path: 'masters',
         canActivate: [AuthService],
         loadChildren: './masters/masters.module#MastersModule'

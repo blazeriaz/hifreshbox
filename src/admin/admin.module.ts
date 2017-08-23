@@ -27,6 +27,7 @@ import { AuthService, AlertService } from "services";
 import { AlertComponent } from "components";
 
 import {TooltipModule} from "ngx-tooltip";
+import { mgCatalogAttribute } from "pipes";
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import {TooltipModule} from "ngx-tooltip";
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
-    AlertComponent
+    AlertComponent,
+    mgCatalogAttribute
   ],
   providers: [
     {
