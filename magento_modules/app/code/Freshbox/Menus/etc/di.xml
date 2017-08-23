@@ -1,0 +1,4 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Menus\Api\Data\MenuInterface" type="Freshbox\Menus\Model\Menu" />
+    <preference for="Freshbox\Menus\Api\MenuRepositoryInterface" type="Freshbox\Menus\Model\MenuRepository" />
+</config>

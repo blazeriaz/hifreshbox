@@ -1,6 +1,7 @@
 <?php
 $userData = array("username" => "admin", "password" => "admin@123");
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/integration/admin/token");
+//$ch = curl_init("http://127.0.0.1/magento/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +14,7 @@ $sku = uniqid();
 $productData = array(
         'sku'               => $sku,
         'name'              => 'Menu Product ' . uniqid(),
-        'visibility'        => 4, /*'catalog',*/
+        'visibility'        => 4, 
         'type_id'           => 'simple',
         'price'             => 72.00,
         'status'            => 1,
@@ -49,25 +50,38 @@ $result = curl_exec($ch);
 
 $product_result = json_decode($result);
 
-
-
-$slide = json_encode(['menu' => [
-						'product_id' => $product_result->id,					
-						'week_no' => '12',						
-						'week_year' => '2017',						
-						'recipe_id' => '1',						
-						'menu_type' => 'week'					
-						]]);
+// add menu 
 						
+$slide_array = array('menu'=>array(
+							array(
+								'product_id' => $product_result->id,
+								'week_no' => '13',						
+								'week_year' => '2017',						
+								'recipe_id' => '1',						
+								'menu_type' => 'week'	
+								),
+							array(
+								'product_id' => $product_result->id,
+								'week_no' => '13',						
+								'week_year' => '2017',						
+								'recipe_id' => '2',						
+								'menu_type' => 'week'	
+								)
+							));
+							
+$slide_new = json_encode($slide_array);
+
+	
 						
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/menus");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch, CURLOPT_POSTFIELDS, $slide);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $slide_new);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
  
 $menu_result = curl_exec($ch);
 echo '<pre>';
+
 print_r(json_decode($menu_result)); 
 echo '</pre>';
 //var_dump($result);
