@@ -8,13 +8,35 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
  
 $token = curl_exec($ch);
  
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/default/V1/products?searchCriteria[pageSize]=10&searchCriteria[filter_groups][0][filters][0][field]=attribute_set_id&searchCriteria[filter_groups][0][filters][0][value]=18&searchCriteria[filter_groups][0][filters][0][condition_type]=eq" );
+$searchCriteria = '{
+    "criteria": {
+        "filter_groups": [
+            {
+                "filters": [
+                    {
+                        "field": "week_no",
+                        "value": "%",
+                        "condition_type": "like"
+                    }
+                ]
+            }
+        ],
+        "current_page": 1,
+        "page_size": 10,
+        "sort_orders": []
+    }
+}';
+
+$searchCriteriaString = http_build_query(json_decode($searchCriteria));
+
+						
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/menus/search?".$searchCriteriaString);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
  
 $result = curl_exec($ch);
-
 echo '<pre>';
 print_r(json_decode($result)); 
 echo '</pre>';

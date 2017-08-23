@@ -10,49 +10,35 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 $token = curl_exec($ch);
 
 
-$sku = uniqid();
-$productData = array(
-        'sku'               => $sku,
-        'name'              => 'Menu Product ' . uniqid(),
-        'visibility'        => 4, 
-        'type_id'           => 'simple',
-        'price'             => 72.00,
-        'status'            => 1,
-        'attribute_set_id'  => 18,
-        'weight'            => 1,
-		"extension_attributes"=> [
-            "stock_item"=> [
-                "manage_stock"=> 0,
-                "is_in_stock"=> 1,
-                "qty"=> "100"
-            ]],
-        'custom_attributes' => array(
-            array( 'attribute_code' => 'category_ids', 'value' => ["43"] ),
-            array( 'attribute_code' => 'description', 'value' => 'Simple Description' ),
-            array( 'attribute_code' => 'short_description', 'value' => 'Simple  Short Description' ),
-            array( 'attribute_code' => 'week_no', 'value' => '12' ),
-            array( 'attribute_code' => 'week_year', 'value' => '2017' ),
-            array( 'attribute_code' => 'selected_recipes', 'value' => '1,2,3' ),
-            array( 'attribute_code' => 'menu_type', 'value' => 'week' ),
-            
-            )
-    );
-	
-    $productData = json_encode(array('product' => $productData));
- 
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/default/V1/products");
+$subscription_product_id = 2078;
+
+/* =====================Add Single Menu ========================================= */
+$single_menu = json_encode(['menu' => [
+						'product_id' => $subscription_product_id,
+						'week_no' => '13',						
+						'week_year' => '2017',						
+						'recipe_id' => '1',						
+						'menu_type' => 'week',	
+						]]);
+						
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/menu");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch,CURLOPT_POSTFIELDS, $productData);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $single_menu);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
  
-$result = curl_exec($ch);
+$menu_result = curl_exec($ch);					
+echo '<pre>';
+var_dump($menu_result);
+//print_r(json_decode($menu_result)); 
+echo '</pre>';
 
-$product_result = json_decode($result);
+/* ==========================End Single Menu ==========================================*/
 
-// add menu 
-						
-$slide_array = array('menu'=>array(
+
+/* =======================For adding Multiple  menu use the Below Code===========================*/					
+
+/*$slide_array = array('menu'=>array(
 							array(
 								'product_id' => $product_result->id,
 								'week_no' => '13',						
@@ -79,9 +65,11 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $slide_new);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
  
-$menu_result = curl_exec($ch);
-echo '<pre>';
+$menu_result = curl_exec($ch);*/
 
-print_r(json_decode($menu_result)); 
-echo '</pre>';
-//var_dump($result);
+
+/* =====================================End  Multiple Add Menu ==================*/
+
+
+
+
