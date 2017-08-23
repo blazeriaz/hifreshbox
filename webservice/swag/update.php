@@ -26,7 +26,8 @@ $productData = array(
             array( 'attribute_code' => 'category_ids', 'value' => ["42"] ),
             array( 'attribute_code' => 'description', 'value' => 'update Description updated' ),
             array( 'attribute_code' => 'short_description', 'value' => 'update  Short Description' ),
-            
+            array( 'attribute_code' => 'order_shipping', 'value' => 'Order and shipping Description' ),
+            array( 'attribute_code' => 'return_policy', 'value' => 'REturn policy Description' ),
             )
     );
 	
