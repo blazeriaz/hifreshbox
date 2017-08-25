@@ -10,14 +10,14 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 $token = curl_exec($ch);
 
 
-$subscription_product_id = 2078;
+
 
 /* =====================Add Single recipe ========================================= */
 $single_menu = json_encode(['menu' => [
 						'product_sku' => 'freshbox-subscription',
 						'week_no' => '13',						
 						'week_year' => '2017',						
-						'recipe_id' => '1',						
+						'recipe_sku' => '123',						
 						'menu_type' => 'week',	
 						]]);
 						
@@ -43,14 +43,14 @@ echo '</pre>';
 								'product_sku' => $product_result->id,
 								'week_no' => '13',						
 								'week_year' => '2017',						
-								'recipe_id' => '1',						
+								'recipe_sku' => '1',						
 								'menu_type' => 'week'	
 								),
 							array(
 								'product_sku' => $product_result->id,
 								'week_no' => '13',						
 								'week_year' => '2017',						
-								'recipe_id' => '2',						
+								'recipe_sku' => '2',						
 								'menu_type' => 'week'	
 								)
 							));
