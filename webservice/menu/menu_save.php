@@ -14,7 +14,7 @@ $subscription_product_id = 2078;
 
 /* =====================Add Single Menu ========================================= */
 $single_menu = json_encode(['menu' => [
-						'product_id' => $subscription_product_id,
+						'product_sku' => 'sku123',
 						'week_no' => '13',						
 						'week_year' => '2017',						
 						'recipe_id' => '1',						
