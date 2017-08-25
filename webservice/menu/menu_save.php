@@ -12,9 +12,9 @@ $token = curl_exec($ch);
 
 $subscription_product_id = 2078;
 
-/* =====================Add Single Menu ========================================= */
+/* =====================Add Single recipe ========================================= */
 $single_menu = json_encode(['menu' => [
-						'product_sku' => 'sku123',
+						'product_sku' => 'freshbox-subscription',
 						'week_no' => '13',						
 						'week_year' => '2017',						
 						'recipe_id' => '1',						
@@ -36,18 +36,18 @@ echo '</pre>';
 /* ==========================End Single Menu ==========================================*/
 
 
-/* =======================For adding Multiple  menu use the Below Code===========================*/					
+/* =======================For adding Multiple  recipe for menu use the Below Code===========================*/					
 
 /*$slide_array = array('menu'=>array(
 							array(
-								'product_id' => $product_result->id,
+								'product_sku' => $product_result->id,
 								'week_no' => '13',						
 								'week_year' => '2017',						
 								'recipe_id' => '1',						
 								'menu_type' => 'week'	
 								),
 							array(
-								'product_id' => $product_result->id,
+								'product_sku' => $product_result->id,
 								'week_no' => '13',						
 								'week_year' => '2017',						
 								'recipe_id' => '2',						
