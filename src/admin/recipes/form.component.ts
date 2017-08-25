@@ -1,16 +1,17 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { ProductsService, AlertService } from "services";
+import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 @Injectable()
 export class recipeEditResolve implements Resolve<any> {
   
-  constructor(private recipesService: ProductsService) {}
+  constructor(private rest: RestService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
     let recipeSku = route.params['sku'];
-    return this.recipesService.getProduct(recipeSku);
+    this.rest.setRestModule('products');
+    return this.rest.getItem(recipeSku);
   }
 }
 
@@ -55,11 +56,14 @@ export class RecipeFormComponent implements OnInit {
 
     constructor(
       private recipesService: ProductsService,
+      private rest: RestService,
       private alert: AlertService,
       private route: ActivatedRoute,
       private router: Router,
       private _fb : FormBuilder
-    ) { }
+    ) {
+      this.rest.setRestModule('products');
+    }
     
     ngOnInit(): void {
       this.ingredients = [];
@@ -252,7 +256,7 @@ export class RecipeFormComponent implements OnInit {
             sendData.sku = getRandomInt(10000, 99999);
           }
 
-          this.recipesService.saveProduct(recipeSku, {product : sendData}).subscribe(
+          this.rest.saveItem(recipeSku, {product : sendData}).subscribe(
               data => {
                 if(this.image.base64) {
                   let base64 = this.image.base64.split('base64,');

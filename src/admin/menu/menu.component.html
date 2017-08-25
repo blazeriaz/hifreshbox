@@ -1,0 +1,31 @@
+<div class="row my-1">
+	<div class="col-auto pl-3">
+		<button type="button" class="btn btn-primary" [disabled]="disablePreviousWeek" (click)="gotToPrevWeek()"><< Previous</button>
+	</div>
+	<div class="col">
+		<ng-select [allowClear]="true" [multiple]="false"
+          [items]="displayYears" 
+          [active]="selectedYear" 
+          (data)="refreshYearValue($event)"
+          placeholder="Select Year">
+        </ng-select>
+	</div>
+	<div class="col">
+		<ng-select [allowClear]="true" [multiple]="false"
+          [items]="displayWeeks" 
+          [active]="selectedWeek" 
+          (data)="refreshWeekValue($event)"
+          placeholder="Select Week">
+        </ng-select>
+	</div>
+	<div class="col-auto pr-3">
+		<button type="button" class="btn btn-primary" [disabled]="disableNextWeek" (click)="gotToNextWeek()">Next >></button>
+	</div>
+</div>
+
+<div class="row my-1">
+	<div class="col-sm-12 align-center">
+		
+	</div>
+</div>
+<router-outlet></router-outlet>

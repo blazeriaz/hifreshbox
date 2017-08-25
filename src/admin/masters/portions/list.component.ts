@@ -13,6 +13,7 @@ export class portionListResolve implements Resolve<any> {
   
   resolve(route: ActivatedRouteSnapshot) {
     this.restService.setRestModule("portions");
+    this.restService.setRestCriteria("criteria");
     return this.restService.getItems(1, [], pageSize);
   }
 }
@@ -38,7 +39,7 @@ export class PortionsListComponent implements OnInit {
     
     ngOnInit(): void {  
         this.masterForm = this._fb.group({
-            title : ['', [Validators.required, Validators.minLength(3)]]
+            title : ['', [Validators.required]]
         });
 
         this.restService.setRestModule("portions");

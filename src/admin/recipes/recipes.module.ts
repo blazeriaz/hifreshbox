@@ -9,10 +9,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
 
+import {SharedModule} from "shared.module";
 
 @NgModule({
     imports: [
-        SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
+        SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
     ],
     declarations: [ RecipesListComponent, RecipeFormComponent ],
     providers: [ProductsService, recipesListResolve, recipeEditResolve, PagerService]

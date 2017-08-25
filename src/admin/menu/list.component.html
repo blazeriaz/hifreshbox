@@ -1,0 +1,43 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> Menu Recipes
+          <div  class="pull-right">
+          <a [routerLink]="'add-recipe'" class="btn btn-primary">Add Recipe</a>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="row py-2 bg-primary">
+            <div class="col-md-3">Receipe</div>
+            <div class="col-md-2">Serving Size</div>
+            <div class="col-md-2">Cook Time</div>
+            <div class="col-md-2">Created By</div>
+          </div>
+          <div class="row py-2" *ngFor="let recipe of recipes;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+            <div class="col-md-1">
+              <div class="avatar">
+                <img class="img-avatar" 
+                  [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
+                  (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
+                <span class="avatar-status badge-success"></span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              {{recipe.name}}
+            </div>
+            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'servings'}}</div>
+            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'cooking_time'}}</div>
+            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'chef_name'}}</div>
+            <div class="col-md-3">
+              <div class="btn-group btn-group-sm">                
+                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.sku)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

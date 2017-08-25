@@ -1,6 +1,6 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angular/router';
-import { ProductsService, AlertService, PagerService } from "services";
+import { RestService, AlertService, PagerService } from "services";
 
 export const pageSize = 10;
 export const filterGroups = [{
@@ -14,10 +14,11 @@ export const filterGroups = [{
 @Injectable()
 export class swagsListResolve implements Resolve<any> {
   
-  constructor(private swagsService: ProductsService) {}
+  constructor(private rest: RestService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    return this.swagsService.getProducts(1, filterGroups, pageSize);
+    this.rest.setRestModule('products');
+    return this.rest.getItems(1, filterGroups, pageSize);
   }
 }
 
@@ -28,11 +29,13 @@ export class SwagsListComponent implements OnInit {
     private swags:any;
     private pager: any;
 
-    constructor(private swagsService: ProductsService,
+    constructor(private rest: RestService,
                 private alert: AlertService,
                 private pagerService: PagerService,
                 private route: ActivatedRoute,
-                private router: Router ) { }
+                private router: Router ) {
+        this.rest.setRestModule('products');
+    }
                 
     ngOnInit(): void {
         let swags = this.route.snapshot.data['swags'];        
@@ -47,7 +50,7 @@ export class SwagsListComponent implements OnInit {
     }
 
     setPage(page) {
-        this.swagsService.getProducts(page, filterGroups, pageSize).subscribe(swags => {
+        this.rest.getItems(page, filterGroups, pageSize).subscribe(swags => {
             this.initSwagsList(swags, page);
         });
     }
@@ -57,10 +60,10 @@ export class SwagsListComponent implements OnInit {
             return;
         }
         this.alert.clear();
-        this.swagsService.deleteProduct(swagSku).subscribe(data => {
+        this.rest.deleteItem(swagSku).subscribe(data => {
             if(data) {
                 this.alert.success("The swag deleted successfully!", true);
-                this.swagsService.getProducts(1, filterGroups, pageSize).subscribe(swags => {
+                this.rest.getItems(1, filterGroups, pageSize).subscribe(swags => {
                     this.initSwagsList(swags);
                 });
             } else {

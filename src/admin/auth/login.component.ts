@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from "services/auth.service";
-import { AlertService } from "services";
+import { AlertService, RestService } from "services";
 import { AlertComponent } from "components";
 
 @Component({
@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
               private route: ActivatedRoute,
               private auth: AuthService,
               private formBuilder: FormBuilder,
-              private alert: AlertService) { 
+              private alert: AlertService,
+              private rest: RestService) { 
     this.loginForm = this.formBuilder.group({
       'username': ['', Validators.required],
       'password': ['', [Validators.required]]
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.alert.clear();
     if (this.loginForm.dirty && this.loginForm.valid) {
-      this.loading = true;
+      this.rest.showLoader();
       this.auth.login(this.loginForm.value.username, this.loginForm.value
         .password)
         .subscribe(
@@ -48,7 +49,7 @@ export class LoginComponent implements OnInit {
               } else {
                 this.alert.error("Server Error");
               }
-              this.loading = false;
+              this.rest.hideLoader();
             });
     } else {
       this.alert.error('Please enter username and password');

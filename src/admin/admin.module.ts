@@ -4,14 +4,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { AdminComponent } from './admin.component';
+import { BreadcrumbsComponent } from 'app/shared/breadcrumb.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NAV_DROPDOWN_DIRECTIVES } from 'app/shared/nav-dropdown.directive';
-
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SIDEBAR_TOGGLE_DIRECTIVES } from 'app/shared/sidebar.directive';
 import { AsideToggleDirective } from 'app/shared/aside.directive';
-import { BreadcrumbsComponent } from 'app/shared/breadcrumb.component';
+
 
 // Routing Module
 import { AdminRoutingModule } from './admin.routing';
@@ -23,41 +22,36 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 import { HttpModule } from "@angular/http";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService, AlertService } from "services";
-import { AlertComponent } from "components";
 
-import {TooltipModule} from "ngx-tooltip";
-import { mgCatalogAttribute } from "pipes";
+import {SharedModule} from "shared.module";
+import {RestService} from "services";
+
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AdminRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule,
+    AdminRoutingModule,
+    SharedModule,
     HttpModule,
-    ReactiveFormsModule,
-    TooltipModule
+    ReactiveFormsModule
   ],
   declarations: [
-    AdminComponent,
-    FullLayoutComponent,
-    SimpleLayoutComponent,
-    NAV_DROPDOWN_DIRECTIVES,
-    BreadcrumbsComponent,
+    NAV_DROPDOWN_DIRECTIVES,    
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
-    AlertComponent,
-    mgCatalogAttribute
+    BreadcrumbsComponent,
+    AdminComponent,
+    FullLayoutComponent,
+    SimpleLayoutComponent
   ],
   providers: [
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    },
-    AuthService, AlertService
+    }, RestService
   ],
   bootstrap: [ AdminComponent ]
 })

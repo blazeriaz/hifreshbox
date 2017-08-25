@@ -1,16 +1,16 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { ProductsService, AlertService } from "services";
+import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 @Injectable()
 export class swagEditResolve implements Resolve<any> {
   
-  constructor(private swagsService: ProductsService) {}
+  constructor(private rest: RestService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
     let swagSku = route.params['sku'];
-    return this.swagsService.getProduct(swagSku);
+    return this.rest.getItem(swagSku);
   }
 }
 
@@ -55,6 +55,7 @@ export class SwagFormComponent implements OnInit {
 
     constructor(
       private swagsService: ProductsService,
+      private rest: RestService,
       private alert: AlertService,
       private route: ActivatedRoute,
       private router: Router,
@@ -62,22 +63,7 @@ export class SwagFormComponent implements OnInit {
     ) { }
     
     ngOnInit(): void {
-      this.ingredients = [];
-      this.newIngredient = {};
-      this.swagSteps = [];
-      this.ingredientsOptions = null;
       this.image = {};
-
-      this.swagsService.getIngredienOptions().subscribe(data => {
-        this.ingredientsOptions = {};
-        let options = data[0];
-        this.ingredientsOptions.ingredients = options.ingredients.map(ingredient => {
-          return {id: ingredient.ingredient_id, text: ingredient.title}
-        });
-        this.ingredientsOptions.portions = options.portions.map(portion => {
-          return {id: portion.portion_id, text: portion.title}
-        });
-      });;
 
       let swagSku = this.route.snapshot.params['sku'];
       this.swag = (swagSku)?this.route.snapshot.data['swag']:{};
@@ -97,10 +83,10 @@ export class SwagFormComponent implements OnInit {
       
       this.swagForm = this._fb.group({
         name : [this.swag.name, [Validators.required, Validators.minLength(5)]],
+        status : this.swag.status,
         visibility: 1,
         type_id : 'simple',
         price : 0,
-        status : 1,
         attribute_set_id : 16,
         extension_attributes : this._fb.group({
           stock_item : this._fb.group({
@@ -140,30 +126,21 @@ export class SwagFormComponent implements OnInit {
       return '';
     }
 
-    ingredientDisable() {
-      return !(this.newIngredient.ingredient && this.newIngredient.qty);
+
+    setStatus(status) {
+        this.swagForm.patchValue({status : status});
     }
 
-    refreshIngredientOptionValue(ingredient) {
-      this.newIngredient.ingredient = ingredient;
+    getStatus() {
+        return this.swagForm.value.status;
     }
 
-    addIngredient() {
-      this.ingredients.push(this.newIngredient);
-      this.newIngredient = {};
-    }
-
-    removeIngredient(i: number) {
-      this.ingredients.splice(i, 1);      
-    }
-
-    addSwagStep() {
-      this.swagSteps.push(this.newSwagStep);
-      this.newSwagStep = "";
-    }
-
-    removeSwagStep(i: number) {
-      this.swagSteps.splice(i, 1);
+    setStatusClass(type) {
+        if(this.getStatus() == type) {
+            return 'btn-primary';
+        } else {
+            return 'btn-secondary';
+        }
     }
 
     setInputErrorClass(input) {
@@ -220,20 +197,12 @@ export class SwagFormComponent implements OnInit {
           let swagSku = this.route.snapshot.params['sku'];
           
           let sendData = this.swagForm.value;
-          sendData.custom_attributes.push({
-            attribute_code : "ingredients",
-            value : JSON.stringify(this.ingredients)
-          });
-          sendData.custom_attributes.push({
-            attribute_code : "steps",
-            value : JSON.stringify(this.swagSteps)
-          });
           if(!swagSku) {
             swagSku = '';
             sendData.sku = getRandomInt(10000, 99999);
           }
 
-          this.swagsService.saveProduct(swagSku, {product : sendData}).subscribe(
+          this.rest.saveItem(swagSku, {product : sendData}).subscribe(
               data => {
                 if(this.image.base64) {
                   let base64 = this.image.base64.split('base64,');

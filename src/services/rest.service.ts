@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
@@ -13,20 +14,33 @@ import * as GlobalVariable from "../global";
 export class RestService {
   private module: string;
   private criteria: string;
+  private url: string;
+  private loaderSubject = new Subject();
+  loaderState = this.loaderSubject.asObservable();
+
+  showLoader() {
+      this.loaderSubject.next({show: true});
+  }
+
+  hideLoader() {
+      this.loaderSubject.next({show: false});
+  }
 
   constructor(private http: Http, 
               private router: Router) {
-    this.criteria = "criteria";
+    this.criteria = "searchCriteria";
   }
 
   setRestModule(module) {
     this.module = module;
+    return this;
   }
   setRestCriteria(criteria) {
     this.criteria = criteria;
+    return this;
   }
 
-  getItems(page?, filterGroups?, pageSize?) {
+  getItems(page?, filterGroups?, pageSize?, url?) {
     let searchCriteria = {
       pageSize : pageSize?pageSize:10,
       currentPage : page?page:1,      
@@ -53,50 +67,129 @@ export class RestService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
+
+    if(!url) {
+      if(this.module == "products") {
+        url = this.module + '?' + params;
+      } else {
+        url = this.module + '/search?' + params;
+      }      
+    }
+
+    url = GlobalVariable.BASE_API_URL + url;
     
-    return this.http.get(
-        GlobalVariable.BASE_API_URL + this.module + '/search?' + params,
-        options
-      ).map((response: Response) => response.json());
+    this.showLoader();
+    return this.http.get(url, options)
+      .map((response: Response) => response.json())
+      .catch(this.onCatch)
+      .do((res: Response) => {
+         this.onSuccess(res);
+      }, (error: any) => {
+         this.onError(error);
+      })
+      .finally(() => {
+         this.onEnd();
+      });
   }
 
-  getItem(itemId) {
+  getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
+
+    if(!url) {
+      url = this.module + '/' + itemId;
+    }
+
+    url = GlobalVariable.BASE_API_URL + url;
     
-    return this.http.get(
-        GlobalVariable.BASE_API_URL + this.module + '/' + itemId,
-        options
-      ).map((response: Response) => response.json());
+    this.showLoader();
+    return this.http.get(url, options)
+      .map((response: Response) => response.json())
+      .catch(this.onCatch)
+      .do((res: Response) => {
+         this.onSuccess(res);
+      }, (error: any) => {
+         this.onError(error);
+      })
+      .finally(() => {
+         this.onEnd();
+      });
   }
   
-  saveItem(itemId, data) {
+  saveItem(itemId, data, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
+
+    if(!url) {
+      url = this.module + '/' + itemId;
+    }
+
+    url = GlobalVariable.BASE_API_URL + url;
     
+    this.showLoader();
+    let request;
     if(itemId) {
-      return this.http.put(
-          GlobalVariable.BASE_API_URL + this.module + '/' + itemId,
-          data, options
+      request = this.http.put(
+          url, data, options
         ).map((response: Response) => response.json());
     } else {
-      return this.http.post(
-          GlobalVariable.BASE_API_URL + this.module,
-          data, options
+      request = this.http.post(
+          url, data, options
         ).map((response: Response) => response.json());
     }
+    return request.map((response: Response) => response.json())
+      .catch(this.onCatch)
+      .do((res: Response) => {
+         this.onSuccess(res);
+      }, (error: any) => {
+         this.onError(error);
+      })
+      .finally(() => {
+         this.onEnd();
+      });
   }
   
-  deleteItem(itemId) {
+  deleteItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });
+
+    if(!url) {
+      url = this.module + '/' + itemId;
+    }
+
+    url = GlobalVariable.BASE_API_URL + url;
     
-    return this.http.delete(
-        GlobalVariable.BASE_API_URL + this.module + '/' + itemId, options
-      ).map((response: Response) => response.json());
+    this.showLoader();
+    return this.http.delete(url, options)
+      .map((response: Response) => response.json())
+      .catch(this.onCatch)
+      .do((res: Response) => {
+         this.onSuccess(res);
+      }, (error: any) => {
+         this.onError(error);
+      })
+      .finally(() => {
+         this.onEnd();
+      });
+  }
+
+  private onCatch(error: any, caught: Observable<any>): Observable<any> {
+    return Observable.throw(error);
+  }
+
+  private onSuccess(res: Response): void {
+    console.log('Request successful');
+  }
+
+  private onError(res: Response): void {
+    console.log('Error, status code: ' + res.status);
+  }
+
+  private onEnd(): void {
+    this.hideLoader();
   }
 
 }

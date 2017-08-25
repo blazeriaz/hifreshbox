@@ -1,6 +1,6 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angular/router';
-import { ProductsService, AlertService, PagerService } from "services";
+import { AlertService, PagerService, RestService } from "services";
 
 export const pageSize = 10;
 export const filterGroups = [{
@@ -14,10 +14,11 @@ export const filterGroups = [{
 @Injectable()
 export class recipesListResolve implements Resolve<any> {
   
-  constructor(private recipesService: ProductsService) {}
+  constructor(private rest: RestService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    return this.recipesService.getProducts(1, filterGroups, pageSize);
+    this.rest.setRestModule('products');
+    return this.rest.getItems(1, filterGroups, pageSize);
   }
 }
 
@@ -28,11 +29,13 @@ export class RecipesListComponent implements OnInit {
     private recipes:any;
     private pager: any;
 
-    constructor(private recipesService: ProductsService,
+    constructor(private rest: RestService,
                 private alert: AlertService,
                 private pagerService: PagerService,
                 private route: ActivatedRoute,
-                private router: Router ) { }
+                private router: Router ) {
+        this.rest.setRestModule('products');
+    }
                 
     ngOnInit(): void {
         let recipes = this.route.snapshot.data['recipes'];        
@@ -47,7 +50,7 @@ export class RecipesListComponent implements OnInit {
     }
 
     setPage(page) {
-        this.recipesService.getProducts(page, filterGroups, pageSize).subscribe(recipes => {
+        this.rest.getItems(page, filterGroups, pageSize).subscribe(recipes => {
             this.initRecipesList(recipes, page);
         });
     }
@@ -57,10 +60,10 @@ export class RecipesListComponent implements OnInit {
             return;
         }
         this.alert.clear();
-        this.recipesService.deleteProduct(recipeSku).subscribe(data => {
+        this.rest.deleteItem(recipeSku).subscribe(data => {
             if(data) {
                 this.alert.success("The recipe deleted successfully!", true);
-                this.recipesService.getProducts(1, filterGroups, pageSize).subscribe(recipes => {
+                this.rest.getItems(1, filterGroups, pageSize).subscribe(recipes => {
                     this.initRecipesList(recipes);
                 });
             } else {

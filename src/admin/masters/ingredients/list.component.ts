@@ -13,6 +13,7 @@ export class ingredientListResolve implements Resolve<any> {
   
   resolve(route: ActivatedRouteSnapshot) {
     this.restService.setRestModule("ingredients");
+    this.restService.setRestCriteria("criteria");
     return this.restService.getItems(1, [], pageSize);
   }
 }
@@ -42,6 +43,7 @@ export class IngredientsListComponent implements OnInit {
         });
 
         this.restService.setRestModule("ingredients");
+        this.restService.setRestCriteria("criteria");
         let items = this.route.snapshot.data['items'];
         this.initItemsList(items);
     }
