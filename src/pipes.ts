@@ -17,3 +17,10 @@ export class mgCatalogAttribute implements PipeTransform {
     return attr_vlue;
   }
 }
+
+@Pipe({name: 'mgCatalogImage'})
+export class mgCatalogImage implements PipeTransform {
+  transform(imgSrc: string): any {
+    return GlobalVariable.BASE_MEDIA_URL + imgSrc;
+  }
+}

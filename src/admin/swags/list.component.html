@@ -8,7 +8,8 @@
         </div>
         <div class="card-block">
           <div class="row py-2 bg-primary">
-            <div class="col-sm-8">Name</div>
+            <div class="col-sm-5">Name</div>
+            <div class="col-sm-3">Price</div>
             <div class="col-sm-4">Status</div>
           </div>
 
@@ -21,16 +22,20 @@
                 <span class="avatar-status badge-success"></span>
               </div>
             </div>
-            <div class="col-sm-6">
+            
+            <div class="col-sm-3">
               <div>{{swag.name}}</div>
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['edit', swag.sku]" class="btn btn-link pl-0">Edit</a>
                 <button type="button" class="btn btn-link px-0" (click)="deleteReceipe(swag.sku)">Delete</button>
               </div>
             </div>
+            <div class="col-sm-3">
+              <div>{{swag.price}}</div> USD
+            </div>
             <div class="col-md-4">
               <button type="button" class="btn btn-success" *ngIf="swag.status == 1">Enable</button>
-              <button type="button" class="btn btn-danger" *ngIf="swag.status == 0">Disable</button>
+              <button type="button" class="btn btn-danger" *ngIf="swag.status == 2">Disable</button>
             </div>
           </div>
 

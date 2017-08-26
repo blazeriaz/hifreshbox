@@ -11,7 +11,7 @@ import { AuthService, AlertService, RestService } from "services";
 import { AlertComponent } from "components";
 
 import {TooltipModule} from "ngx-tooltip";
-import { mgCatalogAttribute } from "pipes";
+import { mgCatalogAttribute, mgCatalogImage } from "pipes";
 
 @NgModule({
   imports: [
@@ -24,6 +24,7 @@ import { mgCatalogAttribute } from "pipes";
   ],
   declarations: [
     AlertComponent,
+    mgCatalogImage,
     mgCatalogAttribute
   ],
   providers: [
@@ -35,6 +36,7 @@ import { mgCatalogAttribute } from "pipes";
   ],
   exports: [
     AlertComponent,
+    mgCatalogImage,
     mgCatalogAttribute
   ]
 })

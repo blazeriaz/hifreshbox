@@ -17,6 +17,9 @@ export class MealMenuService {
 	    let date = new Date();
 	    let currentYear = date.getFullYear();
 	    let currentWeek = this.getWeekNumber(date);
+	    if(date.getDay() > 2) {
+	    	currentWeek++;
+	    }
 	    this.setYearWeek(currentYear, currentWeek);
 	}
 

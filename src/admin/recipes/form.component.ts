@@ -239,7 +239,7 @@ export class RecipeFormComponent implements OnInit {
     saveRecipe() {
       this.alert.clear();
       this.submitted = true;
-      if (this.recipeForm.dirty && this.recipeForm.valid) {
+      if (this.recipeForm.valid) {
           let recipeSku = this.route.snapshot.params['sku'];
           
           let sendData = this.recipeForm.value;

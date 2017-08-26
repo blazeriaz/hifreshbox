@@ -86,8 +86,8 @@ export class SwagFormComponent implements OnInit {
         status : this.swag.status,
         visibility: 1,
         type_id : 'simple',
-        price : 0,
-        attribute_set_id : 16,
+        price : this.swag.price,
+        attribute_set_id : 17,
         extension_attributes : this._fb.group({
           stock_item : this._fb.group({
             manage_stock : 0,
@@ -193,7 +193,7 @@ export class SwagFormComponent implements OnInit {
     saveSwag() {
       this.alert.clear();
       this.submitted = true;
-      if (this.swagForm.dirty && this.swagForm.valid) {
+      if (this.swagForm.valid) {
           let swagSku = this.route.snapshot.params['sku'];
           
           let sendData = this.swagForm.value;

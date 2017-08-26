@@ -1,3 +1,31 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header">
+				<i class="fa fa-list"></i> Add Recipe
+			</div>
+			<div class="card-block">
+				<form [formGroup]="menuForm" (submit)="saveMealMenu()">
+				<div class="form-group row">
+					<label for="recipe_name" class="col-md-2 col-sm-4 form-control-label">Name</label>
+					<div class="col-md-4 col-sm-8" [ngClass]="setContainerErrorClass('name')">
+						<input type="text" class="form-control" id="menu_name" 
+							formControlName="name"  [ngClass]="setInputErrorClass('name')" />
+					</div>
+					<label for="recipe_name" class="col-md-2 col-sm-4 form-control-label">Price</label>
+					<div class="col-md-2 col-sm-8" [ngClass]="setContainerErrorClass('price')">
+						<input type="number" class="form-control" id="menu_price"
+							formControlName="price"  [ngClass]="setInputErrorClass('price')" />
+					</div>
+					<div class="col-md-2 col-sm-12">
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="row my-1">
 	<div class="col-auto pl-3">
 		<button type="button" class="btn btn-primary" [disabled]="disablePreviousWeek" (click)="gotToPrevWeek()"><< Previous</button>

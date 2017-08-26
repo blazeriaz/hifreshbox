@@ -133,11 +133,11 @@ export class RestService {
     if(itemId) {
       request = this.http.put(
           url, data, options
-        ).map((response: Response) => response.json());
+        );
     } else {
       request = this.http.post(
           url, data, options
-        ).map((response: Response) => response.json());
+        );
     }
     return request.map((response: Response) => response.json())
       .catch(this.onCatch)
@@ -184,7 +184,7 @@ export class RestService {
     console.log('Request successful');
   }
 
-  private onError(res: Response): void {
+  private onError(res: Response): void {console.log(res);
     console.log('Error, status code: ' + res.status);
   }
 

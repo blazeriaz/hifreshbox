@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
-import { RestService, MealMenuService } from 'services';
+import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { RestService, AlertService, MealMenuService } from 'services';
 
 @Component({
   // tslint:disable-next-line
@@ -20,8 +21,14 @@ export class MenuComponent implements OnInit {
   disablePreviousWeek;
   disableNextWeek;
 
+  menuForm;
+  menuItem;
+  submitted;
+
   constructor(
     private router: Router,
+    private _fb: FormBuilder,
+    private alert: AlertService,
     private rest: RestService, 
     private mealMenuService: MealMenuService) {
     this.displayYears=[];
@@ -57,10 +64,54 @@ export class MenuComponent implements OnInit {
         this.disableNextWeek = true;
       }
     });
+
+    this.menuForm = this._fb.group({
+        name : ['', [Validators.required, Validators.minLength(5)]],
+        price: ['', [Validators.required]],  
+    });
+
+    this.rest.getItem('', 'products/freshbox-subscription').subscribe(data => {
+        this.menuItem = data;
+        this.menuForm.patchValue({name: data.name, price: data.price});
+    });
   }
 
   ngOnDestroy() {
     this.yearMonthSubs.unsubscribe();
+  }
+
+  saveMealMenu() {
+      this.alert.clear();
+      this.submitted = true;
+      if (this.menuForm.dirty && this.menuForm.valid) {
+        
+        let sendData = this.menuForm.value;
+
+        this.rest.saveItem('freshbox-subscription', {product : sendData}, 'products/freshbox-subscription').subscribe(
+            data => {
+                this.alert.success("The menu details are updated successfully!", true);                  
+            },
+            error => {
+                if(error.status == 401) {
+                    this.alert.error("Access restricted!");
+                } else {
+                    this.alert.error("Server Error");
+                }
+            }
+        );
+      } else {
+          this.alert.error("Please check the form to enter all required details");
+      }
+  }
+
+  setInputErrorClass(input) {
+    let invalid = this.menuForm.get(input).invalid && this.submitted;
+    if(invalid) return 'form-control-danger';
+  }
+
+  setContainerErrorClass(input) {
+    let invalid = this.menuForm.get(input).invalid && this.submitted;
+    if(invalid) return 'has-danger';
   }
 
   displayListWeeks = function(year){

@@ -17,7 +17,7 @@
           <div class="row py-2" *ngFor="let recipe of recipes;let odd=odd;" [ngClass]="{'bg-faded': odd}">
             <div class="col-md-1">
               <div class="avatar">
-                <img class="img-avatar" 
+               <img class="img-avatar" 
                   [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
                   (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
                 <span class="avatar-status badge-success"></span>
@@ -27,12 +27,12 @@
               {{recipe.name}}
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['edit', recipe.sku]" class="btn btn-link pl-0">Edit</a>
-                <button type="button" class="btn btn-link px-0" (click)="deleteReceipe(recipe.sku)">Delete</button>
+                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.sku)">Delete</button>
               </div>
             </div>
-            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute: 'servings'}}</div>
-            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute: 'cooking_time'}}</div>
-            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute: 'chef_name'}}</div>
+            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute:'servings'}}</div>
+            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute:'cooking_time'}}</div>
+            <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute:'chef_name'}}</div>
           </div>
 
           <div class="row mt-2"><div class="col-md-12">

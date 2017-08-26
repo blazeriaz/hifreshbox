@@ -4,8 +4,8 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-list"></i> Menu Recipes
-          <div  class="pull-right">
-          <a [routerLink]="'add-recipe'" class="btn btn-primary">Add Recipe</a>
+          <div  class="pull-right" *ngIf="showAddRecipe">
+            <a [routerLink]="'add-recipe'" class="btn btn-primary">Add Recipe</a>
           </div>
         </div>
         <div class="card-block">
@@ -15,24 +15,24 @@
             <div class="col-md-2">Cook Time</div>
             <div class="col-md-2">Created By</div>
           </div>
-          <div class="row py-2" *ngFor="let recipe of recipes;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+          <div class="row py-2" *ngFor="let recipe of recipes; let odd=odd;" [ngClass]="{'bg-faded': odd}">
             <div class="col-md-1">
               <div class="avatar">
                 <img class="img-avatar" 
-                  [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
+                  [src]="recipe.recipe_detail.thumbnail | mgCatalogImage"
                   (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
                 <span class="avatar-status badge-success"></span>
               </div>
             </div>
             <div class="col-md-2">
-              {{recipe.name}}
+              {{recipe.recipe_detail.name}}
             </div>
-            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'servings'}}</div>
-            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'cooking_time'}}</div>
-            <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'chef_name'}}</div>
+            <div class="col-md-2">{{recipe.recipe_detail.servings}}</div>
+            <div class="col-md-2">{{recipe.recipe_detail.cooking_time}}</div>
+            <div class="col-md-2">{{recipe.recipe_detail.chef_name}}</div>
             <div class="col-md-3">
               <div class="btn-group btn-group-sm">                
-                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.sku)">Remove</button>
+                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
               </div>
             </div>
           </div>

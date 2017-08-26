@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { PagerService, RestService, MealMenuService} from "services";
+import { PagerService, AlertService, RestService, MealMenuService} from "services";
 
 export const pageSize = 5;
 export const filterGroups = [{
@@ -17,9 +17,12 @@ export const filterGroups = [{
 export class RecipesListComponent implements OnInit {
     private recipes:any;
     private pager: any;
+    yearMonthSubs;
+    yearWeek;
 
     constructor(private router: Router,
                 private rest: RestService,
+                private alert: AlertService,
                 private pagerService: PagerService,
                 private mealMenuService: MealMenuService) {
     }
@@ -29,6 +32,14 @@ export class RecipesListComponent implements OnInit {
         this.rest.getItems(1, filterGroups, pageSize).subscribe(recipes => {
             this.initRecipesList(recipes, 1);
         });
+
+        this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
+            this.yearWeek = data;
+        });
+    }
+
+    ngOnDestroy() {
+        this.yearMonthSubs.unsubscribe();
     }
 
     initRecipesList(recipes, page?) {
@@ -48,7 +59,17 @@ export class RecipesListComponent implements OnInit {
         this.router.navigate(['menu']);
     }
 
-    addRecipeToMenu(sku) {
-
+    addRecipeToMenu(recipe_sku) {
+        let sendData = {menu : {
+            product_sku : 'freshbox-subscription',
+            week_no : this.yearWeek.week,
+            week_year : this.yearWeek.year, 
+            recipe_sku : recipe_sku,
+            menu_type : 'week'
+        }};
+        this.alert.clear();
+        this.rest.saveItem('', sendData, 'menu').subscribe(data => {
+            this.alert.success("The recipe added to menu successfully!", true);
+        });
     }
 }
