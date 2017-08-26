@@ -1,6 +1,6 @@
 <?php
 $userData = array("username" => "admin", "password" => "admin@123");
-$ch = curl_init("http://127.0.0.1/magento/index.php/rest/V1/integration/admin/token");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -34,7 +34,7 @@ $searchCriteria = '{
 
 $searchCriteriaString = http_build_query(json_decode($searchCriteria));
  
-$ch = curl_init("http://127.0.0.1/magento/index.php/rest/V1/review/search?".$searchCriteriaString );
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/review/search?".$searchCriteriaString );
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
