@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-list"></i> Menu Recipes
-          <div  class="pull-right" *ngIf="showAddRecipe">
+          <div  class="pull-right">
             <a [routerLink]="'add-recipe'" class="btn btn-primary">Add Recipe</a>
           </div>
         </div>
@@ -31,7 +31,7 @@
             <div class="col-md-2">{{recipe.recipe_detail.cooking_time}}</div>
             <div class="col-md-2">{{recipe.recipe_detail.chef_name}}</div>
             <div class="col-md-3">
-              <div class="btn-group btn-group-sm">                
+              <div class="btn-group btn-group-sm" *ngIf="!disableEdit">                
                 <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
               </div>
             </div>

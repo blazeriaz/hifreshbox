@@ -15,6 +15,7 @@ import { AsideToggleDirective } from 'app/shared/aside.directive';
 // Routing Module
 import { AdminRoutingModule } from './admin.routing';
 
+import { AlertComponent } from "components";
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
@@ -24,7 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import {SharedModule} from "shared.module";
-import {RestService} from "services";
+import {RestService, AlertService} from "services";
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import {RestService} from "services";
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
     BreadcrumbsComponent,
+    AlertComponent,
     AdminComponent,
     FullLayoutComponent,
     SimpleLayoutComponent
@@ -51,7 +53,7 @@ import {RestService} from "services";
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    }, RestService
+    }, RestService, AlertService
   ],
   bootstrap: [ AdminComponent ]
 })

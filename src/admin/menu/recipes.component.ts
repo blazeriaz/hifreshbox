@@ -34,6 +34,14 @@ export class RecipesListComponent implements OnInit {
         });
 
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
+            let date = new Date();
+            let currentWeek = this.mealMenuService.getWeekNumber(date);
+            if(date.getDay() <=5 && data.week < currentWeek + 2) {
+                //this.router.navigate(['menu']);
+            }
+            if(date.getDay() > 5 && data.week <= currentWeek + 2) {
+                //this.router.navigate(['menu']);
+            }
             this.yearWeek = data;
         });
     }

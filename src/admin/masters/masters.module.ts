@@ -4,16 +4,18 @@ import { CommonModule } from "@angular/common";
 import { MasterRoutingModule }   from './masters-routing.module';
 import { RestService, PagerService } from "services";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { emptyLayoutComponent } from "../layouts/empty-layout.component";
 
 import { ingredientListResolve, IngredientsListComponent } from "./ingredients";
 import { portionListResolve, PortionsListComponent } from "./portions";
 
+import  { SharedModule } from "shared.module";
+
+
 @NgModule({
     imports: [
-        MasterRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
+        MasterRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule 
     ],
-    declarations: [ IngredientsListComponent, PortionsListComponent, emptyLayoutComponent ],
+    declarations: [ IngredientsListComponent, PortionsListComponent ],
     providers: [RestService, PagerService, ingredientListResolve, portionListResolve]
 })
 export class MastersModule { }

@@ -7,8 +7,9 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { HttpModule } from "@angular/http";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService, AlertService, RestService } from "services";
-import { AlertComponent } from "components";
+import { AuthService } from "services";
+
+import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
 import {TooltipModule} from "ngx-tooltip";
 import { mgCatalogAttribute, mgCatalogImage } from "pipes";
@@ -23,7 +24,7 @@ import { mgCatalogAttribute, mgCatalogImage } from "pipes";
     TooltipModule
   ],
   declarations: [
-    AlertComponent,
+    emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute
   ],
@@ -32,10 +33,10 @@ import { mgCatalogAttribute, mgCatalogImage } from "pipes";
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
-    AuthService, AlertService
+    AuthService
   ],
   exports: [
-    AlertComponent,
+    emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute
   ]

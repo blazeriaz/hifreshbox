@@ -33,6 +33,10 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
+  goToForgetPass() {
+    this.router.navigate(['auth/forget']);
+  }
+
   login() {
     this.alert.clear();
     if (this.loginForm.dirty && this.loginForm.valid) {

@@ -1,0 +1,89 @@
+<div class="animated fadeIn">
+  <form [formGroup]="mainForm" (submit)="saveStoreInfo()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> General Contact
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="address_first_name" class="col-md-2 col-sm-4 form-control-label">Name</label>
+            <div class="col-md-10 col-sm-8" [ngClass]="setContainerErrorClass('name')">
+              <input type="text" class="form-control" id="address_first_name" formControlName="name" 
+                 [ngClass]="setInputErrorClass('name')" /></div>
+          </div>
+          <div class="form-group row">
+            <label for="address_street_0" class="col-md-2 form-control-label">Street Address</label>
+            <div class="col-md-5" [ngClass]="setContainerErrorClass('street_line1')">
+              <input type="text" class="form-control" id="address_street_0" formControlName="street_line1" 
+                 [ngClass]="setInputErrorClass('street_line1')" /></div>
+            <div class="col-md-5">
+              <input type="text" class="form-control" id="address_street_1" formControlName="street_line2" /></div>
+          </div>
+          <div class="form-group row">
+            <label for="address_city" class="col-md-2 form-control-label">City</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('city')">
+              <input type="text" class="form-control" id="address_city" formControlName="city" 
+                 [ngClass]="setInputErrorClass('city')" /></div>
+          </div>
+          <div class="form-group row">
+            <label for="address_postcode" class="col-md-2 form-control-label">Post Code</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('postcode')">
+              <input type="text" class="form-control" id="address_postcode" formControlName="postcode" 
+                 [ngClass]="setInputErrorClass('postcode')" /></div>
+          </div>
+          <div class="form-group row" [ngClass]="setContainerErrorClass('phone')">
+            <label for="address_telephone" class="col-md-2 form-control-label">Phone</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="address_telephone" formControlName="phone" 
+                 [ngClass]="setInputErrorClass('phone')" /></div>
+          </div>
+          <div class="form-group row">
+            <label for="address_country" class="col-md-2 form-control-label">Country</label>
+            <div class="col-md-10" *ngIf="countries.length > 0">
+              <ng-select [allowClear]="true" [multiple]="false"
+                [items]="countries" 
+                [active]="getActiveCountry()" 
+                (data)="refreshCountryValue($event)"
+                placeholder="No country selected">
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="address_region" class="col-md-2 form-control-label">Region</label>
+            <div class="col-md-10" *ngIf="getActiveCountryRegions()">
+              <ng-select [allowClear]="true" [multiple]="false"
+                [items]="getActiveCountryRegions()" 
+                [active]="getActiveRegion()" 
+                (data)="refreshRegionValue($event)"
+                placeholder="No region selected">
+              </ng-select>
+            </div><!--
+            <div class="col-md-10" *ngIf="getActiveCountryRegions()" formGroupName="region">
+              <input type="text" class="form-control" id="address_region" formControlName="region" />
+            </div>-->
+          </div>
+          <div class="form-group row">
+            <label for="address_hours" class="col-md-2 col-sm-4 form-control-label">Hours</label>
+            <div class="col-md-10 col-sm-8" [ngClass]="setContainerErrorClass('hours')">
+              <input type="text" class="form-control" id="address_hours" formControlName="hours" 
+                 [ngClass]="setInputErrorClass('hours')" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>

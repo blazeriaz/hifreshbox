@@ -40,20 +40,24 @@ export class RestService {
     return this;
   }
 
-  getItems(page?, filterGroups?, pageSize?, url?) {
+  getItems(page?, filterGroups?, pageSize?, url?, criteria?) {
     let searchCriteria = {
       pageSize : pageSize?pageSize:10,
       currentPage : page?page:1,      
     };
 
+    if(!criteria) {
+      criteria = this.criteria;
+    }
+ 
     let searchParams = [];
     let pIndex = 0;
-    searchParams[pIndex++] = this.criteria + "[pageSize]=" + searchCriteria.pageSize;
-    searchParams[pIndex++] = this.criteria + "[currentPage]=" + searchCriteria.currentPage;
+    searchParams[pIndex++] = criteria + "[pageSize]=" + searchCriteria.pageSize;
+    searchParams[pIndex++] = criteria + "[currentPage]=" + searchCriteria.currentPage;
 
     filterGroups = filterGroups?filterGroups:[];
     filterGroups.map((data, index) => {
-      let key = this.criteria + "[filter_groups]["+index+"]";
+      let key = criteria + "[filter_groups]["+index+"]";
       data.filters.map((filter, i) => {
         key += "[filters]["+i+"]";
         searchParams[pIndex++] = key + "[field]=" + filter.field;

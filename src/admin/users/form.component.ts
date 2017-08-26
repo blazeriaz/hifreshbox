@@ -266,7 +266,7 @@ export class UserFormComponent implements OnInit {
     saveUser() {
         this.alert.clear();
         this.submitted = true;
-        if (this.userForm.dirty && this.userForm.valid) {                   
+        if (this.userForm.valid) {                   
             let userId = this.route.snapshot.params['id'];
             userId = (userId)?userId:'';
             this.usersService.saveUser(userId, {customer: this.userForm.value}).subscribe(

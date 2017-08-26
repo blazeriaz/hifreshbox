@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, Event as RouterEvent, NavigationStart, 
   NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
  import { Subscription } from 'rxjs/Subscription';
- import { RestService } from "services";
+ import { AuthService, AlertService, RestService } from "services";
 
 @Component({
   // tslint:disable-next-line

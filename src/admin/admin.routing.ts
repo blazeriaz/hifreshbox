@@ -48,7 +48,11 @@ export const routes: Routes = [
         path: 'masters',
         canActivate: [AuthService],
         loadChildren: './masters/masters.module#MastersModule'
-      }      
+      },
+      {
+        path: 'settings',
+        loadChildren: './settings/settings.module#SettingsModule'
+      }
     ]
   },
   {

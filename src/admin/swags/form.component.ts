@@ -10,6 +10,7 @@ export class swagEditResolve implements Resolve<any> {
   
   resolve(route: ActivatedRouteSnapshot) {
     let swagSku = route.params['sku'];
+    this.rest.setRestModule('products');
     return this.rest.getItem(swagSku);
   }
 }
@@ -67,6 +68,7 @@ export class SwagFormComponent implements OnInit {
 
       let swagSku = this.route.snapshot.params['sku'];
       this.swag = (swagSku)?this.route.snapshot.data['swag']:{};
+      this.rest.setRestModule('products');
 
       this.customAttributes = [];
       let customAttributesArray = [];
@@ -90,9 +92,9 @@ export class SwagFormComponent implements OnInit {
         attribute_set_id : 17,
         extension_attributes : this._fb.group({
           stock_item : this._fb.group({
-            manage_stock : 0,
+            manage_stock : 1,
             is_in_stock : 1,
-            qty : 0
+            qty : this.swag.extension_attributes.stock_item.qty
           })
         }),
         custom_attributes : this._fb.array(customAttributesArray)     
@@ -171,6 +173,16 @@ export class SwagFormComponent implements OnInit {
         if(invalid) return 'has-danger';
     }
 
+    setQtyInputErrorClass() {
+      let invalid = this.swagForm.controls['extension_attributes'].controls['stock_item'].controls['qty'].invalid && this.submitted;
+      if(invalid) return 'form-control-danger';
+    }
+
+    setQtyContainerErrorClass() {
+      let invalid = this.swagForm.controls['extension_attributes'].controls['stock_item'].controls['qty'].invalid && this.submitted;
+      if(invalid) return 'has-danger';
+    }
+
     changeListener($event) : void {
       this.readThis($event.target);
     }
@@ -203,42 +215,43 @@ export class SwagFormComponent implements OnInit {
           }
 
           this.rest.saveItem(swagSku, {product : sendData}).subscribe(
-              data => {
-                if(this.image.base64) {
-                  let base64 = this.image.base64.split('base64,');
-                  let image_upload = {
-                    media_type: 'image',
-                    label: 'Product Image',
-                    position: 0,
-                    disabled: 0,
-                    types: ['image','small_image','thumbnail','swatch_image'],
-                    file: this.image.filename,
-                    content: {
-                      base64_encoded_data: base64[1],
-                      type: this.image.filetype,
-                      name: this.image.filename
-                    }                    
-                  };
-                  this.swagsService.saveProductImage(data.sku, image_upload).subscribe(
-                    data => {
-                      this.alert.success("The swag details are saved successfully!", true);
-                      this.router.navigate(['swags']);
-                    }
-                  );
-                } else {
-                  this.alert.success("The swag details are saved successfully!", true);
-                  this.router.navigate(['swags']);
-                }                   
-              },
-              error => {
-                  if(error.status == 401) {
-                      this.alert.error("Access restricted!");
-                  } else {
-                      this.alert.error("Server Error");
+            data => {
+              if(this.image.base64) {
+                let base64 = this.image.base64.split('base64,');
+                let image_upload = {
+                  media_type: 'image',
+                  label: 'Product Image',
+                  position: 0,
+                  disabled: 0,
+                  types: ['image','small_image','thumbnail','swatch_image'],
+                  file: this.image.filename,
+                  content: {
+                    base64_encoded_data: base64[1],
+                    type: this.image.filetype,
+                    name: this.image.filename
+                  }                    
+                };
+                this.rest.showLoader();
+                this.swagsService.saveProductImage(data.sku, image_upload).subscribe(
+                  data => {
+                    this.rest.hideLoader();
+                    this.alert.success("The swag details are saved successfully!", true);
+                    this.router.navigate(['swags']);
                   }
-                  window.scrollTo(0,0);
+                );
+              } else {
+                this.alert.success("The swag details are saved successfully!", true);
+                this.router.navigate(['swags']);
+              }                   
+            }, error => {
+              if(error.status == 401) {
+                  this.alert.error("Access restricted!");
+              } else {
+                  this.alert.error("Server Error");
               }
-          );
+              window.scrollTo(0,0);
+          }
+        );
       } else {
         this.alert.error("Please check the form to enter all required details");
         window.scrollTo(0,0);

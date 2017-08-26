@@ -1,0 +1,72 @@
+<div class="animated fadeIn">
+  <form [formGroup]="mainForm" (submit)="saveContactEmails()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> General Contact
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="general_contact_name" class="col-md-2 form-control-label">Name</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('general_contact_name')">
+              <input type="text" class="form-control" id="general_contact_name" formControlName="general_contact_name" [ngClass]="setInputErrorClass('general_contact_name')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="general_contact_email" class="col-md-2 form-control-label">Email</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('general_contact_email')">
+              <input type="text" class="form-control" id="general_contact_email" formControlName="general_contact_email" [ngClass]="setInputErrorClass('general_contact_email')" />
+            </div>
+          </div>
+        </div>
+        <div class="card-header">
+          <i class="fa fa-list"></i> Sales Contact
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="sales_representive_name" class="col-md-2 form-control-label">Name</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('sales_representive_name')">
+              <input type="text" class="form-control" id="sales_representive_name" formControlName="sales_representive_name" [ngClass]="setInputErrorClass('sales_representive_name')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="sales_representive_email" class="col-md-2 form-control-label">Email</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('sales_representive_email')">
+              <input type="text" class="form-control" id="sales_representive_email" formControlName="sales_representive_email" [ngClass]="setInputErrorClass('sales_representive_email')" />
+            </div>
+          </div>
+        </div>
+        <div class="card-header">
+          <i class="fa fa-list"></i> Customer Contact
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="customer_support_name" class="col-md-2 form-control-label">Name</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('customer_support_name')">
+              <input type="text" class="form-control" id="customer_support_name" formControlName="customer_support_name" [ngClass]="setInputErrorClass('customer_support_name')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="customer_support_email" class="col-md-2 form-control-label">Email</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('customer_support_email')">
+              <input type="text" class="form-control" id="customer_support_email" formControlName="customer_support_email" [ngClass]="setInputErrorClass('customer_support_email')" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>

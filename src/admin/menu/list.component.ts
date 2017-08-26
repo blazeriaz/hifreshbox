@@ -18,7 +18,7 @@ export class MenuListComponent implements OnInit {
     private recipes:any;
     private pager: any;
     yearMonthSubs;
-    showAddRecipe;
+    disableEdit;
 
     constructor(
         private rest: RestService,
@@ -30,15 +30,15 @@ export class MenuListComponent implements OnInit {
                 
     ngOnInit(): void {
         this.recipes = [];
-        this.showAddRecipe = false;
+        this.disableEdit = true;
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
             let date = new Date();
             let currentWeek = this.mealMenuService.getWeekNumber(date);
-            if(date.getDay() <=5 && data.week >= currentWeek + 2) {
-                this.showAddRecipe = true;
+            if(date.getDay() <=5 && data.week >= currentWeek + 1) {
+                this.disableEdit = false;
             }
-            if(date.getDay() > 5 && data.week > currentWeek + 2) {
-                this.showAddRecipe = true;
+            if(date.getDay() > 5 && data.week > currentWeek) {
+                this.disableEdit = false;
             }
             let sendData = {week_data : {
                 sku : 'freshbox-subscription',
@@ -47,7 +47,7 @@ export class MenuListComponent implements OnInit {
             }}
             //Get recipes og Menu
             this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-                this.recipes = recipes;console.log(recipes);
+                this.recipes = recipes;
             });
         });
     }
