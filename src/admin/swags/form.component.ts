@@ -85,7 +85,7 @@ export class SwagFormComponent implements OnInit {
       
       this.swagForm = this._fb.group({
         name : [this.swag.name, [Validators.required, Validators.minLength(5)]],
-        status : this.swag.status,
+        status : this.swag.status?this.swag.status:1,
         visibility: 1,
         type_id : 'simple',
         price : this.swag.price,
@@ -94,7 +94,7 @@ export class SwagFormComponent implements OnInit {
           stock_item : this._fb.group({
             manage_stock : 1,
             is_in_stock : 1,
-            qty : this.swag.extension_attributes.stock_item.qty
+            qty : this.swag.extension_attributes?this.swag.extension_attributes.stock_item.qty:0
           })
         }),
         custom_attributes : this._fb.array(customAttributesArray)     
