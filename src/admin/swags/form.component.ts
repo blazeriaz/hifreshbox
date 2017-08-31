@@ -105,7 +105,6 @@ export class SwagFormComponent implements OnInit {
                       entry : image,
                       accepted: true 
                     };
-                    alert(GlobalVariable.BASE_MEDIA_URL + image.file);
                     dropzone.emit("addedfile", mockFile);
                     dropzone.createThumbnailFromUrl(mockFile, GlobalVariable.BASE_MEDIA_URL + image.file);
                     dropzone.emit("success", mockFile);
