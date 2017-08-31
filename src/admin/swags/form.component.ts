@@ -3,6 +3,10 @@ import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angula
 import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
+import * as GlobalVariable from "../../global";
+
 @Injectable()
 export class swagEditResolve implements Resolve<any> {
   
@@ -40,7 +44,8 @@ export function checkAllChildrenValid (c: FormArray): { [key: string] : any} {
 }
 
 @Component({
-    templateUrl: 'form.component.html'
+    templateUrl: 'form.component.html',
+    styles: ['.dz-progress{display:none;}']
 })
 export class SwagFormComponent implements OnInit {
     private swag:any;
@@ -52,8 +57,9 @@ export class SwagFormComponent implements OnInit {
     private swagSteps:any;
     private newSwagStep:any;
     private submitted:any;
-    private image:any;
-
+    private images:any;
+    imageUploadConfig: DropzoneConfigInterface;
+    addImageIndex;
     constructor(
       private swagsService: ProductsService,
       private rest: RestService,
@@ -62,9 +68,63 @@ export class SwagFormComponent implements OnInit {
       private router: Router,
       private _fb : FormBuilder
     ) { }
+
+    removedfile(file) {
+      if(file.addedIndex >= 0) {
+        this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
+      }
+      console.log(this.images);
+    }
     
     ngOnInit(): void {
-      this.image = {};
+      this.images = [];
+      this.addImageIndex = 0;
+
+      this.imageUploadConfig = {
+        url: 'https://httpbin.org/post',
+        acceptedFiles: 'image/*',
+        addRemoveLinks: true,
+        accept : (function(ctrl){
+          return function(file) {        
+            file.addedIndex = ctrl.addImageIndex;
+            file.previewElement.classList.add('dz-success');
+            file.previewElement.classList.add('dz-complete');
+            ctrl.images.push(file);
+            ctrl.addImageIndex++;
+            console.log(ctrl.images);
+          }
+        })(this),
+        init : (function(ctrl){
+          return function() {
+            (function(dropzone){
+              if(ctrl.swag && ctrl.swag.sku) {
+                ctrl.rest.getItem('', 'products/'+ctrl.swag.sku+'/media').subscribe(function(images){
+                  images.map(function(image){
+                    var mockFile = { 
+                      name: image.label,
+                      entry : image,
+                      accepted: true 
+                    };
+                    alert(GlobalVariable.BASE_MEDIA_URL + image.file);
+                    dropzone.emit("addedfile", mockFile);
+                    dropzone.createThumbnailFromUrl(mockFile, GlobalVariable.BASE_MEDIA_URL + image.file);
+                    dropzone.emit("success", mockFile);
+                    dropzone.emit("complete", mockFile);
+                    dropzone.files.push(mockFile);
+                  });                  
+                });
+              }
+            })(this);
+            /**
+            var mockFile = { name: fileName, size: fileSize, type: fileMimeType, serverID: 0, accepted: true };
+            this.emit("addedfile", mockFile);
+            this.createThumbnailFromUrl(mockFile, fileUrl);
+            this.emit("success", mockFile);
+            this.emit("complete", mockFile);
+            this.files.push(mockFile);*/
+          }
+        })(this)
+      };
 
       let swagSku = this.route.snapshot.params['sku'];
       this.swag = (swagSku)?this.route.snapshot.data['swag']:{};
@@ -183,25 +243,6 @@ export class SwagFormComponent implements OnInit {
       if(invalid) return 'has-danger';
     }
 
-    changeListener($event) : void {
-      this.readThis($event.target);
-    }
-
-    readThis(inputValue: any): void {
-      var file:File = inputValue.files[0];
-      var myReader:FileReader = new FileReader();
-
-      this.image.filetype = file.type;
-      this.image.filename = file.name;
-      this.image.filesize = file.size;
-
-      myReader.onloadend = (e) => {
-        this.image.base64 = myReader.result;
-        console.log(this.image);
-      }
-      myReader.readAsDataURL(file);
-    }
-
     saveSwag() {
       this.alert.clear();
       this.submitted = true;
@@ -216,7 +257,7 @@ export class SwagFormComponent implements OnInit {
 
           this.rest.saveItem(swagSku, {product : sendData}).subscribe(
             data => {
-              if(this.image.base64) {
+              /**if(this.images) {
                 let base64 = this.image.base64.split('base64,');
                 let image_upload = {
                   media_type: 'image',
@@ -239,10 +280,10 @@ export class SwagFormComponent implements OnInit {
                     this.router.navigate(['swags']);
                   }
                 );
-              } else {
+              } else {**/
                 this.alert.success("The swag details are saved successfully!", true);
                 this.router.navigate(['swags']);
-              }                   
+             // }                   
             }, error => {
               if(error.status == 401) {
                   this.alert.error("Access restricted!");

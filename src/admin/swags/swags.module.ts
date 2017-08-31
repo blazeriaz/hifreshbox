@@ -10,10 +10,20 @@ import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
 
 import {SharedModule} from "shared.module";
+import { DropzoneModule, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import * as Dropzone from 'dropzone';
+Dropzone.autoDiscover = false;
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+    // Change this to your upload POST address:
+    maxFilesize: 1,
+    uploadMultiple: false,
+    autoProcessQueue: false
+  };
 
 @NgModule({
     imports: [
-        SelectModule, SwagsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
+        SelectModule, SwagsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, 
+        SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG)
     ],
     declarations: [ SwagsListComponent, SwagFormComponent ],
     providers: [ProductsService, swagsListResolve, swagEditResolve, PagerService]

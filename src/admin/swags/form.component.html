@@ -40,6 +40,8 @@
               </div>
             </div>
           </div>
+          <dropzone (removedfile)="removedfile($event)" [config]="imageUploadConfig" [message]="'Click or drag images here to upload'"></dropzone>
+          
           <div class="form-group row">
             <label for="swag_name" class="col-md-2 form-control-label">Image</label>
             <div class="col-md-5">
