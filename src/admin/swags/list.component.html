@@ -8,6 +8,13 @@
         </div>
         <div class="card-block">
           <div class="row py-2 bg-primary">
+            <label class="col-md-2 col-sm-4">Search : </label>
+            <div class="col-md-6 col-sm-8">              
+              <input type="text" class-"form-control" [ngModel]="search" (ngModelChange)="searchRecipeName()" />
+            </div>
+          </div>
+          
+          <div class="row py-2 bg-primary">
             <div class="col-sm-5">Name</div>
             <div class="col-sm-3">Price</div>
             <div class="col-sm-4">Status</div>

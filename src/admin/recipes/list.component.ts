@@ -28,6 +28,8 @@ export class recipesListResolve implements Resolve<any> {
 export class RecipesListComponent implements OnInit {
     private recipes:any;
     private pager: any;
+    searchName;
+    searchSubscripe;
 
     constructor(private rest: RestService,
                 private alert: AlertService,
@@ -47,6 +49,30 @@ export class RecipesListComponent implements OnInit {
         // get pager object from service
         page = page?page:1;
         this.pager = this.pagerService.getPager(recipes.total_count, page, pageSize);        
+    }
+
+    searchRecipeName() {
+        if(this.searchName) {
+            let filterGroups = [{
+                filters : [{
+                    field : "attribute_set_id",
+                    value : 16,
+                    condition_type : 'eq'
+                }]
+            },{
+                filters : [{
+                    field : "name",
+                    value : "%" + this.searchName + "%",
+                    condition_type : 'like'
+                }]
+            }];
+            if(this.searchSubscripe) {
+                this.searchSubscripe.unsubscribe();
+            }
+            this.searchSubscripe = this.rest.getItems(1, filterGroups, pageSize).subscribe(recipes => {
+                this.initRecipesList(recipes, 1);
+            });
+        }
     }
 
     setPage(page) {
