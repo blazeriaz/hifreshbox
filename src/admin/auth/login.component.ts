@@ -6,6 +6,20 @@ import { AlertService, RestService } from "services";
 import { AlertComponent } from "components";
 
 @Component({
+  template: ''
+})
+export class LogoutComponent implements OnInit {
+  constructor(private router: Router,
+    private auth: AuthService) { 
+  }
+
+  ngOnInit() {
+    this.auth.logout();
+    this.router.navigate(['auth/login']);
+  }
+}
+
+@Component({
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
@@ -26,8 +40,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    // reset login status
-    this.auth.logout();
+    if (localStorage.getItem('token')) {
+      this.router.navigate(['dashboard']);
+    } else {
+      // reset login status
+      this.auth.logout();
+    }
 
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';

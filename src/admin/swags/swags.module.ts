@@ -15,10 +15,11 @@ import * as Dropzone from 'dropzone';
 Dropzone.autoDiscover = false;
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
     // Change this to your upload POST address:
+    url : "#",
     maxFilesize: 1,
     uploadMultiple: false,
     autoProcessQueue: false
-  };
+};
 
 @NgModule({
     imports: [

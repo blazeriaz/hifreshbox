@@ -94,7 +94,7 @@ export class IngredientsListComponent implements OnInit {
         this.masterForm.patchValue({
             title : item.title
         });
-        window.scrollTo(0,0);
+        
     }
 
     saveItem() {
@@ -109,19 +109,11 @@ export class IngredientsListComponent implements OnInit {
                     this.submitted = false; 
                     this.masterForm.reset();
                     this.setPage(1); 
-                },
-                error => {
-                    if(error.status == 401) {
-                        this.alert.error("Access restricted!");
-                    } else {
-                        this.alert.error("Server Error");
-                    }
-                    window.scrollTo(0,0);
                 }
             );
         } else {
             this.alert.error("Please check the form to enter all required details");
-            window.scrollTo(0,0);
+            
         }
     }
 }

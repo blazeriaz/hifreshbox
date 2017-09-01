@@ -14,20 +14,6 @@
                 [ngClass]="setInputErrorClass('name')" />
             </div>
           </div>
-          <div class="form-group row">
-            <label for="recipe_name" class="col-md-2 form-control-label">Image</label>
-            <div class="col-md-5">
-              <input type="file" accept="image/*" (change)="changeListener($event)" />
-            </div>
-            <div class="col-md-5" ng-if="recipe.sku">
-              <div class="avatar">
-                <img class="img-avatar" 
-                  [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
-                  (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
-                <span class="avatar-status badge-success"></span>
-              </div>
-            </div>
-          </div>
           <div class="form-group row" formArrayName="custom_attributes" 
               *ngIf="getCustomAttributeIndex('description') >= 0">
             <label for="recipe_desc" class="col-md-2 form-control-label">Description</label>
@@ -126,13 +112,13 @@
             </div>
           </div>
           <ul class="list-group" *ngFor="let ingredient of ingredients; let index = index;">
-            <li class="list-group-item p-1">
-              <span>{{ingredient.ingredient.text}}</span> 
-              <span>{{ingredient.qty}}</span> 
-              <span *ngIf="ingredient.portion">{{ingredient.portion.text}}</span>
-              <span class="px-1">
+            <li class="list-group-item row p-1 mx-0">
+              <span class="col">{{ingredient.ingredient.text}}</span> 
+              <span class="col-auto">{{ingredient.qty}}</span> 
+              <span class="col-auto" *ngIf="ingredient.portion">{{ingredient.portion.text}}</span>
+              <span class="col-auto px-1">
                 <button class="btn btn-link p-0" type="button" (click)="removeIngredient(index)">
-                  <i class="fa fa-remove"></i> Remove
+                  <i class="fa fa-remove"></i>
                 </button>
               </span>
             </li>
@@ -154,17 +140,17 @@
                 <textarea type="text" class="form-control" rows="5" 
                     [(ngModel)]="newRecipeStep" [ngModelOptions]="{standalone: true}"></textarea>
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button" (click)="addRecipeStep()">Add</button>
+                  <button class="btn btn-primary" type="button" [disabled]="!newRecipeStep" (click)="addRecipeStep()">Add</button>
                 </span>
               </div>
             </div>
           </div>
           <ul class="list-group" *ngFor="let step of recipeSteps; let index = index;">
-            <li class="list-group-item p-1">
-              {{step}}
-              <span class="px-1">
+            <li class="list-group-item row p-1 mx-0">
+              <p class="col">{{step}}</p>
+              <span class="col-auto px-1">
                 <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(index)">
-                  <i class="fa fa-remove"></i> Remove
+                  <i class="fa fa-remove"></i>
                 </button>
               </span>
             </li>
@@ -183,11 +169,21 @@
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" [(ngModel)]="newYouNeed" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button">Add</button>
+                  <button class="btn btn-primary" [disabled]="!newYouNeed" (click)="addYouNeeds()" type="button">Add</button>
                 </span>
               </div>
+              <ul class="list-group" *ngFor="let youNeed of youNeeds; let index = index;">
+                <li class="list-group-item row p-1 mx-0">
+                  <span class="col">{{youNeed}}</span> 
+                  <span class="col-auto px-1">
+                    <button class="btn btn-link p-0" type="button" (click)="removeYouNeed(index)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -196,19 +192,53 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          Allergies
+            Allergies
         </div>
         <div class="card-block">
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" [(ngModel)]="newAllerigy" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="button">Add</button>
+                  <button class="btn btn-primary" [disabled]="!newAllerigy" (click)="addAllergy()" type="button">Add</button>
                 </span>
               </div>
-            </div>
+              <ul class="list-group" *ngFor="let allergy of allergies; let index = index;">
+                <li class="list-group-item row p-1 mx-0">
+                  <span class="col">{{allergy}}</span> 
+                  <span class="col-auto px-1">
+                    <button class="btn btn-link p-0" type="button" (click)="removeAllergy(index)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </span>
+                </li>
+              </ul>
+            </div>            
           </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-header">
+        <i class="fa fa-list"></i> Images
+      </div>
+      <div class="card">
+        <div class="card-block">
+            <dropzone (removedfile)="removedImage($event)" [config]="imageUploadConfig" [message]="'Click or drag images here to upload'"></dropzone>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-header">
+        <i class="fa fa-list"></i> PDF Document
+      </div>
+      <div class="card">
+        <div class="card-block">
+            <dropzone [config]="pdfUploadConfig" [message]="'Click or drag PDF here to upload'"></dropzone>
         </div>
       </div>
     </div>
@@ -227,3 +257,22 @@
   </div>
   </form>
 </div>
+<ng-template #savemodal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Save Recipe</h4>
+    </div>
+    <div class="modal-body">
+      {{updatingMessage}}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
+          Go To List
+      </button>
+      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
+          Close
+      </button>
+      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
+          Abort
+      </button>
+    </div>
+  </ng-template>

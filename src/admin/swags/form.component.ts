@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, TemplateRef, ViewChild } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
@@ -6,6 +6,7 @@ import { FormBuilder, Validators, FormArray } from "@angular/forms";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
 import * as GlobalVariable from "../../global";
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 @Injectable()
 export class swagEditResolve implements Resolve<any> {
@@ -14,8 +15,7 @@ export class swagEditResolve implements Resolve<any> {
   
   resolve(route: ActivatedRouteSnapshot) {
     let swagSku = route.params['sku'];
-    this.rest.setRestModule('products');
-    return this.rest.getItem(swagSku);
+    return this.rest.getItem('', 'products/' + swagSku);
   }
 }
 
@@ -23,31 +23,12 @@ export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function checkAllChildrenValid (c: FormArray): { [key: string] : any} {
-    if (c.controls.length == 0) {
-        return {
-            checkAllChildrenValid: true
-        };
-    }
-
-    for (let i: number = 0; i < c.controls.length-1; i++) {
-        if (!c.controls[i].valid) {
-            return {
-                checkAllChildrenValid: true
-            };
-        }
-    }
-
-    return {
-        checkAllChildrenValid: false
-    };
-}
-
 @Component({
-    templateUrl: 'form.component.html',
-    styles: ['.dz-progress{display:none;}']
+    templateUrl: 'form.component.html'
 })
 export class SwagFormComponent implements OnInit {
+  @ViewChild('savemodal') saveModal: TemplateRef<any>;
+  
     private swag:any;
     private swagForm:any;
     private customAttributes:any;
@@ -59,75 +40,54 @@ export class SwagFormComponent implements OnInit {
     private submitted:any;
     private images:any;
     imageUploadConfig: DropzoneConfigInterface;
+    serverImagesLoading;    
     addImageIndex;
+    imagesDropZone;
+    updatingMessage;
+    saveModalClose;
+    abortModalClose;
+    saveRequests;
+    public modalRef: BsModalRef;
     constructor(
       private swagsService: ProductsService,
       private rest: RestService,
       private alert: AlertService,
       private route: ActivatedRoute,
       private router: Router,
-      private _fb : FormBuilder
+      private _fb : FormBuilder,
+      private modalService: BsModalService
     ) { }
-
-    removedfile(file) {
-      if(file.addedIndex >= 0) {
-        this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
-      }
-      console.log(this.images);
-    }
     
     ngOnInit(): void {
       this.images = [];
       this.addImageIndex = 0;
+      this.serverImagesLoading = false;
+      this.saveModalClose = false;
+      this.abortModalClose = false;
+      
+      let swagSku = this.route.snapshot.params['sku'];
+      this.swag = {};
+      if(swagSku) {
+        this.swag = this.route.snapshot.data['swag'];        
+      }
 
       this.imageUploadConfig = {
         url: 'https://httpbin.org/post',
         acceptedFiles: 'image/*',
         addRemoveLinks: true,
         accept : (function(ctrl){
-          return function(file) {        
+          return function(file) {console.log(file);
             file.addedIndex = ctrl.addImageIndex;
-            file.previewElement.classList.add('dz-success');
-            file.previewElement.classList.add('dz-complete');
             ctrl.images.push(file);
             ctrl.addImageIndex++;
-            console.log(ctrl.images);
           }
         })(this),
         init : (function(ctrl){
           return function() {
-            (function(dropzone){
-              if(ctrl.swag && ctrl.swag.sku) {
-                ctrl.rest.getItem('', 'products/'+ctrl.swag.sku+'/media').subscribe(function(images){
-                  images.map(function(image){
-                    var mockFile = { 
-                      name: image.label,
-                      entry : image,
-                      accepted: true 
-                    };
-                    dropzone.emit("addedfile", mockFile);
-                    dropzone.createThumbnailFromUrl(mockFile, GlobalVariable.BASE_MEDIA_URL + image.file);
-                    dropzone.emit("success", mockFile);
-                    dropzone.emit("complete", mockFile);
-                    dropzone.files.push(mockFile);
-                  });                  
-                });
-              }
-            })(this);
-            /**
-            var mockFile = { name: fileName, size: fileSize, type: fileMimeType, serverID: 0, accepted: true };
-            this.emit("addedfile", mockFile);
-            this.createThumbnailFromUrl(mockFile, fileUrl);
-            this.emit("success", mockFile);
-            this.emit("complete", mockFile);
-            this.files.push(mockFile);*/
+            ctrl.loadMediaImages(this);
           }
         })(this)
       };
-
-      let swagSku = this.route.snapshot.params['sku'];
-      this.swag = (swagSku)?this.route.snapshot.data['swag']:{};
-      this.rest.setRestModule('products');
 
       this.customAttributes = [];
       let customAttributesArray = [];
@@ -143,7 +103,7 @@ export class SwagFormComponent implements OnInit {
       customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
       
       this.swagForm = this._fb.group({
-        name : [this.swag.name, [Validators.required, Validators.minLength(5)]],
+        name : [this.swag.name, [Validators.required]],
         status : this.swag.status?this.swag.status:1,
         visibility: 1,
         type_id : 'simple',
@@ -158,6 +118,45 @@ export class SwagFormComponent implements OnInit {
         }),
         custom_attributes : this._fb.array(customAttributesArray)     
       });
+    }
+
+    loadMediaImages(imagesDropZone) {      
+      this.imagesDropZone = imagesDropZone;
+      if(this.serverImagesLoading || !this.swag || !this.swag.sku) {
+        return;
+      }
+      this.serverImagesLoading = true;
+      this.rest.getItem('', 'products-gal/'+this.swag.sku+'/media').subscribe(function(images){
+        images.map(function(image){
+          var mockFile = { 
+            name: image.label,
+            entry : image,
+            accepted: true 
+          };
+          imagesDropZone.emit("addedfile", mockFile);
+          imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
+          imagesDropZone.emit("success", mockFile);
+          imagesDropZone.emit("complete", mockFile);
+          imagesDropZone.files.push(mockFile);
+        });                  
+      });
+    }
+
+    removedfile(file) {      
+      if(file.entry && file.entry.id) {
+        this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
+          res=>res,
+          error => {
+            this.imagesDropZone.emit("addedfile", file);
+            this.imagesDropZone.emit("thumbnail", file, file.entry.file.resized);
+            this.imagesDropZone.emit("success", file);
+            this.imagesDropZone.emit("complete", file);
+            this.imagesDropZone.files.push(file);
+          }
+        );
+      } else if(file.addedIndex >= 0) {
+        this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
+      }
     }
 
     addCustomArrtibute(attribute_code, value, required) {
@@ -186,7 +185,6 @@ export class SwagFormComponent implements OnInit {
       }
       return '';
     }
-
 
     setStatus(status) {
         this.swagForm.patchValue({status : status});
@@ -246,56 +244,82 @@ export class SwagFormComponent implements OnInit {
       this.alert.clear();
       this.submitted = true;
       if (this.swagForm.valid) {
-          let swagSku = this.route.snapshot.params['sku'];
-          
-          let sendData = this.swagForm.value;
-          if(!swagSku) {
-            swagSku = '';
-            sendData.sku = getRandomInt(10000, 99999);
+        let swagSku = this.route.snapshot.params['sku'];
+        
+        let sendData = this.swagForm.value; 
+        let saveUrl = "products"; 
+        if(!swagSku) {
+          swagSku = '';
+          sendData.sku = getRandomInt(10000, 99999);
+        } else {
+          saveUrl += "/" + swagSku;
+        }
+        this.updatingMessage = "Uploading the Swag information...";
+        this.saveModalClose = false;
+        this.abortModalClose = true;
+        this.openSaveModal();
+        this.saveRequests = [];
+        this.saveRequests.push(this.rest.saveItem(swagSku, {product : sendData}, saveUrl).subscribe(data => {    
+          if(this.images.length == 0) {
+            this.updatingMessage = "The Swag information saved successfully!"; 
+            this.saveModalClose = true;
+            this.abortModalClose = false;
+            return;
           }
-
-          this.rest.saveItem(swagSku, {product : sendData}).subscribe(
-            data => {
-              /**if(this.images) {
-                let base64 = this.image.base64.split('base64,');
-                let image_upload = {
-                  media_type: 'image',
-                  label: 'Product Image',
-                  position: 0,
-                  disabled: 0,
-                  types: ['image','small_image','thumbnail','swatch_image'],
-                  file: this.image.filename,
-                  content: {
-                    base64_encoded_data: base64[1],
-                    type: this.image.filetype,
-                    name: this.image.filename
-                  }                    
-                };
-                this.rest.showLoader();
-                this.swagsService.saveProductImage(data.sku, image_upload).subscribe(
-                  data => {
-                    this.rest.hideLoader();
-                    this.alert.success("The swag details are saved successfully!", true);
-                    this.router.navigate(['swags']);
-                  }
-                );
-              } else {**/
-                this.alert.success("The swag details are saved successfully!", true);
-                this.router.navigate(['swags']);
-             // }                   
-            }, error => {
-              if(error.status == 401) {
-                  this.alert.error("Access restricted!");
-              } else {
-                  this.alert.error("Server Error");
+          this.updatingMessage = "Uploading the Swag images...";   
+          let totalImages = this.images.length;
+          this.images.map(image => {
+            let base64 = image.dataURL.split('base64,');
+            let image_upload = {
+              media_type: 'image',
+              label: image.name,
+              position: 0,
+              disabled: 0,
+              types: ['image','small_image','thumbnail','swatch_image'],
+              file: image.name,
+              content: {
+                base64_encoded_data: base64[1],
+                type: image.type,
+                name: image.name
+              }                    
+            };
+            this.saveRequests.push(this.swagsService.saveProductImage(data.sku, image_upload).subscribe(data => {
+              let i = this.images.indexOf(image);
+              this.images.splice(i, 1);
+              this.updatingMessage = "Uploading the Swag images... " 
+                    + (totalImages - this.images.length) + " / " + totalImages + " Images uploaded!";
+              if(this.images.length == 0) {
+                this.updatingMessage = "The Swag information and images saved successfully!"; 
+                this.saveModalClose = true;
+                this.abortModalClose = false;
               }
-              window.scrollTo(0,0);
-          }
-        );
+              image.entry = {};
+              image.entry.id = data;
+              this.imagesDropZone.emit("success", image);
+              this.imagesDropZone.emit("complete", image);
+            }));
+          });
+        }));
       } else {
-        this.alert.error("Please check the form to enter all required details");
-        window.scrollTo(0,0);
+        this.alert.error("Please check the form to enter all required details");     
       }
+    }
+
+    openSaveModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalRef = this.modalService.show(this.saveModal, config);
+    }
+
+    abortSave() {
+      if(this.saveRequests && this.saveRequests.length > 0) {
+        this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalRef.hide();
     }
 
     goToList() {

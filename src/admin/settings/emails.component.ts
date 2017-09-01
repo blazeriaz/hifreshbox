@@ -60,12 +60,12 @@ export class EmailsFormComponent implements OnInit {
           this.rest.saveItem("", {email_address : sendData}, "emailupdate").subscribe(
             data => {
                 this.alert.success("The profile details saved successfully!", true);
-                window.scrollTo(0,0);
+                
             }
         );
       } else {
         this.alert.error("Please check the form to enter all required details");
-        window.scrollTo(0,0);
+        
       }
     }
 }

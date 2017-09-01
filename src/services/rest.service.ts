@@ -82,7 +82,7 @@ export class RestService {
 
     url = GlobalVariable.BASE_API_URL + url;
     
-    this.showLoader();
+    
     return this.http.get(url, options)
       .map((response: Response) => response.json())
       .catch(this.onCatch)
@@ -107,7 +107,7 @@ export class RestService {
 
     url = GlobalVariable.BASE_API_URL + url;
     
-    this.showLoader();
+    
     return this.http.get(url, options)
       .map((response: Response) => response.json())
       .catch(this.onCatch)
@@ -132,7 +132,7 @@ export class RestService {
 
     url = GlobalVariable.BASE_API_URL + url;
     
-    this.showLoader();
+    
     let request;
     if(itemId) {
       request = this.http.put(
@@ -166,7 +166,7 @@ export class RestService {
 
     url = GlobalVariable.BASE_API_URL + url;
     
-    this.showLoader();
+    
     return this.http.delete(url, options)
       .map((response: Response) => response.json())
       .catch(this.onCatch)
@@ -193,7 +193,7 @@ export class RestService {
   }
 
   private onEnd(): void {
-    this.hideLoader();
+    
   }
 
 }

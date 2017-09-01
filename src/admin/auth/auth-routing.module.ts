@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LoginComponent } from './login.component';
+import { LoginComponent, LogoutComponent } from './login.component';
 import { ForgetComponent } from './forget.component';
 
 const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Example Pages'
+      title: 'Auth'
     },
     children: [      
       {
         path: 'login',
         component: LoginComponent,
         data: {
-          title: 'Login Page'
+          title: 'Login'
+        }
+      },
+      {
+        path: 'logout',
+        component: LogoutComponent,
+        data: {
+          title: 'Logout'
         }
       },
       {

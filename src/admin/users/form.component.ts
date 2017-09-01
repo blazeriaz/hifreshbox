@@ -273,19 +273,11 @@ export class UserFormComponent implements OnInit {
                 data => {
                     this.alert.success("The customer details are saved successfully!", true);
                     this.router.navigate(['users']);                    
-                },
-                error => {
-                    if(error.status == 401) {
-                        this.alert.error("Access restricted!");
-                    } else {
-                        this.alert.error("Server Error");
-                    }
-                    window.scrollTo(0,0);
                 }
             );
         } else {
             this.alert.error("Please check the form to enter all required details");
-            window.scrollTo(0,0);
+            
         }
     }
 }

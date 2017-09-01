@@ -1,7 +1,12 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, TemplateRef, ViewChild } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
+
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
+import * as GlobalVariable from "../../global";
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 @Injectable()
 export class recipeEditResolve implements Resolve<any> {
@@ -10,8 +15,7 @@ export class recipeEditResolve implements Resolve<any> {
   
   resolve(route: ActivatedRouteSnapshot) {
     let recipeSku = route.params['sku'];
-    this.rest.setRestModule('products');
-    return this.rest.getItem(recipeSku);
+    return this.rest.getItem('', 'products/' + recipeSku);
   }
 }
 
@@ -19,30 +23,11 @@ export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function checkAllChildrenValid (c: FormArray): { [key: string] : any} {
-    if (c.controls.length == 0) {
-        return {
-            checkAllChildrenValid: true
-        };
-    }
-
-    for (let i: number = 0; i < c.controls.length-1; i++) {
-        if (!c.controls[i].valid) {
-            return {
-                checkAllChildrenValid: true
-            };
-        }
-    }
-
-    return {
-        checkAllChildrenValid: false
-    };
-}
-
 @Component({
     templateUrl: 'form.component.html'
 })
 export class RecipeFormComponent implements OnInit {
+  @ViewChild('savemodal') saveModal: TemplateRef<any>;
     private recipe:any;
     private recipeForm:any;
     private customAttributes:any;
@@ -51,8 +36,27 @@ export class RecipeFormComponent implements OnInit {
     private newIngredient:any;
     private recipeSteps:any;
     private newRecipeStep:any;
+    private youNeeds:any;
+    private newYouNeed:any;
+    private allergies:any;
+    private newAllerigy:any;
     private submitted:any;
-    private image:any;
+    
+    images;
+    imageUploadConfig: DropzoneConfigInterface;
+    serverImagesLoading;    
+    addImageIndex;
+    imagesDropZone;
+    updatingMessage;
+    saveModalClose;
+    abortModalClose;
+    saveRequests;
+    public modalRef: BsModalRef;
+
+    pdfUploadConfig: DropzoneConfigInterface;
+    serverPDFLoading;
+    pdfDropZone;
+    pdfDocument;
 
     constructor(
       private recipesService: ProductsService,
@@ -60,7 +64,8 @@ export class RecipeFormComponent implements OnInit {
       private alert: AlertService,
       private route: ActivatedRoute,
       private router: Router,
-      private _fb : FormBuilder
+      private _fb : FormBuilder,
+      private modalService: BsModalService
     ) {
       this.rest.setRestModule('products');
     }
@@ -69,8 +74,10 @@ export class RecipeFormComponent implements OnInit {
       this.ingredients = [];
       this.newIngredient = {};
       this.recipeSteps = [];
+      this.youNeeds = [];
+      this.allergies = [];
       this.ingredientsOptions = null;
-      this.image = {};
+      this.images = [];
 
       this.recipesService.getIngredienOptions().subscribe(data => {
         this.ingredientsOptions = {};
@@ -85,6 +92,51 @@ export class RecipeFormComponent implements OnInit {
 
       let recipeSku = this.route.snapshot.params['sku'];
       this.recipe = (recipeSku)?this.route.snapshot.data['recipe']:{};
+
+      this.imageUploadConfig = {
+        acceptedFiles: 'image/*',
+        addRemoveLinks: true,
+        accept : (function(ctrl){
+          return function(file) {
+            file.addedIndex = ctrl.addImageIndex;
+            ctrl.images.push(file);
+            ctrl.addImageIndex++;
+          }
+        })(this),
+        init : (function(ctrl){
+          return function() {
+            ctrl.loadMediaImages(this);
+          }
+        })(this)
+      };
+
+      this.pdfUploadConfig = {
+        acceptedFiles: 'application/pdf',
+        addRemoveLinks: false,
+        accept : (function(ctrl){
+          return function(pdf) {
+            let reader = new FileReader();
+            reader.onload = handleReaderLoad;
+            reader.readAsDataURL(pdf);
+            function handleReaderLoad(evt) {
+              pdf.data64 = evt.target.result;
+            }
+            
+            this.files.map(file => {
+              if(pdf != file) {
+                this.removeFile(file);
+              }
+            });
+            this.emit('thumbnail', pdf, GlobalVariable.pdfDataURL)
+            ctrl.pdfDocument = pdf;
+          }
+        })(this),
+        init : (function(ctrl){
+          return function() {
+            ctrl.loadPdfDocuments(this);
+          }
+        })(this)
+      };
 
       this.customAttributes = [];
       let customAttributesArray = [];
@@ -134,6 +186,52 @@ export class RecipeFormComponent implements OnInit {
         }),
         custom_attributes : this._fb.array(customAttributesArray)     
       });
+    }
+
+    loadPdfDocuments(pdfDropZone) {
+      this.pdfDropZone = pdfDropZone;
+      if(this.serverPDFLoading || !this.recipe || !this.recipe.sku) {
+        return;
+      }
+    }
+
+    loadMediaImages(imagesDropZone) {      
+      this.imagesDropZone = imagesDropZone;
+      if(this.serverImagesLoading || !this.recipe || !this.recipe.sku) {
+        return;
+      }
+      this.serverImagesLoading = true;
+      this.rest.getItem('', 'products-gal/'+this.recipe.sku+'/media').subscribe(function(images){
+        images.map(function(image){
+          var mockFile = { 
+            name: image.label,
+            entry : image,
+            accepted: true 
+          };
+          imagesDropZone.emit("addedfile", mockFile);
+          imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
+          imagesDropZone.emit("success", mockFile);
+          imagesDropZone.emit("complete", mockFile);
+          imagesDropZone.files.push(mockFile);
+        });                  
+      });
+    }
+
+    removedImage(file) {      
+      if(file.entry && file.entry.id) {
+        this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
+          res=>res,
+          error => {
+            this.imagesDropZone.emit("addedfile", file);
+            this.imagesDropZone.emit("thumbnail", file, file.entry.file.resized);
+            this.imagesDropZone.emit("success", file);
+            this.imagesDropZone.emit("complete", file);
+            this.imagesDropZone.files.push(file);
+          }
+        );
+      } else if(file.addedIndex >= 0) {
+        this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
+      }
     }
 
     addCustomArrtibute(attribute_code, value, required) {
@@ -189,6 +287,24 @@ export class RecipeFormComponent implements OnInit {
       this.recipeSteps.splice(i, 1);
     }
 
+    addYouNeeds() {
+      this.youNeeds.push(this.newYouNeed);
+      this.newYouNeed = "";
+    }
+
+    removeYouNeed(i: number) {
+      this.youNeeds.splice(i, 1);
+    }
+
+    addAllergy() {
+      this.allergies.push(this.newAllerigy);
+      this.newAllerigy = "";
+    }
+
+    removeAllergy(i: number) {
+      this.allergies.splice(i, 1);
+    }
+
     setInputErrorClass(input) {
       let invalid = this.recipeForm.get(input).invalid && this.submitted;
       if(invalid) return 'form-control-danger';
@@ -217,25 +333,6 @@ export class RecipeFormComponent implements OnInit {
         if(invalid) return 'has-danger';
     }
 
-    changeListener($event) : void {
-      this.readThis($event.target);
-    }
-
-    readThis(inputValue: any): void {
-      var file:File = inputValue.files[0];
-      var myReader:FileReader = new FileReader();
-
-      this.image.filetype = file.type;
-      this.image.filename = file.name;
-      this.image.filesize = file.size;
-
-      myReader.onloadend = (e) => {
-        this.image.base64 = myReader.result;
-        console.log(this.image);
-      }
-      myReader.readAsDataURL(file);
-    }
-
     saveRecipe() {
       this.alert.clear();
       this.submitted = true;
@@ -251,52 +348,81 @@ export class RecipeFormComponent implements OnInit {
             attribute_code : "steps",
             value : JSON.stringify(this.recipeSteps)
           });
+          let saveUrl = "products"; 
           if(!recipeSku) {
             recipeSku = '';
             sendData.sku = getRandomInt(10000, 99999);
+          } else {
+            saveUrl += "/" + recipeSku;
           }
 
-          this.rest.saveItem(recipeSku, {product : sendData}).subscribe(
-              data => {
-                if(this.image.base64) {
-                  let base64 = this.image.base64.split('base64,');
-                  let image_upload = {
-                    media_type: 'image',
-                    label: 'Product Image',
-                    position: 0,
-                    disabled: 0,
-                    types: ['image','small_image','thumbnail','swatch_image'],
-                    file: this.image.filename,
-                    content: {
-                      base64_encoded_data: base64[1],
-                      type: this.image.filetype,
-                      name: this.image.filename
-                    }                    
-                  };
-                  this.recipesService.saveProductImage(data.sku, image_upload).subscribe(
-                    data => {
-                      this.alert.success("The recipe details are saved successfully!", true);
-                      this.router.navigate(['recipes']);
-                    }
-                  );
-                } else {
-                  this.alert.success("The recipe details are saved successfully!", true);
-                  this.router.navigate(['recipes']);
-                }                   
-              },
-              error => {
-                  if(error.status == 401) {
-                      this.alert.error("Access restricted!");
-                  } else {
-                      this.alert.error("Server Error");
-                  }
-                  window.scrollTo(0,0);
-              }
-          );
+          this.updatingMessage = "Uploading the Recipe information...";
+          this.saveModalClose = false;
+          this.abortModalClose = true;
+          this.openSaveModal();
+          this.saveRequests = [];
+          this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(data => {    
+            if(this.images.length == 0) {
+              this.updatingMessage = "The Recipe information saved successfully!"; 
+              this.saveModalClose = true;
+              this.abortModalClose = false;
+              return;
+            }
+            this.updatingMessage = "Uploading the Recipe images...";   
+            let totalImages = this.images.length;
+            this.images.map(image => {
+              let base64 = image.dataURL.split('base64,');
+              let image_upload = {
+                media_type: 'image',
+                label: image.name,
+                position: 0,
+                disabled: 0,
+                types: ['image','small_image','thumbnail','swatch_image'],
+                file: image.name,
+                content: {
+                  base64_encoded_data: base64[1],
+                  type: image.type,
+                  name: image.name
+                }                    
+              };
+              this.saveRequests.push(this.recipesService.saveProductImage(data.sku, image_upload).subscribe(data => {
+                let i = this.images.indexOf(image);
+                this.images.splice(i, 1);
+                this.updatingMessage = "Uploading the Recipe images... " 
+                      + (totalImages - this.images.length) + " / " + totalImages + " Images uploaded!";
+                if(this.images.length == 0) {
+                  this.updatingMessage = "The Recipe information and images saved successfully!"; 
+                  this.saveModalClose = true;
+                  this.abortModalClose = false;
+                }
+                image.entry = {};
+                image.entry.id = data;
+                this.imagesDropZone.emit("success", image);
+                this.imagesDropZone.emit("complete", image);
+              }));
+            });
+          }));
       } else {
         this.alert.error("Please check the form to enter all required details");
-        window.scrollTo(0,0);
+        
       }
+    }
+    
+    openSaveModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalRef = this.modalService.show(this.saveModal, config);
+    }
+
+    abortSave() {
+      if(this.saveRequests && this.saveRequests.length > 0) {
+        this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalRef.hide();
     }
 
     goToList() {

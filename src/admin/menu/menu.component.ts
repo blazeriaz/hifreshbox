@@ -88,17 +88,10 @@ export class MenuComponent implements OnInit {
         let sendData = this.menuForm.value;
 
         this.rest.saveItem('freshbox-subscription', {product : sendData}, 'products/freshbox-subscription').subscribe(
-            data => {
-                this.alert.success("The menu details are updated successfully!", true);                  
-            },
-            error => {
-                if(error.status == 401) {
-                    this.alert.error("Access restricted!");
-                } else {
-                    this.alert.error("Server Error");
-                }
-            }
-        );
+          data => {
+              this.alert.success("The menu details are updated successfully!", true);                  
+          }
+        )
       } else {
           this.alert.error("Please check the form to enter all required details");
       }

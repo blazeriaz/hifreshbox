@@ -10,10 +10,21 @@ import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
 
 import {SharedModule} from "shared.module";
+import { DropzoneModule, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import * as Dropzone from 'dropzone';
+Dropzone.autoDiscover = false;
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+    // Change this to your upload POST address:
+    url : "#",
+    maxFilesize: 1,
+    uploadMultiple: false,
+    autoProcessQueue: false
+};
 
 @NgModule({
     imports: [
-        SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
+        SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, 
+        SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG)
     ],
     declarations: [ RecipesListComponent, RecipeFormComponent ],
     providers: [ProductsService, recipesListResolve, recipeEditResolve, PagerService]

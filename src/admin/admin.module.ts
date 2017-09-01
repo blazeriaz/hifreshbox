@@ -7,6 +7,8 @@ import { AdminComponent } from './admin.component';
 import { BreadcrumbsComponent } from 'app/shared/breadcrumb.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ModalModule } from "ngx-bootstrap/modal";
+
 import { NAV_DROPDOWN_DIRECTIVES } from 'app/shared/nav-dropdown.directive';
 import { SIDEBAR_TOGGLE_DIRECTIVES } from 'app/shared/sidebar.directive';
 import { AsideToggleDirective } from 'app/shared/aside.directive';
@@ -28,12 +30,14 @@ import {SharedModule} from "shared.module";
 import {RestService, AlertService} from "services";
 
 
+
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
+    ModalModule.forRoot(),
     AdminRoutingModule,
     SharedModule,
     HttpModule,
