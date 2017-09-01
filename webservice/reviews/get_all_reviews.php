@@ -44,4 +44,42 @@ $result = curl_exec($ch);
 echo '<pre>';
 print_r(json_decode($result)); 
 echo '</pre>';
+ /*
+ [items] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [review_id] => 9 					 //  review id
+                    [created_at] => 2017-08-26 10:33:17  //   created  date
+                    [entity_id] => 1
+                    [entity_pk_value] => 2081             // product id
+                    [status_id] => 1                       // review Status
+                    [detail_id] => 9                       // relation id for detail table you dont need this because i have the detail value
+                    [title] => test title                  // title
+                    [week_no] => 23                         // week no
+                    [detail] => test detail                 // review description 
+                    [nickname] => nickname                 // review description
+                    [customer_id] =>                       // Empty Means Guest, Id present then Customer
+                    [entity_code] =>                  
+                    [ravitng_votes] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [vote_id] => 7
+                                    [option_id] => 4
+                                    [remote_ip] => 160.153.91.70
+                                    [remote_ip_long] => 2694404934
+                                    [customer_id] => 
+                                    [entity_pk_value] => 2081
+                                    [rating_id] => 1
+                                    [review_id] => 9
+                                    [percent] => 80                  // rating value in percentage
+                                    [value] => 4                    // rating value in number
+                                )
+
+                        )
+
+                )
+*/
+
 //var_dump($result);
