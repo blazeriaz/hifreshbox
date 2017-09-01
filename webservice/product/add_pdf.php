@@ -54,6 +54,7 @@ $image_array = array('pdfdata'=>array(
 								'media_type'=>'pdf',
 								'label'=>'my pdf',
 								'file'=>'pdf-sample.pdf',
+								'product_id'=> '2099',
 								'content'=>array(
 											'base64_encoded_data'=>$base_64_pdf_content,
 											'type'=>'application/pdf',
