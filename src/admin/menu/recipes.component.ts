@@ -16,9 +16,11 @@ export const filterGroups = [{
 })
 export class RecipesListComponent implements OnInit {
     private recipes:any;
+    private selectedRecipes:any;
     private pager: any;
     yearMonthSubs;
     yearWeek;
+    loadedselectedRecipes;
 
     constructor(private router: Router,
                 private rest: RestService,
@@ -33,6 +35,7 @@ export class RecipesListComponent implements OnInit {
             this.initRecipesList(recipes, 1);
         });
 
+        this.loadedselectedRecipes = false;
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
             let date = new Date();
             let currentWeek = this.mealMenuService.getWeekNumber(date);
@@ -43,6 +46,18 @@ export class RecipesListComponent implements OnInit {
                 //this.router.navigate(['menu']);
             }
             this.yearWeek = data;
+
+            //Get recipes og Menu
+            let sendData = {week_data : {
+                sku : 'freshbox-subscription',
+                week_no : data.week,
+                year : data.year
+            }}
+            this.loadedselectedRecipes = false;
+            this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
+                this.selectedRecipes = recipes.map(data=>data.recipe_detail.sku);
+                this.loadedselectedRecipes = true;
+            });
         });
     }
 
@@ -58,7 +73,7 @@ export class RecipesListComponent implements OnInit {
     }
 
     setPage(page) {
-        this.rest.getItems(page, filterGroups, pageSize).subscribe(recipes => {
+        this.rest.getItems(page, filterGroups, pageSize).subscribe(recipes => {            
             this.initRecipesList(recipes, page);
         });
     }
@@ -77,6 +92,7 @@ export class RecipesListComponent implements OnInit {
         }};
         this.alert.clear();
         this.rest.saveItem('', sendData, 'menu').subscribe(data => {
+            this.selectedRecipes.push(recipe_sku);
             this.alert.success("The recipe added to menu successfully!", true);
         });
     }

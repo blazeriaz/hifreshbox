@@ -333,6 +333,12 @@ export class RecipeFormComponent implements OnInit {
         if(invalid) return 'has-danger';
     }
 
+    noticeRecipeSaved = function() {
+      this.updatingMessage = "The Recipe has been saved successfully!"; 
+      this.saveModalClose = true;
+      this.abortModalClose = false;
+    }
+
     saveRecipe() {
       this.alert.clear();
       this.submitted = true;
@@ -348,6 +354,14 @@ export class RecipeFormComponent implements OnInit {
             attribute_code : "steps",
             value : JSON.stringify(this.recipeSteps)
           });
+
+          if(this.pdfDocument) {
+            sendData.custom_attributes.push({
+              attribute_code : "pdf_upload",
+              value : this.pdfDocument.name
+            });
+          }
+
           let saveUrl = "products"; 
           if(!recipeSku) {
             recipeSku = '';
@@ -361,51 +375,75 @@ export class RecipeFormComponent implements OnInit {
           this.abortModalClose = true;
           this.openSaveModal();
           this.saveRequests = [];
-          this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(data => {    
+          this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(product => {    
+            this.doPDFUpload(product);
             if(this.images.length == 0) {
-              this.updatingMessage = "The Recipe information saved successfully!"; 
-              this.saveModalClose = true;
-              this.abortModalClose = false;
+              this.noticeRecipeSaved();
               return;
             }
-            this.updatingMessage = "Uploading the Recipe images...";   
-            let totalImages = this.images.length;
-            this.images.map(image => {
-              let base64 = image.dataURL.split('base64,');
-              let image_upload = {
-                media_type: 'image',
-                label: image.name,
-                position: 0,
-                disabled: 0,
-                types: ['image','small_image','thumbnail','swatch_image'],
-                file: image.name,
-                content: {
-                  base64_encoded_data: base64[1],
-                  type: image.type,
-                  name: image.name
-                }                    
-              };
-              this.saveRequests.push(this.recipesService.saveProductImage(data.sku, image_upload).subscribe(data => {
-                let i = this.images.indexOf(image);
-                this.images.splice(i, 1);
-                this.updatingMessage = "Uploading the Recipe images... " 
-                      + (totalImages - this.images.length) + " / " + totalImages + " Images uploaded!";
-                if(this.images.length == 0) {
-                  this.updatingMessage = "The Recipe information and images saved successfully!"; 
-                  this.saveModalClose = true;
-                  this.abortModalClose = false;
-                }
-                image.entry = {};
-                image.entry.id = data;
-                this.imagesDropZone.emit("success", image);
-                this.imagesDropZone.emit("complete", image);
-              }));
-            });
+            this.doImagesUpload(product);
           }));
       } else {
-        this.alert.error("Please check the form to enter all required details");
-        
+        this.alert.error("Please check the form to enter all required details");        
       }
+    }
+
+    doPDFUpload = function(product) {
+      //this.updatingMessage = "Uploading the Recipe PDF document..."; 
+      let base64 = this.pdfDocument.data64.split('base64,');
+      let pdfdata = {
+        media_type: 'pdf',
+        label: this.pdfDocument.name,
+        file: this.pdfDocument.name,
+        content: {
+          base64_encoded_data: base64[1],
+          type: this.pdfDocument.type,
+          name: this.pdfDocument.name
+        }         
+      };
+      this.saveRequests.push(this.rest.saveItem('', {pdfdata : pdfdata}, 'freshboxrecipespdf').subscribe(pdf => {
+        this.imagesDropZone.emit("success", this.pdfDocument);
+        this.imagesDropZone.emit("complete", this.pdfDocument);
+        this.pdfDocument = null;
+      }));
+    }
+
+    doImagesUpload = function(product) {
+      this.updatingMessage = "Uploading the Recipe images...";   
+      let totalImages = this.images.length;
+      this.images.map(image => {
+          let base64 = image.dataURL.split('base64,');
+          let image_upload = {
+            media_type: 'image',
+            label: image.name,
+            position: 0,
+            disabled: 0,
+            types: ['image','small_image','thumbnail','swatch_image'],
+            file: image.name,
+            content: {
+              base64_encoded_data: base64[1],
+              type: image.type,
+              name: image.name
+            }                    
+          };
+          this.saveRequests.push(this.recipesService.saveProductImage(product.sku, image_upload).subscribe(imageId => {
+            let i = this.images.indexOf(image);
+            this.images.splice(i, 1);
+            this.updatingMessage = "Uploading the Recipe images... " 
+                  + (totalImages - this.images.length) + " / " + totalImages + " Images uploaded!";
+            if(this.images.length == 0) {
+              if(this.pdfDocument) {
+                this.doPDFUpload(product);
+              } else {
+                this.noticeRecipeSaved();
+              }
+            }
+            image.entry = {};
+            image.entry.id = imageId;
+            this.imagesDropZone.emit("success", image);
+            this.imagesDropZone.emit("complete", image);
+          }));
+        });
     }
     
     openSaveModal() {

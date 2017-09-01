@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-list"></i> Recipes for adding to Menu
-          <div  class="pull-right"><button type="button" (click)="goToBack()" class="btn btn-primary">Cancel</button></div>
+          <div  class="pull-right"><button type="button" (click)="goToBack()" class="btn btn-primary">Go List</button></div>
         </div>
         <div class="card-block">
           <div class="row py-2 bg-primary">
@@ -30,8 +30,15 @@
             <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'cooking_time'}}</div>
             <div class="col-md-2">{{recipe.custom_attributes | mgCatalogAttribute: 'chef_name'}}</div>
             <div class="col-md-3">
-              <div class="btn-group btn-group-sm">                
-                <button type="button" class="btn btn-link px-0" (click)="addRecipeToMenu(recipe.sku)">Add</button>
+              <div class="btn-group btn-group-sm" *ngIf="loadedselectedRecipes">                
+                <button type="button" class="btn btn-link px-0" (click)="addRecipeToMenu(recipe.sku)" 
+                    *ngIf="selectedRecipes.indexOf(recipe.sku) === -1">
+                  Add
+                </button>
+                <button type="button" class="btn btn-link px-0"  
+                    *ngIf="selectedRecipes.indexOf(recipe.sku) !== -1">
+                  Added
+                </button>
               </div>
             </div>
           </div>
