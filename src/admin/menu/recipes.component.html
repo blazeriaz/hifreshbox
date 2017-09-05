@@ -4,7 +4,8 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-list"></i> Recipes for adding to Menu
-          <div  class="pull-right"><button type="button" (click)="goToBack()" class="btn btn-primary">Go List</button></div>
+          <div class="pull-right" *ngIf="selectedRecipes.length > 0">
+            <button type="button" (click)="goToBack()" class="btn btn-primary">Go List</button></div>
         </div>
         <div class="card-block">
           <div class="row py-2 bg-primary">

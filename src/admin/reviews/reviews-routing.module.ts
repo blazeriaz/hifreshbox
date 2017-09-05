@@ -2,29 +2,33 @@ import { NgModule }             from '@angular/core';
 import { Routes,
          RouterModule }         from '@angular/router';
 
-import { UsersListComponent } from './list.component';
-import { UserFormComponent } from "./form.component";
-import { FullLayoutComponent } from "../layouts/full-layout.component";
-import { emptyLayoutComponent } from "../layouts/empty-layout.component";
+import { ReviewsListComponent } from './list.component';
+import { ReviewFormComponent, reviewEditResolve } from "./form.component";
 
 const routes: Routes = [
     {
         path: '',
-        component: UsersListComponent,
+        component: ReviewsListComponent,/**
+        resolve: {
+            reviews: reviewsListResolve
+        },**/
         data: {
-            title: 'Users'
+            title: 'Reviews'
         }
     },
     {
         path: 'add',
-        component: UserFormComponent,
+        component: ReviewFormComponent,
         data: {
             title: 'Add'
         }
     },
     {
         path: 'edit/:id',
-        component: UserFormComponent,
+        component: ReviewFormComponent,
+        resolve: {
+            review: reviewEditResolve
+        },
         data: {
             title: 'Edit'
         }
@@ -36,4 +40,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class UsersRoutingModule {}
+export class ReviewsRoutingModule {}

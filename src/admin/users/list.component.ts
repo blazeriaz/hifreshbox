@@ -1,18 +1,10 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, PagerService } from "services";
+import { UsersService, AlertService, PagerService, RestService } from "services";
+
+import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 export const pageSize = 10;
-
-@Injectable()
-export class customerListResolve implements Resolve<any> {
-  
-  constructor(private usersService: UsersService) {}
-  
-  resolve(route: ActivatedRouteSnapshot) {
-    return this.usersService.getUsers(1, [], pageSize);
-  }
-}
 
 @Component({
     templateUrl: 'list.component.html'
@@ -20,18 +12,58 @@ export class customerListResolve implements Resolve<any> {
 export class UsersListComponent implements OnInit {
     public users:any;
     public pager: any;
+    searchForm;
+    searchSubscripe;
+    loadingList;
+    initLoad;
+    deleteItems;
 
     constructor(private usersService: UsersService, 
         private alert: AlertService,
+        private rest: RestService,
         private pagerService: PagerService,
         public route: ActivatedRoute,
-        public router: Router ) { }
+        public router: Router,
+        private _fb : FormBuilder ) { }
     
     ngOnInit(): void {
-        let users = this.route.snapshot.data['users'];
-        this.initUsersList(users);
-    }
+        this.initLoad = true;
+        this.deleteItems = [];
+        this.searchForm = this._fb.group({
+            name : ''
+        });
 
+        this.searchForm.valueChanges
+            .debounceTime(500)
+            .subscribe(values => this.loadUsersList(1));
+
+        this.loadUsersList();
+    }
+    
+    loadUsersList(pageNo?) {
+        let filters = [];
+        let searchValues = this.searchForm.value;
+        if(searchValues && searchValues.name) {
+            let searchNameFilter = {
+                filters : [{
+                    field : "name",
+                    value : "%" + searchValues.name + "%",
+                    condition_type : 'like'
+                }]
+            };
+            filters.push(searchNameFilter);
+        }
+        if(this.searchSubscripe) {
+            this.searchSubscripe.unsubscribe();
+        }
+        this.loadingList = true;
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, "customers/search").subscribe(users => {
+            this.initLoad = false;
+            this.loadingList = false;
+            this.initUsersList(users, pageNo);
+        });        
+    }
+    
     initUsersList(users, page?) {
         this.users = users.items;
         for (let user of this.users){
@@ -43,27 +75,49 @@ export class UsersListComponent implements OnInit {
         this.pager = this.pagerService.getPager(users.total_count, page, pageSize);
     }
 
-    setPage(page) {
-        this.usersService.getUsers(page, [], pageSize).subscribe(users => {
-            this.initUsersList(users, page);
-        });
+    abortSearch() {
+        this.searchSubscripe && this.searchSubscripe.unsubscribe();
+        this.loadingList = false;
     }
 
+    setPage(page) {
+        this.loadUsersList(page);
+    }
+    
+    isDeleted(userId) {
+        return this.deleteItems.findIndex(item => item.id == userId) !== -1;
+    }
+
+    cancelDelete(userId) {
+        let i = this.deleteItems.findIndex(item => item.id == userId);
+        this.deleteItems[i].subscribe.unsubscribe();
+        this.deleteItems.splice(i,1);
+    }
+    
     deleteUser(userId) {
         if(!confirm("Are you sure to delete the customer?")) {
             return;
         }
         this.alert.clear();
-        this.usersService.deleteUser(userId).subscribe(data => {
-            if(data) {
-                this.alert.success("The customer deleted successfully!", true);
-                let page = 1;
-                this.usersService.getUsers(page, [], pageSize).subscribe(users => {
-                    this.initUsersList(users, page);
-                });
+        let deleteSubscribe = this.rest.deleteItem(userId, 'customers/'+userId).subscribe(data => {
+            if(data) {                
+                this.deleteItems = this.deleteItems.filter(item => item.id != userId);
+                this.users = this.users.filter(item => item.id != userId);
+                if(this.deleteItems.length == 0) {
+                    this.alert.success("The customers deleted successfully!", true);
+                    this.initLoad = true;
+                    this.loadUsersList(this.pager.currentPage);
+                }
             } else {
-                this.alert.error("The customer can't be deleted!", true);
+                this.deleteItems = this.deleteItems.filter(item => item.id != userId);
             }
+        }, error => {
+            this.deleteItems = this.deleteItems.filter(item => item.id != userId);
         });
+        let deleteItem = {
+            id : userId,
+            subscribe : deleteSubscribe
+        };
+        this.deleteItems.push(deleteItem);
     }
 }

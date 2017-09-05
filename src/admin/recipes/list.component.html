@@ -7,20 +7,40 @@
           <div  class="pull-right"><a [routerLink]="'add'" class="btn btn-primary">Add</a></div>
         </div>
         <div class="card-block">
-          <div class="row py-2 bg-primary">
+          <form [formGroup]="searchForm">
+          <div class="row py-2">
             <label class="col-md-2 col-sm-4">Search : </label>
             <div class="col-md-6 col-sm-8">              
-              <input type="text" class-"form-control" [ngModel]="search" (ngModelChange)="searchRecipeName()" />
+              <input type="text" class="form-control" formControlName="name" />
             </div>
           </div>
+          </form>
+
           <div class="row py-2 bg-primary">
             <div class="col-md-3">Receipe</div>
             <div class="col-md-3">Serving Size</div>
             <div class="col-md-3">Cook Time</div>
             <div class="col-md-3">Created By</div>
           </div>
+          
+          <div class="row py-2 bg-info" *ngIf="loadingList">
+            <div class="col">
+              Please wait! Loading the records...
+            </div>
+            <div class="col-auto px-2" *ngIf="!initLoad">
+              <button type="button" class="btn btn-sm btn-danger" (click)="abortSearch()">Abort</button>
+            </div>
+          </div>
+          
+          <div class="row py-2 bg-warning" *ngIf="!loadingList && recipes && recipes.length == 0">
+            <div class="col">
+              No records found.
+            </div>
+          </div>
 
-          <div class="row py-2" *ngFor="let recipe of recipes;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+          <div class="row py-2" 
+              *ngFor="let recipe of recipes;let odd=odd;" 
+              [ngClass]="{'bg-faded': odd, 'bg-danger': isDeleted(recipe.sku)}">
             <div class="col-md-1">
               <div class="avatar">
                <img class="img-avatar" 
@@ -31,9 +51,12 @@
             </div>
             <div class="col-md-2">
               {{recipe.name}}
-              <div class="btn-group btn-group-sm">
+              <div class="col px-0 btn-group btn-group-sm" *ngIf="isDeleted(recipe.sku)">
+                <button type="button" class="btn btn-link px-0" (click)="cancelDelete(recipe.sku)">Cancel Delete</button>
+              </div>
+              <div class="col px-0 btn-group btn-group-sm" *ngIf="!isDeleted(recipe.sku)">
                 <a [routerLink]="['edit', recipe.sku]" class="btn btn-link pl-0">Edit</a>
-                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.sku)">Delete</button>
+                <button type="button" class="btn btn-link px-0" (click)="deleteReceipe(recipe.sku, pager.page)">Delete</button>
               </div>
             </div>
             <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute:'servings'}}</div>
@@ -41,7 +64,7 @@
             <div class="col-md-3">{{recipe.custom_attributes | mgCatalogAttribute:'chef_name'}}</div>
           </div>
 
-          <div class="row mt-2"><div class="col-md-12">
+          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
             <ul class="pagination pull-right">
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>

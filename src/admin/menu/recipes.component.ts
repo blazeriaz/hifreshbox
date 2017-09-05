@@ -36,6 +36,7 @@ export class RecipesListComponent implements OnInit {
         });
 
         this.loadedselectedRecipes = false;
+        this.selectedRecipes = [];
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
             let date = new Date();
             let currentWeek = this.mealMenuService.getWeekNumber(date);

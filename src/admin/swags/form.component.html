@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <form [formGroup]="swagForm" (submit)="saveSwag()">
+  <form [formGroup]="swagForm" (submit)="saveSwag()" *ngIf="loadedFormData">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -100,3 +100,16 @@
     </button>
   </div>
 </ng-template>
+<ng-template #editLoadModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Edit Recipe</h4>
+    </div>
+    <div class="modal-body">
+      Loading the required form datas...
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+          Abort
+      </button>
+    </div>
+  </ng-template>

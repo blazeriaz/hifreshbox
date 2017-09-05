@@ -1,33 +1,19 @@
-import { Component, OnInit, Injectable, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
-
+ 
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
 import * as GlobalVariable from "../../global";
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
-
-@Injectable()
-export class swagEditResolve implements Resolve<any> {
-  
-  constructor(private rest: RestService) {}
-  
-  resolve(route: ActivatedRouteSnapshot) {
-    let swagSku = route.params['sku'];
-    return this.rest.getItem('', 'products/' + swagSku);
-  }
-}
-
-export function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 @Component({
     templateUrl: 'form.component.html'
 })
 export class SwagFormComponent implements OnInit {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
+  @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
   
     private swag:any;
     private swagForm:any;
@@ -47,7 +33,12 @@ export class SwagFormComponent implements OnInit {
     saveModalClose;
     abortModalClose;
     saveRequests;
-    public modalRef: BsModalRef;
+    public modalRef: BsModalRef;   
+    modalEditRef: BsModalRef;   
+    serverMediaImages;
+    loadedFormData;
+    countLoadedFormReqs;
+    loadFormRequests;
     constructor(
       private swagsService: ProductsService,
       private rest: RestService,
@@ -59,18 +50,83 @@ export class SwagFormComponent implements OnInit {
     ) { }
     
     ngOnInit(): void {
+      this.swag = {};
       this.images = [];
       this.addImageIndex = 0;
       this.serverImagesLoading = false;
       this.saveModalClose = false;
       this.abortModalClose = false;
-      
-      let swagSku = this.route.snapshot.params['sku'];
-      this.swag = {};
-      if(swagSku) {
-        this.swag = this.route.snapshot.data['swag'];        
-      }
+      this.serverMediaImages = [];
 
+      this.loadFormRequests = [];
+      this.countLoadedFormReqs = 0;
+      this.loadedFormData = false;
+      
+      this.loadFormData();
+      this.loadMediaImages();
+      if(this.loadFormRequests.length == 0) {
+        this.checkAllFormDataLoaded();
+      } else {
+        this.openEditModal();
+      }
+    } 
+    
+    openEditModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalEditRef = this.modalService.show(this.editLoadModal, config);
+    }
+    
+    abortEdit() {
+      if(this.loadFormRequests && this.loadFormRequests.length > 0) {
+        this.loadFormRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalEditRef.hide();
+      this.goToList();
+    }
+
+    checkAllFormDataLoaded() {      
+      if(--this.countLoadedFormReqs <= 0) {
+        this.modalEditRef && this.modalEditRef.hide();
+        this.initEditForm();  
+        this.initImagesDropZone();
+        this.loadedFormData = true; 
+      }
+    }
+
+    loadFormData() {
+      let recipeSku = this.route.snapshot.params['sku'];      
+      if(!recipeSku) return;
+      this.loadFormRequests.push(
+        this.rest.getItem(recipeSku, 'products/' + recipeSku).subscribe(swag => {
+          this.swag = swag;
+          this.checkAllFormDataLoaded();
+        })
+      );
+      this.countLoadedFormReqs++;
+    }
+
+    loadMediaImages() {
+      let recipeSku = this.route.snapshot.params['sku'];
+      if(!recipeSku) return;
+      this.loadFormRequests.push(
+        this.rest.getItem('', 'products-gal/'+recipeSku+'/media')
+          .subscribe(images => {
+            this.serverMediaImages = images;
+            this.checkAllFormDataLoaded();
+          },
+         error => {
+          this.checkAllFormDataLoaded();
+         })
+      );
+      this.countLoadedFormReqs++;
+    }
+
+    initImagesDropZone() {
       this.imageUploadConfig = {
         url: 'https://httpbin.org/post',
         acceptedFiles: 'image/*',
@@ -84,11 +140,41 @@ export class SwagFormComponent implements OnInit {
         })(this),
         init : (function(ctrl){
           return function() {
-            ctrl.loadMediaImages(this);
+            ctrl.attachMediaImagesToDropzone(this);
           }
         })(this)
       };
+    }
+    
+    attachMediaImagesToDropzone(imagesDropZone) {      
+      this.imagesDropZone = imagesDropZone;
+      if(!this.swag || !this.swag.sku || this.serverMediaImages.length == 0) {
+        return;
+      }
+      this.serverMediaImages.map(image => {
+        var mockFile = { 
+          name: image.label,
+          entry : image,
+          accepted: true,
+          previewTemplate : document.createElement('div')
+        };
+        imagesDropZone.emit("addedfile", mockFile);
+        imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
+        imagesDropZone.emit("success", mockFile);
+        imagesDropZone.emit("complete", mockFile);
+        imagesDropZone.files.push(mockFile);
+        this.removeFileSizeElement(mockFile);
+      });
+    }    
 
+    removeFileSizeElement(mockFile) {
+      let fileSizeElement = mockFile.previewTemplate.querySelector(".dz-size");
+      if(fileSizeElement) {
+        fileSizeElement.parentNode.removeChild(fileSizeElement);
+      }
+    }
+    
+    initEditForm() {
       this.customAttributes = [];
       let customAttributesArray = [];
       ["description", "order_shipping", "return_policy"].map(attribute_code => {
@@ -117,28 +203,6 @@ export class SwagFormComponent implements OnInit {
           })
         }),
         custom_attributes : this._fb.array(customAttributesArray)     
-      });
-    }
-
-    loadMediaImages(imagesDropZone) {      
-      this.imagesDropZone = imagesDropZone;
-      if(this.serverImagesLoading || !this.swag || !this.swag.sku) {
-        return;
-      }
-      this.serverImagesLoading = true;
-      this.rest.getItem('', 'products-gal/'+this.swag.sku+'/media').subscribe(function(images){
-        images.map(function(image){
-          var mockFile = { 
-            name: image.label,
-            entry : image,
-            accepted: true 
-          };
-          imagesDropZone.emit("addedfile", mockFile);
-          imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
-          imagesDropZone.emit("success", mockFile);
-          imagesDropZone.emit("complete", mockFile);
-          imagesDropZone.files.push(mockFile);
-        });                  
       });
     }
 
@@ -250,7 +314,7 @@ export class SwagFormComponent implements OnInit {
         let saveUrl = "products"; 
         if(!swagSku) {
           swagSku = '';
-          sendData.sku = getRandomInt(10000, 99999);
+          sendData.sku = GlobalVariable.getRandomInt(10000, 99999);
         } else {
           saveUrl += "/" + swagSku;
         }

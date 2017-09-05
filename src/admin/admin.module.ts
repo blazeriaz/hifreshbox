@@ -29,8 +29,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {SharedModule} from "shared.module";
 import {RestService, AlertService} from "services";
 
-
-
 @NgModule({
   imports: [
     BrowserModule,

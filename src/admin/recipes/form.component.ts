@@ -8,26 +8,12 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import * as GlobalVariable from "../../global";
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
-@Injectable()
-export class recipeEditResolve implements Resolve<any> {
-  
-  constructor(private rest: RestService) {}
-  
-  resolve(route: ActivatedRouteSnapshot) {
-    let recipeSku = route.params['sku'];
-    return this.rest.getItem('', 'products/' + recipeSku);
-  }
-}
-
-export function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 @Component({
     templateUrl: 'form.component.html'
 })
 export class RecipeFormComponent implements OnInit {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
+  @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
     private recipe:any;
     private recipeForm:any;
     private customAttributes:any;
@@ -36,15 +22,15 @@ export class RecipeFormComponent implements OnInit {
     private newIngredient:any;
     private recipeSteps:any;
     private newRecipeStep:any;
-    private youNeeds:any;
-    private newYouNeed:any;
+    private customerNeeds:any;
+    private newCustomerNeed:any;
     private allergies:any;
     private newAllerigy:any;
     private submitted:any;
     
     images;
     imageUploadConfig: DropzoneConfigInterface;
-    serverImagesLoading;    
+    serverMediaImages;    
     addImageIndex;
     imagesDropZone;
     updatingMessage;
@@ -58,6 +44,11 @@ export class RecipeFormComponent implements OnInit {
     pdfDropZone;
     pdfDocument;
 
+    loadedFormData;
+    countLoadedFormReqs;
+    loadFormRequests;
+    modalEditRef;
+
     constructor(
       private recipesService: ProductsService,
       private rest: RestService,
@@ -67,77 +58,101 @@ export class RecipeFormComponent implements OnInit {
       private _fb : FormBuilder,
       private modalService: BsModalService
     ) {
-      this.rest.setRestModule('products');
     }
     
     ngOnInit(): void {
       this.ingredients = [];
       this.newIngredient = {};
       this.recipeSteps = [];
-      this.youNeeds = [];
+      this.customerNeeds = [];
       this.allergies = [];
       this.ingredientsOptions = null;
       this.images = [];
+      this.serverMediaImages = [];
+      this.loadFormRequests = [];
+      this.countLoadedFormReqs = 0;
 
-      this.recipesService.getIngredienOptions().subscribe(data => {
-        this.ingredientsOptions = {};
-        let options = data[0];
-        this.ingredientsOptions.ingredients = options.ingredients.map(ingredient => {
-          return {id: ingredient.ingredient_id, text: ingredient.title}
-        });
-        this.ingredientsOptions.portions = options.portions.map(portion => {
-          return {id: portion.portion_id, text: portion.title}
-        });
-      });;
+      this.loadedFormData = false;
+      this.openEditModal();
+      this.loadIngredients();
+      this.loadFormData();
+      this.loadMediaImages();
+    }
+    
+    openEditModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalEditRef = this.modalService.show(this.editLoadModal, config);
+    }
+    
+    abortEdit() {
+      if(this.loadFormRequests && this.loadFormRequests.length > 0) {
+        this.loadFormRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalEditRef.hide();
+      this.goToList();
+    }
 
+    checkAllFormDataLoaded() {      
+      if(--this.countLoadedFormReqs == 0) {
+        this.modalEditRef.hide();
+        this.initEditForm();        
+        this.initPdfDropZone();
+        this.initImagesDropZone();
+        this.loadedFormData = true; 
+      }
+    }
+
+    loadFormData() {
       let recipeSku = this.route.snapshot.params['sku'];
-      this.recipe = (recipeSku)?this.route.snapshot.data['recipe']:{};
+      if(!recipeSku) return;
+      this.loadFormRequests.push(
+        this.rest.getItem(recipeSku, 'products/' + recipeSku).subscribe(recipe => {
+          this.recipe = recipe;
+          this.checkAllFormDataLoaded();
+        })
+      );
+      this.countLoadedFormReqs++;
+    }
 
-      this.imageUploadConfig = {
-        acceptedFiles: 'image/*',
-        addRemoveLinks: true,
-        accept : (function(ctrl){
-          return function(file) {
-            file.addedIndex = ctrl.addImageIndex;
-            ctrl.images.push(file);
-            ctrl.addImageIndex++;
-          }
-        })(this),
-        init : (function(ctrl){
-          return function() {
-            ctrl.loadMediaImages(this);
-          }
-        })(this)
-      };
-
-      this.pdfUploadConfig = {
-        acceptedFiles: 'application/pdf',
-        addRemoveLinks: false,
-        accept : (function(ctrl){
-          return function(pdf) {
-            let reader = new FileReader();
-            reader.onload = handleReaderLoad;
-            reader.readAsDataURL(pdf);
-            function handleReaderLoad(evt) {
-              pdf.data64 = evt.target.result;
-            }
-            
-            this.files.map(file => {
-              if(pdf != file) {
-                this.removeFile(file);
-              }
-            });
-            this.emit('thumbnail', pdf, GlobalVariable.pdfDataURL)
-            ctrl.pdfDocument = pdf;
-          }
-        })(this),
-        init : (function(ctrl){
-          return function() {
-            ctrl.loadPdfDocuments(this);
-          }
-        })(this)
-      };
-
+    loadIngredients() {
+      this.loadFormRequests.push(
+        this.recipesService.getIngredienOptions().subscribe(data => {
+          this.ingredientsOptions = {};
+          let options = data[0];
+          this.ingredientsOptions.ingredients = options.ingredients.map(ingredient => {
+            return {id: ingredient.ingredient_id, text: ingredient.title}
+          });
+          this.ingredientsOptions.portions = options.portions.map(portion => {
+            return {id: portion.portion_id, text: portion.title}
+          });
+          this.checkAllFormDataLoaded();
+        })
+      );
+      this.countLoadedFormReqs++;
+    }
+    
+    loadMediaImages() {
+      let recipeSku = this.route.snapshot.params['sku'];
+      if(!recipeSku) return;
+      this.loadFormRequests.push(
+        this.rest.getItem('', 'products-gal/'+recipeSku+'/media')
+          .subscribe(images => {
+            this.serverMediaImages = images;
+            this.checkAllFormDataLoaded();
+          },
+         error => {
+          this.checkAllFormDataLoaded();
+         })
+      );
+      this.countLoadedFormReqs++;
+    }
+    
+    initEditForm() {
       this.customAttributes = [];
       let customAttributesArray = [];
       ["description", "chef_name", "servings", "cooking_time", "calories", "protein", "carb", "fat"].map(attribute_code => {
@@ -150,11 +165,11 @@ export class RecipeFormComponent implements OnInit {
         customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, true));
       });
 
-      ["ingredients", "steps"].map(attribute_code => {
+      ["ingredients", "steps", "customer_needs", "allergies"].map(attribute_code => {
         let value:any = [];
         if(this.recipe && this.recipe.custom_attributes) {
           let attribute = this.recipe.custom_attributes.find(x => x.attribute_code == attribute_code);
-          value = attribute.value;
+          value = attribute?attribute.value:'';
         };
         try {
           value = JSON.parse(value);
@@ -167,11 +182,17 @@ export class RecipeFormComponent implements OnInit {
         if(attribute_code == "steps") {
           this.recipeSteps = value;
         }
+        if(attribute_code == "customer_needs") {
+          this.customerNeeds = value;
+        }
+        if(attribute_code == "allergies") {
+          this.allergies = value;
+        }        
       });
-      customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
       
+      customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
       this.recipeForm = this._fb.group({
-        name : [this.recipe.name, [Validators.required, Validators.minLength(5)]],
+        name : [this.recipe?this.recipe.name:'', [Validators.required, Validators.minLength(5)]],
         visibility: 1,
         type_id : 'simple',
         price : 0,
@@ -188,32 +209,116 @@ export class RecipeFormComponent implements OnInit {
       });
     }
 
-    loadPdfDocuments(pdfDropZone) {
+    initPdfDropZone() {
+      this.pdfUploadConfig = {
+        acceptedFiles: 'application/pdf',
+        addRemoveLinks: false,
+        accept : (function(ctrl){
+          return function(pdf) {console.log(pdf);
+            let reader = new FileReader();
+            reader.onload = handleReaderLoad;
+            reader.readAsDataURL(pdf);
+            function handleReaderLoad(evt) {
+              pdf.data64 = evt.target.result;
+            }
+            
+            this.files.map(file => {
+              if(pdf != file) {
+                this.removeFile(file);
+              }
+            });
+            this.emit('thumbnail', pdf, GlobalVariable.pdfDataURL);
+            ctrl.removeFileSizeElement(pdf);
+            ctrl.pdfDocument = pdf;
+          }
+        })(this),
+        init : (function(ctrl){
+          return function() {
+            ctrl.attachPdfDocumentToDropzone(this);
+          }
+        })(this)
+      };
+    }
+
+    attachPdfDocumentToDropzone(pdfDropZone) {
       this.pdfDropZone = pdfDropZone;
-      if(this.serverPDFLoading || !this.recipe || !this.recipe.sku) {
-        return;
+      if(this.recipe && this.recipe.custom_attributes.length > 0) {
+        let i = this.recipe.custom_attributes.findIndex(attr => {
+          return attr.attribute_code == "pdf_upload";
+        })
+        if(i !== -1) {
+          let pdf_file_name = this.recipe.custom_attributes[i].value;
+          let mockFile = { 
+            name: pdf_file_name,
+            accepted: true,
+            previewTemplate : document.createElement('div')
+          };  
+
+          pdfDropZone.emit("addedfile", mockFile);          
+          pdfDropZone.emit("thumbnail", mockFile, GlobalVariable.pdfDataURL);
+          pdfDropZone.emit("success", mockFile);
+          pdfDropZone.emit("complete", mockFile);
+          pdfDropZone.files.push(mockFile);
+          this.removeFileSizeElement(mockFile);
+          this.appendPDFDownloaLink(mockFile, pdf_file_name);
+        }
       }
     }
 
-    loadMediaImages(imagesDropZone) {      
+    removeFileSizeElement(mockFile) {
+      let fileSizeElement = mockFile.previewTemplate.querySelector(".dz-size");
+      if(fileSizeElement) {
+        fileSizeElement.parentNode.removeChild(fileSizeElement);
+      }
+    }
+
+    appendPDFDownloaLink(mockFile, pdf_file_name) {
+      let a = document.createElement('a');
+      a.setAttribute('target', '_blank');
+      a.setAttribute('href', GlobalVariable.BASE_MEDIA + "recipe-pdf/" + pdf_file_name);
+      a.innerHTML = "Download";
+      a.className = 'dz-remove';
+      mockFile.previewTemplate.appendChild(a);
+    }
+
+    initImagesDropZone() {
+      this.imageUploadConfig = {
+        acceptedFiles: 'image/*',
+        addRemoveLinks: true,
+        accept : (function(ctrl){
+          return function(file) {
+            file.addedIndex = ctrl.addImageIndex;
+            ctrl.images.push(file);
+            ctrl.addImageIndex++;
+            ctrl.removeFileSizeElement(file);
+          }
+        })(this),
+        init : (function(ctrl){
+          return function() {
+            ctrl.attachMediaImagesToDropzone(this);
+          }
+        })(this)
+      };
+    }
+
+    attachMediaImagesToDropzone(imagesDropZone) {      
       this.imagesDropZone = imagesDropZone;
-      if(this.serverImagesLoading || !this.recipe || !this.recipe.sku) {
+      if(!this.recipe || !this.recipe.sku || this.serverMediaImages.length == 0) {
         return;
       }
-      this.serverImagesLoading = true;
-      this.rest.getItem('', 'products-gal/'+this.recipe.sku+'/media').subscribe(function(images){
-        images.map(function(image){
-          var mockFile = { 
-            name: image.label,
-            entry : image,
-            accepted: true 
-          };
-          imagesDropZone.emit("addedfile", mockFile);
-          imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
-          imagesDropZone.emit("success", mockFile);
-          imagesDropZone.emit("complete", mockFile);
-          imagesDropZone.files.push(mockFile);
-        });                  
+      this.serverMediaImages.map(image => {
+        var mockFile = { 
+          name: image.label,
+          entry : image,
+          accepted: true,
+          previewTemplate : document.createElement('div')
+        };
+        imagesDropZone.emit("addedfile", mockFile);
+        imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
+        imagesDropZone.emit("success", mockFile);
+        imagesDropZone.emit("complete", mockFile);
+        imagesDropZone.files.push(mockFile);
+        this.removeFileSizeElement(mockFile);
       });
     }
 
@@ -288,12 +393,12 @@ export class RecipeFormComponent implements OnInit {
     }
 
     addYouNeeds() {
-      this.youNeeds.push(this.newYouNeed);
-      this.newYouNeed = "";
+      this.customerNeeds.push(this.newCustomerNeed);
+      this.newCustomerNeed = "";
     }
 
     removeYouNeed(i: number) {
-      this.youNeeds.splice(i, 1);
+      this.customerNeeds.splice(i, 1);
     }
 
     addAllergy() {
@@ -354,18 +459,19 @@ export class RecipeFormComponent implements OnInit {
             attribute_code : "steps",
             value : JSON.stringify(this.recipeSteps)
           });
-
-          if(this.pdfDocument) {
-            sendData.custom_attributes.push({
-              attribute_code : "pdf_upload",
-              value : this.pdfDocument.name
-            });
-          }
+          sendData.custom_attributes.push({
+            attribute_code : "customer_needs",
+            value : JSON.stringify(this.customerNeeds)
+          });
+          sendData.custom_attributes.push({
+            attribute_code : "allergies",
+            value : JSON.stringify(this.allergies)
+          });
 
           let saveUrl = "products"; 
           if(!recipeSku) {
             recipeSku = '';
-            sendData.sku = getRandomInt(10000, 99999);
+            sendData.sku = GlobalVariable.getRandomInt(10000, 99999);
           } else {
             saveUrl += "/" + recipeSku;
           }
@@ -389,9 +495,11 @@ export class RecipeFormComponent implements OnInit {
     }
 
     doPDFUpload = function(product) {
+      if(!this.pdfDocument) return;
       //this.updatingMessage = "Uploading the Recipe PDF document..."; 
       let base64 = this.pdfDocument.data64.split('base64,');
       let pdfdata = {
+        product_id: product.id,
         media_type: 'pdf',
         label: this.pdfDocument.name,
         file: this.pdfDocument.name,
@@ -404,6 +512,8 @@ export class RecipeFormComponent implements OnInit {
       this.saveRequests.push(this.rest.saveItem('', {pdfdata : pdfdata}, 'freshboxrecipespdf').subscribe(pdf => {
         this.imagesDropZone.emit("success", this.pdfDocument);
         this.imagesDropZone.emit("complete", this.pdfDocument);
+        this.removeFileSizeElement(this.pdfDocument);
+        this.appendPDFDownloaLink(this.pdfDocument, pdf[3]);
         this.pdfDocument = null;
       }));
     }

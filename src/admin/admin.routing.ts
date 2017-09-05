@@ -51,7 +51,19 @@ export const routes: Routes = [
       },
       {
         path: 'settings',
+        canActivate: [AuthService],
         loadChildren: './settings/settings.module#SettingsModule'
+      },
+      {
+        path: 'reviews',
+        canActivate: [AuthService],
+        loadChildren: './reviews/reviews.module#ReviewsModule'
+      }
+      ,
+      {
+        path: 'newsletter',
+        canActivate: [AuthService],
+        loadChildren: './newsletter/newsletter.module#NewsletterModule'
       }
     ]
   },

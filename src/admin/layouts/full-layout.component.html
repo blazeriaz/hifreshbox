@@ -49,6 +49,19 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/users']">
             <i class="icon-user"></i> Users</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/reviews']">
+            <i class="icon-list"></i> Reviews</a>
+        </li>
+        <li class="nav-item nav-dropdown open" routerLinkActive1="open" appNavDropdown1>
+          <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle1><i class="icon-star"></i> Newsletter</a>
+          <ul class="nav-dropdown-items">
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/newsletter']">
+                <i class="icon-list"></i> Subscribers</a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item nav-dropdown open" routerLinkActive1="open" appNavDropdown1>
           <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle1><i class="icon-star"></i> Masters</a>
           <ul class="nav-dropdown-items">

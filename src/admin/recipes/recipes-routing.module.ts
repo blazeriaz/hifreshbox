@@ -2,16 +2,13 @@ import { NgModule }             from '@angular/core';
 import { Routes,
          RouterModule }         from '@angular/router';
 
-import { RecipesListComponent, recipesListResolve } from './list.component';
-import { RecipeFormComponent, recipeEditResolve } from "./form.component";
+import { RecipesListComponent } from './list.component';
+import { RecipeFormComponent } from "./form.component";
 
 const routes: Routes = [
     {
         path: '',
         component: RecipesListComponent,
-        resolve: {
-            recipes: recipesListResolve
-        },
         data: {
             title: 'Recipes'
         }
@@ -26,9 +23,6 @@ const routes: Routes = [
     {
         path: 'edit/:sku',
         component: RecipeFormComponent,
-        resolve: {
-            recipe: recipeEditResolve
-        },
         data: {
             title: 'Edit'
         }

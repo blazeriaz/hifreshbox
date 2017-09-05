@@ -78,6 +78,8 @@ export class RestService {
       } else {
         url = this.module + '/search?' + params;
       }      
+    } else {
+      url += "?" + params;
     }
 
     url = GlobalVariable.BASE_API_URL + url;

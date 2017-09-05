@@ -2,16 +2,13 @@ import { NgModule }             from '@angular/core';
 import { Routes,
          RouterModule }         from '@angular/router';
 
-import { SwagsListComponent, swagsListResolve } from './list.component';
-import { SwagFormComponent, swagEditResolve } from "./form.component";
+import { SwagsListComponent } from './list.component';
+import { SwagFormComponent } from "./form.component";
 
 const routes: Routes = [
     {
         path: '',
         component: SwagsListComponent,
-        resolve: {
-            swags: swagsListResolve
-        },
         data: {
             title: 'Swags'
         }
@@ -26,9 +23,6 @@ const routes: Routes = [
     {
         path: 'edit/:sku',
         component: SwagFormComponent,
-        resolve: {
-            swag: swagEditResolve
-        },
         data: {
             title: 'Edit'
         }

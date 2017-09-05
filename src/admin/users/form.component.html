@@ -1,4 +1,4 @@
-<form [formGroup]="userForm" (submit)="saveUser()" novalidate>
+<form [formGroup]="userForm" (submit)="saveUser()" novalidate *ngIf="loadedFormData">
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
@@ -164,3 +164,35 @@
     </div>
   </div>
 </div></form>
+<ng-template #savemodal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Save User</h4>
+    </div>
+    <div class="modal-body">
+      {{updatingMessage}}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
+          Go To List
+      </button>
+      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
+          Close
+      </button>
+      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
+          Abort
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #editLoadModal>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Edit Customer</h4>
+      </div>
+      <div class="modal-body">
+        Loading the required form datas...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+            Abort
+        </button>
+      </div>
+    </ng-template>

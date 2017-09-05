@@ -118,7 +118,7 @@ export class StoreFormComponent implements OnInit {
       if (this.mainForm.valid) {          
           let sendData = this.mainForm.value;
 
-          this.rest.saveItem("", {email_address : sendData}, "emailupdate").subscribe(
+          this.rest.saveItem("", {siteinfo : sendData}, "updatesiteinfo").subscribe(
             data => {
                 this.alert.success("The profile details saved successfully!", true);
                 

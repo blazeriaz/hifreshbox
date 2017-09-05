@@ -1,10 +1,10 @@
 import { NgModule }                 from '@angular/core';
 
-import { SwagsListComponent } from './list.component';
-import { SwagsRoutingModule }   from './swags-routing.module';
+import { ReviewsListComponent } from './list.component';
+import { ReviewsRoutingModule }   from './reviews-routing.module';
 import { ProductsService } from "services";
 import { CommonModule } from "@angular/common";
-import { SwagFormComponent } from "./form.component";
+import { ReviewFormComponent, reviewEditResolve } from "./form.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
@@ -19,14 +19,14 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     maxFilesize: 1,
     uploadMultiple: false,
     autoProcessQueue: false
-};
+}; 
 
 @NgModule({
     imports: [
-        SelectModule, SwagsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, 
+        SelectModule, ReviewsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, 
         SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG)
     ],
-    declarations: [ SwagsListComponent, SwagFormComponent ],
-    providers: [ProductsService, PagerService]
+    declarations: [ ReviewsListComponent, ReviewFormComponent ],
+    providers: [ProductsService, reviewEditResolve, PagerService]
 })
-export class SwagsModule { }
+export class ReviewsModule { }

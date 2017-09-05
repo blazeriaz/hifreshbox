@@ -16,17 +16,18 @@ DB:
 DB Name: freshbox
 Password: 0q5!7J8f3%IJ
 
-1) By Default if it is less than 10 pagination should not come
-2) Search Box needed for all page.
+
 
 4) Ingredient and portion need to have disable. remove delete.
 5) Forgot Password need to be completed.
 6) Reviews Listing need to be added.
 11) Bread crumb need to be fixed.
-14) USer Edit Address if not record is present need to show No record Available
+
 
 Partial Done
 ********************
+1) By Default if it is less than 10 pagination should not come
+2) Search Box needed for all page.
 3) In Menu While adding recipe . when added it should say added  when clicked in add. and remove it is already added.
 7) Pdf for recipe needed to be added.
 8) what you need . needed to be added and allergies needed to be added.
@@ -38,3 +39,4 @@ Done
 9) Swag needed Multiple image to be uploaded
 10 while clicking on logo it should redirect to dashboard page
 12) Recipe loader is not proper while saving'
+14) USer Edit Address if not record is present need to show No record Available

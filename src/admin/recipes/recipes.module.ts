@@ -1,10 +1,10 @@
 import { NgModule }                 from '@angular/core';
 
-import { RecipesListComponent, recipesListResolve } from './list.component';
+import { RecipesListComponent } from './list.component';
 import { RecipesRoutingModule }   from './recipes-routing.module';
 import { ProductsService } from "services";
 import { CommonModule } from "@angular/common";
-import { RecipeFormComponent, recipeEditResolve } from "./form.component";
+import { RecipeFormComponent } from "./form.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
@@ -27,6 +27,6 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
         SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG)
     ],
     declarations: [ RecipesListComponent, RecipeFormComponent ],
-    providers: [ProductsService, recipesListResolve, recipeEditResolve, PagerService]
+    providers: [ProductsService, PagerService]
 })
 export class RecipesModule { }

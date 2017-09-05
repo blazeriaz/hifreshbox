@@ -1,23 +1,16 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService } from "services";
+import { UsersService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from "@angular/forms";
-
-@Injectable()
-export class customerEditResolve implements Resolve<any> {
-  
-  constructor(private usersService: UsersService) {}
-  
-  resolve(route: ActivatedRouteSnapshot) {
-    let userId = route.params['id'];
-    return this.usersService.getUser(userId);
-  }
-}
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 @Component({
     templateUrl: 'form.component.html'
 })
 export class UserFormComponent implements OnInit {
+    @ViewChild('savemodal') saveModal: TemplateRef<any>;
+    @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
+    
     countries:any;
     available_regions : any;
     regionsAll:any;
@@ -27,16 +20,75 @@ export class UserFormComponent implements OnInit {
     indexDefaultAddress : number;
     submitted:boolean;
 
+    updatingMessage;
+    saveModalClose;
+    abortModalClose;
+    saveRequests;
+    public modalRef: BsModalRef;
+
+      
+    modalEditRef: BsModalRef;   
+    serverMediaImages;
+    loadedFormData;
+    countLoadedFormReqs;
+    loadFormRequests;
+
     constructor(private usersService: UsersService, 
                 private alert: AlertService,
+                private rest: RestService,
                 private _fb: FormBuilder,
                 private route: ActivatedRoute,
-                private router: Router ) {
+                private router: Router,
+                private modalService: BsModalService ) {        
+               
+    }
+    
+    ngOnInit(): void {
+        this.loadFormRequests = [];
+        this.countLoadedFormReqs = 0;
+        this.loadedFormData = false;
+        this.openEditModal();
+        this.loadCountries();
+        this.loadFormData();
+
+        let userId = this.route.snapshot.params['id'];
+        this.user = {};
+        
+        
+    }
+    
+    openEditModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalEditRef = this.modalService.show(this.editLoadModal, config);
+    }
+    
+    abortEdit() {
+      if(this.loadFormRequests && this.loadFormRequests.length > 0) {
+        this.loadFormRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalEditRef.hide();
+      this.goToList();
+    }
+
+    checkAllFormDataLoaded() {      
+      if(--this.countLoadedFormReqs == 0) {
+        this.modalEditRef.hide();
+        this.initEditForm(); 
+        this.loadedFormData = true; 
+      }
+    }
+
+    loadCountries() {
         this.countries = [];
         this.regionsAll = [];
         this.available_regions = [];
-        this.usersService.getCountries().subscribe(
-            data => {
+        this.loadFormRequests.push(
+            this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(data => {
                 data.filter(data => {
                     this.available_regions[data.id] = null
                     if(data.available_regions) {
@@ -50,11 +102,26 @@ export class UserFormComponent implements OnInit {
                     }
                     this.countries.push({id: data.id, text: data.full_name_locale});
                 });
-            }
-        );        
+                this.checkAllFormDataLoaded();
+            })
+        ); 
+        this.countLoadedFormReqs++;
+    }
+    
+    loadFormData() {
+        let userId = this.route.snapshot.params['id'];
+        this.user = {};
+        if(!userId) return;
+        this.loadFormRequests.push(
+            this.rest.getItem(userId, 'customers/' + userId).subscribe(user => {
+                this.user = user;
+                this.checkAllFormDataLoaded();
+            })
+        );
+        this.countLoadedFormReqs++;
     }
 
-    initUserForm(user) {
+    initEditForm() {
         this.userForm = this._fb.group({
             'id': this.user.id,
             'store_id': 1, 
@@ -65,6 +132,25 @@ export class UserFormComponent implements OnInit {
             'gender': this.user.gender,
             'addresses' : this._fb.array([])
         });
+
+        let doAddNewAddress = true;
+        if(this.user.id) {            
+            this.user.addresses.map((address, i) => {
+                if(address.default_shipping) {
+                    this.indexDefaultAddress = i;
+                }
+                this.userForm.controls['addresses'].push(this.initAddressForm(address));
+            });
+            if(this.user.addresses.length > 0) {
+                doAddNewAddress = false;
+                this.doEditAddress(0);
+            }            
+        }
+        if(doAddNewAddress) {
+            this.addNewAddress();
+            this.setDefaultAddress(0, true);
+        }
+
         this.userForm.valueChanges.subscribe(data => {
             if(!this.indexEditAddress) return;
 
@@ -108,24 +194,6 @@ export class UserFormComponent implements OnInit {
             'default_billing' : address.default_billing
         });
     }    
-    
-    ngOnInit(): void {
-        let userId = this.route.snapshot.params['id'];
-        this.user = (userId)?this.route.snapshot.data['user']:{};
-        this.initUserForm(this.user);
-        if(userId) {            
-            this.user.addresses.map((address, i) => {
-                if(address.default_shipping) {
-                    this.indexDefaultAddress = i;
-                }
-                this.userForm.controls['addresses'].push(this.initAddressForm(address));
-            });
-            this.doEditAddress(0);
-        } else {
-            this.addNewAddress();
-            this.setDefaultAddress(0, true);
-        }
-    }
     
     getActiveCountry() {
         let country_id = this.userForm.value.addresses[this.indexEditAddress].country_id;
@@ -263,21 +331,51 @@ export class UserFormComponent implements OnInit {
         this.doEditAddress(this.userForm.controls['addresses'].controls.length - 1);
     }
 
+    noticeUserSaved = function() {
+        this.updatingMessage = "The customer details have been saved successfully!"; 
+        this.saveModalClose = true;
+        this.abortModalClose = false;
+    }
+
     saveUser() {
         this.alert.clear();
         this.submitted = true;
         if (this.userForm.valid) {                   
             let userId = this.route.snapshot.params['id'];
             userId = (userId)?userId:'';
-            this.usersService.saveUser(userId, {customer: this.userForm.value}).subscribe(
-                data => {
-                    this.alert.success("The customer details are saved successfully!", true);
-                    this.router.navigate(['users']);                    
-                }
-            );
+
+            this.updatingMessage = "Uploading the Customer information...";
+            this.saveModalClose = false;
+            this.abortModalClose = true;
+            this.openSaveModal();
+            this.saveRequests = [];
+
+            this.rest.saveItem(userId, {customer: this.userForm.value}, "customers/" + userId).subscribe(data => {
+                this.noticeUserSaved();                  
+            });
         } else {
-            this.alert.error("Please check the form to enter all required details");
-            
+            this.alert.error("Please check the form to enter all required details");            
         }
+    }
+    
+    openSaveModal() {
+      let config = {
+        animated: true,
+        keyboard: false,
+        backdrop: true,
+        ignoreBackdropClick: true
+      };
+      this.modalRef = this.modalService.show(this.saveModal, config);
+    }
+
+    abortSave() {
+      if(this.saveRequests && this.saveRequests.length > 0) {
+        this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
+      }
+      this.modalRef.hide();
+    }
+
+    goToList() {
+      this.router.navigate(['users']);
     }
 }
