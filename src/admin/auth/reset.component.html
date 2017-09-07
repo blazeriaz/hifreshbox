@@ -1,0 +1,19 @@
+<form [formGroup]="resetForm" (submit)="resetPassword()">
+  <h1>Reset Password</h1>
+  <div class="input-group mb-3">    
+    <input type="password" class="form-control" placeholder="New Password"
+        formControlName="password" id="password" />
+  </div>
+  <div class="input-group mb-3">    
+    <input type="password" class="form-control" placeholder="Cofirmation Password"
+        formControlName="confirmation" id="confirmation" />
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <button [disabled]="loading" type="submit" class="btn btn-primary px-4">Submit</button>
+    </div>
+    <div class="col-sm-6">
+      <button [disabled]="loading" type="button" class="btn btn-link px-4" (click)="goToLogin()">Go to login</button>
+    </div>
+  </div>
+</form>

@@ -34,9 +34,12 @@ export class ForgetComponent implements OnInit {
   sendForgetEmail() {
     this.alert.clear();
     if (this.forgetForm.valid) {
+      this.rest.showLoader();
       this.rest.getItem('', 'forgotemail/' + this.forgetForm.value.email).subscribe(
         data => {
-            this.alert.error("Please check your mail to reset the password");
+          this.rest.hideLoader();
+          this.alert.success("Please check your mail to reset the password", true);
+          this.goToLogin();
         },
         error => {
           this.alert.error("Server Error");

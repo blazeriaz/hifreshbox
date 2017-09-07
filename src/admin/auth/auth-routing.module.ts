@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent, LogoutComponent } from './login.component';
 import { ForgetComponent } from './forget.component';
+import { ResetComponent, checkRestTokenResolve } from "./reset.component";
 
 const routes: Routes = [
   {
@@ -30,6 +31,16 @@ const routes: Routes = [
         component: ForgetComponent,
         data: {
           title: 'Forget Password'
+        }
+      },
+      {
+        path: 'reset/:customerId/:token',
+        component: ResetComponent,/**
+        resolve: {
+          check: checkRestTokenResolve
+        },**/
+        data: {
+          title: 'Reset Password'
         }
       }
     ]

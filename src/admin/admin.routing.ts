@@ -40,6 +40,11 @@ export const routes: Routes = [
         loadChildren: './swags/swags.module#SwagsModule'
       },
       {
+        path: 'orders',
+        canActivate: [AuthService],
+        loadChildren: './orders/orders.module#OrdersModule'
+      },
+      {
         path: 'menu',
         canActivate: [AuthService],
         loadChildren: './menu/menu.module#MenuModule'
