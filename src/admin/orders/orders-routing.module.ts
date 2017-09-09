@@ -3,7 +3,7 @@ import { Routes,
          RouterModule }         from '@angular/router';
 
 import { OrdersListComponent } from './list.component';
-import { OrderFormComponent } from "./form.component";
+import { OrderViewComponent } from "./view.component";
 import { FullLayoutComponent } from "../layouts/full-layout.component";
 import { emptyLayoutComponent } from "../layouts/empty-layout.component";
 
@@ -16,20 +16,12 @@ const routes: Routes = [
         }
     },
     {
-        path: 'add',
-        component: OrderFormComponent,
+        path: 'view/:id',
+        component: OrderViewComponent,
         data: {
-            title: 'Add'
+            title: 'View Order'
         }
-    },
-    {
-        path: 'edit/:id',
-        component: OrderFormComponent,
-        data: {
-            title: 'Edit'
-        }
-    }
-    
+    }    
 ];
 
 @NgModule({

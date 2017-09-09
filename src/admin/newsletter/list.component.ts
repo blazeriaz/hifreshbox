@@ -10,8 +10,8 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class NewslettersListComponent implements OnInit {
-    private newsletters:any;
-    private pager: any;
+    newsletters:any;
+    pager: any;
     searchForm;
     searchSubscripe;
     loadingList;
@@ -34,6 +34,13 @@ export class NewslettersListComponent implements OnInit {
             .debounceTime(500)
             .subscribe(values => this.loadNewslettersList(1));
         this.loadNewslettersList(1);
+    }
+
+    getStatusText(status) {
+        if(status == 1) return "Subscribed";
+        if(status == 2) return "Not Activated";
+        if(status == 3) return "Unsubscribed";
+        if(status == 4) return "Unconfirmed";    
     }
 
     initNewslettersList(newsletters, page?) {

@@ -40,7 +40,7 @@
             <div class="col-sm-8">
               {{newsletter.subscriber_email}}
             </div>
-            <div class="col-sm-4">{{newsletter.subscriber_status}}</div>            
+            <div class="col-sm-4">{{getStatusText(newsletter.subscriber_status)}}</div>            
           </div>
 
           <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">

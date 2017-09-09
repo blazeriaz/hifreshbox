@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="row mt-2" *ngIf="page && page.totalPages > 1"><div class="col-md-12">
+          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
             <ul class="pagination pull-right">
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>

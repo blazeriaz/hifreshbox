@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { OrdersListComponent } from './list.component';
 import { OrdersRoutingModule }   from './orders-routing.module';
 import { PagerService } from "services";
-import { OrderFormComponent } from "./form.component";
+import { OrderViewComponent } from "./view.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {SelectModule} from 'ng2-select';
 
@@ -12,7 +12,7 @@ import {SelectModule} from 'ng2-select';
     imports: [
         SelectModule, OrdersRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
     ],
-    declarations: [ OrdersListComponent, OrderFormComponent ],
+    declarations: [ OrdersListComponent, OrderViewComponent ],
     providers: [ PagerService]
 })
 export class OrdersModule { }

@@ -165,34 +165,40 @@
   </div>
 </div></form>
 <ng-template #savemodal>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Save User</h4>
-    </div>
-    <div class="modal-body">
-      {{updatingMessage}}
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
-          Go To List
-      </button>
-      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
-          Close
-      </button>
-      <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
-          Abort
-      </button>
-    </div>
-  </ng-template>
-  <ng-template #editLoadModal>
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Edit Customer</h4>
-      </div>
-      <div class="modal-body">
-        Loading the required form datas...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
-            Abort
-        </button>
-      </div>
-    </ng-template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Save User</h4>
+  </div>
+  <div class="modal-body">
+    {{updatingMessage}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
+        Go To List
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
+        Close
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
+        Abort
+    </button>
+  </div>
+</ng-template>
+<ng-template #editLoadModal>
+  <div class="modal-header" *ngIf="!user.id">
+    <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Customer</h4>
+  </div>
+  <div class="modal-header" *ngIf="user.id">
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Customer</h4>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Customer</h4>
+  </div>
+  <div class="modal-body">
+    Loading the required form datas...
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+        Abort
+    </button>
+  </div>
+</ng-template>

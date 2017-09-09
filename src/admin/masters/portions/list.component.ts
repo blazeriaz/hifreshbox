@@ -60,21 +60,24 @@ export class PortionsListComponent implements OnInit {
         });
     }
 
-    deleteItem(itemId) {
-        if(!confirm("Are you sure to delete the portion?")) {
+    toggleStatusItem(item) {
+        if(!confirm("Are you sure to change the status?")) {
             return;
         }
         this.alert.clear();
-        this.restService.deleteItem(itemId).subscribe(data => {
+        let modifyStatus = (item.is_active)?0:1;
+        this.restService.saveItem(item.id, {portion:{is_active:modifyStatus}}).subscribe(data => {
             if(data) {
-                this.alert.success("The portion deleted successfully!", true);
+                this.alert.success("The portion status changed successfully!", true);
                 let page = 1;
                 this.restService.getItems(page, [], pageSize).subscribe(items => {
                     this.initItemsList(items, page);
                 });
             } else {
-                this.alert.error("The portion can't be deleted!", true);
+                this.alert.error("Somthing went wrong!", true);
             }
+        }, err => {
+            this.alert.error("Somthing went wrong!", true);
         });
     }
 
@@ -92,8 +95,7 @@ export class PortionsListComponent implements OnInit {
         this.editItem = item;
         this.masterForm.patchValue({
             title : item.title
-        });
-        
+        });        
     }
 
     saveItem() {
@@ -106,7 +108,9 @@ export class PortionsListComponent implements OnInit {
                     this.alert.success("The portion are saved successfully!", true);
                     this.editItem = false;
                     this.submitted = false; 
-                    this.masterForm.reset();
+                    this.masterForm.patchValue({
+                        title : ''
+                    });
                     this.setPage(1); 
                 }
             );

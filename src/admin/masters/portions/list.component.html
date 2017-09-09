@@ -17,23 +17,26 @@
         </div>
         <div class="card-block">
           <div class="row py-2 bg-info">
-            <div class="col-sm-8">Name</div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-6">Name</div>
+            <div class="col-sm-3">Status</div>
           </div>  
 
           <div class="row py-2" [ngClass]="{'bg-faded': odd}" *ngFor="let item of items; let odd= odd;">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
               {{item.title}}
             </div>
-            <div class="col-sm-4">              
+            <div class="col-sm-3">
+              <button type="button" class="btn btn-success" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 1">Active</button>
+              <button type="button" class="btn btn-danger" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 0">Inactive</button>
+            </div>
+            <div class="col-sm-3">              
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-secondary" (click)="doEditItem(item)">Edit</button>
-                <button type="button" class="btn btn-secondary" (click)="deleteItem(item.id)">Delete</button>
               </div>
             </div>
           </div>
 
-          <div class="row mt-2"><div class="col-md-12">
+          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
             <ul class="pagination pull-right">
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>

@@ -101,15 +101,18 @@
   </div>
 </ng-template>
 <ng-template #editLoadModal>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Edit Recipe</h4>
-    </div>
-    <div class="modal-body">
-      Loading the required form datas...
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
-          Abort
-      </button>
-    </div>
-  </ng-template>
+  <div class="modal-header" *ngIf="!swag.id">
+    <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Swag</h4>
+  </div>
+  <div class="modal-header" *ngIf="swag.id">
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Swag</h4>
+  </div>
+  <div class="modal-body">
+    Loading the required form datas...
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+        Abort
+    </button>
+  </div>
+</ng-template>

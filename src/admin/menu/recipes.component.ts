@@ -15,9 +15,9 @@ export const filterGroups = [{
     templateUrl: 'recipes.component.html'
 })
 export class RecipesListComponent implements OnInit {
-    private recipes:any;
-    private selectedRecipes:any;
-    private pager: any;
+    recipes:any;
+    selectedRecipes:any;
+    pager: any;
     yearMonthSubs;
     yearWeek;
     loadedselectedRecipes;

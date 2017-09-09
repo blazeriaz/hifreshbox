@@ -11,12 +11,20 @@ export class checkRestTokenResolve implements Resolve<any> {
   constructor(private rest: RestService, private alert: AlertService, private router: Router) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    let customerId = route.params.customerId;
-    let token = route.params.token;
-    return this.rest.getItem('', 'customers/'+customerId+'/password/resetLinkToken/'+token).subscribe(res => {
-      return res;
+    let sendData  = {
+      id: route.params.customerId,
+      token: route.params.token
+    };
+
+    return this.rest.saveItem('', {email_validation : sendData}, 'forgotemailvalidate').subscribe(res => {
+      if(res == 'success') {
+        return res;
+      } else {
+        this.alert.error(res, true);
+        this.router.navigate(['auth/forget']);
+      }
     }, err => {
-      this.alert.error("Your reset password link has expired", true);
+      this.alert.error("Something went wrong!", true);
       this.router.navigate(['auth/forget']);
     })
   }
@@ -46,7 +54,14 @@ export class ResetComponent implements OnInit {
       'token': token,
       'password': ['', [Validators.required]],
       'confirmation': ['', [Validators.required]]
-    });
+    }, {validator: this.checkPasswords});
+  }
+  
+  checkPasswords(resetForm) {
+    let pass = resetForm.controls.password.value;
+    let confirmPass = resetForm.controls.confirmation.value;
+  
+    return pass === confirmPass ? null : { notSame: true }
   }
 
   goToLogin() {
@@ -59,8 +74,8 @@ export class ResetComponent implements OnInit {
       this.rest.showLoader();
       this.rest.saveItem('', {email_change_data : this.resetForm.value}, 'forgotemailchange').subscribe(
         data => {
-          if(data[0] == "error") {
-            this.alert.error(data[1]);
+          if(data != "success") {
+            this.alert.error(data);
             this.rest.hideLoader();
           } else {
             this.rest.hideLoader();
@@ -73,7 +88,7 @@ export class ResetComponent implements OnInit {
           this.rest.hideLoader();
         });
     } else {
-      this.alert.error('Please enter the passwords');
+      this.alert.error('Please check the passwords are entered correctly');
     }
   }
 

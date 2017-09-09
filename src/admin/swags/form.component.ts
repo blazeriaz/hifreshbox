@@ -15,16 +15,16 @@ export class SwagFormComponent implements OnInit {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
   @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
   
-    private swag:any;
-    private swagForm:any;
-    private customAttributes:any;
-    private ingredientsOptions:any;
-    private ingredients:any;
-    private newIngredient:any;
-    private swagSteps:any;
-    private newSwagStep:any;
-    private submitted:any;
-    private images:any;
+    swag:any;
+    swagForm:any;
+    customAttributes:any;
+    ingredientsOptions:any;
+    ingredients:any;
+    newIngredient:any;
+    swagSteps:any;
+    newSwagStep:any;
+    submitted:any;
+    images:any;
     imageUploadConfig: DropzoneConfigInterface;
     serverImagesLoading;    
     addImageIndex;
@@ -187,19 +187,21 @@ export class SwagFormComponent implements OnInit {
         customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, true));
       });
       customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
+
+      let qty = this.swag.extension_attributes?this.swag.extension_attributes.stock_item.qty:0;
       
       this.swagForm = this._fb.group({
         name : [this.swag.name, [Validators.required]],
         status : this.swag.status?this.swag.status:1,
         visibility: 1,
         type_id : 'simple',
-        price : this.swag.price,
+        price : [this.swag.price, [Validators.required]],
         attribute_set_id : 17,
         extension_attributes : this._fb.group({
           stock_item : this._fb.group({
             manage_stock : 1,
             is_in_stock : 1,
-            qty : this.swag.extension_attributes?this.swag.extension_attributes.stock_item.qty:0
+            qty : [qty, [Validators.required]]
           })
         }),
         custom_attributes : this._fb.array(customAttributesArray)     

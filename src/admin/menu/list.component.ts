@@ -15,8 +15,8 @@ export const filterGroups = [{
     templateUrl: 'list.component.html'
 })
 export class MenuListComponent implements OnInit {
-    private recipes:any;
-    private pager: any;
+    recipes:any;
+    pager: any;
     yearMonthSubs;
     disableEdit;
 
@@ -48,10 +48,6 @@ export class MenuListComponent implements OnInit {
             }}
             //Get recipes of Menu
             this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-                if(recipes.length == 0) {
-                    this.alert.warn("Please add recipes for this week menu", true);
-                    this.router.navigate(['menu/add-recipe']);
-                }
                 this.recipes = recipes;
             });
         });

@@ -60,22 +60,25 @@ export class IngredientsListComponent implements OnInit {
             this.initItemsList(items, page);
         });
     }
-
-    deleteItem(itemId) {
-        if(!confirm("Are you sure to delete the ingredient?")) {
+    
+    toggleStatusItem(item) {
+        if(!confirm("Are you sure to change the status?")) {
             return;
         }
         this.alert.clear();
-        this.restService.deleteItem(itemId).subscribe(data => {
+        let modifyStatus = (item.is_active)?0:1;
+        this.restService.saveItem(item.id, {ingredient:{is_active:modifyStatus}}).subscribe(data => {
             if(data) {
-                this.alert.success("The ingredient deleted successfully!", true);
+                this.alert.success("The ingredient status changed successfully!", true);
                 let page = 1;
                 this.restService.getItems(page, [], pageSize).subscribe(items => {
                     this.initItemsList(items, page);
                 });
             } else {
-                this.alert.error("The ingredient can't be deleted!", true);
+                this.alert.error("Somthing went wrong!", true);
             }
+        }, err => {
+            this.alert.error("Somthing went wrong!", true);
         });
     }
 
@@ -107,7 +110,9 @@ export class IngredientsListComponent implements OnInit {
                     this.alert.success("The ingredient are saved successfully!", true);
                     this.editItem = false;
                     this.submitted = false; 
-                    this.masterForm.reset();
+                    this.masterForm.patchValue({
+                        title : ''
+                    });
                     this.setPage(1); 
                 }
             );

@@ -10,8 +10,8 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class ReviewsListComponent implements OnInit {
-    private reviews:any;
-    private pager: any;
+    reviews:any;
+    pager: any;
     searchForm;
     searchSubscripe;
     loadingList;

@@ -40,7 +40,7 @@
               {{order.increment_id}}</div>
             <div class="col-md-2">
               {{order.created_at | date}}</div>
-            <div class="col-md-2">increment_id
+            <div class="col-md-2">
               <i class="fa fa-male" *ngIf="order.customer_gender == 1"></i>
               <i class="fa fa-female" *ngIf="order.customer_gender == 2"></i>
               {{order.customer_firstname}} {{order.customer_lastname}}
@@ -53,7 +53,7 @@
               {{order.order_currency_code}}</div>
             <div class="col-md-12">  
               <div class="btn-group btn-group-sm">
-                <a [routerLink]="['view', order.id]" class="btn btn-link pl-0">View</a>
+                <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>
               </div>
             </div>
           </div>

@@ -24,8 +24,8 @@ export class reviewEditResolve implements Resolve<any> {
 })
 export class ReviewFormComponent implements OnInit {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
-    private review:any;
-    private reviewForm:any;
+    review:any;
+    reviewForm:any;
     submitted;
     updatingMessage;
     saveModalClose;

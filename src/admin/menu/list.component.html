@@ -15,6 +15,9 @@
             <div class="col-md-2">Cook Time</div>
             <div class="col-md-2">Created By</div>
           </div>
+          <div class="row py-2" *ngIf="recipes.length == 0">
+              <div class="col-md-12">No reipes added to the menu!</div>
+          </div>
           <div class="row py-2" *ngFor="let recipe of recipes; let odd=odd;" [ngClass]="{'bg-faded': odd}">
             <div class="col-md-1">
               <div class="avatar">

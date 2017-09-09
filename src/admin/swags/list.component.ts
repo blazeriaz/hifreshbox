@@ -10,8 +10,8 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class SwagsListComponent implements OnInit {
-    private swags:any;
-    private pager: any;
+    swags:any;
+    pager: any;
     searchForm;
     searchSubscripe;
     loadingList;

@@ -10,8 +10,8 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class RecipesListComponent implements OnInit {
-    private recipes:any;
-    private pager: any;
+    recipes:any;
+    pager: any;
     searchForm;
     searchSubscripe;
     loadingList;

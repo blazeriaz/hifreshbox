@@ -35,10 +35,10 @@ const routes: Routes = [
       },
       {
         path: 'reset/:customerId/:token',
-        component: ResetComponent,/**
+        component: ResetComponent,
         resolve: {
           check: checkRestTokenResolve
-        },**/
+        },
         data: {
           title: 'Reset Password'
         }
