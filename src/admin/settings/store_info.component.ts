@@ -116,17 +116,14 @@ export class StoreFormComponent implements OnInit {
       this.alert.clear();
       this.submitted = true;
       if (this.mainForm.valid) {          
-          let sendData = this.mainForm.value;
-
-          this.rest.saveItem("", {siteinfo : sendData}, "updatesiteinfo").subscribe(
-            data => {
-                this.alert.success("The profile details saved successfully!", true);
-                
-            }
-        );
+        let sendData = this.mainForm.value;
+        this.rest.showLoader();
+        this.rest.saveItem("", {siteinfo : sendData}, "updatesiteinfo").subscribe(data => {
+            this.alert.success("The profile details saved successfully!", true);
+            this.rest.hideLoader();
+        }, err => this.rest.hideLoader());
       } else {
         this.alert.error("Please check the form to enter all required details");
-        
       }
     }
 }

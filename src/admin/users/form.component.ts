@@ -112,6 +112,7 @@ export class UserFormComponent implements OnInit {
         let userId = this.route.snapshot.params['id'];
         this.user = {};
         if(!userId) return;
+        this.user.id = userId;
         this.loadFormRequests.push(
             this.rest.getItem(userId, 'customers/' + userId).subscribe(user => {
                 this.user = user;

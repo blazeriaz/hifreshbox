@@ -99,10 +99,12 @@ export class SwagFormComponent implements OnInit {
     }
 
     loadFormData() {
-      let recipeSku = this.route.snapshot.params['sku'];      
-      if(!recipeSku) return;
+      let swagSku = this.route.snapshot.params['sku'];    
+      this.swag = {};  
+      if(!swagSku) return;
+      this.swag.sku = swagSku;
       this.loadFormRequests.push(
-        this.rest.getItem(recipeSku, 'products/' + recipeSku).subscribe(swag => {
+        this.rest.getItem(swagSku, 'products/' + swagSku).subscribe(swag => {
           this.swag = swag;
           this.checkAllFormDataLoaded();
         })
@@ -111,10 +113,10 @@ export class SwagFormComponent implements OnInit {
     }
 
     loadMediaImages() {
-      let recipeSku = this.route.snapshot.params['sku'];
-      if(!recipeSku) return;
+      let swagSku = this.route.snapshot.params['sku'];
+      if(!swagSku) return;
       this.loadFormRequests.push(
-        this.rest.getItem('', 'products-gal/'+recipeSku+'/media')
+        this.rest.getItem('', 'products-gal/'+swagSku+'/media')
           .subscribe(images => {
             this.serverMediaImages = images;
             this.checkAllFormDataLoaded();
@@ -148,7 +150,7 @@ export class SwagFormComponent implements OnInit {
     
     attachMediaImagesToDropzone(imagesDropZone) {      
       this.imagesDropZone = imagesDropZone;
-      if(!this.swag || !this.swag.sku || this.serverMediaImages.length == 0) {
+      if(!this.swag || !this.swag.custom_attributes || this.serverMediaImages.length == 0) {
         return;
       }
       this.serverMediaImages.map(image => {

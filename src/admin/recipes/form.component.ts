@@ -109,7 +109,9 @@ export class RecipeFormComponent implements OnInit {
 
     loadFormData() {
       let recipeSku = this.route.snapshot.params['sku'];
+      this.recipe = {};
       if(!recipeSku) return;
+      this.recipe.sku = recipeSku;
       this.loadFormRequests.push(
         this.rest.getItem(recipeSku, 'products/' + recipeSku).subscribe(recipe => {
           this.recipe = recipe;
@@ -242,27 +244,28 @@ export class RecipeFormComponent implements OnInit {
 
     attachPdfDocumentToDropzone(pdfDropZone) {
       this.pdfDropZone = pdfDropZone;
-      if(this.recipe && this.recipe.custom_attributes.length > 0) {
-        let i = this.recipe.custom_attributes.findIndex(attr => {
-          return attr.attribute_code == "pdf_upload";
-        })
-        if(i !== -1) {
-          let pdf_file_name = this.recipe.custom_attributes[i].value;
-          let mockFile = { 
-            name: pdf_file_name,
-            accepted: true,
-            previewTemplate : document.createElement('div')
-          };  
-
-          pdfDropZone.emit("addedfile", mockFile);          
-          pdfDropZone.emit("thumbnail", mockFile, GlobalVariable.pdfDataURL);
-          pdfDropZone.emit("success", mockFile);
-          pdfDropZone.emit("complete", mockFile);
-          pdfDropZone.files.push(mockFile);
-          this.removeFileSizeElement(mockFile);
-          this.appendPDFDownloaLink(mockFile, pdf_file_name);
-        }
+      if(!this.recipe || !this.recipe.custom_attributes || this.recipe.custom_attributes.length > 0) {
+        return;
       }
+      let i = this.recipe.custom_attributes.findIndex(attr => {
+        return attr.attribute_code == "pdf_upload";
+      })
+      if(i !== -1) {
+        let pdf_file_name = this.recipe.custom_attributes[i].value;
+        let mockFile = { 
+          name: pdf_file_name,
+          accepted: true,
+          previewTemplate : document.createElement('div')
+        };  
+
+        pdfDropZone.emit("addedfile", mockFile);          
+        pdfDropZone.emit("thumbnail", mockFile, GlobalVariable.pdfDataURL);
+        pdfDropZone.emit("success", mockFile);
+        pdfDropZone.emit("complete", mockFile);
+        pdfDropZone.files.push(mockFile);
+        this.removeFileSizeElement(mockFile);
+        this.appendPDFDownloaLink(mockFile, pdf_file_name);
+      }      
     }
 
     removeFileSizeElement(mockFile) {
@@ -303,7 +306,7 @@ export class RecipeFormComponent implements OnInit {
 
     attachMediaImagesToDropzone(imagesDropZone) {      
       this.imagesDropZone = imagesDropZone;
-      if(!this.recipe || !this.recipe.sku || this.serverMediaImages.length == 0) {
+      if(!this.recipe || !this.recipe.custom_attributes || this.serverMediaImages.length == 0) {
         return;
       }
       this.serverMediaImages.map(image => {

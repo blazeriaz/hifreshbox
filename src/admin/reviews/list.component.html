@@ -17,10 +17,10 @@
           </form>
 
           <div class="row py-2 bg-primary">
-            <div class="col-md-3">Reviewer</div>
+            <div class="col-md-2">Nickname</div>
             <div class="col-md-2">Date</div>
             <div class="col-md-3">Title</div>
-            <div class="col-md-2">Rating(%)</div>
+            <div class="col-md-2">Rating</div>
             <div class="col-md-2">Status</div>
           </div>
 
@@ -41,20 +41,21 @@
 
           <div class="row py-2" *ngFor="let review of reviews;let odd=odd;" [ngClass]="{'bg-faded': odd}">
             <div class="col-md-2">
-              {{review.nickname}}<!--
-              <div class="col px-0 btn-group btn-group-sm">
-                <a [routerLink]="['edit', review.review_id]" class="btn btn-link pl-0">Edit</a>
-                <button type="button" class="btn btn-link px-0" (click)="deleteReview(review.review_id)">Delete</button>
-              </div>-->
+              {{review.nickname}}
+              <span *ngIf="!review.customer_id"> (Guest)</span>
             </div>
             <div class="col-md-2">{{review.created_at | date}}</div>
             <div class="col-md-3">{{review.title}}</div>
             <div class="col-md-2">
               <span *ngIf="review.ravitng_votes.length > 0">
-                {{review.ravitng_votes[0].percent}}
+                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=1"></i>
+                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=2"></i>
+                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=3"></i>
+                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=4"></i>
+                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=5"></i>
               </span>
             </div>
-            <div class="col-md-2">{{review.status_id}}</div>            
+            <div class="col-md-2">{{getReviewStatus(review.status_id)}}</div>            
           </div>
 
           <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">

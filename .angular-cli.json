@@ -18,7 +18,9 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "admin",
       "styles": [
-        "scss/style.scss"
+        "scss/style.scss",
+        "assets/css/font-awesome.min.css",
+        "assets/css/simple-line-icons.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",

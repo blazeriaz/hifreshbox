@@ -36,6 +36,12 @@ export class ReviewsListComponent implements OnInit {
         this.loadReviewsList(1);
     }
 
+    getReviewStatus(status) {
+        if(status == 1) return "Approved";
+        if(status == 2) return "Pending";
+        if(status == 3) return "Not Approved";
+    }
+
     initReviewsList(reviews, page?) {
         this.reviews = reviews.items;        
         // get pager object from service

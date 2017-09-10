@@ -57,20 +57,19 @@ export class PofileFormComponent implements OnInit {
       this.alert.clear();
       this.submitted = true;
       if (this.mainForm.valid) {          
-          let sendData = this.mainForm.value;
-          if(sendData.password == "") {
-            delete sendData.password;
-          }
-
-          this.rest.saveItem("", {adminsettings : sendData}, "adminsettings").subscribe(
-            data => {
-                this.alert.success("The profile details saved successfully!", true);
-                
-            }
+        let sendData = this.mainForm.value;
+        if(sendData.password == "") {
+          delete sendData.password;
+        }
+        this.rest.showLoader();
+        this.rest.saveItem("", {adminsettings : sendData}, "adminsettings").subscribe(
+          data => {
+              this.alert.success("The profile details saved successfully!", true);
+              this.rest.hideLoader();
+          }, err => this.rest.hideLoader()
         );
       } else {
         this.alert.error("Please check the form to enter all required details");
-        
       }
     }
 }
