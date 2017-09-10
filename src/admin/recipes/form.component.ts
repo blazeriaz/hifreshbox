@@ -445,6 +445,7 @@ export class RecipeFormComponent implements OnInit {
       this.updatingMessage = "The Recipe has been saved successfully!"; 
       this.saveModalClose = true;
       this.abortModalClose = false;
+      this.modalRef.hide();
     }
 
     saveRecipe() {
