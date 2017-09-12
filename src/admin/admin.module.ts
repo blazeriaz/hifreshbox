@@ -27,7 +27,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import {SharedModule} from "shared.module";
-import {RestService, AlertService} from "services";
 
 @NgModule({
   imports: [
@@ -37,7 +36,7 @@ import {RestService, AlertService} from "services";
     TabsModule.forRoot(),
     ModalModule.forRoot(),
     AdminRoutingModule,
-    SharedModule,
+    SharedModule.forRoot(),
     HttpModule,
     ReactiveFormsModule
   ],
@@ -55,7 +54,7 @@ import {RestService, AlertService} from "services";
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    }, RestService, AlertService
+    }
   ],
   bootstrap: [ AdminComponent ]
 })

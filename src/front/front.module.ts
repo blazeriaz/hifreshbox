@@ -7,6 +7,8 @@ import { HttpModule } from "@angular/http";
 import { SharedModule } from "shared.module";
 import { FrontRoutingModule } from "front/front.routing";
 
+import { AuthService, AlertService, RestService } from "services";
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -22,7 +24,7 @@ import { FrontRoutingModule } from "front/front.routing";
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    }
+    }, AuthService, AlertService, RestService
   ],
   bootstrap: [ FrontComponent ]
 })
