@@ -24,7 +24,7 @@
 // @import "bower_components/bootstrap/scss/bootstrap";
 
 // Import core styles
-@import "custom-variables";
+@import "front-variables";
 @import "core/mixins";
 
 // Import vendors styles
@@ -78,4 +78,4 @@
 @import "core/rtl";
 
 // Custom styles
-@import "custom";
+@import "custom-front";

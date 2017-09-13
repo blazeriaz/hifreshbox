@@ -38,7 +38,7 @@
       "outDir": "dist",
       "assets": ["assets_front"],
       "index": "index.html",
-      "main": "front.ts",
+      "main": "main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",

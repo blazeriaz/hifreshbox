@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit, ElementRef } from '@angular/core';
 import { Router, Event as RouterEvent, NavigationStart, 
   NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
  import { Subscription } from 'rxjs/Subscription';
@@ -22,17 +22,27 @@ export class FrontComponent implements OnInit {
   // Sets initial value to true to show loading spinner on first load
   loading = true
   time;
+  bodyclass;
   private subscription: Subscription;
 
-  constructor(private router: Router, private rest: RestService) {
+  constructor(private router: Router, 
+    private rest: RestService,
+    private elementRef: ElementRef ) {
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
     })
   }
 
+  ngAfterContentInit() {
+    this.bodyclass.forEach(className => {
+      this.elementRef.nativeElement.classList.add(className);
+    });    
+  }
+
   ngOnInit() { 
+    this.bodyclass = "app header-fixed sidebar-hidden aside-menu-fixed aside-menu-hidden".split(" ");
     this.subscription = this.rest.loaderState
-        .subscribe((state:any) => {console.log(state);
+        .subscribe((state:any) => {
             this.loading = state.show;
         });
   }

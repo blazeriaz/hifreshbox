@@ -23,6 +23,7 @@ export class AdminComponent implements OnInit {
   // Sets initial value to true to show loading spinner on first load
   loading = true
   time;
+  bodyclass;
   private subscription: Subscription;
 
   constructor(private router: Router, private rest: RestService) {
@@ -32,6 +33,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() { 
+    this.bodyclass = "app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden";
     this.subscription = this.rest.loaderState
         .subscribe((state:any) => {console.log(state);
             this.loading = state.show;

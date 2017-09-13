@@ -16,19 +16,6 @@
 }
 
 .card {
-    /* IE 8 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-
-  /* IE 5-7 */
-  filter: alpha(opacity=90);
-
-  /* Netscape */
-  -moz-opacity: 0.9;
-
-  /* Safari 1.x */
-  -khtml-opacity: 0.9;
-
-  /* Good browsers */
   opacity: 0.9;
 }
 
@@ -37,18 +24,5 @@
     width: 100%;
     z-index: 9999;
     background-color: #efefef;
-    /* IE 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
-
-    /* IE 5-7 */
-    filter: alpha(opacity=60);
-
-    /* Netscape */
-    -moz-opacity: 0.6;
-
-    /* Safari 1.x */
-    -khtml-opacity: 0.6;
-
-    /* Good browsers */
     opacity: 0.6;
 }
