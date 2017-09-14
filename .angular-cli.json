@@ -45,7 +45,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "front",
       "styles": [
-        "scss/front.scss"
+        "scss/front.scss",
+        "assets/css/font-awesome.min.css"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -37,8 +37,8 @@ $vimeo: #aad450;
 
 // Navbar
 
-$navbar-height:                     70px;
-$navbar-bg:                         rgba(0,0,0,0.4);
+$navbar-height:                     50px;
+$navbar-bg:                         rgba(0,0,0,0);
 $navbar-border: (
     bottom: (
         size:                       0px,
@@ -46,7 +46,7 @@ $navbar-border: (
         color:                      $border-color
     )
 );
-$navbar-brand-width:                220px;
+$navbar-brand-width:                160px;
 $navbar-brand-bg:                   rgba(0,0,0,0);
 $navbar-brand-logo:                 url('../img/logo-front.png');
 $navbar-brand-logo-size:            150px auto;

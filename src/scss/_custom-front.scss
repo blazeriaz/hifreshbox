@@ -30,10 +30,51 @@
          url('fonts/AvenirRoman.svg#AvenirRoman') format('svg');
 }
 
+.container-fluid {
+    max-width: 1900px;
+}
+
+.app {
+    min-height: 0px;
+    max-height: 800px;
+    height: 100vh;
+}
+
+body {
+    font-size: 1rem;
+    font-family: 'AvenirRoman', sans-serif;
+}
+
+.font-special {
+    font-family: 'MuseoSans_500', sans-serif;
+}
+
+.color-spl-green {
+    color: #7BCA0C;
+}
+
+.p-6 {
+
+}
+
 .font-wild {
-    font-family: 'WildSpiritAlt', sans-serif''
+    font-family: 'WildSpiritAlt', sans-serif;
+    letter-spacing: 0.7rem;
 }
 
 .overlay_loading {
     opacity: 0.6;
+}
+
+.btn-outline-white {
+    font-weight: 300;
+    @include button-outline-variant(#FFFFFF, #000000);
+    @include button-size(0.5rem, 2rem, 1.2rem, 5);    
+}
+
+.border-1 {
+    border-width: 1px;
+}
+.border-2 {
+    border-width: 2px;
 }

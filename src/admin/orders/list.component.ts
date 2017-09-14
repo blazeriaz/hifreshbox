@@ -1,5 +1,5 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService, PagerService, RestService } from "services";
 
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
