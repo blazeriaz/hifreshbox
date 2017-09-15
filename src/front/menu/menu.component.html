@@ -1,25 +1,72 @@
-<div class="container-fluid app flex-row align-items-center" [ngStyle]="backgrounds.header">
+<div class="container-fluid flex-row py-10" [ngStyle]="backgrounds.header">
     <div class="container">
-        <div class="row text-center justify-content-center p-2 mt-5">
+        <div class="row text-center p-2">
             <div class="col-sm-12">
-                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Cook Well. Eat Well. Live Well.</h1>
-                <div>
-                    <button type="button" class="btn btn-outline-white border-2 text-uppercase">Order Now</button>
-                </div>
+                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Menu</h1>
+                <h2 class="font-special text-uppercase"><span class="color-spl-green">For The Week Of</span> August 8th 2017</h2>
             </div>
         </div>
     </div>
 </div>
 <div class="container-fluid p-0">
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <img [src]="backgrounds.whatfreshbox" class="img-fluid" />
-        </div>
-        <div class="col-sm-12 col-md-6 text-center px-7 pt-5">
-            <div class="p-5">
-                <img class="mb-3" [src]="backgrounds.cap" />
-                <h1 class="font-special text-uppercase"><span class="color-spl-green">What Is</span> FreshBox?</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="panel panel-default text-center">
+                    <div class="panel-image hide-panel-body">
+                        <img class="img-fluid" [src]="backgrounds.recipe">
+                    </div>
+                    <div class="panel-body">
+                        <div class="title">BeefStraganoff</div>
+                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
+                        <div class="stars">
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <a href="#">More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="panel panel-default text-center">
+                    <div class="panel-image hide-panel-body">
+                        <img class="img-fluid" [src]="backgrounds.recipe">
+                    </div>
+                    <div class="panel-body">
+                        <div class="title">BeefStraganoff</div>
+                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
+                        <div class="stars">
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <a href="#">More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="panel panel-default text-center">
+                    <div class="panel-image hide-panel-body">
+                        <img class="img-fluid" [src]="backgrounds.recipe">
+                    </div>
+                    <div class="panel-body">
+                        <div class="title">BeefStraganoff</div>
+                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
+                        <div class="stars">
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star active" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                        <a href="#">More</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

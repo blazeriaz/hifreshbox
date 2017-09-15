@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 //Layouts
 import { FrontComponent } from "front/front.component";
 import { HomeComponent } from "front/home/home.component";
+import { MenuComponent } from "front/menu/menu.component";
 import { FullLayoutComponent } from "front/layouts/full-layout.component";
 
 export const routes: Routes = [
@@ -24,6 +25,12 @@ export const routes: Routes = [
         component: HomeComponent,    
         data: {
           title: 'Home'
+        }
+      },{
+        path: 'menu',
+        component: MenuComponent,    
+        data: {
+          title: 'Menu'
         }
       }]      
     }]

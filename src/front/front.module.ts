@@ -9,6 +9,7 @@ import { FrontRoutingModule } from "front/front.routing";
 
 import { AuthService, AlertService, RestService } from "services";
 import { HomeComponent } from "front/home/home.component";
+import { MenuComponent } from "front/menu/menu.component";
 import { FullLayoutComponent } from "front/layouts/full-layout.component";
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FullLayoutComponent } from "front/layouts/full-layout.component";
   declarations: [
     FrontComponent,
     FullLayoutComponent,
-    HomeComponent
+    HomeComponent,
+    MenuComponent
   ],
   providers: [
     {

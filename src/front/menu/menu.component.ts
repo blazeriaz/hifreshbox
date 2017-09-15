@@ -3,20 +3,22 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as GlobalVariable from "global";
 
 @Component({
-  templateUrl: 'home.component.html'
+  templateUrl: 'menu.component.html'
 })
-export class HomeComponent implements OnInit {
+export class MenuComponent implements OnInit {
   backgrounds;
   constructor() { }
   
     ngOnInit(): void {
         this.backgrounds = {
             header: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-home.png)',
+                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-week-menu.png)',
                 'background-position' : 'bottom',
+                'background-size': 'cover', 
                 'background-attachment' : 'fixed',
                 'background-color' : '#2F2F30'
             },
+            recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
             cap : GlobalVariable.htmlImages+'chef-cap-green.png',
             culinery : GlobalVariable.htmlImages+'culinery.png',
             whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
