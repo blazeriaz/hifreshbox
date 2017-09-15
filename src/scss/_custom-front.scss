@@ -53,10 +53,6 @@ body {
     color: #7BCA0C;
 }
 
-.p-6 {
-
-}
-
 .font-wild {
     font-family: 'WildSpiritAlt', sans-serif;
     letter-spacing: 0.7rem;
@@ -77,4 +73,68 @@ body {
 }
 .border-2 {
     border-width: 2px;
+}
+
+.scrolled-down, .sidebar-mobile-show {
+    .app-header .navbar {
+        margin-top: 0;  
+        background-color: rgba(0,0,0,0.5);      
+    }
+    .sidebar {
+        .sidebar-nav {
+            margin-top: $navbar-height + 20px;
+        }
+    }
+}
+.sidebar {
+    .sidebar-nav {
+        margin-top: $navbar-height + 50px;
+    }
+}
+.app-header .navbar {
+    margin-top: 2rem;
+    .nav-link {
+        color: $white;
+        text-transform: uppercase;
+
+        @include hover-focus {
+            color: $brand-success;
+        }
+
+        &.disabled {
+            color: $nav-disabled-link-color;
+            background-color: transparent;
+            border-color: transparent;
+        }
+    }   
+
+    .nav-item.active .nav-link,
+    .nav-item.show .nav-link {
+        color: $brand-success;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .app-header {        
+        .navbar-brand {
+          width: $navbar-brand-width !important;
+          margin: 0 !important;
+        }
+    }
+}
+@include media-breakpoint-down(sm) {
+    .app-header {    
+        .navbar-toggler {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 70px;
+          height: inherit;
+        }
+    
+        .navbar-brand {
+          width: 100% !important;
+          margin: 0 auto !important;
+        }
+    }
 }

@@ -1,34 +1,54 @@
-<header class="app-header navbar">
-  <div class="container">
-    <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button>
-    <a class="navbar-brand border-0" [routerLink]="['/']"></a>
-  </div>
+<header class="app-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-outline-success py-3 navbar-toggler hidden-md-up" type="button" appMobileSidebarToggler>&#9776;</button>
+          <a class="navbar-brand border-0" [routerLink]="['/']"></a>
+        </div>
+        <div class="col-auto hidden-sm-down my-auto">
+          <ul class="nav text-uppercase">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Menu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Order</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Swag</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>      
+    </div>
+  </nav> 
 </header>
 
 <div class="app-body mt-0">
   <div class="sidebar">
     <nav class="sidebar-nav">
-      <ul class="nav">
+      <ul class="nav text-uppercase">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Menu</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']">
-            <i class="icon-speedometer"></i> Dashboard</a>
-        </li>        
+          <a class="nav-link" href="#">Order</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/menu']">
-            <i class="icon-list"></i> Menu</a>
-        </li> 
+          <a class="nav-link" href="#">Swag</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/recipes']">
-            <i class="icon-list"></i> Recipes</a>
-        </li> 
+          <a class="nav-link" href="#">FAQ</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/swags']">
-            <i class="icon-list"></i> Swags</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/users']">
-            <i class="icon-user"></i> Users</a>
-        </li>    
+          <a class="nav-link" href="#">Contact</a>
+        </li>
       </ul>
     </nav>
   </div>
@@ -39,4 +59,36 @@
 </div>
 
 <footer class="app-footer">
+  <div class="container-fluid" 
+        [ngStyle]="{'background-image': 'url(http://localhost/html-v1/images/hiw-bg.png)','background-position' : 'bottom','background-color' : '#DFDFDF'}">
+    <div class="container py-5">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-auto">
+                <ul>
+                  <li class="active">Menus</li>
+                  <li class="">Swag</li>
+                  <li class="">Gifts</li>
+                </ul>
+              </div>
+              <div class="col-auto">
+                <ul>
+                  <li class="active">Menus</li>
+                  <li class="">Swag</li>
+                  <li class="">Gifts</li>
+                </ul>
+              </div>
+              <div class="col-auto">
+                <ul>
+                  <li class="active">Menus</li>
+                  <li class="">Swag</li>
+                  <li class="">Gifts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
 </footer>

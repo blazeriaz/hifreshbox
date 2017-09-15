@@ -9,11 +9,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from "ngx-bootstrap/modal";
 
-import { NAV_DROPDOWN_DIRECTIVES } from 'shared/nav-dropdown.directive';
-import { SIDEBAR_TOGGLE_DIRECTIVES } from 'shared/sidebar.directive';
-import { AsideToggleDirective } from 'shared/aside.directive';
-
-
 // Routing Module
 import { AdminRoutingModule } from './admin.routing';
 
@@ -41,9 +36,6 @@ import {SharedModule} from "shared.module";
     ReactiveFormsModule
   ],
   declarations: [
-    NAV_DROPDOWN_DIRECTIVES,    
-    SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective,
     BreadcrumbsComponent,
     AlertComponent,
     AdminComponent,

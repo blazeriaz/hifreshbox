@@ -7,10 +7,6 @@ import { HttpModule } from "@angular/http";
 import { SharedModule } from "shared.module";
 import { FrontRoutingModule } from "front/front.routing";
 
-import { NAV_DROPDOWN_DIRECTIVES } from 'shared/nav-dropdown.directive';
-import { SIDEBAR_TOGGLE_DIRECTIVES } from 'shared/sidebar.directive';
-import { AsideToggleDirective } from 'shared/aside.directive';
-
 import { AuthService, AlertService, RestService } from "services";
 import { HomeComponent } from "front/home/home.component";
 import { FullLayoutComponent } from "front/layouts/full-layout.component";
@@ -19,14 +15,11 @@ import { FullLayoutComponent } from "front/layouts/full-layout.component";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule,    
+    SharedModule.forRoot(),    
     HttpModule,
     FrontRoutingModule
   ],
   declarations: [
-    NAV_DROPDOWN_DIRECTIVES,    
-    SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective,
     FrontComponent,
     FullLayoutComponent,
     HomeComponent

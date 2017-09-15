@@ -2,6 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { RouterModule } from "@angular/router";
 
+import { NAV_DROPDOWN_DIRECTIVES } from 'shared/nav-dropdown.directive';
+import { SIDEBAR_TOGGLE_DIRECTIVES } from 'shared/sidebar.directive';
+import { AsideToggleDirective } from 'shared/aside.directive';
+
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { HttpModule } from "@angular/http";
@@ -23,14 +27,20 @@ import { mgCatalogAttribute, mgCatalogImage } from "pipes";
     ReactiveFormsModule,
     TooltipModule
   ],
-  declarations: [
+  declarations: [    
+    NAV_DROPDOWN_DIRECTIVES,    
+    SIDEBAR_TOGGLE_DIRECTIVES,
+    AsideToggleDirective,
     emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute
   ],
   providers: [
   ],
-  exports: [
+  exports: [        
+    NAV_DROPDOWN_DIRECTIVES,    
+    SIDEBAR_TOGGLE_DIRECTIVES,
+    AsideToggleDirective,
     emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute

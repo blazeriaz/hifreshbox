@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterContentInit, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit, ElementRef, HostListener } from '@angular/core';
 import { Router, Event as RouterEvent, NavigationStart, 
   NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
  import { Subscription } from 'rxjs/Subscription';
@@ -18,7 +18,16 @@ import { Router, Event as RouterEvent, NavigationStart,
     <router-outlet></router-outlet>
   `
 })
-export class FrontComponent implements OnInit {
+export class FrontComponent implements OnInit { 
+
+  @HostListener('window:scroll', ['$event']) private onScroll($event:Event):void {
+    if(window.pageYOffset > 80) {
+      this.elementRef.nativeElement.classList.add('scrolled-down');
+    } else {
+      this.elementRef.nativeElement.classList.remove('scrolled-down');
+    }
+  };
+
   // Sets initial value to true to show loading spinner on first load
   loading = true
   time;

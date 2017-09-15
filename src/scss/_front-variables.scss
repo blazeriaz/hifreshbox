@@ -46,7 +46,7 @@ $navbar-border: (
         color:                      $border-color
     )
 );
-$navbar-brand-width:                160px;
+$navbar-brand-width:                175px;
 $navbar-brand-bg:                   rgba(0,0,0,0);
 $navbar-brand-logo:                 url('../img/logo-front.png');
 $navbar-brand-logo-size:            150px auto;
@@ -58,7 +58,7 @@ $navbar-brand-border: (
     )
 );
 
-$navbar-color:                      $gray-light;
+$navbar-color:                      $white;
 $navbar-hover-color:                $gray;
 $navbar-active-color:               $gray;
 $navbar-disabled-color:             $gray-lightest;
