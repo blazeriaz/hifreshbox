@@ -6,6 +6,7 @@ import { FrontComponent } from "front/front.component";
 import { HomeComponent } from "front/home/home.component";
 import { MenuComponent } from "front/menu/menu.component";
 import { FullLayoutComponent } from "front/layouts/full-layout.component";
+import { RecipeComponent } from "front/recipe/recipe.component";
 
 export const routes: Routes = [
   {
@@ -31,6 +32,12 @@ export const routes: Routes = [
         component: MenuComponent,    
         data: {
           title: 'Menu'
+        }
+      },{
+        path: 'menu/recipe',
+        component: RecipeComponent,    
+        data: {
+          title: 'Menu Recipe'
         }
       }]      
     }]

@@ -43,6 +43,7 @@
 body {
     font-size: 1rem;
     font-family: 'AvenirRoman', sans-serif;
+    background-color: #FFFFFF;
 }
 
 .font-special {
@@ -68,6 +69,15 @@ body {
     @include button-size(0.5rem, 2rem, 1.2rem, 5);    
 }
 
+.btn-outline-green {
+    font-weight: 300;
+    @include button-outline-variant(#7BCA0C, #FFFFFF);
+    @include button-size(0.5rem, 2rem, 1.2rem, 5);    
+}
+
+.border-top {
+    border-top: 1px solid #000000;
+}
 .border-1 {
     border-width: 1px;
 }

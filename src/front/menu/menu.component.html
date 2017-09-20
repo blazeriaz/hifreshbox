@@ -1,135 +1,111 @@
-<div class="container-fluid flex-row py-10" [ngStyle]="backgrounds.header">
+<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header" *ngIf="!selectedRecipe">
     <div class="container">
-        <div class="row text-center p-2">
-            <div class="col-sm-12">
+        <div class="row p-2 mt-10">
+            <div class="col-12 text-center">
                 <h1 class="font-wild text-white text-uppercase display-1 mb-5">Menu</h1>
-                <h2 class="font-special text-uppercase"><span class="color-spl-green">For The Week Of</span> August 8th 2017</h2>
+            </div>
+            <div class="col-md-1 col-2 text-left p-0">
+                <button (click)="gotToPrevWeek()"  [disabled]="disablePreviousWeek" 
+                        class="btn btn-outline-white rounded-circle font-5xl">
+                    <i class="fa fa-angle-left"></i></button>
+            </div>
+            <div class="col-md-10 col-8 p-0 text-center">
+                <h2 class="font-special text-uppercase">                    
+                    <span class="color-spl-green">For The Week Of</span> 
+                    <u class="text-white" *ngIf="selectedWeek">{{selectedWeek.text}}</u>                    
+                </h2>
+            </div>
+            <div class="col-md-1 col-2 text-right p-0">
+                <button (click)="gotToNextWeek()"  [disabled]="disableNextWeek"
+                        class="btn btn-outline-white rounded-circle font-5xl">
+                    <i class="fa fa-angle-right"></i></button>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid p-0">
+<div class="container-fluid p-0" [ngStyle]="backgrounds.gray" *ngIf="!selectedRecipe">
     <div class="container">
-        <div class="row my-3">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="panel panel-default text-center">
-                    <div class="panel-image hide-panel-body">
+        <div class="row py-3" *ngIf="!loadedselectedRecipes">
+            <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of [0,1,2]">
+                <div class="card px-3 py-4 text-center">
+                    <div>
                         <img class="img-fluid" [src]="backgrounds.recipe">
                     </div>
-                    <div class="panel-body">
-                        <div class="title">BeefStraganoff</div>
-                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
-                        <div class="stars">
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">Loading...</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="my-3">
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
                         </div>
-                        <a href="#">More</a>
+                        <div>
+                            <button type="button" disabled class="btn btn-outline-green border-2 text-uppercase font-special font-lg px-3 rounded-0">More</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="panel panel-default text-center">
-                    <div class="panel-image hide-panel-body">
-                        <img class="img-fluid" [src]="backgrounds.recipe">
+        </div>
+        <div class="row py-3" *ngIf="loadedselectedRecipes && recipes.length == 0">
+            <div class="col-12">
+                <div class="card px-3 py-4 text-center">         
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">No Recipes.</h5>
                     </div>
-                    <div class="panel-body">
-                        <div class="title">BeefStraganoff</div>
-                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
-                        <div class="stars">
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                        <a href="#">More</a>
+                    <div class="card-body">
+                        <p>Please check after sometime...</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="panel panel-default text-center">
-                    <div class="panel-image hide-panel-body">
+        </div>
+        <div class="row py-3" *ngIf="loadedselectedRecipes">
+            <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of recipes">
+                <div class="card px-3 py-4 text-center">
+                    <div>
                         <img class="img-fluid" [src]="backgrounds.recipe">
                     </div>
-                    <div class="panel-body">
-                        <div class="title">BeefStraganoff</div>
-                        <p>Donec sagittis mollis sapien, in laoreet dolor tempus ut.</p>
-                        <div class="stars">
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
-                            <i class="fa fa-star active" aria-hidden="true"></i>
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">{{recipe.name}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>{{recipe.description}}</p>
+                        <div class="my-3">
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
+                            <i class="fa fa-star color-spl-green" aria-hidden="true"></i>
                             <i class="fa fa-star" aria-hidden="true"></i>
                         </div>
-                        <a href="#">More</a>
+                        <div>
+                            <button type="button" 
+                                (click)="selectRecipe(recipe.sku)" 
+                                class="btn btn-outline-green border-2 text-uppercase font-special font-lg px-3 rounded-0">More</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid" [ngStyle]="backgrounds.gray">
-    <div class="container py-5">
-        <div class="row text-center">
-            <div class="col-sm-12 px-5">
-                <h1 class="font-special text-uppercase"><span class="color-spl-green">How It</span> Works</h1>
-                <h3 class="my-3">Our Chefs Do The Shopping For You</h3>
-                <p>Every week you get new healthy recipes and all the fresh pre-portioned ingredients deliveredsstraight to your door. Say goodbye to long gorcery lines, parking lot power struggles,....enjoy fresh BOX two ways! order one for yourself and get fresh ingredients and creative recipes delivered straight to your door.</p>
-            </div>
+<div class="container-fluid p-0" [ngStyle]="backgrounds.orders" *ngIf="!selectedRecipe">
+    <div class="row py-10 mb-3">        
+        <div class="col-sm-12 col-md-5 py-5 text-white text-center">
+            <h1 class="font-wild display-1">Orders</h1>
         </div>
-        <div class="row text-center">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/sign-up-icon.png" />
-                    <h5>Sign Up</h5>
-                    <div><span class="pill">1</span></div>
-                </figure>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/pick-meal-icon.png" />
-                    <h5>Pick your meal plan</h5>
-                    <div><span class="pill">1</span></div>
-                </figure>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/weekly-box-icon.png" />
-                    <h5>Get your weekly box</h5>
-                    <div><span class="pill">1</span></div>
-                </figure>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/cook-meal-icon.png" />
-                    <h5>Cook a delicious meal</h5>
-                    <div><span class="pill">1</span></div>
-                </figure>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid p-0">
-    <div class="row">
-        <div class="col-sm-12 col-md-6 text-center px-7 pt-5">
-            <div class="p-5">
+        <div class="col-sm-12 col-md-6 text-white text-center px-5 py-3">
+            <div class="px-5 py-4">
                 <img class="mb-3" [src]="backgrounds.cap" />
-                <h1 class="font-special text-uppercase"><span class="color-spl-green">WILLIAM</span> CHEN</h1>
-                <h3>Culinery Director</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <h5>All orders must be placed by Friday, August 4th for Tuesday, August 8th</h5>
             </div>
-        </div>        
-        <div class="col-sm-12 col-md-6">
-            <img class="img-fluid" [src]="backgrounds.culinery" />
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials">
+<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials" *ngIf="!selectedRecipe">
     <div class="row">
-        <div class="col-sm-12 text-center text-white py-10">
+        <div class="col-sm-12 text-center text-white py-5">
             <h1 class="font-special color-spl-green text-uppercase">testimonials</h1>       
             <blockquote class="my-3">
                 <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Vestibulum luctus ante libero, sed finibus quam volutpa"</p>
@@ -144,6 +120,7 @@
         </div> 
     </div>
 </div>
+<recipe-detail *ngIf="selectedRecipe" [recipe]="selectedRecipe" (backtomenu)="backToMenu($event)"></recipe-detail>
 <div class="container-fluid p-0">
     <div class="container my-5" [ngStyle]="backgrounds.signup">            
         <div class="row">

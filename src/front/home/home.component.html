@@ -4,7 +4,7 @@
             <div class="col-sm-12">
                 <h1 class="font-wild text-white text-uppercase display-1 mb-5">Cook Well. Eat Well. Live Well.</h1>
                 <div>
-                    <button type="button" class="btn btn-outline-white border-2 text-uppercase">Order Now</button>
+                    <a [routerLink]="'menu'" class="btn btn-outline-white border-2 text-uppercase">Order Now</a>
                 </div>
             </div>
         </div>
@@ -25,42 +25,42 @@
     </div>
 </div>
 <div class="container-fluid" [ngStyle]="backgrounds.gray">
-    <div class="container py-5">
+    <div class="container py-8">
         <div class="row text-center">
             <div class="col-sm-12 px-5">
                 <h1 class="font-special text-uppercase"><span class="color-spl-green">How It</span> Works</h1>
-                <h3 class="my-3">Our Chefs Do The Shopping For You</h3>
+                <h3 class="mt-4 mb-5">Our Chefs Do The Shopping For You</h3>
                 <p>Every week you get new healthy recipes and all the fresh pre-portioned ingredients deliveredsstraight to your door. Say goodbye to long gorcery lines, parking lot power struggles,....enjoy fresh BOX two ways! order one for yourself and get fresh ingredients and creative recipes delivered straight to your door.</p>
             </div>
         </div>
-        <div class="row text-center">
+        <div class="row mt-5 text-center font-special">
             <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/sign-up-icon.png" />
-                    <h5>Sign Up</h5>
-                    <div><span class="pill">1</span></div>
+                <figure style="height:120px;">
+                    <img src="images/sign-up-icon.png" />                    
                 </figure>
+                <h5>Sign Up</h5>
+                <div><span class="badge badge-default rounded-circle p-2 font-lg">1</span></div>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/pick-meal-icon.png" />
-                    <h5>Pick your meal plan</h5>
-                    <div><span class="pill">1</span></div>
+                <figure style="height:120px;">
+                    <img src="images/pick-meal-icon.png" />                    
                 </figure>
+                <h5>Pick your meal plan</h5>
+                <div><span class="badge badge-default rounded-circle p-2 font-lg">2</span></div>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/weekly-box-icon.png" />
-                    <h5>Get your weekly box</h5>
-                    <div><span class="pill">1</span></div>
+                <figure style="height:120px;">
+                    <img src="images/weekly-box-icon.png" />                    
                 </figure>
+                <h5>Get your weekly box</h5>
+                <div><span class="badge badge-default rounded-circle p-2 font-lg">3</span></div>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
-                <figure>
-                    <img src="http://localhost/html-v1/images/cook-meal-icon.png" />
-                    <h5>Cook a delicious meal</h5>
-                    <div><span class="pill">1</span></div>
+                <figure style="height:120px;">
+                    <img src="images/cook-meal-icon.png" />                    
                 </figure>
+                <h5>Cook a delicious meal</h5>
+                <div><span class="badge badge-default rounded-circle p-2 font-lg">4</span></div>
             </div>
         </div>
     </div>
@@ -106,13 +106,13 @@
                 <form class="mt-5">
                     <div class="form-row row">
                         <div class="col-md-2"></div>
-                        <div class="col-md-6">
-                            <input class="form-control" type="text" placeholder="Email" />
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn">GO</button>
-                        </div>
-                    </div>
+                        <div class="col-md-8 input-group">
+                            <input class="form-control py-2" placeholder="Email" type="text">
+                        
+                        <span class="input-group-btn ml-3">
+                            <button class="btn btn-outline-green px-5 py-2">GO</button>
+                        </span>
+                    </div></div>
                 </form>
             </div>
         </div> 

@@ -1,0 +1,102 @@
+<div class="container-fluid flex-row py-5" [ngStyle]="{'background-color':'rgba(5,5,5,0.8)'}">
+    <div class="container">
+        <div class="row text-center p-2">
+        </div>
+    </div>
+</div>
+<div class="container-fluid flex-row py-10" [ngStyle]="backgrounds.header">
+    <div class="container">
+        <div class="row text-center p-2">
+            <div class="col-sm-6 font-special text-white">
+                <h1 class="text-uppercase mb-3">{{recipe.name}}</h1>
+                {{recipe.description}}
+                <div>
+                    <button (click)="backToMenu()" type="button" class="btn btn-outline-green border-2 text-uppercase font-lg">Back to main menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid flex-row py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h2 class="text-uppercase font-special mb-3">Ingredients</h2>
+                <ul class="list-unstyled" *ngIf="recipe.ingredients">
+                    <li *ngFor="let ingredient of recipe.ingredients | jsonParse">
+                        {{ingredient.ingredient.text}} - {{ingredient.qty}} {{ingredient.portion.text}}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-8">
+                <div class="row mb-3">
+                    <div class="col-md col-12">
+                        <h2 class="text-uppercase font-special mb-3">What you'll need:</h2>
+                        <ul class="list-unstyled">
+                            <li>
+                                Salt
+                            </li>
+                            <li>
+                                Peeper
+                            </li>
+                            <li>
+                                12" Large pot with lid
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md col-12">
+                        <h2 class="text-uppercase mb-3">Allergies:</h2>
+                        <ul class="list-unstyled">
+                            <li>
+                                Egg
+                            </li>
+                            <li>
+                                Soy
+                            </li>
+                            <li>
+                                Wheat
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row border-top py-5">
+                    <div class="col px-3">
+                        <h5>Calories</h5>
+                        <h1 class="font-special color-spl-green">{{recipe.calories}}</h1>
+                    </div>
+                    <div class="col px-3">
+                        <h5>Protein</h5>
+                        <h1 class="font-special color-spl-green">{{recipe.protein}}g</h1>
+                    </div>
+                    <div class="col px-3">
+                        <h5>Carb</h5>
+                        <h1 class="font-special color-spl-green">{{recipe.carb}}g</h1>
+                    </div>
+                    <div class="col px-3">
+                        <h5>Fat</h5>
+                        <h1 class="font-special color-spl-green">{{recipe.fat}}g</h1>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid flex-row py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-uppercase font-special mb-3">Directions</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-12 mb-3" *ngFor="let step of recipe.steps | jsonParse;let index = index;">
+                <div class="row">
+                    <div class="col-auto px-3">
+                        <h1 class="text-uppercase color-spl-green font-special mb-3 display-4">{{(index + 1) | zeropad : 2}}</h1>
+                    </div>
+                    <div class="col mt-2">{{step}}</div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

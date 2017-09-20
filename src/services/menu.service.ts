@@ -16,8 +16,9 @@ export class MealMenuService {
 		) {
 	    let date = new Date();
 	    let currentYear = date.getFullYear();
-	    let currentWeek = this.getWeekNumber(date);
-	    if(date.getDay() > 2) {
+		let currentWeek = this.getWeekNumber(date);
+		currentWeek++;
+	    if(date.getDay() >= 5) {
 	    	currentWeek++;
 	    }
 	    this.setYearWeek(currentYear, currentWeek);
@@ -65,5 +66,22 @@ export class MealMenuService {
 		  return false;
 		}
 		return this.datePipe.transform(ISOweekStart, "MMM d");
+	}
+
+	getDateOfISOWeekStringFull(w, y, format?) {
+		var simple = new Date(y, 0, 1 + (w - 1) * 7);
+		var dow = simple.getDay();
+		var ISOweekStart = simple;
+		if (dow <= 4)
+		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 2);
+		else
+		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
+		if(ISOweekStart.getFullYear() != y) {
+		  return false;
+		}
+		if(!format) {
+			format = "longDate";
+		}
+		return this.datePipe.transform(ISOweekStart, format);
 	}
 } 
