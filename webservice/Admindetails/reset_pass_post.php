@@ -10,9 +10,9 @@ $token = curl_exec($ch);
 
 $slide = json_encode(['email_change_data' => [
 						'id'	=> 1,
-						'token'  => '6bfbf977a07a4e2f0e583ba54f6c79f9',
-						'password' =>'123',
-						'confirmation'=>'123'
+						'token'  => 'ae94a6a123b4502fcc2bd75bef301081',
+						'password' =>'abcdef@123',
+						'confirmation'=>'abcdef@123'
 						]]);
 						
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/forgotemailchange");

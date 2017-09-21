@@ -1,6 +1,6 @@
 <?php
 $userData = array("username" => "admin", "password" => "admin@123");
-$ch = curl_init("http://localhost/magento/index.php/rest/V1/integration/admin/token");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -11,7 +11,7 @@ $token = curl_exec($ch);
 
 						
 						
-$ch = curl_init("http://localhost/magento/index.php/rest/V1/ingredients/1");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/ingredients/1");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
