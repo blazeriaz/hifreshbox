@@ -1,0 +1,79 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> FAQ
+          <div  class="pull-right"><a [routerLink]="'add'" class="btn btn-primary">Add</a></div>
+        </div>
+        <div class="card-block">
+            <form [formGroup]="searchForm">
+            <div class="row py-2">
+              <label class="col-md-2 col-sm-4">Search : </label>
+              <div class="col-md-6 col-sm-8">              
+                <input type="text" class="form-control" formControlName="name" />
+              </div>
+            </div>
+            </form>
+          
+          <div class="row py-2 bg-primary">
+            <div class="col-sm-5">Question</div>
+            <div class="col-sm-5">Answer</div>
+            <div class="col-sm-2">Status</div>
+          </div>
+          
+          <div class="row py-2 bg-info" *ngIf="loadingList">
+            <div class="col">
+              Please wait! Loading the records...
+            </div>
+            <div class="col-auto px-2" *ngIf="!initLoad">
+              <button type="button" class="btn btn-sm btn-danger" (click)="abortSearch()">Abort</button>
+            </div>
+          </div>
+          
+          <div class="row py-2 bg-warning" *ngIf="!loadingList && faq && faq.length == 0">
+            <div class="col">
+              No records found.
+            </div>
+          </div>
+
+          <div class="row py-2" *ngFor="let fq of faq;let odd=odd;" 
+              [ngClass]="{'bg-faded': odd}">
+            
+            <div class="col-sm-5">
+              <div>{{fq.question}}</div>
+              <!--<div class="btn-group btn-group-sm" *ngIf="isDeleted(fq.id)">
+                  <button type="button" class="btn btn-link px-0" (click)="cancelDelete(fq.id)">Cancel Delete</button>
+                </div>
+              <div class="btn-group btn-group-sm" *ngIf="!isDeleted(fq.id)">
+                <a [routerLink]="['edit', fq.id]" class="btn btn-link pl-0">Edit</a>
+                <button type="button" class="btn btn-link px-0" (click)="deleteFaq(fq.id)">Delete</button>
+              </div>-->
+            </div>
+            <div class="col-sm-5">
+              {{fq.answer}} 
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-success" *ngIf="fq.is_active == 1">Enable</button>
+              <button type="button" class="btn btn-danger" *ngIf="fq.is_active == 2">Disable</button>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

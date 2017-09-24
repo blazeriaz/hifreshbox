@@ -1,0 +1,88 @@
+<div class="animated fadeIn">
+  <form  (submit)="faqForm()" *ngIf="loadedFormData">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header" *ngIf="!faq.id">
+          <i class="fa fa-list"></i> Add Faq
+        </div>
+        <div class="card-header" *ngIf="faq.id">
+          <i class="fa fa-list"></i> Edit Faq
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="question" class="col-md-2 form-control-label">Question</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('name')">
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="question" formControlName="name" [ngClass]="setInputErrorClass('question')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="answer" class="col-md-2 form-control-label">Ansuwer</label>
+            <div class="col-md-10" [ngClass]="setContainerErrorClass('answer')">
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="answer" formControlName="answer" [ngClass]="setInputErrorClass('answer')" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-sm-4 form-control-label">Status</label>
+            <div class="col-md-10 col-sm-8">
+              <div class="btn-group">
+                <button type="button" class="btn" (click)="setStatus(1)" [ngClass]="setStatusClass(1)">
+                  Enable</button>
+                <button type="button" class="btn" (click)="setStatus(2)" [ngClass]="setStatusClass(2)">
+                  Disable</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" (click)="goToList()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+<ng-template #savemodal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Save Faq</h4>
+  </div>
+  <div class="modal-body">
+    {{updatingMessage}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
+        Go To List
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
+        Close
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
+        Abort
+    </button>
+  </div>
+</ng-template>
+<ng-template #editLoadModal>
+  <div class="modal-header" *ngIf="!faq.id">
+    <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Faq</h4>
+  </div>
+  <div class="modal-header" *ngIf="faq.id">
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Faq</h4>
+  </div>
+  <div class="modal-body">
+    Loading the required form datas...
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+        Abort
+    </button>
+  </div>
+</ng-template>

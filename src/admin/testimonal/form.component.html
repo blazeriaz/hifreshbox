@@ -1,0 +1,94 @@
+<div class="animated fadeIn">
+  <form >
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header" >
+          <i class="fa fa-list"></i> Add Testimonal
+        </div>
+        <div class="card-header">
+          <i class="fa fa-list"></i> Edit Testimonal
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <label for="name" class="col-md-2 form-control-label">Testimonal Name</label>
+            <div class="col-md-10" >
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="name"  />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="email" class="col-md-2 form-control-label">Email</label>
+            <div class="col-md-10" >
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="email"  />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="component" class="col-md-2 form-control-label">Component</label>
+            <div class="col-md-10" >
+              <input tooltip="dsdsf dsf dsf ds" type="text" class="form-control" id="component"   />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-2 col-sm-4 form-control-label">Status</label>
+            <div class="col-md-10 col-sm-8">
+              <div class="btn-group">
+                <button type="button" class="btn" [ngClass]="setStatusClass(1)">
+                  Enable</button>
+                <button type="button" class="btn">
+                  Disable</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" >Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+<ng-template #savemodal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Save Testimonal</h4>
+  </div>
+  <div class="modal-body">
+    {{updatingMessage}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary pull-right" aria-label="Close">
+        Go To List
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" >
+        Close
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close">
+        Abort
+    </button>
+  </div>
+</ng-template>
+<ng-template #editLoadModal>
+  <div class="modal-header" >
+    <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Testimonal</h4>
+  </div>
+  <div class="modal-header" >
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Testimonal</h4>
+  </div>
+  <div class="modal-body">
+    Loading the required form datas...
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger pull-right" >
+        Abort
+    </button>
+  </div>
+</ng-template>

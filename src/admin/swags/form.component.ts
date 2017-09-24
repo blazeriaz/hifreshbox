@@ -64,7 +64,7 @@ export class SwagFormComponent implements OnInit {
       
       this.loadFormData();
       this.loadMediaImages();
-      if(this.loadFormRequests.length == 0) {
+      if(this.loadFormRequests.length == 0) { 
         this.checkAllFormDataLoaded();
       } else {
         this.openEditModal();
