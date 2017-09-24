@@ -15,7 +15,7 @@ import { AuthService, AlertService, RestService, MealMenuService } from "service
 
 import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
-import {TooltipModule} from "ngx-tooltip";
+import {TooltipModule} from "ngx-bootstrap";
 import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from "pipes";
 
 @NgModule({

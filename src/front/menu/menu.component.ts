@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RestService, AlertService, MealMenuService } from 'services';
 
 import * as GlobalVariable from "global";
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: 'menu.component.html'
@@ -20,10 +21,12 @@ export class MenuComponent implements OnInit {
   loadedselectedRecipes;
   recipes;
   selectedRecipe;
+  days;
 
   constructor(
     private alert: AlertService,
     private rest: RestService, 
+    private route: Router,
     private mealMenuService: MealMenuService
   ) { }
   
@@ -68,17 +71,23 @@ export class MenuComponent implements OnInit {
         this.currentYear = date.getFullYear();  
         this.startYear = 2017;
         this.endYear = this.currentYear + 10;
+        this.days = {};
 
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
             let tuesday = this.mealMenuService.getDateOfISOWeekStringFull(data.week, data.year);
             this.selectedWeek = {id: data.week, text: tuesday, year: data.year};
-            
-            this.disablePreviousWeek = false;      
+
+            this.days = {
+                friday: this.mealMenuService.getDateOfISOWeekFriday(data.week, data.year),
+                tuesday: this.mealMenuService.getDateOfISOWeek(data.week, data.year)
+            }
+
+            this.disablePreviousWeek = false;
             let prevTuesday = this.mealMenuService.getDateOfISOWeekString(data.week - 1, data.year);
-            if(data.year == this.startYear && !prevTuesday) {
+            if (data.year === this.startYear && !prevTuesday) {
                 this.disablePreviousWeek = true;
             }
-        
+
             this.disableNextWeek = false;
             let nextTuesday = this.mealMenuService.getDateOfISOWeekString(data.week + 1, data.year);
             if(data.year == this.endYear && !nextTuesday) {
@@ -106,12 +115,7 @@ export class MenuComponent implements OnInit {
     }
 
     selectRecipe(sku) {
-        this.selectedRecipe = this.recipes.filter(data => data.sku == sku)[0];
-        window.scrollTo(0,0);
-    }
-
-    backToMenu(event) {
-        this.selectedRecipe = null;
+        this.route.navigate(['menu', sku]);
     }
     
     gotToPrevWeek() {

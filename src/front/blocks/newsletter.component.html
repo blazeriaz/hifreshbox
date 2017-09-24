@@ -1,0 +1,23 @@
+<div class="container-fluid p-0">
+    <div class="container my-5" [ngStyle]="backgrounds.signup">            
+        <div class="row">
+            <div class="col-sm-12 text-center text-white py-8">
+                <h1 class="display-2 font-wild text-uppercase pl-4">Sign up</h1>
+                <h5 class="text-uppercase">FOR EXCLUSIVE DEALS</h5>
+                <form class="mt-5" [formGroup]="nlForm" *ngIf="!subscribed">
+                    <div class="form-row row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8 input-group">
+                            <input formControlName="email" class="form-control py-2" placeholder="Email" type="email" />
+                        
+                            <span class="input-group-btn ml-sm-3">
+                                <button type="butoon" [disabled]="nlForm.invalid" (click)="submit()" class="btn btn-outline-green px-sm-5 px-2 py-2 rounded-0">GO</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+                <h6 class="mt-5 font-weight-bold color-spl-green" *ngIf="subscribed">Thanks for your suscription!</h6>
+            </div>
+        </div> 
+    </div>
+</div>

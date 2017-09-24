@@ -54,6 +54,17 @@ export class MealMenuService {
 		return ISOweekStart;
 	}
 
+	getDateOfISOWeekFriday(w, y) {
+		var simple = new Date(y, 0, 1 + (w - 2) * 7);
+		var dow = simple.getDay();
+		var ISOweekStart = simple;
+		if (dow <= 4)
+		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 5);
+		else
+		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 5);
+		return ISOweekStart;
+	}
+
 	getDateOfISOWeekString(w, y) {
 		var simple = new Date(y, 0, 1 + (w - 1) * 7);
 		var dow = simple.getDay();

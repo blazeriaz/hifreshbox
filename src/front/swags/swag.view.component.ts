@@ -1,32 +1,34 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { RestService, AlertService } from 'services';
 
-import * as GlobalVariable from 'global';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService, RestService } from 'services';
+import * as GlobalVariable from "global";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    templateUrl: 'recipe.component.html'
+  templateUrl: 'swag.view.component.html'
 })
-export class RecipeComponent implements OnInit {
+export class SwagViewComponent implements OnInit {
     backgrounds;
-    loadedRecipe;
-    recipe;
+
+    loadedSwag; 
+    loadedSwagMedia; 
+    swag;
+    swagMediaImages;
 
     constructor(
         private alert: AlertService,
         private rest: RestService,
         private route: ActivatedRoute,
-        private router: Router
     ) { }
-
+  
     ngOnInit(): void {
         this.backgrounds = {
             header: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-single-recipe.png)',
-                'background-position' : 'top left',
+                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-week-menu.png)',
+                'background-position' : 'bottom',
                 'background-size': 'cover', 
-                'background-repeat' : 'no-repeat',
-                'min-height' : '90vh'
+                'background-attachment' : 'fixed',
+                'background-color' : '#2F2F30'
             },
             recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
             cap : GlobalVariable.htmlImages+'chef-cap-green.png',
@@ -55,19 +57,36 @@ export class RecipeComponent implements OnInit {
                 'background-position' : 'bottom'
             }
         };
-        this.loadRecipe();
-    }
-    
-    loadRecipe() {        
-        this.loadedRecipe = false;
-        let recipeSku = this.route.snapshot.params['sku']; 
-        this.rest.getItem(recipeSku, "products/"+recipeSku).subscribe(recipe => {
-            this.loadedRecipe = true;
-            this.recipe = recipe;
-        });        
+
+        this.loadSwag();
+        this.loadMediaImages();
     }
 
-    backToMenu() {
-        this.router.navigate(['menu']);
+    ngOnDestroy() {
+        
+    }
+
+    loadSwag() {        
+        this.loadedSwag = false;
+        let swagSku = this.route.snapshot.params['sku']; 
+        this.rest.getItem(swagSku, "products/"+swagSku).subscribe(swag => {
+            this.loadedSwag = true;
+            this.swag = swag;
+        });        
+    }
+    
+
+    loadMediaImages() {
+        let swagSku = this.route.snapshot.params['sku'];
+        if(!swagSku) return;
+        this.loadedSwagMedia = false;
+        this.rest.getItem('', 'products-gal/'+swagSku+'/media')
+            .subscribe(images => {
+              this.swagMediaImages = images;
+              this.loadedSwagMedia = true;
+            },
+           error => {
+               
+           });
     }
 }

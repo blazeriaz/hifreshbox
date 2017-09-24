@@ -9,13 +9,13 @@
         <div class="col-auto hidden-sm-down my-auto">
           <ul class="nav text-uppercase">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Menu</a>
+              <a class="nav-link" [routerLink]="'menu'">Menu</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Order</a>
+              <a class="nav-link" [routerLink]="'menu'">Order</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Swag</a>
+              <a class="nav-link" [routerLink]="'swags'">Swag</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">FAQ</a>
@@ -35,10 +35,10 @@
     <nav class="sidebar-nav">
       <ul class="nav text-uppercase">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Menu</a>
+          <a class="nav-link"  [routerLink]="'menu'">Menu</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Order</a>
+          <a class="nav-link"  [routerLink]="'menu'">Order</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Swag</a>
@@ -58,37 +58,50 @@
   </main>
 </div>
 
-<footer class="app-footer">
+<footer>
   <div class="container-fluid" 
         [ngStyle]="{'background-image': 'url(http://localhost/html-v1/images/hiw-bg.png)','background-position' : 'bottom','background-color' : '#DFDFDF'}">
     <div class="container py-5">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-auto">
-                <ul>
-                  <li class="active">Menus</li>
-                  <li class="">Swag</li>
-                  <li class="">Gifts</li>
-                </ul>
-              </div>
-              <div class="col-auto">
-                <ul>
-                  <li class="active">Menus</li>
-                  <li class="">Swag</li>
-                  <li class="">Gifts</li>
-                </ul>
-              </div>
-              <div class="col-auto">
-                <ul>
-                  <li class="active">Menus</li>
-                  <li class="">Swag</li>
-                  <li class="">Gifts</li>
-                </ul>
-              </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row text-uppercase font-xl">
+            <div class="col-auto pr-8">
+              <ul class="list-unstyled">
+                <li class="">Menus</li>
+                <li class="">Swag</li>
+                <li class="">Gifts</li>
+              </ul>
+            </div>
+            <div class="col-auto pr-8">
+              <ul class="list-unstyled">
+                <li class="">CONTACT US</li>
+                <li class="">FAQ</li>
+              </ul>
+            </div>
+            <div class="col-auto">
+              <ul class="list-unstyled">
+                <li class="">Blog</li>
+                <li class="">Cookbook</li>
+              </ul>
             </div>
           </div>
         </div>
+        <div class="col-md-4 text-center">
+          <a href="#" class="foot-logo"><img src="images/footer-logo.png"></a>
+          <div class="row">
+            <a class="px-3"><i class="font-3xl fa fa-instagram" aria-hidden="true"></i></a>
+            <a class="px-3"><i class="font-3xl fa fa-twitter" aria-hidden="true"></i></a>
+            <a class="px-3"><i class="font-3xl fa fa-facebook" aria-hidden="true"></i></a>
+            <a class="px-3"><i class="font-3xl fa fa-pinterest-p" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p class="mb-1">&copy; Hawaii Fresh Box. All Rights Reserved.</p>
+          <p>Designed  by <a class="color-spl-green" target="_blank" href="http://white-space.studio/">White Space Studio</a>
+        </div>
+      </div>
     </div>
   </div>
 </footer>

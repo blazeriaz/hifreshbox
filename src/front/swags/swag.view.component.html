@@ -1,0 +1,45 @@
+<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
+    <div class="container">
+        <div class="row p-2 mt-10">
+            <div class="col-12 text-center">
+                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Swags</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid p-0">
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6" *ngIf="loadedSwag">
+                <h1>{{swag.name}}</h1>
+                <div class="row my-3">
+                    <div class="col-auto px-3 pt-2">
+                        Price ${{swag.price}}
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input class="form-control py-2" type="number" />
+                        
+                            <span class="input-group-btn ml-3">
+                                <button class="btn btn-outline-green px-2 py-2">Add to cart</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <p>{{swag.custom_attributes | mgCatalogAttribute : 'description'}}</p>
+                    </div>
+                </div>
+                <tabset>
+                    <tab heading="Product Details">{{swag.custom_attributes | mgCatalogAttribute : 'description'}}</tab>
+                    <tab heading="Return Policy">{{swag.custom_attributes | mgCatalogAttribute : 'return_policy'}}</tab>
+                    <tab heading="Order and Shipping">{{swag.custom_attributes | mgCatalogAttribute : 'order_shipping'}}</tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+<newsletter></newsletter>

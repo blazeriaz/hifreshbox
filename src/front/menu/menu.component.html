@@ -1,4 +1,4 @@
-<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header" *ngIf="!selectedRecipe">
+<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
     <div class="container">
         <div class="row p-2 mt-10">
             <div class="col-12 text-center">
@@ -23,7 +23,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.gray" *ngIf="!selectedRecipe">
+<div class="container-fluid p-0" [ngStyle]="backgrounds.gray">
     <div class="container">
         <div class="row py-3" *ngIf="!loadedselectedRecipes">
             <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of [0,1,2]">
@@ -90,7 +90,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.orders" *ngIf="!selectedRecipe">
+<div class="container-fluid p-0" [ngStyle]="backgrounds.orders">
     <div class="row py-10 mb-3">        
         <div class="col-sm-12 col-md-5 py-5 text-white text-center">
             <h1 class="font-wild display-1">Orders</h1>
@@ -98,12 +98,12 @@
         <div class="col-sm-12 col-md-6 text-white text-center px-5 py-3">
             <div class="px-5 py-4">
                 <img class="mb-3" [src]="backgrounds.cap" />
-                <h5>All orders must be placed by Friday, August 4th for Tuesday, August 8th</h5>
+                <h5>All orders must be placed by {{days.friday | date : 'EEEE, MMMM d'}} for {{days.tuesday | date : 'EEEE, MMMM d'}}</h5>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials" *ngIf="!selectedRecipe">
+<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials">
     <div class="row">
         <div class="col-sm-12 text-center text-white py-5">
             <h1 class="font-special color-spl-green text-uppercase">testimonials</h1>       
@@ -120,25 +120,4 @@
         </div> 
     </div>
 </div>
-<recipe-detail *ngIf="selectedRecipe" [recipe]="selectedRecipe" (backtomenu)="backToMenu($event)"></recipe-detail>
-<div class="container-fluid p-0">
-    <div class="container my-5" [ngStyle]="backgrounds.signup">            
-        <div class="row">
-            <div class="col-sm-12 text-center text-white py-8">
-                <h1 class="display-2 font-wild text-uppercase pl-4">Sign up</h1>
-                <h5 class="text-uppercase">FOR EXCLUSIVE DEALS</h5>
-                <form class="mt-5">
-                    <div class="form-row row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-6">
-                            <input class="form-control" type="text" placeholder="Email" />
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn">GO</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div> 
-    </div>
-</div>
+<newsletter></newsletter>

@@ -173,34 +173,34 @@ export class RecipeFormComponent implements OnInit {
         customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, true));
       });
 
-      ["ingredients", "steps", "customer_needs", "allergies"].map(attribute_code => {
-        let value:any = [];
-        if(this.recipe && this.recipe.custom_attributes) {
-          let attribute = this.recipe.custom_attributes.find(x => x.attribute_code == attribute_code);
-          value = attribute?attribute.value:'';
+      ['ingredients', 'steps', 'customer_needs', 'allergies'].map(attribute_code => {
+        let value: any = [];
+        if (this.recipe && this.recipe.custom_attributes) {
+          let attribute = this.recipe.custom_attributes.find(x => x.attribute_code === attribute_code);
+          value = attribute ? attribute.value : '';
         };
         try {
           value = JSON.parse(value);
         } catch (e) {
           value = [];
         }
-        if(attribute_code == "ingredients") {
+        if (attribute_code === 'ingredients') {
           this.ingredients = value;
         }
-        if(attribute_code == "steps") {
+        if (attribute_code === 'steps') {
           this.recipeSteps = value;
         }
-        if(attribute_code == "customer_needs") {
+        if (attribute_code === 'customer_needs') {
           this.customerNeeds = value;
         }
-        if(attribute_code == "allergies") {
+        if (attribute_code === 'allergies') {
           this.allergies = value;
-        }        
+        }
       });
-      
-      customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
+
+      customAttributesArray.push(this.addCustomArrtibute('category_ids', ['41'], false));
       this.recipeForm = this._fb.group({
-        name : [this.recipe?this.recipe.name:'', [Validators.required, Validators.minLength(5)]],
+        name : [this.recipe ? this.recipe.name : '', [Validators.required, Validators.minLength(5)]],
         visibility: 1,
         type_id : 'simple',
         price : 0,
@@ -213,7 +213,7 @@ export class RecipeFormComponent implements OnInit {
             qty : 0
           })
         }),
-        custom_attributes : this._fb.array(customAttributesArray)     
+        custom_attributes : this._fb.array(customAttributesArray)
       });
     }
 
@@ -223,18 +223,18 @@ export class RecipeFormComponent implements OnInit {
         addRemoveLinks: true,
         accept : (function(ctrl){
           return function(pdf) {
-            if(pdf && !pdf.saved) {
-              let reader = new FileReader();
+            if (pdf && !pdf.saved) {
+              const reader = new FileReader();
               reader.onload = handleReaderLoad;
               reader.readAsDataURL(pdf);
-            }            
+            }
             function handleReaderLoad(evt) {
               pdf.data64 = evt.target.result;
             }
             console.log(this.files);
             console.log(pdf);
             this.files.map(file => {
-              if(pdf != file) {
+              if (pdf !== file) {
                 this.removeFile(file);
               }
             });
@@ -334,23 +334,23 @@ export class RecipeFormComponent implements OnInit {
           };
           ctrl.imagesDropZone.emit("addedfile", mockFile);
           ctrl.imagesDropZone.emit("thumbnail", mockFile, image.file.resized);
-          ctrl.imagesDropZone.emit("success", mockFile);
-          ctrl.imagesDropZone.emit("complete", mockFile);
+          ctrl.imagesDropZone.emit('success', mockFile);
+          ctrl.imagesDropZone.emit('complete', mockFile);
           ctrl.imagesDropZone.files.push(mockFile);
           ctrl.removeFileSizeElement(mockFile);
         });
       }, 2000);
     }
 
-    removedImage(file) {      
+    removedImage(file) {
       if(file.entry && file.entry.id) {
         this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
           res=>res,
           error => {
-            this.imagesDropZone.emit("addedfile", file);
-            this.imagesDropZone.emit("thumbnail", file, file.entry.file.resized);
-            this.imagesDropZone.emit("success", file);
-            this.imagesDropZone.emit("complete", file);
+            this.imagesDropZone.emit('addedfile', file);
+            this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
+            this.imagesDropZone.emit('success', file);
+            this.imagesDropZone.emit('complete', file);
             this.imagesDropZone.files.push(file);
           }
         );
@@ -360,17 +360,17 @@ export class RecipeFormComponent implements OnInit {
     }
 
     addCustomArrtibute(attribute_code, value, required) {
-      if(attribute_code == "category_ids") {
+      if(attribute_code == 'category_ids') {
         value = this._fb.array(value);
       }
       if(required) {
         value = [value, Validators.required];
       }
-         
+
       return this._fb.group({
         attribute_code : attribute_code,
         value : value
-      });      
+      });
     }
 
     getCustomAttributeIndex(attribute_code) {
@@ -400,12 +400,12 @@ export class RecipeFormComponent implements OnInit {
     }
 
     removeIngredient(i: number) {
-      this.ingredients.splice(i, 1);      
+      this.ingredients.splice(i, 1);
     }
 
     addRecipeStep() {
       this.recipeSteps.push(this.newRecipeStep);
-      this.newRecipeStep = "";
+      this.newRecipeStep = '';
     }
 
     removeRecipeStep(i: number) {
@@ -414,7 +414,7 @@ export class RecipeFormComponent implements OnInit {
 
     addYouNeeds() {
       this.customerNeeds.push(this.newCustomerNeed);
-      this.newCustomerNeed = "";
+      this.newCustomerNeed = '';
     }
 
     removeYouNeed(i: number) {
@@ -423,7 +423,7 @@ export class RecipeFormComponent implements OnInit {
 
     addAllergy() {
       this.allergies.push(this.newAllerigy);
-      this.newAllerigy = "";
+      this.newAllerigy = '';
     }
 
     removeAllergy(i: number) {
@@ -459,7 +459,7 @@ export class RecipeFormComponent implements OnInit {
     }
 
     noticeRecipeSaved = function() {
-      this.updatingMessage = "The Recipe has been saved successfully!"; 
+      this.updatingMessage = 'The Recipe has been saved successfully!';
       this.saveModalClose = true;
       this.abortModalClose = false;
       this.modalRef.hide();
@@ -470,65 +470,65 @@ export class RecipeFormComponent implements OnInit {
       this.submitted = true;
       if (this.recipeForm.valid) {
           let recipeSku = this.route.snapshot.params['sku'];
-          
+
           let sendData = this.recipeForm.value;
           sendData.custom_attributes.push({
-            attribute_code : "ingredients",
+            attribute_code : 'ingredients',
             value : JSON.stringify(this.ingredients)
           });
           sendData.custom_attributes.push({
-            attribute_code : "steps",
+            attribute_code : 'steps',
             value : JSON.stringify(this.recipeSteps)
           });
           sendData.custom_attributes.push({
-            attribute_code : "customer_needs",
+            attribute_code : 'customer_needs',
             value : JSON.stringify(this.customerNeeds)
           });
           sendData.custom_attributes.push({
-            attribute_code : "allergies",
+            attribute_code : 'allergies',
             value : JSON.stringify(this.allergies)
           });
 
-          let saveUrl = "products"; 
+          let saveUrl = 'products';
           if(!recipeSku) {
             recipeSku = '';
             sendData.sku = GlobalVariable.getRandomInt(10000, 99999);
           } else {
-            saveUrl += "/" + recipeSku;
+            saveUrl += '/' + recipeSku;
           }
 
-          this.updatingMessage = "Uploading the Recipe information...";
+          this.updatingMessage = 'Uploading the Recipe information...';
           this.saveModalClose = false;
           this.abortModalClose = true;
           this.openSaveModal();
           this.saveRequests = [];
-          this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(product => {    
+          this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(product => {
             if(this.images.length == 0 && !this.pdfDocument) {
               this.noticeRecipeSaved();
               return;
             }
-            this.doPDFUpload(product);            
+            this.doPDFUpload(product);
             this.doImagesUpload(product);
           }));
       } else {
-        this.alert.error("Please check the form to enter all required details");        
+        this.alert.error('Please check the form to enter all required details');
       }
     }
 
-    pdfImageUploadingMessage() {      
+    pdfImageUploadingMessage() {
       let message = '';
       if(this.pdfDocument) {
-        message += "Uploading the Recipe PDF document...";
+        message += 'Uploading the Recipe PDF document...';
       }
       if(this.images.length > 0) {
-        message += "Uploading the Recipe images... ";
+        message += 'Uploading the Recipe images... ';
       }
       this.updatingMessage = message;
     }
 
     doPDFUpload = function(product) {
       if(!this.pdfDocument) return;
-      this.pdfImageUploadingMessage(); 
+      this.pdfImageUploadingMessage();
       let base64 = this.pdfDocument.data64.split('base64,');
       let pdfdata = {
         product_id: product.id,
@@ -539,11 +539,11 @@ export class RecipeFormComponent implements OnInit {
           base64_encoded_data: base64[1],
           type: this.pdfDocument.type,
           name: this.pdfDocument.name
-        }         
+        }
       };
       this.saveRequests.push(this.rest.saveItem('', {pdfdata : pdfdata}, 'freshboxrecipespdf').subscribe(pdf => {
-        this.imagesDropZone.emit("success", this.pdfDocument);
-        this.imagesDropZone.emit("complete", this.pdfDocument);
+        this.imagesDropZone.emit('success', this.pdfDocument);
+        this.imagesDropZone.emit('complete', this.pdfDocument);
         this.removeFileSizeElement(this.pdfDocument);
         this.appendPDFDownloaLink(this.pdfDocument, pdf[3]);
         this.pdfDocument = null;
@@ -554,7 +554,7 @@ export class RecipeFormComponent implements OnInit {
     }
 
     doImagesUpload = function(product) {
-      this.pdfImageUploadingMessage();   
+      this.pdfImageUploadingMessage();
       let totalImages = this.images.length;
       this.images.map(image => {
           let base64 = image.dataURL.split('base64,');
@@ -569,7 +569,7 @@ export class RecipeFormComponent implements OnInit {
               base64_encoded_data: base64[1],
               type: image.type,
               name: image.name
-            }                    
+            }
           };
           this.saveRequests.push(this.recipesService.saveProductImage(product.sku, image_upload).subscribe(imageId => {
             let i = this.images.indexOf(image);
@@ -580,14 +580,14 @@ export class RecipeFormComponent implements OnInit {
             }
             image.entry = {};
             image.entry.id = imageId;
-            this.imagesDropZone.emit("success", image);
-            this.imagesDropZone.emit("complete", image);
+            this.imagesDropZone.emit('success', image);
+            this.imagesDropZone.emit('complete', image);
           }));
         });
     }
-    
+
     openSaveModal() {
-      let config = {
+      const config = {
         animated: true,
         keyboard: false,
         backdrop: true,
@@ -598,7 +598,7 @@ export class RecipeFormComponent implements OnInit {
 
     abortSave() {
       if(this.saveRequests && this.saveRequests.length > 0) {
-        this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
+        this.saveRequests.map(sub => sub ? sub.unsubscribe() : '');
       }
       this.modalRef.hide();
     }

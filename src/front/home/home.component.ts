@@ -22,19 +22,20 @@ export class HomeComponent implements OnInit {
             whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
             gray : {
                 'background-image': 'url('+GlobalVariable.htmlImages+'hiw-bg.png)',
-                'background-position' : 'bottom',
-                'background-color' : '#DFDFDF'
+                'background-position' : 'top left',
+                'background-color' : '#DFDFDF',
+                'background-size': 'cover', 
             },
             testimonials : {
                 'background-image': 'url('+GlobalVariable.htmlImages+'testimonials.png)',
                 'background-size': 'cover', 
-                'background-position' : 'bottom',
+                'background-position' : 'top center',
                 'background-color' : '#DFDFDF'
             },
             signup: {
                 'background-image': 'url('+GlobalVariable.htmlImages+'newsletter-signup.png)',
                 'background-size': 'cover', 
-                'background-position' : 'bottom', 
+                'background-position' : 'top center', 
                 'background-color' : '#DFDFDF'
             }
         };

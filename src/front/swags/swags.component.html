@@ -1,0 +1,53 @@
+<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
+    <div class="container">
+        <div class="row p-2 mt-10">
+            <div class="col-12 text-center">
+                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Swags</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid p-0">
+    <div class="container">
+        <div class="row py-3" *ngIf="!loadedSwagsList">
+            <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of [0,1,2]">
+                <div class="card p-0">
+                    <div>
+                        <img class="img-fluid" [src]="backgrounds.recipe">
+                    </div>
+                    <div class="card-title px-2 mt-3 mb-0 text-center">
+                        <h5 class="text-uppercase">Loading...</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row py-3" *ngIf="loadedSwagsList && swags.length == 0">
+            <div class="col-12">
+                <div class="card px-3 py-4 text-center">         
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">No Swags.</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Please check after sometime...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row py-3" *ngIf="loadedSwagsList">
+            <div class="col-md-4 col-sm-4 col-12" *ngFor="let swag of swags">
+                <div class="card" (click)="goToSwag(swag.sku)">
+                    <div>
+                        <img class="img-fluid" [src]="backgrounds.recipe">
+                    </div>
+                    <div class="card-title px-2 mt-3 mb-0">
+                        <div class="row mx-0">
+                            <div class="col px-0">{{swag.name}}</div>
+                            <div class="col-auto">${{swag.price}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<newsletter></newsletter>

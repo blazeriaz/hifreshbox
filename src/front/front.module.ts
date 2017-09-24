@@ -12,22 +12,33 @@ import { HomeComponent } from "front/home/home.component";
 import { MenuComponent } from "front/menu/menu.component";
 import { FullLayoutComponent } from "front/layouts/full-layout.component";
 import { RecipeComponent } from "front/recipe/recipe.component";
+import { SwagsComponent } from 'front/swags/swags.component';
+import { SwagViewComponent } from 'front/swags/swag.view.component';
+import { TabsModule } from 'ngx-bootstrap';
+import { NewsletterComponent } from 'front/blocks/newsletter.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
-    SharedModule.forRoot(),    
+    SharedModule.forRoot(),  
+    TabsModule.forRoot(),  
     HttpModule,
-    FrontRoutingModule
+    FrontRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     FrontComponent,
     FullLayoutComponent,
     HomeComponent,
     MenuComponent,
-    RecipeComponent
+    RecipeComponent,
+    SwagsComponent,
+    SwagViewComponent,
+    NewsletterComponent
   ],
   providers: [
     {
