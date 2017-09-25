@@ -1,4 +1,4 @@
-<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
+<div class="container-fluid flex-row pt-5 pb-0" [ngStyle]="backgrounds.header">
     <div class="container">
         <div class="row p-2 mt-10">
             <div class="col-12 text-center">
@@ -11,6 +11,18 @@
     <div class="container">
         <div class="row py-3">
             <div class="col-md-6">
+                <div class="row mx-0">
+                    <div class="col-auto">
+                        <ul class="list-unstyled">
+                            <li style="width:50px;" *ngFor="let image of swagMediaImages" (click)="changeMainImage(image)">
+                                <img [src]="image.file.resized" class="img-fluid" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <img class="img-fluid" [src]="mainImgSrc" imageZoom="zoomedImgSrc" />
+                    </div>
+                </div>
             </div>
             <div class="col-md-6" *ngIf="loadedSwag">
                 <h1>{{swag.name}}</h1>

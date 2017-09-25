@@ -39,10 +39,10 @@
             </div>
           </div>
 
-          <div class="row py-2" *ngFor="let testimonal of testimonal;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+          <div class="row py-2" *ngFor="let testimonal of testimonals;let odd=odd;" [ngClass]="{'bg-faded': odd}">
             <div class="col-md-2">
               {{testimonal.name}}
-			  <div class="btn-group btn-group-sm" >
+			        <div class="btn-group btn-group-sm" >
                 <a [routerLink]="['edit', testimonal.name]" class="btn btn-link pl-0">Edit</a>
                 <button type="button" class="btn btn-link px-0" (click)="deleteTestimonial(testimonal.name)">Delete</button>
               </div>

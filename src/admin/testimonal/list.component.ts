@@ -10,7 +10,7 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class TestimonalListComponent implements OnInit {
-    testimonal:any;
+    testimonals:any;
     pager: any;
     searchForm;
     searchSubscripe;
@@ -43,11 +43,10 @@ export class TestimonalListComponent implements OnInit {
     }
 
     initTestimonalList(testimonal, page?) {
-        this.testimonal = testimonal.items;        
+        this.testimonals = testimonal.items;        
         // get pager object from service
         page = page?page:1;
         this.pager = this.pagerService.getPager(testimonal.total_count, page, pageSize);     
-        console.log(this.testimonal);   
     }
 
     loadTestimonalList(pageNo?) {

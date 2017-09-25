@@ -14,6 +14,8 @@ export class SwagViewComponent implements OnInit {
     loadedSwagMedia; 
     swag;
     swagMediaImages;
+    mainImgSrc;
+    zoomedImgSrc;
 
     constructor(
         private alert: AlertService,
@@ -58,6 +60,8 @@ export class SwagViewComponent implements OnInit {
             }
         };
 
+        this.mainImgSrc = this.backgrounds.recipe;
+        this.zoomedImgSrc = this.backgrounds.recipe;
         this.loadSwag();
         this.loadMediaImages();
     }
@@ -78,15 +82,22 @@ export class SwagViewComponent implements OnInit {
 
     loadMediaImages() {
         let swagSku = this.route.snapshot.params['sku'];
+        this.swagMediaImages = [];
         if(!swagSku) return;
         this.loadedSwagMedia = false;
         this.rest.getItem('', 'products-gal/'+swagSku+'/media')
             .subscribe(images => {
               this.swagMediaImages = images;
               this.loadedSwagMedia = true;
+              if(images.length > 0) this.changeMainImage(images[0]);
             },
            error => {
                
            });
+    }
+
+    changeMainImage(image) {
+        this.mainImgSrc = image.file.resized;
+        this.zoomedImgSrc = GlobalVariable.BASE_MEDIA_URL + image.file.original;
     }
 }

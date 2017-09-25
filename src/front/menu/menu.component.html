@@ -65,7 +65,8 @@
             <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of recipes">
                 <div class="card px-3 py-4 text-center">
                     <div>
-                        <img class="img-fluid" [src]="backgrounds.recipe">
+                        <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!recipe.default_image" />
+                        <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
                     </div>
                     <div class="card-title my-3">
                         <h5 class="text-uppercase">{{recipe.name}}</h5>

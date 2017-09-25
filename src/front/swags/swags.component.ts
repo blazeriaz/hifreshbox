@@ -75,7 +75,7 @@ export class SwagsComponent implements OnInit {
         
         this.loadedSwagsList = false;
         pageNo = pageNo?pageNo:1;
-        this.rest.getItems(pageNo, filters, 100, "products").subscribe(swags => {
+        this.rest.getItems(pageNo, filters, 100, "swags/products").subscribe(swags => {
             this.loadedSwagsList = true;
             this.swags = swags.items;
         });        
