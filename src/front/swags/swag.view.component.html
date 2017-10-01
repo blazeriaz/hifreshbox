@@ -1,13 +1,10 @@
-<div class="container-fluid flex-row pt-5 pb-0" [ngStyle]="backgrounds.header">
+<div class="container-fluid py-5">
     <div class="container">
-        <div class="row p-2 mt-10">
-            <div class="col-12 text-center">
-                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Swags</h1>
-            </div>
+        <div class="row text-center p-2">
         </div>
     </div>
 </div>
-<div class="container-fluid p-0">
+<div class="container-fluid p-0 mt-5">
     <div class="container">
         <div class="row py-3">
             <div class="col-md-6">
@@ -28,11 +25,11 @@
                 <h1>{{swag.name}}</h1>
                 <div class="row my-3">
                     <div class="col-auto px-3 pt-2">
-                        Price ${{swag.price}}
+                        Price {{swag.price | currency:'USD':true:'1.2-2'}}
                     </div>
                     <div class="col">
                         <div class="input-group">
-                            <input class="form-control py-2" type="number" />
+                            <input class="form-control py-2" type="number" value="1" min="1" />
                         
                             <span class="input-group-btn ml-3">
                                 <button class="btn btn-outline-green px-2 py-2">Add to cart</button>

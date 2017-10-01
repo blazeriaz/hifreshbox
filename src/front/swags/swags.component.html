@@ -43,7 +43,7 @@
                     <div class="card-title px-2 mt-3 mb-0">
                         <div class="row mx-0">
                             <div class="col px-0">{{swag.name}}</div>
-                            <div class="col-auto">${{swag.price}}</div>
+                            <div class="col-auto">{{swag.price | currency:'USD':true:'1.2-2'}}</div>
                         </div>
                     </div>
                 </div>

@@ -2,58 +2,73 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //Layouts
-import { FrontComponent } from "front/front.component";
-import { HomeComponent } from "front/home/home.component";
-import { MenuComponent } from "front/menu/menu.component";
-import { FullLayoutComponent } from "front/layouts/full-layout.component";
-import { RecipeComponent } from "front/recipe/recipe.component";
+import { FrontComponent } from 'front/front.component';
+import { HomeComponent } from 'front/home/home.component';
+import { MenuComponent } from 'front/menu/menu.component';
+import { FullLayoutComponent } from 'front/layouts/full-layout.component';
+import { RecipeComponent } from 'front/recipe/recipe.component';
 import { SwagsComponent } from 'front/swags/swags.component';
 import { SwagViewComponent } from 'front/swags/swag.view.component';
+import { FaqComponent } from 'front/faq/faq.component';
+import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: FrontComponent,    
+    component: FrontComponent,
     data: {
       title: 'Home'
     },
     children : [{
       path: '',
-      component: FullLayoutComponent,    
+      component: FullLayoutComponent,
       data: {
         title: 'Home'
       },
       children : [{
         path: '',
-        component: HomeComponent,    
+        component: HomeComponent,
         data: {
           title: 'Home'
         }
       },{
         path: 'menu',
-        component: MenuComponent,    
+        component: MenuComponent,
         data: {
           title: 'Menu'
         }
       },{
         path: 'menu/:sku',
-        component: RecipeComponent,    
+        component: RecipeComponent,
         data: {
           title: 'Menu Recipe'
         }
       },{
         path: 'swags',
-        component: SwagsComponent,    
+        component: SwagsComponent,
         data: {
           title: 'Swags'
         }
       },{
         path: 'swags/:sku',
-        component: SwagViewComponent,    
+        component: SwagViewComponent,
         data: {
           title: 'Swags'
         }
-      }]      
+      },{
+        path: 'faq',
+        component: FaqComponent,
+        data: {
+          title: 'FAQ'
+        }
+      }]
+    }, {
+      path: '',
+      component: SimpleLayoutComponent,
+      children : [{
+        path: 'auth',
+        loadChildren: './auth/auth.module#AuthModule',
+      }]
     }]
   }
 ];

@@ -6,18 +6,24 @@ import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import * as GlobalVariable from "../global";
+import * as GlobalVariable from '../global';
 
 
 @Injectable()
 export class AuthService {
+  module;
 
   constructor(private http: Http, 
               private router: Router) {
+    this.setAuthModule('admin');
+  }
+
+  setAuthModule(module) {
+    this.module = module;
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('token')) {
+    if (this.isLogin()) {
         // logged in so return true
         return true;
     }
@@ -27,12 +33,16 @@ export class AuthService {
     return false;
   }
 
+  isLogin() {
+    return localStorage.getItem(this.module + '_token') ? true : false;
+  }
+
   login(username: string, password: string) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(
-        GlobalVariable.BASE_API_URL + 'integration/admin/token', 
+        GlobalVariable.BASE_API_URL + 'integration/' + this.module + '/token', 
         JSON.stringify({ username: username, password: password }),
         options
       ).map((response: Response) => {
@@ -40,7 +50,7 @@ export class AuthService {
         let token = response.json();
         if (token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('token', token);
+          localStorage.setItem(this.module + '_token', token);
         }
 
         return token;
@@ -49,7 +59,7 @@ export class AuthService {
 
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('token');
+    localStorage.removeItem(this.module + '_token');
   }
 
 }

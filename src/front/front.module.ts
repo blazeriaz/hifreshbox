@@ -14,9 +14,11 @@ import { FullLayoutComponent } from "front/layouts/full-layout.component";
 import { RecipeComponent } from "front/recipe/recipe.component";
 import { SwagsComponent } from 'front/swags/swags.component';
 import { SwagViewComponent } from 'front/swags/swag.view.component';
-import { TabsModule } from 'ngx-bootstrap';
+import { TabsModule, AccordionModule } from 'ngx-bootstrap';
 import { NewsletterComponent } from 'front/blocks/newsletter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FaqComponent } from 'front/faq/faq.component';
+import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
 
 @NgModule({
   imports: [
@@ -25,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     SharedModule.forRoot(),  
     TabsModule.forRoot(),  
+    AccordionModule.forRoot(),
     HttpModule,
     FrontRoutingModule,
     FormsModule,
@@ -38,7 +41,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RecipeComponent,
     SwagsComponent,
     SwagViewComponent,
-    NewsletterComponent
+    NewsletterComponent,
+    FaqComponent,
+
+    SimpleLayoutComponent
   ],
   providers: [
     {

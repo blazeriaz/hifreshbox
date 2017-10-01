@@ -34,14 +34,15 @@ export class LoginComponent implements OnInit {
               private alert: AlertService,
               private rest: RestService) { 
     this.loginForm = this.formBuilder.group({
-      'username': ['', Validators.required],
+      'username': ['', [Validators.required, Validators.email]],
       'password': ['', [Validators.required]]
     });
   }
 
   ngOnInit() {
+    this.auth.setAuthModule('customer');
     if (this.auth.isLogin()) {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['']);
     } else {
       // reset login status
       this.auth.logout();
@@ -59,8 +60,7 @@ export class LoginComponent implements OnInit {
     this.alert.clear();
     if (this.loginForm.dirty && this.loginForm.valid) {
       this.rest.showLoader();
-      this.auth.login(this.loginForm.value.username, this.loginForm.value
-        .password)
+      this.auth.login(this.loginForm.value.username, this.loginForm.value.password)
         .subscribe(
             data => {
                 this.router.navigate([this.returnUrl]);

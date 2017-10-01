@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import * as GlobalVariable from "global";
+import * as GlobalVariable from 'global';
 
 @Component({
   templateUrl: 'home.component.html'

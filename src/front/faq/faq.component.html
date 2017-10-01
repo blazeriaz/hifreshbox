@@ -1,0 +1,37 @@
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row text-center p-2">
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-3">    
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <accordion [closeOthers]="'true'">
+                    <accordion-group #group [panelClass]="'head-green mb-2'" 
+                        *ngFor="let faq of faqs;let index=index;" 
+                        [isOpen]="index==0">
+                        <div accordion-heading>
+                            {{faq.title}}
+                            <i class="pull-right float-xs-right fa"
+                                [ngClass]="{'fa-angle-down': group?.isOpen, 'fa-angle-up': !group?.isOpen}"></i>
+                        </div>
+                        <div [innerHTML]="faq.content"></div>
+                    </accordion-group>
+                </accordion>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid py-5">    
+    <div class="row text-center">
+        <div class="col-12">
+            <h2>Sounds great! Where do I order?</h2>
+            <p>
+                Yay! We are exited that you are exited. 
+                <a class="btn btn-outline-green" [routerLink]="['/','menu']">Order here</a> to get started
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { RestService, AlertService } from 'services';
 
 import * as GlobalVariable from "global";
@@ -21,6 +21,7 @@ export class SwagViewComponent implements OnInit {
         private alert: AlertService,
         private rest: RestService,
         private route: ActivatedRoute,
+        private renderer: Renderer2
     ) { }
   
     ngOnInit(): void {
@@ -60,6 +61,7 @@ export class SwagViewComponent implements OnInit {
             }
         };
 
+        this.renderer.addClass(document.body, 'white-header');
         this.mainImgSrc = this.backgrounds.recipe;
         this.zoomedImgSrc = this.backgrounds.recipe;
         this.loadSwag();
@@ -67,7 +69,7 @@ export class SwagViewComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        
+        this.renderer.removeClass(document.body, 'white-header');
     }
 
     loadSwag() {        
@@ -97,7 +99,7 @@ export class SwagViewComponent implements OnInit {
     }
 
     changeMainImage(image) {
-        this.mainImgSrc = image.file.resized;
-        this.zoomedImgSrc = GlobalVariable.BASE_MEDIA_URL + image.file.original;
+        this.mainImgSrc = image.file.medium_file;
+        this.zoomedImgSrc = image.file.original_file_fullpath;
     }
 }

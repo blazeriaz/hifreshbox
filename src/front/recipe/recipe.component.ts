@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,19 +16,21 @@ export class RecipeComponent implements OnInit {
         private alert: AlertService,
         private rest: RestService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private renderer: Renderer2
     ) { }
 
     ngOnInit(): void {
+        this.renderer.addClass(document.body, 'white-header');
         this.backgrounds = {
             header: {
                 'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-single-recipe.png)',
-                'background-position' : 'top left',
+                'background-position' : 'center left',
                 'background-size': 'cover', 
-                'background-repeat' : 'no-repeat',
-                'min-height' : '90vh'
+                'background-repeat' : 'no-repeat'
             },
             recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
+            singlerecipe : GlobalVariable.htmlImages+'single-recipe.png',
             cap : GlobalVariable.htmlImages+'chef-cap-green.png',
             culinery : GlobalVariable.htmlImages+'culinery.png',
             whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
@@ -69,5 +71,10 @@ export class RecipeComponent implements OnInit {
 
     backToMenu() {
         this.router.navigate(['menu']);
+    }
+
+    // tslint:disable-next-line:use-life-cycle-interface
+    ngOnDestroy() {
+        this.renderer.removeClass(document.body, 'white-header');
     }
 }

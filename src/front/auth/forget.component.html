@@ -1,0 +1,15 @@
+<form [formGroup]="forgetForm" (submit)="sendForgetEmail()">
+  <h1 class="text-center">Forget Password</h1>
+  <div class="mb-3">    
+    <label class="font-xl">Email</label>
+    <input type="text" class="form-control py-3"  formControlName="email" />
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button [disabled]="loading" type="submit" class="btn btn-success px-4 w-100 font-3xl">Submit</button>
+    </div>
+    <div class="col-12 text-right px-0">
+      <button [disabled]="loading" type="button" class="btn btn-link px-4" (click)="goToLogin()">Go to login</button>
+    </div>
+  </div>
+</form>

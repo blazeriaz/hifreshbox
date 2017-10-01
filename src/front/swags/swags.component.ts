@@ -66,8 +66,8 @@ export class SwagsComponent implements OnInit {
         let filters = [];
         let iniFilter = {
             filters : [{
-                field : "attribute_set_id",
-                value : 17,
+                field : 'category_id',
+                value : 42,
                 condition_type : 'eq'
             }]
         };

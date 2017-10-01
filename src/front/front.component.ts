@@ -71,7 +71,8 @@ export class FrontComponent implements OnInit {
     if (event instanceof NavigationEnd) {
       console.log("Nav End");
       console.log(( Date.now() - this.time));
-      this.loading = false
+      this.loading = false;
+      window.scroll(0, 0);
     }
 
     // Set loading state to false in both of the below events to hide the spinner in case a request fails

@@ -34,6 +34,10 @@
     max-width: 1900px;
 }
 
+.container {
+    width: 100%;
+}
+
 .app {
     min-height: 0px;
     max-height: 800px;
@@ -121,6 +125,26 @@ body {
     .nav-item.active .nav-link,
     .nav-item.show .nav-link {
         color: $brand-success;
+    }
+}
+.white-header:not(.scrolled-down) {
+    .navbar-brand {
+        background-image: $navbar-brand-logo-alt;
+    }
+    .app-header .navbar .nav-link, .app-header .navbar .dropdown-toggle {
+        color:$gray-dark;
+    }
+    .app-header .navbar .nav-link:focus, 
+    .app-header .navbar .dropdown-toggle:focus, 
+    .app-header .navbar .nav-link:hover, 
+    .app-header .navbar .dropdown-toggle:hover {
+        color:$brand-success;
+    }
+}
+.panel-open .head-green {
+    .card-header {
+        background-color:$brand-success;
+        color:$white;
     }
 }
 
