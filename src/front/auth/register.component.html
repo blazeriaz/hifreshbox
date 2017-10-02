@@ -1,0 +1,34 @@
+<form [formGroup]="registerForm" (submit)="register()">
+  <h1 class="text-center">Registration</h1>
+  <div class="mb-3 px-2">    
+    <label class="font-xl">Email</label>
+    <input type="text" class="form-control py-3" formControlName="email" />
+  </div>
+  <div class="mb-3 px-2">    
+    <label class="font-xl">First Name</label>
+    <input type="text" class="form-control py-3" formControlName="firstname" />
+  </div>
+  <div class="mb-3 px-2">    
+    <label class="font-xl">Last Name</label>
+    <input type="text" class="form-control py-3" formControlName="lastname" />
+  </div>
+  <div class="mb-4 px-2">
+    <label class="font-xl">Password</label>
+    <input type="password" class="form-control py-3" formControlName="password" />
+  </div>
+  <div class="mb-4 px-2">
+    <label class="font-xl">Confirm Password</label>
+    <input type="password" class="form-control py-3" formControlName="confirmation" />
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button [disabled]="loading" type="submit" class="btn btn-success px-4 w-100 font-3xl">
+        REGISTER</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-right px-0">
+      <button [disabled]="loading" type="button" class="btn btn-link px-4" (click)="goToLogin()">Already member? go to login</button>
+    </div>
+  </div>
+</form>

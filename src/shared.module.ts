@@ -17,6 +17,7 @@ import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
 import {TooltipModule} from "ngx-bootstrap";
 import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from "pipes";
+import { AlertComponent } from 'components';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from "pipes";
     NAV_DROPDOWN_DIRECTIVES,    
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    AlertComponent,
     emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute,
@@ -42,6 +44,7 @@ import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from "pipes";
     NAV_DROPDOWN_DIRECTIVES,    
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    AlertComponent,
     emptyLayoutComponent,
     mgCatalogImage,
     mgCatalogAttribute,

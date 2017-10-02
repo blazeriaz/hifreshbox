@@ -14,6 +14,7 @@ export class LogoutComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.auth.setAuthModule('customer');
     this.auth.logout();
     this.router.navigate(['auth/login']);
   }
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
     }
 
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   goToForgetPass() {

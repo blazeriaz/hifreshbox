@@ -98,7 +98,7 @@ export class RestService {
       });
   }
 
-  getItem(itemId, url?) {
+getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers });

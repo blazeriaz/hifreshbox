@@ -7,32 +7,22 @@
           <a class="navbar-brand border-0" [routerLink]="['/']"></a>
         </div>
         <div class="col-auto hidden-sm-down my-auto">
-          <ul class="nav text-uppercase">
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/','menu']">Menu</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/','menu']">Order</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/','swags']">Swag</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link"  [routerLink]="['/','faq']">FAQ</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
-          </ul>
+            <topmenu></topmenu>
         </div>
       </div>      
     </div>
   </nav> 
 </header>
 <div class="app flex-row align-items-center" [ngStyle]="backgrounds.header">
-  <div class="container">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <topmenu></topmenu>
+    </nav>
+  </div>
+  <div class="container main">
     <div class="row justify-content-center">
-      <div class="col-md-6 text-white">
+      <div class="col-md-6 text-white mt-8">
+        <alert></alert>
         <router-outlet></router-outlet>        
       </div>
     </div>

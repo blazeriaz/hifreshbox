@@ -37,7 +37,6 @@ import {SharedModule} from "shared.module";
   ],
   declarations: [
     BreadcrumbsComponent,
-    AlertComponent,
     AdminComponent,
     FullLayoutComponent,
     SimpleLayoutComponent

@@ -50,6 +50,14 @@ body {
     background-color: #FFFFFF;
 }
 
+.overlay_loading {
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+    background-color: #efefef;
+    opacity: 0.6;
+}
+
 .font-special {
     font-family: 'MuseoSans_500', sans-serif;
 }

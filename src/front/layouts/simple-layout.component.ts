@@ -14,7 +14,10 @@ export class SimpleLayoutComponent implements OnInit {
             header: {
                 'background-image': 'url(' + GlobalVariable.htmlImages + 'top-banner-home.png)',
                 'background-position' : 'center',
-                'background-attachment' : 'fixed'
+                'background-attachment' : 'fixed',
+                'min-height' : '100vh',
+                'max-height' : '12000px',
+                'height' : 'auto'
             }
         };
     }

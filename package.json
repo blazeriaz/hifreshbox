@@ -14,8 +14,8 @@
     "front": "ng serve --app front --port 4202 --open",
     "admin1": "ng serve --app admin --port 4201 --open --proxy-config proxy.conf.json",
     "app": "ng serve --app app --port 4200 --open",
-    "buildAdmin": "ng build --app admin --prod --deploy-url scripts",
-    "build": "ng build --app front --prod --deploy-url scripts",
+    "buildAdmin": "ng build --app admin --prod --deploy-url scripts/",
+    "build": "ng build --app front --prod --deploy-url scripts/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

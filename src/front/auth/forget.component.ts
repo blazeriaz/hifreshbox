@@ -40,7 +40,7 @@ export class ForgetComponent implements OnInit {
         template : 'email_reset',
         websiteId : 1
       };
-      this.rest.saveItem('', sendData, 'cutomers/password').subscribe(
+      this.rest.saveItem(1, sendData, 'customers/password').subscribe(
         data => {
           this.rest.hideLoader();
           this.alert.success('Please check your mail to reset the password', true);

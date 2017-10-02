@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent, LogoutComponent } from './login.component';
 import { ForgetComponent } from './forget.component';
 import { ResetComponent, checkRestTokenResolve } from "./reset.component";
+import { RegisterComponent } from './register.component';
 
 const routes: Routes = [
   {
@@ -11,10 +12,17 @@ const routes: Routes = [
     data: {
       title: 'Auth'
     },
-    children: [      
+    children: [
       {
         path: 'login',
         component: LoginComponent,
+        data: {
+          title: 'Login'
+        }
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
         data: {
           title: 'Login'
         }
