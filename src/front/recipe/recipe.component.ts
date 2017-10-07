@@ -25,7 +25,7 @@ export class RecipeComponent implements OnInit {
         this.backgrounds = {
             header: {
                 'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-single-recipe.png)',
-                'background-position' : 'center left',
+                'background-position' : 'top left',
                 'background-size': 'cover', 
                 'background-repeat' : 'no-repeat'
             },

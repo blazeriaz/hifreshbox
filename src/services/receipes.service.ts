@@ -7,19 +7,21 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import * as GlobalVariable from "../global";
+import { AuthService } from 'services';
 
 
 @Injectable()
 export class RecipesService {
 
   constructor(private http: Http, 
-              private router: Router) {
+              private router: Router,
+            private auth: AuthService) {
     
   }
 
   getRecipes() {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(

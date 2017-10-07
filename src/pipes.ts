@@ -28,6 +28,9 @@ export class mgCatalogImage implements PipeTransform {
 @Pipe({name: 'jsonParse'})
 export class jsonParse implements PipeTransform {
   transform(jsonString: string): any {
+    if (!jsonString) {
+      return null;
+    }
     return JSON.parse(jsonString);
   }
 }
@@ -35,8 +38,8 @@ export class jsonParse implements PipeTransform {
 @Pipe({name: 'zeropad'})
 export class zeropad implements PipeTransform {
   transform(number: string, length: number): any {
-    let s = number+''; let c = '0';
-    while(s.length < length) {
+    let s = number + ''; const c = '0';
+    while (s.length < length) {
       s = c + '' + s;
     }
     return s;

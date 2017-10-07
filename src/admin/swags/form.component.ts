@@ -134,7 +134,7 @@ export class SwagFormComponent implements OnInit {
         acceptedFiles: 'image/*',
         addRemoveLinks: true,
         accept : (function(ctrl){
-          return function(file) {console.log(file);
+          return function(file) {
             file.addedIndex = ctrl.addImageIndex;
             ctrl.images.push(file);
             ctrl.addImageIndex++;

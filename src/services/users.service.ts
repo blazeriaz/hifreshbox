@@ -7,13 +7,15 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import * as GlobalVariable from "../global";
+import { AuthService } from 'services';
 
 
 @Injectable()
 export class UsersService {
 
   constructor(private http: Http, 
-              private router: Router) {
+              private router: Router,
+            private auth : AuthService) {
     
   }
 
@@ -42,7 +44,7 @@ export class UsersService {
     let params = new URLSearchParams(searchParams.join("&"));
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(
@@ -53,7 +55,7 @@ export class UsersService {
 
   getUser(userId) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(
@@ -64,7 +66,7 @@ export class UsersService {
   
   saveUser(userId, data) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     if(userId) {
@@ -82,7 +84,7 @@ export class UsersService {
   
   deleteUser(userId) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     return this.http.delete(
@@ -92,7 +94,7 @@ export class UsersService {
 
   getCountries() {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
     
     return this.http.get(

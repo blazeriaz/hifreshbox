@@ -26,13 +26,17 @@ export class AdminComponent implements OnInit {
   bodyclass;
   private subscription: Subscription;
 
-  constructor(private router: Router, private rest: RestService) {
+  constructor(
+    private router: Router,
+    private rest: RestService,
+    private auth: AuthService) {
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
     })
   }
 
-  ngOnInit() { 
+  ngOnInit() {
+    this.auth.setAuthModule('admin');
     this.bodyclass = "app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden";
     this.subscription = this.rest.loaderState
         .subscribe((state:any) => {console.log(state);

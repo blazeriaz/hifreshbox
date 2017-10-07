@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, AfterContentInit, ElementRef, HostListener } from '@angular/core';
-import { Router, Event as RouterEvent, NavigationStart, 
-  NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
+import { Router, Event as RouterEvent, NavigationStart,
+  NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
  import { Subscription } from 'rxjs/Subscription';
- import { AuthService, AlertService, RestService } from "services";
+ import { AuthService, AlertService, RestService } from 'services';
 
 @Component({
   // tslint:disable-next-line
@@ -18,7 +18,12 @@ import { Router, Event as RouterEvent, NavigationStart,
     <router-outlet></router-outlet>
   `
 })
-export class FrontComponent implements OnInit { 
+export class FrontComponent implements OnInit {
+  // Sets initial value to true to show loading spinner on first load
+  public loading = true;
+  public time;
+  public bodyclass;
+  public  subscription: Subscription;
 
   @HostListener('window:scroll', ['$event']) private onScroll($event:Event):void {
     if(window.pageYOffset > 80) {
@@ -28,14 +33,9 @@ export class FrontComponent implements OnInit {
     }
   };
 
-  // Sets initial value to true to show loading spinner on first load
-  loading = true
-  time;
-  bodyclass;
-  private subscription: Subscription;
-
   constructor(private router: Router, 
     private rest: RestService,
+    private auth: AuthService,
     private elementRef: ElementRef ) {
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
@@ -49,15 +49,12 @@ export class FrontComponent implements OnInit {
   }
 
   ngOnInit() { 
+    this.auth.setAuthModule('customer');
     this.bodyclass = "app header-fixed sidebar-hidden aside-menu-fixed aside-menu-hidden".split(" ");
     this.subscription = this.rest.loaderState
         .subscribe((state:any) => {
             this.loading = state.show;
         });
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 
@@ -82,5 +79,9 @@ export class FrontComponent implements OnInit {
     if (event instanceof NavigationError) {
       this.loading = false
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

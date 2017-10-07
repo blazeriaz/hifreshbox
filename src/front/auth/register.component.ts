@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.setAuthModule('customer');
     if (this.auth.isLogin()) {
       this.router.navigate(['']);
     } else {

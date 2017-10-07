@@ -7,7 +7,8 @@ import { Subject } from 'rxjs/Subject';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import * as GlobalVariable from "../global";
+import * as GlobalVariable from '../global';
+import { AuthService } from 'services';
 
 
 @Injectable()
@@ -26,8 +27,11 @@ export class RestService {
       this.loaderSubject.next({show: false});
   }
 
-  constructor(private http: Http, 
-              private router: Router) {
+  constructor(
+    private http: Http, 
+    private router: Router,
+    private auth: AuthService
+  ) {
     this.criteria = "searchCriteria";
   }
 
@@ -69,7 +73,7 @@ export class RestService {
     let params = new URLSearchParams(searchParams.join("&"));
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
 
     if(!url) {
@@ -100,7 +104,7 @@ export class RestService {
 
 getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
 
     if(!url) {
@@ -125,7 +129,7 @@ getItem(itemId, url?) {
   
   saveItem(itemId, data, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
 
     if(!url) {
@@ -159,7 +163,7 @@ getItem(itemId, url?) {
   
   deleteItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
 
     if(!url) {

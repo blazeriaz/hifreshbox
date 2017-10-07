@@ -40,8 +40,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.auth.setAuthModule('customer');
+  ngOnInit() {    
     if (this.auth.isLogin()) {
       this.router.navigate(['']);
     } else {

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header" *ngIf="formAction">
           <i class="fa fa-list"></i> {{formAction}} Recipe
         </div>
         <div class="card-block">
@@ -277,7 +277,7 @@
   </div>
 </ng-template>
 <ng-template #editLoadModal>
-  <div class="modal-header">
+  <div class="modal-header" *ngIf="formAction">
     <h4 class="modal-title pull-left"><i class="fa fa-list"></i> {{formAction}} Recipe</h4>
   </div>
   <div class="modal-body">

@@ -14,8 +14,7 @@ export class AuthService {
   module;
 
   constructor(private http: Http, 
-              private router: Router) {
-    this.setAuthModule('admin');
+              private router: Router) {    
   }
 
   setAuthModule(module) {
@@ -35,6 +34,10 @@ export class AuthService {
 
   isLogin() {
     return localStorage.getItem(this.module + '_token') ? true : false;
+  }
+
+  getToken() {
+    return localStorage.getItem(this.module + '_token');
   }
 
   login(username: string, password: string) {

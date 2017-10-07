@@ -45,6 +45,7 @@ export class RecipeFormComponent implements OnInit {
     pdfDocument;
 
     loadedFormData;
+    hiddenAttribtes;
     formAction;
     countLoadedFormReqs;
     loadFormRequests;
@@ -78,6 +79,7 @@ export class RecipeFormComponent implements OnInit {
       this.timeouts = {};
 
       this.loadedFormData = false;
+      this.hiddenAttribtes = ['image', 'small_image', 'thumbnail', 'swatch_image'];
       this.loadIngredients();
       this.loadFormData();
       this.loadMediaImages();      
@@ -163,6 +165,7 @@ export class RecipeFormComponent implements OnInit {
     initEditForm() {
       this.customAttributes = [];
       let customAttributesArray = [];
+      
       ["description", "chef_name", "servings", "cooking_time", "calories", "protein", "carb", "fat"].map(attribute_code => {
         let value = '';
         if(this.recipe && this.recipe.custom_attributes) {
@@ -231,8 +234,7 @@ export class RecipeFormComponent implements OnInit {
             function handleReaderLoad(evt) {
               pdf.data64 = evt.target.result;
             }
-            console.log(this.files);
-            console.log(pdf);
+            
             this.files.map(file => {
               if (pdf !== file) {
                 this.removeFile(file);
@@ -272,12 +274,12 @@ export class RecipeFormComponent implements OnInit {
             saved: true,
             previewTemplate : document.createElement('div')
           }; 
-          ctrl.pdfDropZone.addFile(mockFile);          
+          ctrl.pdfDropZone.addFile(mockFile);
           ctrl.pdfDropZone.emit("success", mockFile);
           ctrl.pdfDropZone.emit("complete", mockFile);
           ctrl.removeFileSizeElement(mockFile);
-          //ctrl.appendPDFDownloaLink(mockFile, pdf_file_name);
-        }      
+          ctrl.appendPDFDownloaLink(mockFile, pdf_file_name);
+        }
       }, 2000);
     }
 
@@ -317,7 +319,7 @@ export class RecipeFormComponent implements OnInit {
       };
     }
 
-    attachMediaImagesToDropzone(imagesDropZone) {      
+    attachMediaImagesToDropzone(imagesDropZone) {
       this.imagesDropZone = imagesDropZone;
       if(!this.recipe || !this.recipe.custom_attributes || this.serverMediaImages.length == 0) {
         return;
@@ -345,7 +347,9 @@ export class RecipeFormComponent implements OnInit {
     removedImage(file) {
       if(file.entry && file.entry.id) {
         this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
-          res=>res,
+          res=>{
+            this.serverMediaImages = this.serverMediaImages.filter(image => image.id != file.entry.id);
+          },
           error => {
             this.imagesDropZone.emit('addedfile', file);
             this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
@@ -432,7 +436,7 @@ export class RecipeFormComponent implements OnInit {
 
     setInputErrorClass(input) {
       let invalid = this.recipeForm.get(input).invalid && this.submitted;
-      if(invalid) return 'form-control-danger';
+      if (invalid) return 'form-control-danger';
     }
 
     setContainerErrorClass(input) {
@@ -463,6 +467,7 @@ export class RecipeFormComponent implements OnInit {
       this.saveModalClose = true;
       this.abortModalClose = false;
       this.modalRef.hide();
+      this.goToList();
     }
 
     saveRecipe() {
@@ -503,7 +508,7 @@ export class RecipeFormComponent implements OnInit {
           this.openSaveModal();
           this.saveRequests = [];
           this.saveRequests.push(this.rest.saveItem(recipeSku, {product : sendData}, saveUrl).subscribe(product => {
-            if(this.images.length == 0 && !this.pdfDocument) {
+            if(this.images.length == 0 && (!this.pdfDocument || !this.pdfDocument.data64)) {
               this.noticeRecipeSaved();
               return;
             }
@@ -517,7 +522,7 @@ export class RecipeFormComponent implements OnInit {
 
     pdfImageUploadingMessage() {
       let message = '';
-      if(this.pdfDocument) {
+      if(this.pdfDocument && this.pdfDocument.data64) {
         message += 'Uploading the Recipe PDF document...';
       }
       if(this.images.length > 0) {
@@ -527,7 +532,7 @@ export class RecipeFormComponent implements OnInit {
     }
 
     doPDFUpload = function(product) {
-      if(!this.pdfDocument) return;
+      if(!this.pdfDocument || !this.pdfDocument.data64) return;
       this.pdfImageUploadingMessage();
       let base64 = this.pdfDocument.data64.split('base64,');
       let pdfdata = {
@@ -555,6 +560,9 @@ export class RecipeFormComponent implements OnInit {
 
     doImagesUpload = function(product) {
       this.pdfImageUploadingMessage();
+      if(this.images.length == 0) {
+        return;
+      }
       let totalImages = this.images.length;
       this.images.map(image => {
           let base64 = image.dataURL.split('base64,');
@@ -572,10 +580,10 @@ export class RecipeFormComponent implements OnInit {
             }
           };
           this.saveRequests.push(this.recipesService.saveProductImage(product.sku, image_upload).subscribe(imageId => {
-            let i = this.images.indexOf(image);
+            const i = this.images.indexOf(image);
             this.images.splice(i, 1);
             this.pdfImageUploadingMessage();
-            if(this.images.length == 0 && !this.pdfDocument) {
+            if(this.images.length == 0 && (!this.pdfDocument || !this.pdfDocument.data64)) {
               this.noticeRecipeSaved();
             }
             image.entry = {};
