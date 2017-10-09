@@ -43,8 +43,8 @@ export class RecipesListComponent implements OnInit {
         let filters = [];
         let iniFilter = {
             filters : [{
-                field : "attribute_set_id",
-                value : 16,
+                field : "category_id",
+                value : 41,
                 condition_type : 'eq'
             }]
         };

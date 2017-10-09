@@ -17,22 +17,28 @@ export class RestService {
   private criteria: string;
   private url: string;
   private loaderSubject = new Subject();
+  private baseUrl;
   loaderState = this.loaderSubject.asObservable();
 
+  constructor(
+    protected http: Http,
+    protected router: Router,
+    protected auth: AuthService
+  ) {
+    this.criteria = "searchCriteria";
+    this.baseUrl = GlobalVariable.BASE_API_URL;
+  }
+
+  changeBaseUrl(url) {
+    this.baseUrl = url;
+  }
+  
   showLoader() {
       this.loaderSubject.next({show: true});
   }
 
   hideLoader() {
       this.loaderSubject.next({show: false});
-  }
-
-  constructor(
-    private http: Http, 
-    private router: Router,
-    private auth: AuthService
-  ) {
-    this.criteria = "searchCriteria";
   }
 
   setRestModule(module) {
@@ -86,7 +92,7 @@ export class RestService {
       url += "?" + params;
     }
 
-    url = GlobalVariable.BASE_API_URL + url;
+    url = this.baseUrl + url;
     
     
     return this.http.get(url, options)
@@ -111,7 +117,7 @@ getItem(itemId, url?) {
       url = this.module + '/' + itemId;
     }
 
-    url = GlobalVariable.BASE_API_URL + url;
+    url = this.baseUrl + url;
     
     
     return this.http.get(url, options)
@@ -136,7 +142,7 @@ getItem(itemId, url?) {
       url = this.module + '/' + itemId;
     }
 
-    url = GlobalVariable.BASE_API_URL + url;
+    url = this.baseUrl + url;
     
     
     let request;
@@ -170,7 +176,7 @@ getItem(itemId, url?) {
       url = this.module + '/' + itemId;
     }
 
-    url = GlobalVariable.BASE_API_URL + url;
+    url = this.baseUrl + url;
     
     
     return this.http.delete(url, options)

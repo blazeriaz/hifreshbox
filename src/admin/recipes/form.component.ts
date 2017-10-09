@@ -346,7 +346,7 @@ export class RecipeFormComponent implements OnInit {
 
     removedImage(file) {
       if(file.entry && file.entry.id) {
-        this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
+        /**this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
           res=>{
             this.serverMediaImages = this.serverMediaImages.filter(image => image.id != file.entry.id);
           },
@@ -357,7 +357,7 @@ export class RecipeFormComponent implements OnInit {
             this.imagesDropZone.emit('complete', file);
             this.imagesDropZone.files.push(file);
           }
-        );
+        );**/
       } else if(file.addedIndex >= 0) {
         this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
       }

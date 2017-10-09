@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { ProductsService, AlertService, RestService } from "services";
+import { ProductsService, AlertService, RestDefaultService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
  
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
@@ -41,7 +41,7 @@ export class SwagFormComponent implements OnInit {
     loadFormRequests;
     constructor(
       private swagsService: ProductsService,
-      private rest: RestService,
+      private rest: RestDefaultService,
       private alert: AlertService,
       private route: ActivatedRoute,
       private router: Router,
@@ -188,7 +188,7 @@ export class SwagFormComponent implements OnInit {
         this.customAttributes.push(attribute_code);
         customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, true));
       });
-      customAttributesArray.push(this.addCustomArrtibute("category_ids", ['41'], false));
+      customAttributesArray.push(this.addCustomArrtibute("category_ids", ['42'], false));
 
       let qty = this.swag.extension_attributes?this.swag.extension_attributes.stock_item.qty:0;
       
@@ -212,7 +212,7 @@ export class SwagFormComponent implements OnInit {
 
     removedfile(file) {      
       if(file.entry && file.entry.id) {
-        this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
+        /**this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
           res=>res,
           error => {
             this.imagesDropZone.emit("addedfile", file);
@@ -221,7 +221,7 @@ export class SwagFormComponent implements OnInit {
             this.imagesDropZone.emit("complete", file);
             this.imagesDropZone.files.push(file);
           }
-        );
+        );**/
       } else if(file.addedIndex >= 0) {
         this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
       }
@@ -332,6 +332,8 @@ export class SwagFormComponent implements OnInit {
             this.updatingMessage = "The Swag information saved successfully!"; 
             this.saveModalClose = true;
             this.abortModalClose = false;
+            this.modalRef.hide();
+            this.goToList();
             return;
           }
           this.updatingMessage = "Uploading the Swag images...";   
@@ -349,38 +351,39 @@ export class SwagFormComponent implements OnInit {
                 base64_encoded_data: base64[1],
                 type: image.type,
                 name: image.name
-              }                    
+              }
             };
             this.saveRequests.push(this.swagsService.saveProductImage(data.sku, image_upload).subscribe(data => {
               let i = this.images.indexOf(image);
               this.images.splice(i, 1);
-              this.updatingMessage = "Uploading the Swag images... " 
-                    + (totalImages - this.images.length) + " / " + totalImages + " Images uploaded!";
-              if(this.images.length == 0) {
-                this.updatingMessage = "The Swag information and images saved successfully!"; 
+              this.updatingMessage = 'Uploading the Swag images... '
+                    + (totalImages - this.images.length) + ' / ' + totalImages + ' Images uploaded!';
+              if (this.images.length === 0) {
+                this.updatingMessage = 'The Swag information and images saved successfully!';
                 this.saveModalClose = true;
                 this.abortModalClose = false;
+                this.modalRef.hide();
+                this.goToList();
               }
               image.entry = {};
               image.entry.id = data;
-              this.imagesDropZone.emit("success", image);
-              this.imagesDropZone.emit("complete", image);
+              this.imagesDropZone.emit('success', image);
+              this.imagesDropZone.emit('complete', image);
             }));
           });
         }));
       } else {
-        this.alert.error("Please check the form to enter all required details");     
+        this.alert.error('Please check the form to enter all required details');
       }
     }
 
     openSaveModal() {
-      let config = {
+      this.modalRef = this.modalService.show(this.saveModal, {
         animated: true,
         keyboard: false,
         backdrop: true,
         ignoreBackdropClick: true
-      };
-      this.modalRef = this.modalService.show(this.saveModal, config);
+      });
     }
 
     abortSave() {

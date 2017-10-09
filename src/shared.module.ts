@@ -11,7 +11,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { HttpModule } from "@angular/http";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService, AlertService, RestService, MealMenuService } from "services";
+import { AuthService, AlertService, RestService, MealMenuService, RestDefaultService } from "services";
 
 import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
@@ -55,7 +55,7 @@ export class SharedModule {
   static forRoot() {
     return {
       ngModule: SharedModule,
-      providers: [ AuthService, RestService, AlertService, MealMenuService ]
+      providers: [ AuthService, RestService, RestDefaultService, AlertService, MealMenuService ]
     }
   }
 }

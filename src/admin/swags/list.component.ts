@@ -1,8 +1,8 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angular/router';
-import { RestService, AlertService, PagerService } from "services";
+import { RestDefaultService, AlertService, PagerService } from 'services';
 
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
 
 export const pageSize = 10;
 
@@ -10,7 +10,7 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class SwagsListComponent implements OnInit {
-    swags:any;
+    swags: any;
     pager: any;
     searchForm;
     searchSubscripe;
@@ -18,12 +18,12 @@ export class SwagsListComponent implements OnInit {
     initLoad;
     deleteItems;
 
-    constructor(private rest: RestService,
+    constructor(private rest: RestDefaultService,
                 private alert: AlertService,
                 private pagerService: PagerService,
                 private route: ActivatedRoute,
                 private router: Router,
-                private _fb : FormBuilder ) {
+                private _fb: FormBuilder ) {
     }
 
     ngOnInit(): void {
@@ -37,13 +37,13 @@ export class SwagsListComponent implements OnInit {
             .subscribe(values => this.loadSwagsList(1));
         this.loadSwagsList(1);
     }
-    
+
     loadSwagsList(pageNo?) {
         let filters = [];
         let iniFilter = {
             filters : [{
-                field : "attribute_set_id",
-                value : 17,
+                field : "category_id",
+                value : 42,
                 condition_type : 'eq'
             }]
         };
@@ -64,7 +64,7 @@ export class SwagsListComponent implements OnInit {
             this.searchSubscripe.unsubscribe();
         }  
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, "products").subscribe(swags => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products').subscribe(swags => {
             this.initLoad = false;
             this.loadingList = false;
             this.initSwagsList(swags, pageNo);
@@ -98,7 +98,7 @@ export class SwagsListComponent implements OnInit {
     }
     
     deleteSwag(swagSku) {
-        if(!confirm("Are you sure to delete the swag?")) {
+        if(!confirm('Are you sure to delete the swag?')) {
             return;
         }
         this.alert.clear();
@@ -107,7 +107,7 @@ export class SwagsListComponent implements OnInit {
                 this.deleteItems = this.deleteItems.filter(item => item.sku != swagSku);
                 this.swags = this.swags.filter(item => item.sku != swagSku);
                 if(this.deleteItems.length == 0) {
-                    this.alert.success("The swags deleted successfully!", true);
+                    this.alert.success('The swags deleted successfully!', true);
                     this.initLoad = true;
                     this.loadSwagsList(this.pager.currentPage); 
                 }

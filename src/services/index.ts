@@ -5,4 +5,5 @@ export * from './products.service';
 export * from './users.service';
 export * from './pager.service';
 export * from './rest.service';
+export * from './rest.default.service';
 export * from './menu.service';
