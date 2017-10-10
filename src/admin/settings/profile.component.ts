@@ -3,13 +3,15 @@ import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angula
 import { ProductsService, AlertService, RestService } from "services";
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
+import { ADMIN_ID } from 'global';
+
 @Injectable()
 export class profileEditResolve implements Resolve<any> {
   
   constructor(private rest: RestService) {}
   
   resolve(route: ActivatedRouteSnapshot) {
-    return this.rest.getItems(1,[],1000,"accountsettings/1","criteria");
+    return this.rest.getItems(ADMIN_ID,[],1000,"accountsettings/" + ADMIN_ID,"criteria");
   }
 }
 
@@ -32,7 +34,7 @@ export class PofileFormComponent implements OnInit {
     ngOnInit(): void {      
       this.profile = this.route.snapshot.data['profile'];
       this.mainForm = this._fb.group({
-        user_id : 1,
+        user_id : this.profile[0],
         firstname : [this.profile[1], [Validators.required]],
         lastname : [this.profile[2], [Validators.required]],
         username : [this.profile[4], [Validators.required]],
