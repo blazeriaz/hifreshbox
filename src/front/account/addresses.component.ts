@@ -27,8 +27,7 @@ export class AddressesComponent implements OnInit {
     public modalRef: BsModalRef;
 
       
-    modalEditRef: BsModalRef;   
-    serverMediaImages;
+    modalEditRef: BsModalRef;       
     loadedFormData;
     countLoadedFormReqs;
     loadFormRequests;
@@ -58,13 +57,12 @@ export class AddressesComponent implements OnInit {
     }
     
     openEditModal() {
-      let config = {
+      this.modalEditRef = this.modalService.show(this.editLoadModal, {
         animated: true,
         keyboard: false,
         backdrop: true,
         ignoreBackdropClick: true
-      };
-      this.modalEditRef = this.modalService.show(this.editLoadModal, config);
+      });
     }
     
     abortEdit() {
@@ -377,6 +375,6 @@ export class AddressesComponent implements OnInit {
     }
 
     goToList() {
-      this.router.navigate(['users']);
+      this.router.navigate(['account']);
     }
 }
