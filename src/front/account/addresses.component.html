@@ -1,0 +1,162 @@
+<form [formGroup]="userForm" (submit)="saveUser()" novalidate *ngIf="loadedFormData">
+<div class="animated fadeIn">  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mb-0 border-bottom-0">
+        <div class="card-header bg-primary">
+          <i class="fa fa-list"></i> Address
+          <button type="button" class="btn btn-warning text-white pull-right" (click)="addNewAddress()">Add New Address</button>
+        </div>
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-4" *ngFor="let address of userForm.get('addresses').value; let index = index;">
+              <div class="card card-faded">
+                <div class="card-block" [ngClass]="setAddressClass(index)">
+                  <address>
+                    <strong>{{address.firstname}} {{address.lastname}}</strong><br>
+                    <span *ngFor="let str of address.street">{{str}}<br *ngIf="str" /></span>
+                    <span *ngIf="address.city">{{address.city}}, </span>
+                    <span *ngIf="address.region.region">{{address.region.region}}, </span>
+                    <span>{{address.country_id}} {{address.postcode}}</span><br />
+                    <abbr title="Phone" *ngIf="address.telephone">P:</abbr> {{address.telephone}}
+                  </address>
+                </div>
+                <div class="card-footer p-0">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-secondary border-0" 
+                        (click)="doEditAddress(index)">
+                      <i class="fa fa-edit"></i> Edit</button>
+                    <button type="button" class="btn btn-secondary border-0" 
+                        (click)="deleteAddress(index)">
+                      <i class="fa fa-remove"></i> Delete</button>
+                    <button type="button" class="btn btn-secondary border-0" 
+                        *ngIf="!address.default_shipping" 
+                        (click)="setDefaultAddress(index)">
+                      <i class="fa fa-star"></i> Default</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" formArrayName="addresses">
+              <div *ngFor="let address of userForm.get('addresses').controls; let index = index;">
+                <div class="card" [formGroupName]="index" *ngIf="index == indexEditAddress">
+                  <div class="card-header bg-primary">
+                    <i class="fa fa-edit"></i> Edit Address
+                  </div>
+                  <div class="card-block">
+                    <div class="form-group row">
+                      <label for="address_first_name" class="col-md-2 col-sm-4 form-control-label">First Name</label>
+                      <div class="col-md-4 col-sm-8" [ngClass]="setAddressDivClass('firstname')">
+                        <input type="text" class="form-control" id="address_first_name" formControlName="firstname" 
+                           [ngClass]="setAddressInputClass('firstname')" /></div>
+                      <label for="address_last_name" class="col-md-2 col-sm-4 form-control-label">Last Name</label>
+                      <div class="col-md-4 col-sm-8" [ngClass]="setAddressDivClass('firstname')">
+                        <input type="text" class="form-control" id="address_last_name" formControlName="lastname" 
+                           [ngClass]="setAddressInputClass('lastname')" /></div>
+                    </div>
+                    <div class="form-group row" formArrayName="street">
+                      <label for="address_street_0" class="col-md-2 form-control-label">Street Address</label>
+                      <div class="col-md-5" [ngClass]="setAddressDivClass('street')">
+                        <input type="text" class="form-control" id="address_street_0" formControlName="0" 
+                           [ngClass]="setAddressInputClass('street')" /></div>
+                      <div class="col-md-5">
+                        <input type="text" class="form-control" id="address_street_1" formControlName="1" /></div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="address_city" class="col-md-2 form-control-label">City</label>
+                      <div class="col-md-10" [ngClass]="setAddressDivClass('city')">
+                        <input type="text" class="form-control" id="address_city" formControlName="city" 
+                           [ngClass]="setAddressInputClass('city')" /></div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="address_postcode" class="col-md-2 form-control-label">Post Code</label>
+                      <div class="col-md-10" [ngClass]="setAddressDivClass('postcode')">
+                        <input type="text" class="form-control" id="address_postcode" formControlName="postcode" 
+                           [ngClass]="setAddressInputClass('postcode')" /></div>
+                    </div>
+                    <div class="form-group row" [ngClass]="setAddressDivClass('telephone')">
+                      <label for="address_telephone" class="col-md-2 form-control-label">Phone</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" id="address_telephone" formControlName="telephone" 
+                           [ngClass]="setAddressInputClass('telephone')" /></div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="address_country" class="col-md-2 form-control-label">Country</label>
+                      <div class="col-md-10" *ngIf="countries.length > 0">
+                        <ng-select [allowClear]="true" [multiple]="false"
+                          [items]="countries" 
+                          [active]="getActiveCountry()" 
+                          (data)="refreshCountryValue($event)"
+                          placeholder="No country selected">
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="address_region" class="col-md-2 form-control-label">Region</label>
+                      <div class="col-md-10" *ngIf="getActiveCountryRegions()">
+                        <ng-select [allowClear]="true" [multiple]="false"
+                          [items]="getActiveCountryRegions()" 
+                          [active]="getActiveRegion()" 
+                          (data)="refreshRegionValue($event)"
+                          placeholder="No region selected">
+                        </ng-select>
+                      </div>
+                      <div class="col-md-10" *ngIf="!getActiveCountryRegions()" formGroupName="region">
+                        <input type="text" class="form-control" id="address_region" formControlName="region" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-info">
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></form>
+<ng-template #savemodal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Save User</h4>
+  </div>
+  <div class="modal-body">
+    {{updatingMessage}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary pull-right" aria-label="Close" (click)="modalRef.hide();goToList()" *ngIf="saveModalClose">
+        Go To List
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="modalRef.hide()" *ngIf="saveModalClose">
+        Close
+    </button>
+    <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="abortSave()" *ngIf="abortModalClose">
+        Abort
+    </button>
+  </div>
+</ng-template>
+<ng-template #editLoadModal>
+  <div class="modal-header" *ngIf="!user.id">
+    <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Customer</h4>
+  </div>
+  <div class="modal-header" *ngIf="user.id">
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Customer</h4>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit Customer</h4>
+  </div>
+  <div class="modal-body">
+    Loading the required form datas...
+  </div>s
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
+        Abort
+    </button>
+  </div>
+</ng-template>

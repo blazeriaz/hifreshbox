@@ -63,10 +63,17 @@ export const routes: Routes = [
         }
       }]
     }, {
-      path: '',
+      path: 'account',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './account/account.module#AccountModule',
+      }]
+    }, {
+      path: 'auth',
       component: SimpleLayoutComponent,
       children : [{
-        path: 'auth',
+        path: '',
         loadChildren: './auth/auth.module#AuthModule',
       }]
     }]
