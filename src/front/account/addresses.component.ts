@@ -1,8 +1,8 @@
-import { Component, OnInit, Injectable, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild, TemplateRef, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, RestService } from "services";
-import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from "@angular/forms";
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { UsersService, AlertService, RestService } from 'services';
+import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     templateUrl: 'addresses.component.html'
@@ -10,52 +10,49 @@ import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 export class AddressesComponent implements OnInit {
     @ViewChild('savemodal') saveModal: TemplateRef<any>;
     @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
-    
-    countries:any;
-    available_regions : any;
-    regionsAll:any;
-    user:any;
+
+    countries: any;
+    available_regions: any;
+    regionsAll: any;
+    user: any;
     userForm: any;
-    indexEditAddress : number;
-    indexDefaultAddress : number;
-    submitted:boolean;
+    indexEditAddress: number;
+    indexDefaultAddress: number;
+    submitted: boolean;
 
     updatingMessage;
     saveModalClose;
     abortModalClose;
     saveRequests;
-    public modalRef: BsModalRef;
-
-      
-    modalEditRef: BsModalRef;       
+    modalRef: BsModalRef;
+    modalEditRef: BsModalRef;
     loadedFormData;
     countLoadedFormReqs;
     loadFormRequests;
 
-    constructor(private usersService: UsersService, 
-                private alert: AlertService,
-                private rest: RestService,
-                private _fb: FormBuilder,
-                private route: ActivatedRoute,
-                private router: Router,
-                private modalService: BsModalService ) {        
-               
+    constructor(
+        private usersService: UsersService,
+        private alert: AlertService,
+        private rest: RestService,
+        private _fb: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router,
+        private modalService: BsModalService,
+        private renderer: Renderer2
+    ) {
+
     }
-    
+
     ngOnInit(): void {
+        this.renderer.addClass(document.body, 'white-header');
         this.loadFormRequests = [];
         this.countLoadedFormReqs = 0;
         this.loadedFormData = false;
         this.openEditModal();
         this.loadCountries();
         this.loadFormData();
-
-        let userId = this.route.snapshot.params['id'];
-        this.user = {};
-        
-        
     }
-    
+
     openEditModal() {
       this.modalEditRef = this.modalService.show(this.editLoadModal, {
         animated: true,
@@ -64,20 +61,20 @@ export class AddressesComponent implements OnInit {
         ignoreBackdropClick: true
       });
     }
-    
+
     abortEdit() {
-      if(this.loadFormRequests && this.loadFormRequests.length > 0) {
-        this.loadFormRequests.map(sub=>sub?sub.unsubscribe():'');
+      if (this.loadFormRequests && this.loadFormRequests.length > 0) {
+        this.loadFormRequests.map(sub => sub ? sub.unsubscribe() : '');
       }
       this.modalEditRef.hide();
       this.goToList();
     }
 
-    checkAllFormDataLoaded() {      
-      if(--this.countLoadedFormReqs == 0) {
+    checkAllFormDataLoaded() {
+      if (--this.countLoadedFormReqs === 0) {
         this.modalEditRef.hide();
-        this.initEditForm(); 
-        this.loadedFormData = true; 
+        this.initEditForm();
+        this.loadedFormData = true;
       }
     }
 
@@ -86,33 +83,29 @@ export class AddressesComponent implements OnInit {
         this.regionsAll = [];
         this.available_regions = [];
         this.loadFormRequests.push(
-            this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(data => {
-                data.filter(data => {
-                    this.available_regions[data.id] = null
-                    if(data.available_regions) {
-                        this.available_regions[data.id] = [];
-                        data.available_regions.filter(region => {
+            this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(countries => {
+                countries.filter(country => {
+                    this.available_regions[country.id] = null
+                    if (country.available_regions) {
+                        this.available_regions[country.id] = [];
+                        country.available_regions.filter(region => {
                             this.regionsAll.push(region);
-                            this.available_regions[data.id].push(
+                            this.available_regions[country.id].push(
                                 {id: region.id, text: region.name}
                             );
                         });
                     }
-                    this.countries.push({id: data.id, text: data.full_name_locale});
+                    this.countries.push({id: country.id, text: country.full_name_locale});
                 });
                 this.checkAllFormDataLoaded();
             })
-        ); 
+        );
         this.countLoadedFormReqs++;
     }
-    
+
     loadFormData() {
-        let userId = this.route.snapshot.params['id'];
-        this.user = {};
-        if(!userId) return;
-        this.user.id = userId;
         this.loadFormRequests.push(
-            this.rest.getItem(userId, 'customers/' + userId).subscribe(user => {
+            this.rest.getItem('me', 'customers/me').subscribe(user => {
                 this.user = user;
                 this.checkAllFormDataLoaded();
             })
@@ -123,7 +116,7 @@ export class AddressesComponent implements OnInit {
     initEditForm() {
         this.userForm = this._fb.group({
             'id': this.user.id,
-            'store_id': 1, 
+            'store_id': 1,
             'website_id': 1,
             'firstname': this.user.firstname,
             'lastname': this.user.lastname,
@@ -133,7 +126,7 @@ export class AddressesComponent implements OnInit {
         });
 
         let doAddNewAddress = true;
-        if(this.user.id) {            
+        if (this.user.id) {
             this.user.addresses.map((address, i) => {
                 if(address.default_shipping) {
                     this.indexDefaultAddress = i;
@@ -143,9 +136,9 @@ export class AddressesComponent implements OnInit {
             if(this.user.addresses.length > 0) {
                 doAddNewAddress = false;
                 this.doEditAddress(0);
-            }            
+            }
         }
-        if(doAddNewAddress) {
+        if (doAddNewAddress) {
             this.addNewAddress();
             this.setDefaultAddress(0, true);
         }
@@ -192,8 +185,8 @@ export class AddressesComponent implements OnInit {
             'default_shipping' : address.default_shipping,
             'default_billing' : address.default_billing
         });
-    }    
-    
+    }
+
     getActiveCountry() {
         let country_id = this.userForm.value.addresses[this.indexEditAddress].country_id;
         return this.countries.filter(x => x.id == country_id);
@@ -201,7 +194,6 @@ export class AddressesComponent implements OnInit {
 
     getActiveCountryRegions() {
         let available_regions = this.available_regions[this.userForm.value.addresses[this.indexEditAddress].country_id];
-        
         return available_regions;
     }
 
@@ -293,6 +285,7 @@ export class AddressesComponent implements OnInit {
     }
 
     doEditAddress(i: number) {
+        this.submitted = false;
         this.indexEditAddress = i;
     }
 
@@ -302,8 +295,8 @@ export class AddressesComponent implements OnInit {
             return;
         }
         if(confirm('Are you sure want to delete the address?')) {
-            this.userForm.controls['addresses'].removeAt(i);
             this.doEditAddress(0);
+            this.userForm.controls['addresses'].removeAt(i);
         }
     }
 
@@ -325,6 +318,7 @@ export class AddressesComponent implements OnInit {
             postcode: "",
             telephone: ""
         };
+        this.submitted = false;
 
         this.userForm.controls['addresses'].push(this.initAddressForm(newAddress));
         this.doEditAddress(this.userForm.controls['addresses'].controls.length - 1);
@@ -339,34 +333,30 @@ export class AddressesComponent implements OnInit {
     saveUser() {
         this.alert.clear();
         this.submitted = true;
-        if (this.userForm.valid) {                   
-            let userId = this.route.snapshot.params['id'];
-            userId = (userId)?userId:'';
-
+        if (this.userForm.valid) {
             this.updatingMessage = "Uploading the Customer information...";
             this.saveModalClose = false;
             this.abortModalClose = true;
             this.openSaveModal();
             this.saveRequests = [];
 
-            this.rest.saveItem(userId, {customer: this.userForm.value}, "customers/" + userId).subscribe(data => {
-                this.noticeUserSaved();                  
+            this.rest.saveItem('me', {customer: this.userForm.value}, "customers/me").subscribe(data => {
+                this.noticeUserSaved();
             });
         } else {
-            this.alert.error("Please check the form to enter all required details");            
+            this.alert.error("Please check the form to enter all required details");
         }
     }
     
     openSaveModal() {
-      let config = {
+      this.modalRef = this.modalService.show(this.saveModal, {
         animated: true,
         keyboard: false,
         backdrop: true,
         ignoreBackdropClick: true
-      };
-      this.modalRef = this.modalService.show(this.saveModal, config);
+      });
     }
-
+    
     abortSave() {
       if(this.saveRequests && this.saveRequests.length > 0) {
         this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
@@ -376,5 +366,9 @@ export class AddressesComponent implements OnInit {
 
     goToList() {
       this.router.navigate(['account']);
+    }
+
+    ngOnDestroy() {
+        this.renderer.removeClass(document.body, 'white-header');
     }
 }

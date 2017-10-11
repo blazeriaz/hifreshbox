@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RestService, AlertService, MealMenuService } from 'services';
 
-import * as GlobalVariable from "global";
+import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
 
 @Component({

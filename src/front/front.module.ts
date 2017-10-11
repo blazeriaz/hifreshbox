@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
 import { TopmenuComponent } from 'front/blocks/topmenu.component';
+import { ContactComponent } from 'front/contact/contact.component';
 
 @NgModule({
   imports: [
@@ -45,7 +46,7 @@ import { TopmenuComponent } from 'front/blocks/topmenu.component';
     SwagViewComponent,
     NewsletterComponent,
     FaqComponent,
-
+    ContactComponent,
     SimpleLayoutComponent,
     TopmenuComponent
   ],

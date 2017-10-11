@@ -11,6 +11,7 @@ import { SwagsComponent } from 'front/swags/swags.component';
 import { SwagViewComponent } from 'front/swags/swag.view.component';
 import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
+import { ContactComponent } from 'front/contact/contact.component';
 
 export const routes: Routes = [
   {
@@ -31,35 +32,41 @@ export const routes: Routes = [
         data: {
           title: 'Home'
         }
-      },{
+      }, {
         path: 'menu',
         component: MenuComponent,
         data: {
           title: 'Menu'
         }
-      },{
+      }, {
         path: 'menu/:sku',
         component: RecipeComponent,
         data: {
           title: 'Menu Recipe'
         }
-      },{
+      }, {
         path: 'swags',
         component: SwagsComponent,
         data: {
           title: 'Swags'
         }
-      },{
+      }, {
         path: 'swags/:sku',
         component: SwagViewComponent,
         data: {
           title: 'Swags'
         }
-      },{
+      }, {
         path: 'faq',
         component: FaqComponent,
         data: {
           title: 'FAQ'
+        }
+      }, {
+        path: 'contact',
+        component: ContactComponent,
+        data: {
+          title: 'Contact'
         }
       }]
     }, {
