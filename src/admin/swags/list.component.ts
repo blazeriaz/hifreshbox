@@ -18,12 +18,14 @@ export class SwagsListComponent implements OnInit {
     initLoad;
     deleteItems;
 
-    constructor(private rest: RestDefaultService,
-                private alert: AlertService,
-                private pagerService: PagerService,
-                private route: ActivatedRoute,
-                private router: Router,
-                private _fb: FormBuilder ) {
+    constructor(
+        private rest: RestDefaultService,
+        private alert: AlertService,
+        private pagerService: PagerService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private _fb: FormBuilder
+    ) {
     }
 
     ngOnInit(): void {
@@ -39,46 +41,49 @@ export class SwagsListComponent implements OnInit {
     }
 
     loadSwagsList(pageNo?) {
-        let filters = [];
-        let iniFilter = {
+        const filters = [];
+        filters.push({
             filters : [{
-                field : "category_id",
+                field : 'category_id',
                 value : 42,
                 condition_type : 'eq'
             }]
-        };
-        filters.push(iniFilter);
+        });
 
-        let searchValues = this.searchForm.value;
-        if(searchValues && searchValues.name) {
-            let searchNameFilter = {
+        const searchValues = this.searchForm.value;
+        if (searchValues && searchValues.name) {
+            filters.push({
                 filters : [{
-                    field : "name",
-                    value : "%" + searchValues.name + "%",
+                    field : 'name',
+                    value : '%' + searchValues.name + '%',
                     condition_type : 'like'
                 }]
-            };
-            filters.push(searchNameFilter);
+            });
         }
-        if(this.searchSubscripe) {
+        if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
-        }  
+        }
+        const sortOrders = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products').subscribe(swags => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products', false, sortOrders).subscribe(swags => {
             this.initLoad = false;
             this.loadingList = false;
             this.initSwagsList(swags, pageNo);
-        });        
+        });
     }
-    
+
     initSwagsList(swags, page?) {
-        this.swags = swags.items;        
+        this.swags = swags.items;
         // get pager object from service
-        page = page?page:1;
-        this.pager = this.pagerService.getPager(swags.total_count, page, pageSize);        
+        page = page ? page : 1;
+        this.pager = this.pagerService.getPager(swags.total_count, page, pageSize);
     }
-    
+
     abortSearch() {
+        // tslint:disable-next-line:no-unused-expression
         this.searchSubscripe && this.searchSubscripe.unsubscribe();
         this.loadingList = false;
     }
@@ -86,27 +91,27 @@ export class SwagsListComponent implements OnInit {
     setPage(page) {
         this.loadSwagsList(page);
     }
-    
+
     isDeleted(sku) {
         return this.deleteItems.findIndex(item => item.sku == sku) !== -1;
     }
 
     cancelDelete(sku) {
-        let i = this.deleteItems.findIndex(item => item.sku == sku);
+        const i = this.deleteItems.findIndex(item => item.sku == sku);
         this.deleteItems[i].subscribe.unsubscribe();
-        this.deleteItems.splice(i,1);
+        this.deleteItems.splice(i, 1);
     }
-    
+
     deleteSwag(swagSku) {
         if(!confirm('Are you sure to delete the swag?')) {
             return;
         }
         this.alert.clear();
-        let deleteSubscribe = this.rest.deleteItem(swagSku, 'products/'+swagSku).subscribe(data => {
-            if(data) {                
-                this.deleteItems = this.deleteItems.filter(item => item.sku != swagSku);
-                this.swags = this.swags.filter(item => item.sku != swagSku);
-                if(this.deleteItems.length == 0) {
+        const deleteSubscribe = this.rest.deleteItem(swagSku, 'products/' + swagSku).subscribe(data => {
+            if (data) {
+                this.deleteItems = this.deleteItems.filter(item => item.sku !== swagSku);
+                this.swags = this.swags.filter(item => item.sku !== swagSku);
+                if (this.deleteItems.length === 0) {
                     this.alert.success('The swags deleted successfully!', true);
                     this.initLoad = true;
                     this.loadSwagsList(this.pager.currentPage); 
@@ -117,10 +122,9 @@ export class SwagsListComponent implements OnInit {
         }, error => {
             this.deleteItems = this.deleteItems.filter(item => item.sku != swagSku);
         });
-        let deleteItem = {
+        this.deleteItems.push( {
             sku : swagSku,
             subscribe : deleteSubscribe
-        };
-        this.deleteItems.push(deleteItem);
+        });
     }
 }

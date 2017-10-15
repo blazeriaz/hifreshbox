@@ -57,8 +57,13 @@ export class TestimonialsListComponent implements OnInit {
         if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
         }
+        const sortOrders = [{
+            field: 'update_time',
+            direction: 'DESC'
+        }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'testimonials/search', 'criteria').subscribe(testimonials => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize,
+            'testimonials/search', 'criteria').subscribe(testimonials => {
             this.initLoad = false;
             this.loadingList = false;
             this.initTestimonialsList(testimonials, pageNo);

@@ -50,7 +50,7 @@ export class RestService {
     return this;
   }
 
-  getItems(page?, filterGroups?, pageSize?, url?, criteria?) {
+  getItems(page?, filterGroups?, pageSize?, url?, criteria?, sortOrders?) {
     let searchCriteria = {
       pageSize : pageSize?pageSize:10,
       currentPage : page?page:1,      
@@ -60,27 +60,34 @@ export class RestService {
       criteria = this.criteria;
     }
  
-    let searchParams = [];
+    const searchParams = [];
     let pIndex = 0;
-    searchParams[pIndex++] = criteria + "[pageSize]=" + searchCriteria.pageSize;
-    searchParams[pIndex++] = criteria + "[currentPage]=" + searchCriteria.currentPage;
+    searchParams[pIndex++] = criteria + '[pageSize]=' + searchCriteria.pageSize;
+    searchParams[pIndex++] = criteria + '[currentPage]=' + searchCriteria.currentPage;
 
-    filterGroups = filterGroups?filterGroups:[];
+    sortOrders = sortOrders ? sortOrders : [];
+    sortOrders.map((data, index) => {
+      const key = criteria + '[sortOrders][' + index + ']';
+      searchParams[pIndex++] = key + '[field]=' + data.field;
+      searchParams[pIndex++] = key + '[direction]=' + data.direction;
+    });
+
+    filterGroups = filterGroups ? filterGroups : [];
     filterGroups.map((data, index) => {
-      let key = criteria + "[filter_groups]["+index+"]";
+      let key = criteria + '[filter_groups][' + index + ']';
       data.filters.map((filter, i) => {
-        key += "[filters]["+i+"]";
-        searchParams[pIndex++] = key + "[field]=" + filter.field;
-        searchParams[pIndex++] = key + "[value]=" + filter.value;
-        searchParams[pIndex++] = key + "[condition_type]=" + filter.condition_type; 
+        key += '[filters][' + i + ']';
+        searchParams[pIndex++] = key + '[field]=' + filter.field;
+        searchParams[pIndex++] = key + '[value]=' + filter.value;
+        searchParams[pIndex++] = key + '[condition_type]=' + filter.condition_type;
       })
     });
 
-    let params = new URLSearchParams(searchParams.join("&"));
+    const params = new URLSearchParams(searchParams.join('&'));
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + this.auth.getToken());
-    let options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({ headers: headers });
 
     if(!url) {
       if(this.module == "products") {
@@ -107,6 +114,10 @@ export class RestService {
          this.onEnd();
       });
   }
+
+    private newFunction() {
+        return "[direction]=";
+    }
 
 getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
