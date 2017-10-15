@@ -1,27 +1,27 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { FaqsListComponent } from './list.component';
-import { FaqFormComponent } from './form.component';
+import { TestimonialsListComponent } from './list.component';
+import { TestimonialFormComponent } from './form.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: FaqsListComponent,
+        component: TestimonialsListComponent,
         data: {
-            title: 'Faq'
+            title: 'Testimonials'
         }
     },
     {
         path: 'add',
-        component: FaqFormComponent,
+        component: TestimonialFormComponent,
         data: {
             title: 'Add'
         }
     },
     {
         path: 'edit/:id',
-        component: FaqFormComponent,
+        component: TestimonialFormComponent,
         data: {
             title: 'Edit'
         }
@@ -32,4 +32,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class FaqRoutingModule {}
+export class TestimonialRoutingModule {}

@@ -9,8 +9,8 @@ export const pageSize = 10;
 @Component({
     templateUrl: 'list.component.html'
 })
-export class FaqsListComponent implements OnInit {
-    faqs: any;
+export class TestimonialsListComponent implements OnInit {
+    testimonials: any;
     pager: any;
     searchForm;
     searchSubscripe;
@@ -34,11 +34,11 @@ export class FaqsListComponent implements OnInit {
         });
         this.searchForm.valueChanges
             .debounceTime(500)
-            .subscribe(values => this.loadFaqsList(1));
-        this.loadFaqsList(1);
+            .subscribe(values => this.loadTestimonialsList(1));
+        this.loadTestimonialsList(1);
     }
 
-    loadFaqsList(pageNo?) {
+    loadTestimonialsList(pageNo?) {
         const filters = [];
         const searchValues = this.searchForm.value;
         if (searchValues && searchValues.name) {
@@ -58,18 +58,18 @@ export class FaqsListComponent implements OnInit {
             this.searchSubscripe.unsubscribe();
         }
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'faqs/search', 'criteria').subscribe(faqs => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'testimonials/search', 'criteria').subscribe(testimonials => {
             this.initLoad = false;
             this.loadingList = false;
-            this.initFaqsList(faqs, pageNo);
+            this.initTestimonialsList(testimonials, pageNo);
         });
     }
 
-    initFaqsList(faqs, page?) {
-        this.faqs = faqs.items;
+    initTestimonialsList(testimonials, page?) {
+        this.testimonials = testimonials.items;
         // get pager object from service
         page = page ? page : 1;
-        this.pager = this.pagerService.getPager(faqs.total_count, page, pageSize);
+        this.pager = this.pagerService.getPager(testimonials.total_count, page, pageSize);
     }
 
     abortSearch() {
@@ -79,7 +79,7 @@ export class FaqsListComponent implements OnInit {
     }
 
     setPage(page) {
-        this.loadFaqsList(page);
+        this.loadTestimonialsList(page);
     }
 
     isDeleted(id) {
@@ -92,28 +92,28 @@ export class FaqsListComponent implements OnInit {
         this.deleteItems.splice(i, 1);
     }
 
-    deleteFaq(faqId) {
-        if (!confirm('Are you sure to delete the faq?')) {
+    deleteTestimonial(testimonialId) {
+        if (!confirm('Are you sure to delete the testimonial?')) {
             return;
         }
         this.alert.clear();
-        const deleteSubscribe = this.rest.deleteItem(faqId, 'faqs/' + faqId).subscribe(data => {
+        const deleteSubscribe = this.rest.deleteItem(testimonialId, 'testimonials/' + testimonialId).subscribe(data => {
             if (data) {
-                this.deleteItems = this.deleteItems.filter(item => item.id !== faqId);
-                this.faqs = this.faqs.filter(item => item.id !== faqId);
+                this.deleteItems = this.deleteItems.filter(item => item.id !== testimonialId);
+                this.testimonials = this.testimonials.filter(item => item.id !== testimonialId);
                 if (this.deleteItems.length === 0) {
-                    this.alert.success('The faqs deleted successfully!', true);
+                    this.alert.success('The testimonials deleted successfully!', true);
                     this.initLoad = true;
-                    this.loadFaqsList(this.pager.currentPage); 
+                    this.loadTestimonialsList(this.pager.currentPage);
                 }
             } else {
-                this.deleteItems = this.deleteItems.filter(item => item.id != faqId);
+                this.deleteItems = this.deleteItems.filter(item => item.id !== testimonialId);
             }
         }, error => {
-            this.deleteItems = this.deleteItems.filter(item => item.id != faqId);
+            this.deleteItems = this.deleteItems.filter(item => item.id !== testimonialId);
         });
         const deleteItem = {
-            id : faqId,
+            id : testimonialId,
             subscribe : deleteSubscribe
         };
         this.deleteItems.push(deleteItem);

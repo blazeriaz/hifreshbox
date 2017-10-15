@@ -11,12 +11,12 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     templateUrl: 'form.component.html'
 })
-export class FaqFormComponent implements OnInit {
+export class TestimonialFormComponent implements OnInit {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
   @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
 
-  faq: any;
-  faqForm: any;
+  testimonial: any;
+  testimonialForm: any;
   submitted: any;
   updatingMessage;
   saveModalClose;
@@ -37,7 +37,7 @@ export class FaqFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.faq = {};
+    this.testimonial = {};
     this.saveModalClose = false;
     this.abortModalClose = false;
 
@@ -80,14 +80,14 @@ export class FaqFormComponent implements OnInit {
   }
 
   loadFormData() {
-    const faqId = this.route.snapshot.params['id'];
-    this.faq = {};
+    const testimonialId = this.route.snapshot.params['id'];
+    this.testimonial = {};
     // tslint:disable-next-line:curly
-    if (!faqId) return;
-    this.faq.id = faqId;
+    if (!testimonialId) return;
+    this.testimonial.id = testimonialId;
     this.loadFormRequests.push(
-      this.rest.getItem(faqId, 'faqs/' + faqId).subscribe(faq => {
-        this.faq = faq;
+      this.rest.getItem(testimonialId, 'testimonials/' + testimonialId).subscribe(testimonial => {
+        this.testimonial = testimonial;
         this.checkAllFormDataLoaded();
       })
     );
@@ -95,19 +95,20 @@ export class FaqFormComponent implements OnInit {
   }
 
   initEditForm() {
-    this.faqForm = this._fb.group({
-      question : [this.faq.question, [Validators.required]],
-      answer : [this.faq.answer, [Validators.required]],
-      is_active : this.faq.is_active ? this.faq.is_active : 1,
+    this.testimonialForm = this._fb.group({
+      name : [this.testimonial.name, [Validators.required]],
+      email : [this.testimonial.email, [Validators.required, Validators.email]],
+      content : [this.testimonial.content, [Validators.required]],
+      is_active : this.testimonial.is_active ? this.testimonial.is_active : 1,
     });
   }
 
   setStatus(is_active) {
-      this.faqForm.patchValue({is_active : is_active});
+      this.testimonialForm.patchValue({is_active : is_active});
   }
 
   getStatus() {
-      return this.faqForm.value.is_active;
+      return this.testimonialForm.value.is_active;
   }
 
   setStatusClass(type) {
@@ -119,36 +120,36 @@ export class FaqFormComponent implements OnInit {
   }
 
   setInputErrorClass(input) {
-    const invalid = this.faqForm.get(input).invalid && this.submitted;
+    const invalid = this.testimonialForm.get(input).invalid && this.submitted;
     // tslint:disable-next-line:curly
     if (invalid) return 'form-control-danger';
   }
 
   setContainerErrorClass(input) {
-    const invalid = this.faqForm.get(input).invalid && this.submitted;
+    const invalid = this.testimonialForm.get(input).invalid && this.submitted;
     // tslint:disable-next-line:curly
     if (invalid) return 'has-danger';
   }
 
-  saveFaq() {
+  saveTestimonial() {
     this.alert.clear();
     this.submitted = true;
-    if (this.faqForm.valid) {
-      let faqId = this.route.snapshot.params['id'];
-      const sendData = this.faqForm.value;
-      let saveUrl = 'faqs';
-      if (!faqId) {
-        faqId = '';
+    if (this.testimonialForm.valid) {
+      let testimonialId = this.route.snapshot.params['id'];
+      const sendData = this.testimonialForm.value;
+      let saveUrl = 'testimonials';
+      if (!testimonialId) {
+        testimonialId = '';
       } else {
-        saveUrl += '/' + faqId;
+        saveUrl += '/' + testimonialId;
       }
-      this.updatingMessage = 'Uploading the Faq information...';
+      this.updatingMessage = 'Uploading the Testimonial information...';
       this.saveModalClose = false;
       this.abortModalClose = true;
       this.openSaveModal();
       this.saveRequests = [];
-      this.saveRequests.push(this.rest.saveItem(faqId, {faq : sendData}, saveUrl).subscribe(data => {
-        this.updatingMessage = 'The Faq information saved successfully!'; 
+      this.saveRequests.push(this.rest.saveItem(testimonialId, {testimonial : sendData}, saveUrl).subscribe(data => {
+        this.updatingMessage = 'The Testimonial information saved successfully!'; 
         this.saveModalClose = true;
         this.abortModalClose = false;
         this.modalRef.hide();
@@ -176,6 +177,6 @@ export class FaqFormComponent implements OnInit {
   }
 
   goToList() {
-    this.router.navigate(['faqs']);
+    this.router.navigate(['testimonials']);
   }
 }

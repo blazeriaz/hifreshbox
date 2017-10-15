@@ -65,12 +65,12 @@ export const routes: Routes = [
         loadChildren: './reviews/reviews.module#ReviewsModule'
       },
       {
-        path: 'testimonal',
+        path: 'testimonials',
         canActivate: [AuthService],
-        loadChildren: './testimonal/testimonal.module#TestimonalModule'
+        loadChildren: './testimonials/testimonials.module#TestimonialsModule'
       },
-	  {
-        path: 'faq',
+      {
+        path: 'faqs',
         canActivate: [AuthService],
         loadChildren: './faq/faq.module#FaqModule'
       },
