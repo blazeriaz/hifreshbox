@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AccountComponent } from './account.component';
 import { AddressesComponent } from './addresses.component';
+import { ProfileComponent } from './profile.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,12 @@ const routes: Routes = [
         component: AddressesComponent,
         data: {
           title: 'Addresses'
+        }
+      },{
+        path: 'profile',
+        component: ProfileComponent,
+        data: {
+          title: 'Edit Profile'
         }
       }
     ]

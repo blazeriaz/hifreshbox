@@ -4,15 +4,21 @@ import * as GlobalVariable from "./global";
 @Pipe({name: 'mgCatalogAttribute'})
 export class mgCatalogAttribute implements PipeTransform {
   transform(productAtts: Array<any>, attribute_code: string): any {
-    if (!productAtts) return productAtts;
+    if (!productAtts) {
+      return productAtts;
+    }
 
-    let attr = productAtts.find(x => x.attribute_code === attribute_code);
+    const attr = productAtts.find(x => x.attribute_code === attribute_code);
 
-    let attr_vlue = (attr)?attr.value:'';
+    let attr_vlue = (attr) ? attr.value : '';
 
-    if(attribute_code == 'image' || attribute_code == 'small_image' || attribute_code == 'thumbnail') {
+    if (attr_vlue && ['image', 'small_image', 'thumbnail'].indexOf(attribute_code) !== -1) {
         attr_vlue = GlobalVariable.BASE_MEDIA_URL + attr_vlue;
     }
+
+    if (attr_vlue && attribute_code === 'pdf_upload' && attr_vlue) {
+      attr_vlue = GlobalVariable.BASE_MEDIA + 'recipe-pdf/' + attr_vlue;
+  }
 
     return attr_vlue;
   }

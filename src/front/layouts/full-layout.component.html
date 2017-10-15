@@ -31,30 +31,30 @@
         [ngStyle]="backgrounds.gray">
     <div class="container py-5">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
           <div class="row text-uppercase font-xl">
             <div class="col-auto pr-8">
               <ul class="list-unstyled">
-                <li><a class="nav-link" [routerLink]="['/','menu']">Menu</a></li>
-                <li><a class="nav-link" [routerLink]="['/','swags']">Swag</a></li>
-                <li>Gifts</li>
+                <li><a class="nav-link text-black" [routerLink]="['/','menu']">Menu</a></li>
+                <li><a class="nav-link text-black" [routerLink]="['/','swags']">Swag</a></li>
+                <li><a class="nav-link text-black" [routerLink]="['/','']">Gifts</a></li>
               </ul>
             </div>
             <div class="col-auto pr-8">
               <ul class="list-unstyled">
-                <li><a class="nav-link" [routerLink]="['/','contact']">CONTACT US</a></li>
-                <li><a class="nav-link" [routerLink]="['/','faq']">FAQ</a></li>
+                <li><a class="nav-link text-black" [routerLink]="['/','contact']">CONTACT US</a></li>
+                <li><a class="nav-link text-black" [routerLink]="['/','faq']">FAQ</a></li>
               </ul>
             </div>
             <div class="col-auto">
               <ul class="list-unstyled">
-                <li>Blog</li>
-                <li>Cookbook</li>
+                <li><a class="nav-link text-black" [routerLink]="['/','']">Blog</a></li>
+                <li><a class="nav-link text-black" [routerLink]="['/','']">Cookbook</a></li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-left">
           <a [routerLink]="['/']" class="foot-logo"><img class="img-fluid" src="images/footer-logo.png"></a>
           <div class="row my-3">
             <a class="px-3"><i class="font-3xl fa fa-instagram" aria-hidden="true"></i></a>

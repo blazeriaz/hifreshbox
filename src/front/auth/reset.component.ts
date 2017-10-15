@@ -14,7 +14,7 @@ export class checkRestTokenResolve implements Resolve<any> {
     const customerId = route.params.customerId;
     const token = route.params.token;
     return this.rest.getItem('', 'customers/' + customerId + '/password/resetLinkToken/' + token).subscribe(res => {
-      if (res === 'success') {
+      if (res) {
         return res;
       } else {
         this.alert.error(res, true);
@@ -69,7 +69,7 @@ export class ResetComponent implements OnInit {
     this.alert.clear();
     if (this.resetForm.valid) {
       this.rest.showLoader();
-      this.rest.saveItem('', {email_change_data : this.resetForm.value}, 'forgotemailchange').subscribe(
+      this.rest.saveItem('', this.resetForm.value, 'customer/reset-password').subscribe(
         data => {
           if (data !== 'success') {
             this.alert.error(data);

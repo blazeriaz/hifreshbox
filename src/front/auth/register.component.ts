@@ -28,9 +28,9 @@ export class RegisterComponent implements OnInit {
     }, {validator: this.checkPasswords});
   }
   
-  checkPasswords(resetForm) {
-    const pass = resetForm.controls.password.value;
-    const confirmPass = resetForm.controls.confirmation.value;
+  checkPasswords(form) {
+    const pass = form.controls.password.value;
+    const confirmPass = form.controls.confirmation.value;
 
     return pass === confirmPass ? null : { notSame: true }
   }
