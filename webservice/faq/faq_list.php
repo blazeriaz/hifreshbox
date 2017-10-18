@@ -23,12 +23,16 @@ $searchCriteria = '{
         ],
         "current_page": 1,
         "page_size": 10,
-        "sort_orders": []
+        "sort_orders": [
+			{
+				"field":"creation_time",
+				"direction":"DESC"
+			}
+		]
     }
 }';
 
 $searchCriteriaString = http_build_query(json_decode($searchCriteria));
-
 						
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/faqs/search?".$searchCriteriaString);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
