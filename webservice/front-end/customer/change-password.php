@@ -1,8 +1,8 @@
 <?php
 
-$slide = json_encode(['email' => 'riaintouch+011@gmail.com',
-					'resetToken'=>'0fcecbf046e75b80197aa4a6660aa67e',
-					'newPassword'=>'Riaz@123']);
+$slide = json_encode(['id' => 19,
+					'resetToken'=>'481a1cf095a2fa5350c447a0a145b641',
+					'newPassword'=>'Abc@123']);
 						
 						
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/customer/reset-password");
