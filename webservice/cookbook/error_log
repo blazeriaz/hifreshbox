@@ -1,0 +1,2 @@
+[21-Oct-2017 12:23:00 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/cookbook/cookbook_update.php on line 23
+[21-Oct-2017 12:23:01 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/cookbook/cookbook_update.php on line 23
