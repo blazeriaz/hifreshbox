@@ -40,3 +40,88 @@ Done
 10 while clicking on logo it should redirect to dashboard page
 12) Recipe loader is not proper while saving'
 14) USer Edit Address if not record is present need to show No record Available
+
+
+hi! Andy!
+ 
+MY EDITS below:
+ 
+the website in general was stalling and was really slow or would just freeze.
+ 
+when i’m trying to add menus for the week — there is no search BOX so you need scroll to find desired recipe for the week.  can we add a search when looking through data base of recipes.
+ 
+i spoke to Chef Will and we should definitely have 3 separated areas:  addition ingredients needed, equipment needed and KEEP allergies.
+ 
+from the back end — can you preview what it will look like in the front end?  seems like you can only edit.
+ 
+also not sure of the purpose of this tool bar?  just to change pricing?  that won’t happen often so not sure why it would be a main feature to edit pricing. better to just have a search bar for the recipe that we can then edit.
+ 
+
+ 
+ 
+from the recipe page — it is not working to add recipe to a X week’s menu. (you can just edit or delete).
+ 
+the buttons on this page to enable or disable does NOT work when you look on the front end.
+ 
+
+ 
+customer order page should have the following capabilities:  previous orders, if they are active for the upcoming week & the type of the subscription that they are on, dietary restriction, special write-in notes, ability to manually push through the next reoccurring payment, bday, anniversary date as member, ability to push through a credit for next payment, etc.
+ 
+for reviews — possible to get a link to their account page so that we can then contact them.
+ 
+also where can we find reviews for recipes?  this be a master list too that we can sort based on different criteria.
+ 
+For FAQs — the enable/disable doesnt work.  also, would it be possible to highlight the answer instead of he question when the question is clicked.  seems more visible if done this way.  there should be a preview or click to live page from here as well.
+ 
+for Testimonials — is the default for the inputed testimonial to be enabled or disabled.  it would be ideal for us to review so it would be disabled until we approve.  possible to get a notification of a new testimonial?  how are customer putting in their testimonials?
+ 
+Newsletter Subscribers — how does this sync with mail chimp which is the service we use?  is this automatically integrated or would we need to manually input each new subscriber?
+ 
+ON the front end — we tried to create an account under William Chen and it was populated as Alice Williams????   I also tried to sign up and got an error message.  “please enter all details correctly”??? i double checked that password and confirm pass were the same too. also, possible to see passwords are they are being typed? instead of encrypted with dots?
+ 
+From member account page — the buttons should highlight when hovered over them.
+ 
+Download from menu page (front end didnt work).  possible to add pictures to steps?
+ 
+ 
+EDITS From CHEF WIll:
+ 
+all font should be lowercase with the exception of "BOX".
+ 
+HOME PAGE:
+What is fresh BOX. fresh BOX is two words.
+Under How It Works:
+"delivered straight" is two words.
+ Also the copy doesn't make sense and needs a new one.  
+current: Every week you get new healthy recipes and all the fresh pre-portioned ingredients deliveredsstraight to your door. Say goodbye to long gorcery lines, parking lot power struggles,....enjoy fresh BOX two ways! order one for yourself and get fresh ingredients and creative recipes delivered straight to your door.
+suggestion: every week you get new healthy recipes and all the fresh pre-portioned ingredients delivered straight to your door. say goodbye to long grocery lines, parking lot power struggles and never knowing what to cook. order fresh BOX and get fresh ingredients and creative recipes delivered straight to your door.
+ 
+MENU & ORDER buttons are currently to the same page
+ 
+Change "SWAGS" to "SWAG"
+Images on SWAG page takes a while to load. Why?
+ 
+Change "SIGNIN" to "SIGN IN"
+"LOG IN" V "LOGIN" also the log in button needs to be aligned.
+Change "forget password" font color
+
+Change "SIGNUP" to "SIGN UP"
+REGISTRATION BUTTON needs to be aligned
+ 
+GIFT link doesn't work
+ 
+CONTACT PAGE:
+Copy font is too big.
+"Say Hi!" should be "say hi!"
+ 
+FAQ page hard to read.
+Suggest we alternate the colors for answer/question.
+ 
+BLOG and COOKBOOK links not active.
+ 
+ 
+BACK END/ADMIN
+ 
+Pages take a long time to load
+Unsure how the recipe page will look
+Tried to add SWAG item, stuck in loading.

@@ -51,19 +51,14 @@ export class RestService {
   }
 
   getItems(page?, filterGroups?, pageSize?, url?, criteria?, sortOrders?) {
-    let searchCriteria = {
-      pageSize : pageSize?pageSize:10,
-      currentPage : page?page:1,      
-    };
-
-    if(!criteria) {
+    if (!criteria) {
       criteria = this.criteria;
     }
- 
+
     const searchParams = [];
     let pIndex = 0;
-    searchParams[pIndex++] = criteria + '[pageSize]=' + searchCriteria.pageSize;
-    searchParams[pIndex++] = criteria + '[currentPage]=' + searchCriteria.currentPage;
+    searchParams[pIndex++] = criteria + '[pageSize]=' + (pageSize ? pageSize : 10);
+    searchParams[pIndex++] = criteria + '[currentPage]=' + (page ? page : 1);
 
     sortOrders = sortOrders ? sortOrders : [];
     sortOrders.map((data, index) => {

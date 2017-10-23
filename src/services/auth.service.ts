@@ -14,7 +14,7 @@ export class AuthService {
   module;
 
   constructor(private http: Http, 
-              private router: Router) {    
+              private router: Router) {
   }
 
   setAuthModule(module) {
@@ -41,16 +41,16 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
 
     return this.http.post(
-        GlobalVariable.BASE_API_URL + 'integration/' + this.module + '/token', 
+        GlobalVariable.BASE_API_URL + 'integration/' + this.module + '/token',
         JSON.stringify({ username: username, password: password }),
         options
       ).map((response: Response) => {
         // login successful if there's a jwt token in the response
-        let token = response.json();
+        const token = response.json();
         if (token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem(this.module + '_token', token);

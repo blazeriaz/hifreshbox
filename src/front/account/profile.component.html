@@ -82,8 +82,8 @@
                   </div>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-outline-green">Update</button>
-                    <button type="button" class="btn btn-outline-green" (click)="openChangePasswordModal()">Change Password</button>
+                    <button type="submit" [disabled]="sentData" class="btn btn-outline-green">Update</button>
+                    <button type="button" [disabled]="sentData" class="btn btn-outline-green" (click)="openChangePasswordModal()">Change Password</button>
                 </div>
               </div>
             </div>
@@ -122,7 +122,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-green">
+      <button (click)="modalRef.hide()" [disabled]="sentData" type="button" class="btn btn-secondary">
+          Close
+      </button>
+      <button type="submit" [disabled]="sentData" class="btn btn-outline-green">
           Submit
       </button>
     </div>

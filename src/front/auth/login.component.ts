@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     if (this.auth.isLogin()) {
       this.router.navigate(['']);
     } else {
@@ -66,10 +66,10 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([this.returnUrl]);
             },
             error => {
-              if(error.status == 401) {
-                this.alert.error("Please check the login details");
+              if (error.status === 401) {
+                this.alert.error('Please check the login details');
               } else {
-                this.alert.error("Server Error");
+                this.alert.error('Server Error');
               }
               this.rest.hideLoader();
             });
@@ -77,5 +77,4 @@ export class LoginComponent implements OnInit {
       this.alert.error('Please enter username and password');
     }
   }
-
 }

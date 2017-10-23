@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, ViewChild, TemplateRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injectable, ViewChild, TemplateRef, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { UsersService, AlertService, RestService } from 'services';
 import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
@@ -7,13 +7,14 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     templateUrl: 'profile.component.html'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
     @ViewChild('changePasswordModal') changePasswordModal: TemplateRef<any>;
 
     user: any;
     userForm: any;
+    sentData: boolean;
     submitted: boolean;
-    
+
     changePasswordForm: any;
     cpsubmitted: boolean;
 
@@ -63,7 +64,7 @@ export class ProfileComponent implements OnInit {
     initEditForm() {
         this.userForm = this._fb.group({
             'id': this.user.id,
-            'store_id': 1, 
+            'store_id': 1,
             'website_id': 1,
             'firstname': [this.user.firstname, Validators.required],
             'lastname': [this.user.lastname, [Validators.required]],
@@ -81,7 +82,7 @@ export class ProfileComponent implements OnInit {
     }
 
     setGenderClass(type) {
-        if(this.getGender() == type) {
+        if (this.getGender() === type) {
             return 'btn-primary';
         } else {
             return 'btn-secondary';
@@ -89,26 +90,34 @@ export class ProfileComponent implements OnInit {
     }
 
     setInputErrorClass(input) {
-        let field = this.userForm.get(input) ? this.userForm.get(input) : this.changePasswordForm.get(input);
-        let invalid = field.invalid && this.submitted;
-        if(invalid) return 'form-control-danger';
+        const field = this.userForm.get(input) ? this.userForm.get(input) : this.changePasswordForm.get(input);
+        const invalid = field.invalid && this.submitted;
+        if (invalid) {
+            return 'form-control-danger';
+        }
     }
 
     setContainerErrorClass(input) {
-        let field = this.userForm.get(input) ? this.userForm.get(input) : this.changePasswordForm.get(input);
-        let invalid = field.invalid && this.submitted;
-        if(invalid) return 'has-danger';
+        const field = this.userForm.get(input) ? this.userForm.get(input) : this.changePasswordForm.get(input);
+        const invalid = field.invalid && this.submitted;
+        if (invalid) {
+            return 'has-danger';
+        }
     }
 
     saveUser() {
         this.alert.clear();
+        this.sentData = true;
         this.submitted = true;
         if (this.userForm.valid) {
-            this.rest.saveItem('me', {customer: this.userForm.value}, "customers/me").subscribe(data => {
-                this.alert.success("Account details are updated!");
+            this.rest.saveItem('me', {customer: this.userForm.value}, 'customers/me').subscribe(data => {
+                this.sentData = false;
+                this.submitted = false;
+                this.alert.success('Account details are updated!');
             });
         } else {
-            this.alert.error("Please check the form to enter all required details");
+            this.sentData = false;
+            this.alert.error('Please check the form to enter all required details');
         }
     }
 
@@ -129,6 +138,7 @@ export class ProfileComponent implements OnInit {
 
     openChangePasswordModal() {
         this.initChangePasswordForm();
+        this.sentData = false;
         this.submitted = false;
         this.modalRef = this.modalService.show(this.changePasswordModal, {
             animated: true,
@@ -140,17 +150,20 @@ export class ProfileComponent implements OnInit {
 
     doChangePassword() {
         this.alert.clear();
+        this.sentData = true;
         this.submitted = true;
-        if (this.changePasswordForm.valid) {            
-            this.rest.saveItem('me', this.changePasswordForm.value, "customers/me/password").subscribe(data => {
+        if (this.changePasswordForm.valid) {
+            this.rest.saveItem('me', this.changePasswordForm.value, 'customers/me/password').subscribe(data => {
                 this.modalRef.hide();
+                this.sentData = false;
                 this.submitted = false;
-                this.alert.success("Password changed successfully!");
+                this.alert.success('Password changed successfully!');
             }, err => {
-                this.alert.error(err.message?err.message:"Server error!");
+                this.sentData = false;
+                this.alert.error(err.message ? err.message : 'Server error!');
             });
         } else {
-            this.alert.error("Please check and correct all details");
+            this.sentData = false;
         }
     }
 

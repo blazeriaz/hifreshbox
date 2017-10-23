@@ -7,8 +7,8 @@
 <div class="container-fluid">
     <div class="container">
 		<div class="row">
-			<div class="col-12">
-				<h4>Hello Alice Williams! (not Alice WIlliams? Sign Out)</h4>
+			<div class="col-12" *ngIf="user">
+				<h4>Hello {{user.firstname}} {{user.lastname}}! (not you? <a [routerLink]="['/','auth','logout']">Sign Out</a>)</h4>
 			</div>
 		</div>
 	</div>
@@ -24,9 +24,9 @@
 				<h4>Change your order and meal preferences by:</h4>
 				<p>May 21st, 2017</p>
 			</div>
-			<div class="col-sm-4 px-3 py-4">
+			<div class="col-sm-4 px-3 py-4" *ngIf="user">
 				<h4>Customer since:</h4>
-				<p>May 21st, 2017</p>
+				<p>{{user.created_at | date}}</p>
 				<button type="button" class="btn btn-outline-green">Unsubscribe</button>
 			</div>
         </div>

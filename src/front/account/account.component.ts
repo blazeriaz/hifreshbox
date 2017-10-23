@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { RestService, AlertService } from 'services';
 
-import * as GlobalVariable from "global";
+import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   templateUrl: 'account.component.html'
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
+    user;
 
     constructor(
         private alert: AlertService,
@@ -16,9 +17,12 @@ export class AccountComponent implements OnInit {
         private route: ActivatedRoute,
         private renderer: Renderer2
     ) { }
-  
+
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
+        this.rest.getItem('me', 'customers/me').subscribe(user => {
+            this.user = user;
+        })
     }
 
     goToAccountMenu(menu) {

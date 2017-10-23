@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row p-2 mt-10">
             <div class="col-12 text-center">
-                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Swags</h1>
+                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Swag</h1>
             </div>
         </div>
     </div>
@@ -10,13 +10,13 @@
 <div class="container-fluid p-0">
     <div class="container">
         <div class="row py-3" *ngIf="!loadedSwagsList">
-            <div class="col-md-4 col-sm-4 col-12" *ngFor="let recipe of [0,1,2]">
-                <div class="card p-0">
-                    <div>
-                        <img class="img-fluid" [src]="backgrounds.recipe" />
+            <div class="col-12">
+                <div class="card px-3 py-4 text-center">         
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">Loading swag...</h5>
                     </div>
-                    <div class="card-title px-2 mt-3 mb-0 text-center">
-                        <h5 class="text-uppercase">Loading...</h5>
+                    <div class="card-body">
+                        <p>Please wait for sometime...</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="col-12">
                 <div class="card px-3 py-4 text-center">         
                     <div class="card-title my-3">
-                        <h5 class="text-uppercase">No Swags.</h5>
+                        <h5 class="text-uppercase">No Swag.</h5>
                     </div>
                     <div class="card-body">
                         <p>Please check after sometime...</p>
@@ -35,7 +35,11 @@
         </div>
         <div class="row py-3" *ngIf="loadedSwagsList">
             <div class="col-md-4 col-sm-4 col-12" *ngFor="let swag of swags">
-                <div class="card" (click)="goToSwag(swag.sku)">
+                <div class="card" 
+                        (click)="goToSwag(swag.sku)" 
+                        [ngClass]="{'card-success text-white' : swag.hover==1}"
+                        (mouseover)="swag.hover=1" 
+                        (mouseout)="swag.hover=0">
                     <div>
                         <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!swag.resized_image" />
                         <img class="img-fluid" [src]="swag.resized_image" *ngIf="swag.resized_image" />

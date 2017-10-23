@@ -8,39 +8,38 @@ import { Router } from '@angular/router';
   templateUrl: 'swags.component.html'
 })
 export class SwagsComponent implements OnInit {
-  backgrounds;
-  
-  loadedSwagsList; 
-  swags;
+    backgrounds;
+    loadedSwagsList;
+    swags;
 
-  constructor(
+    constructor(
     private alert: AlertService,
     private rest: RestService,
     private router: Router
-  ) { }
-  
+    ) { }
+
     ngOnInit(): void {
         this.backgrounds = {
             header: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-week-menu.png)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'top-banner-week-menu.png)',
                 'background-position' : 'bottom',
                 'background-size': 'cover', 
                 'background-attachment' : 'fixed',
                 'background-color' : '#2F2F30'
             },
-            recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
-            cap : GlobalVariable.htmlImages+'chef-cap-green.png',
-            culinery : GlobalVariable.htmlImages+'culinery.png',
-            whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
+            recipe : GlobalVariable.htmlImages + 'each-recipe-img.png',
+            cap : GlobalVariable.htmlImages + 'chef-cap-green.png',
+            culinery : GlobalVariable.htmlImages + 'culinery.png',
+            whatfreshbox : GlobalVariable.htmlImages + 'what-is-freshbox.png',
             gray : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'hiw-bg.png)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'hiw-bg.png)',
                 'background-position' : 'bottom',
                 'background-color' : '#DFDFDF',
-                'background-size': 'cover', 
+                'background-size': 'cover',
             },
             testimonials : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'testimonials.png)',
-                'background-size': 'cover', 
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'testimonials.png)',
+                'background-size': 'cover',
                 'background-position' : 'bottom'
             },
             orders : {
@@ -58,30 +57,34 @@ export class SwagsComponent implements OnInit {
 
         this.loadSwagsList();
     }
-
-    ngOnDestroy() {
-        
-    }
+ 
     loadSwagsList(pageNo?) {
-        let filters = [];
-        let iniFilter = {
+        const filters = [];
+        filters.push({
             filters : [{
                 field : 'category_id',
                 value : 42,
                 condition_type : 'eq'
             }]
-        };
-        filters.push(iniFilter);
-        
+        });
+
+        filters.push({
+            filters : [{
+                field : 'status',
+                value : 1,
+                condition_type : 'eq'
+            }]
+        });
+
         this.loadedSwagsList = false;
-        pageNo = pageNo?pageNo:1;
-        this.rest.getItems(pageNo, filters, 100, "swags/products").subscribe(swags => {
+        pageNo = pageNo ? pageNo : 1;
+        this.rest.getItems(pageNo, filters, 100, 'swags/products').subscribe(swags => {
             this.loadedSwagsList = true;
             this.swags = swags.items;
-        });        
+        });
     }
 
     goToSwag(sku) {
-        this.router.navigate(['swags', sku]);        
+        this.router.navigate(['swags', sku]);
     }
 }
