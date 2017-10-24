@@ -84,7 +84,7 @@ export class SwagsComponent implements OnInit {
         });
     }
 
-    goToSwag(sku) {
-        this.router.navigate(['swags', sku]);
+    goToSwag(swag) {
+        this.router.navigate(['swags', swag.sku]);
     }
 }

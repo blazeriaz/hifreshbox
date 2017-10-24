@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AccountComponent } from './account.component';
 import { AddressesComponent } from './addresses.component';
 import { ProfileComponent } from './profile.component';
+import { RecipesComponent } from './recipes.component';
 
 const routes: Routes = [
   {
@@ -18,17 +19,23 @@ const routes: Routes = [
         data: {
           title: 'Account'
         }
-      },{
+      }, {
         path: 'addresses',
         component: AddressesComponent,
         data: {
           title: 'Addresses'
         }
-      },{
+      }, {
         path: 'profile',
         component: ProfileComponent,
         data: {
           title: 'Edit Profile'
+        }
+      }, {
+        path: 'my-recipes',
+        component: RecipesComponent,
+        data: {
+          title: 'My Recipes'
         }
       }
     ]

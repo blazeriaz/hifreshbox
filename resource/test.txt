@@ -42,17 +42,14 @@ Done
 14) USer Edit Address if not record is present need to show No record Available
 
 
-hi! Andy!
+
  
-MY EDITS below:
+1. when i’m trying to add menus for the week — there is no search BOX so you need scroll to find desired recipe for the week.  
+can we add a search when looking through data base of recipes.
  
-the website in general was stalling and was really slow or would just freeze.
+2. i spoke to Chef Will and we should definitely have 3 separated areas:  addition ingredients needed, equipment needed and KEEP allergies.
  
-when i’m trying to add menus for the week — there is no search BOX so you need scroll to find desired recipe for the week.  can we add a search when looking through data base of recipes.
- 
-i spoke to Chef Will and we should definitely have 3 separated areas:  addition ingredients needed, equipment needed and KEEP allergies.
- 
-from the back end — can you preview what it will look like in the front end?  seems like you can only edit.
+3. from the back end — can you preview what it will look like in the front end?  seems like you can only edit.
  
 also not sure of the purpose of this tool bar?  just to change pricing?  that won’t happen often so not sure why it would be a main feature to edit pricing. better to just have a search bar for the recipe that we can then edit.
  

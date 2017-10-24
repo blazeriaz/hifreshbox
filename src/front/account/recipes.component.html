@@ -1,29 +1,10 @@
-<div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
+<div class="container-fluid py-5">
     <div class="container">
-        <div class="row p-2 mt-10">
-            <div class="col-12 text-center">
-                <h1 class="font-wild text-white text-uppercase display-1 mb-5">Menu</h1>
-            </div>
-            <div class="col-md-1 col-2 text-left p-0">
-                <button (click)="gotToPrevWeek()"  [disabled]="disablePreviousWeek" 
-                        class="btn btn-outline-white rounded-circle font-5xl">
-                    <i class="fa fa-angle-left"></i></button>
-            </div>
-            <div class="col-md-10 col-8 p-0 text-center">
-                <h2 class="font-special text-uppercase">                    
-                    <span class="color-spl-green">For The Week Of</span> 
-                    <u class="text-white" *ngIf="selectedWeek">{{selectedWeek.text}}</u>                    
-                </h2>
-            </div>
-            <div class="col-md-1 col-2 text-right p-0">
-                <button (click)="gotToNextWeek()"  [disabled]="disableNextWeek"
-                        class="btn btn-outline-white rounded-circle font-5xl">
-                    <i class="fa fa-angle-right"></i></button>
-            </div>
+        <div class="row text-center p-2">
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.gray">
+<div class="container-fluid p-0">
     <div class="container">
         <div class="row py-3" *ngIf="loadedselectedRecipes && recipes.length == 0">
             <div class="col-12">
@@ -121,41 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="favourite_star font-2xl" *ngIf="islogin">
-                    <i class="fa fa-star" (click)="addToFavourite(recipe)" tooltip="Add to favourite"></i>
-                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.orders">
-    <div class="row py-10 mb-3">        
-        <div class="col-sm-12 col-md-5 py-5 text-white text-center">
-            <h1 class="font-wild display-1">Orders</h1>
-        </div>
-        <div class="col-sm-12 col-md-6 text-white text-center px-5 py-3">
-            <div class="px-5 py-4">
-                <img class="mb-3" [src]="backgrounds.cap" />
-                <h5>All orders must be placed by {{days.friday | date : 'EEEE, MMMM d'}} for {{days.tuesday | date : 'EEEE, MMMM d'}}</h5>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials">
-    <div class="row">
-        <div class="col-sm-12 text-center text-white py-5">
-            <h1 class="font-special color-spl-green text-uppercase">testimonials</h1>       
-            <blockquote class="my-3">
-                <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Vestibulum luctus ante libero, sed finibus quam volutpa"</p>
-            </blockquote>
-            <div class="my-3">
-                <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                <i class="fa fa-star" aria-hidden="true"></i>
-            </div>    
-            <h6>Shaun Paul, Client</h6>
-        </div> 
-    </div>
-</div>
-<newsletter></newsletter>

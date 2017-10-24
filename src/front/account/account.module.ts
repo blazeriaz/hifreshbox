@@ -9,11 +9,12 @@ import { AddressesComponent } from './addresses.component';
 import { ProfileComponent } from './profile.component';
 import { AccountRoutingModule } from './account-routing.module';
 import { UsersService, PagerService } from "services";
+import { RecipesComponent } from './recipes.component';
 
 @NgModule({
   imports: [ SharedModule, SelectModule, AccountRoutingModule, CommonModule, FormsModule, ReactiveFormsModule ],
   declarations: [
-    AccountComponent, AddressesComponent, ProfileComponent
+    AccountComponent, AddressesComponent, ProfileComponent, RecipesComponent
   ],
   providers: [UsersService, PagerService]
 })

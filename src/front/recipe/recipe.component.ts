@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, 
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService, RestService } from 'services';
+import { AlertService, RestService, AuthService } from 'services';
 
 @Component({
     templateUrl: 'recipe.component.html'
@@ -11,16 +11,19 @@ export class RecipeComponent implements OnInit {
     backgrounds;
     loadedRecipe;
     recipe;
+    islogin;
 
     constructor(
         private alert: AlertService,
         private rest: RestService,
         private route: ActivatedRoute,
         private router: Router,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private auth: AuthService
     ) { }
 
     ngOnInit(): void {
+        this.islogin = this.auth.isLogin();
         this.renderer.addClass(document.body, 'white-header');
         this.backgrounds = {
             header: {

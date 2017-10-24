@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RestService, AlertService, MealMenuService } from 'services';
+import { RestService, AlertService, MealMenuService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
@@ -7,30 +7,34 @@ import { Router } from '@angular/router';
 @Component({
   templateUrl: 'menu.component.html'
 })
-export class MenuComponent implements OnInit {
-  backgrounds;
+export class MenuComponent implements OnInit, OnDestroy {
+    backgrounds;
+    globalVariable;
+    startYear;
+    endYear;
+    currentYear;
+    selectedWeek;
+    yearMonthSubs;
+    disablePreviousWeek;
+    disableNextWeek;
+    loadRecipesSub;
+    loadedselectedRecipes;
+    recipes;
+    selectedRecipe;
+    days;
+    islogin;
 
-  startYear;
-  endYear;
-  currentYear;
-  selectedWeek;
-  yearMonthSubs;
-  disablePreviousWeek;
-  disableNextWeek;
-  loadRecipesSub;
-  loadedselectedRecipes;
-  recipes;
-  selectedRecipe;
-  days;
-
-  constructor(
+    constructor(
     private alert: AlertService,
-    private rest: RestService, 
+    private rest: RestService,
     private route: Router,
-    private mealMenuService: MealMenuService
-  ) { }
-  
+    private mealMenuService: MealMenuService,
+    private auth: AuthService
+    ) { }
+
     ngOnInit(): void {
+        this.islogin = this.auth.isLogin();
+        this.globalVariable = GlobalVariable;
         this.backgrounds = {
             header: {
                 'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-week-menu.png)',
@@ -89,24 +93,44 @@ export class MenuComponent implements OnInit {
             }
 
             this.disableNextWeek = false;
-            let nextTuesday = this.mealMenuService.getDateOfISOWeekString(data.week + 1, data.year);
-            if(data.year == this.endYear && !nextTuesday) {
+            const nextTuesday = this.mealMenuService.getDateOfISOWeekString(data.week + 1, data.year);
+            if (data.year === this.endYear && !nextTuesday) {
                 this.disableNextWeek = true;
             }
-            //Get recipes og Menu
-            let sendData = {week_data : {
+            // Get recipes of Menu
+            const sendData = {week_data : {
                 sku : 'freshbox-subscription',
                 week_no : data.week,
                 year : data.year
             }}
             this.loadedselectedRecipes = false;
-            if(this.loadRecipesSub) {
+            if (this.loadRecipesSub) {
                 this.loadRecipesSub.unsubscribe();
             }
             this.loadRecipesSub = this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-                this.recipes = recipes.map(data => data.recipe_detail);
+                this.recipes = recipes.map(res => res.recipe_detail);
                 this.loadedselectedRecipes = true;
             });
+        });
+        this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
+        });
+    }
+
+    addToFavourite(recipe) {
+        if (!this.auth.isLogin()) {
+            this.islogin = this.auth.isLogin();
+            return;
+        }
+        this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
+        });
+    }
+
+    removeFavourite(recipe) {
+        if (!this.auth.isLogin()) {
+            this.islogin = this.auth.isLogin();
+            return;
+        }
+        this.rest.deleteItem('', 'ipwishlist/delete/' + recipe.entity_id).subscribe(data => {
         });
     }
 
@@ -117,7 +141,7 @@ export class MenuComponent implements OnInit {
     selectRecipe(sku) {
         this.route.navigate(['menu', sku]);
     }
-    
+
     gotToPrevWeek() {
         let prevTuesday = this.mealMenuService.getDateOfISOWeek(this.selectedWeek.id - 1, this.selectedWeek.year);
         if(!prevTuesday) {
