@@ -8,10 +8,6 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 
 $token = curl_exec($ch);
 
-$slide = json_encode(['cookbook_recipe' => [
-						'cookbook_id' => 1,
-						'recipe_id' => 5	// sku of the recipe					
-						]]);
 						
 						
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/cookbook/recipe-list/1");
