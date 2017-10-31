@@ -10,7 +10,7 @@ $token = curl_exec($ch);
 
 $slide = json_encode(['cookbook_recipe' => [
 						'cookbook_id' => 1,
-						'recipe_id' => 5						
+						'recipe_id' => 	29645 // sku of the recipe					
 						]]);
 						
 						
