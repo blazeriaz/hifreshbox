@@ -37,7 +37,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.renderer.addClass(document.body, 'white-header');
         this.loadFormRequests = [];
         this.countLoadedFormReqs = 0;
         this.loadedFormData = false;
@@ -168,6 +167,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.renderer.removeClass(document.body, 'white-header');
     }
 }

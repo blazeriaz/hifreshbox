@@ -1,14 +1,14 @@
-import { NgModule }                 from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { MasterRoutingModule }   from './masters-routing.module';
-import { RestService, PagerService } from "services";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MasterRoutingModule } from './masters-routing.module';
+import { RestService, PagerService } from 'services';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ingredientListResolve, IngredientsListComponent } from "./ingredients";
-import { portionListResolve, PortionsListComponent } from "./portions";
+import { IngredientListResolve, IngredientsListComponent } from './ingredients';
+import { PortionListResolve, PortionsListComponent } from './portions';
 
-import  { SharedModule } from "shared.module";
+import { SharedModule } from 'shared.module';
 
 
 @NgModule({
@@ -16,6 +16,6 @@ import  { SharedModule } from "shared.module";
         MasterRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule 
     ],
     declarations: [ IngredientsListComponent, PortionsListComponent ],
-    providers: [RestService, PagerService, ingredientListResolve, portionListResolve]
+    providers: [RestService, PagerService, IngredientListResolve, PortionListResolve]
 })
 export class MastersModule { }

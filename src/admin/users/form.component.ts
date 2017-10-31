@@ -1,8 +1,8 @@
 import { Component, OnInit, Injectable, ViewChild, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, RestService } from "services";
-import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from "@angular/forms";
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { UsersService, AlertService, RestService } from 'services';
+import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     templateUrl: 'form.component.html'
@@ -10,76 +10,69 @@ import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 export class UserFormComponent implements OnInit {
     @ViewChild('savemodal') saveModal: TemplateRef<any>;
     @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
-    
-    countries:any;
-    available_regions : any;
-    regionsAll:any;
-    user:any;
+
+    countries: any;
+    available_regions: any;
+    regionsAll: any;
+    user: any;
     userForm: any;
-    indexEditAddress : number;
-    indexDefaultAddress : number;
-    submitted:boolean;
+    indexEditAddress: number;
+    indexDefaultAddress: number;
+    submitted: boolean;
 
     updatingMessage;
     saveModalClose;
     abortModalClose;
     saveRequests;
     public modalRef: BsModalRef;
-
-      
-    modalEditRef: BsModalRef;   
+    modalEditRef: BsModalRef;
     serverMediaImages;
     loadedFormData;
     countLoadedFormReqs;
     loadFormRequests;
 
-    constructor(private usersService: UsersService, 
-                private alert: AlertService,
-                private rest: RestService,
-                private _fb: FormBuilder,
-                private route: ActivatedRoute,
-                private router: Router,
-                private modalService: BsModalService ) {        
-               
-    }
-    
+    constructor(
+        private usersService: UsersService,
+        private alert: AlertService,
+        private rest: RestService,
+        private _fb: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router,
+        private modalService: BsModalService
+    ) {}
+
     ngOnInit(): void {
+        this.user = {};
         this.loadFormRequests = [];
         this.countLoadedFormReqs = 0;
         this.loadedFormData = false;
         this.openEditModal();
         this.loadCountries();
         this.loadFormData();
-
-        let userId = this.route.snapshot.params['id'];
-        this.user = {};
-        
-        
     }
-    
+
     openEditModal() {
-      let config = {
+      this.modalEditRef = this.modalService.show(this.editLoadModal, {
         animated: true,
         keyboard: false,
         backdrop: true,
         ignoreBackdropClick: true
-      };
-      this.modalEditRef = this.modalService.show(this.editLoadModal, config);
+      });
     }
-    
+
     abortEdit() {
-      if(this.loadFormRequests && this.loadFormRequests.length > 0) {
-        this.loadFormRequests.map(sub=>sub?sub.unsubscribe():'');
+      if (this.loadFormRequests && this.loadFormRequests.length > 0) {
+        this.loadFormRequests.map(sub => sub ? sub.unsubscribe() : '');
       }
       this.modalEditRef.hide();
       this.goToList();
     }
 
-    checkAllFormDataLoaded() {      
-      if(--this.countLoadedFormReqs == 0) {
+    checkAllFormDataLoaded() {
+      if (--this.countLoadedFormReqs === 0) {
         this.modalEditRef.hide();
-        this.initEditForm(); 
-        this.loadedFormData = true; 
+        this.initEditForm();
+        this.loadedFormData = true;
       }
     }
 
@@ -88,10 +81,10 @@ export class UserFormComponent implements OnInit {
         this.regionsAll = [];
         this.available_regions = [];
         this.loadFormRequests.push(
-            this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(data => {
-                data.filter(data => {
+            this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(res => {
+                res.filter(data => {
                     this.available_regions[data.id] = null
-                    if(data.available_regions) {
+                    if (data.available_regions) {
                         this.available_regions[data.id] = [];
                         data.available_regions.filter(region => {
                             this.regionsAll.push(region);
@@ -104,15 +97,18 @@ export class UserFormComponent implements OnInit {
                 });
                 this.checkAllFormDataLoaded();
             })
-        ); 
+        );
         this.countLoadedFormReqs++;
     }
-    
+
     loadFormData() {
-        let userId = this.route.snapshot.params['id'];
-        this.user = {};
-        if(!userId) return;
-        this.user.id = userId;
+        const userId = this.route.snapshot.params['id'];
+        if (!userId) {
+            return;
+        }
+        this.user = {
+            id: userId
+        };
         this.loadFormRequests.push(
             this.rest.getItem(userId, 'customers/' + userId).subscribe(user => {
                 this.user = user;
@@ -123,42 +119,45 @@ export class UserFormComponent implements OnInit {
     }
 
     initEditForm() {
+        const user = this.user ? this.user : {};
         this.userForm = this._fb.group({
-            'id': this.user.id,
-            'store_id': 1, 
+            'id': user.id,
+            'store_id': 1,
             'website_id': 1,
-            'firstname': [this.user.firstname, Validators.required],
-            'lastname': [this.user.lastname, [Validators.required]],
-            'email': [this.user.email, [Validators.required, Validators.email]],
-            'gender': this.user.gender,
+            'firstname': [user.firstname, Validators.required],
+            'lastname': [user.lastname, [Validators.required]],
+            'email': [user.email, [Validators.required, Validators.email]],
+            'gender': user.gender,
             'addresses' : this._fb.array([])
         });
 
         let doAddNewAddress = true;
-        if(this.user.id) {            
+        if (user.id) {
             this.user.addresses.map((address, i) => {
-                if(address.default_shipping) {
+                if (address.default_shipping) {
                     this.indexDefaultAddress = i;
                 }
                 this.userForm.controls['addresses'].push(this.initAddressForm(address));
             });
-            if(this.user.addresses.length > 0) {
+            if (this.user.addresses.length > 0) {
                 doAddNewAddress = false;
                 this.doEditAddress(0);
-            }            
+            }
         }
-        if(doAddNewAddress) {
+        if (doAddNewAddress) {
             this.addNewAddress();
             this.setDefaultAddress(0, true);
         }
 
         this.userForm.valueChanges.subscribe(data => {
-            if(!this.indexEditAddress) return;
+            if (!this.indexEditAddress) {
+                return;
+            }
 
-            let region_id = data.addresses[this.indexEditAddress].region_id;
-            let region_name = data.addresses[this.indexEditAddress].region.region;
+            const region_id = data.addresses[this.indexEditAddress].region_id;
+            const region_name = data.addresses[this.indexEditAddress].region.region;
 
-            if(region_id == 0) {
+            if (region_id === 0) {
                 this.patchAddressValue(this.indexEditAddress, {
                     region_id : 0,
                     region : {
@@ -194,31 +193,32 @@ export class UserFormComponent implements OnInit {
             'default_shipping' : address.default_shipping,
             'default_billing' : address.default_billing
         });
-    }    
-    
+    }
+
     getActiveCountry() {
-        let country_id = this.userForm.value.addresses[this.indexEditAddress].country_id;
-        return this.countries.filter(x => x.id == country_id);
+        const country_id = this.userForm.value.addresses[this.indexEditAddress].country_id;
+        return this.countries.filter(x => x.id === country_id);
     }
 
     getActiveCountryRegions() {
-        let available_regions = this.available_regions[this.userForm.value.addresses[this.indexEditAddress].country_id];
-        
-        return available_regions;
+        const country_id = this.userForm.value.addresses[this.indexEditAddress].country_id;
+        return this.available_regions[country_id];
     }
 
     getActiveRegion() {
-        let regions = this.getActiveCountryRegions();
-        if(!regions) return;        
-        let region_id = this.userForm.value.addresses[this.indexEditAddress].region_id;
-        return regions.filter(x => x.id == region_id);
+        const regions = this.getActiveCountryRegions();
+        if (!regions) {
+            return;
+        }
+        const region_id = this.userForm.value.addresses[this.indexEditAddress].region_id;
+        return regions.filter(x => x.id === region_id);
     }
 
     refreshCountryValue(country) {
         this.patchAddressValue(this.indexEditAddress, {country_id : country.id});
     }
     refreshRegionValue(selectedRegion) {
-        let region = this.regionsAll.find(x => x.id == selectedRegion.id);
+        const region = this.regionsAll.find(x => x.id === selectedRegion.id);
         this.patchAddressValue(this.indexEditAddress, {
             region_id : region.id,
             region : {
@@ -230,10 +230,10 @@ export class UserFormComponent implements OnInit {
     }
 
     setAddressClass(i: number) {
-        return {            
-            'bg-primary text-white' : this.indexDefaultAddress == i,
-            'bg-warning text-white' : this.indexEditAddress == i,
-            'bg-danger text-white' : this.submitted && this.userForm.controls.addresses.controls[i].invalid,          
+        return {
+            'bg-primary text-white' : this.indexDefaultAddress === i,
+            'bg-warning text-white' : this.indexEditAddress === i,
+            'bg-danger text-white' : this.submitted && this.userForm.controls.addresses.controls[i].invalid,
         };
     }
 
@@ -246,12 +246,13 @@ export class UserFormComponent implements OnInit {
     }
 
     patchAddressValue(i: number, values: object) {
-        if(this.userForm.controls['addresses'].controls[i])
+        if (this.userForm.controls['addresses'].controls[i]) {
             this.userForm.controls['addresses'].controls[i].patchValue(values);
+        }
     }
 
     setGenderClass(type) {
-        if(this.getGender() == type) {
+        if (this.getGender() === type) {
             return 'bg-primary';
         } else {
             return 'bg-secondary';
@@ -259,28 +260,28 @@ export class UserFormComponent implements OnInit {
     }
 
     setInputErrorClass(input) {
-        let invalid = this.userForm.get(input).invalid && this.submitted;
-        if(invalid) return 'form-control-danger';
+        const invalid = this.userForm.get(input).invalid && this.submitted;
+        return (invalid) ? 'form-control-danger' : '';
     }
 
     setContainerErrorClass(input) {
-        let invalid = this.userForm.get(input).invalid && this.submitted;
-        if(invalid) return 'has-danger';
+        const invalid = this.userForm.get(input).invalid && this.submitted;
+        return (invalid) ? 'has-danger' : '';
     }
 
     setAddressInputClass(input) {
-        let invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
-        if(invalid && this.submitted) return 'form-control-danger';
+        const invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
+        return (invalid && this.submitted) ? 'form-control-danger' : '';
     }
 
     setAddressDivClass(input) {
-        let invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
-        if(invalid && this.submitted) return 'has-danger';
+        const invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
+        return (invalid && this.submitted) ? 'has-danger' : '';
     }
 
     setDefaultAddress(i: number, first?) {
-        if(first || confirm('Are you sure want to change default Address?')) {
-            if(!this.indexDefaultAddress) {
+        if (first || confirm('Are you sure want to change default Address?')) {
+            if (!this.indexDefaultAddress) {
                 this.patchAddressValue(this.indexDefaultAddress, {
                     default_shipping : null,
                     default_billing : null
@@ -299,33 +300,34 @@ export class UserFormComponent implements OnInit {
     }
 
     deleteAddress(i: number) {
-        if(i == this.indexDefaultAddress) {
-            alert("You can't delete the default address");
+        if (i === this.indexDefaultAddress) {
+            alert('You can\'t delete the default address');
             return;
         }
-        if(confirm('Are you sure want to delete the address?')) {
+        if (confirm('Are you sure want to delete the address?')) {
             this.userForm.controls['addresses'].removeAt(i);
             this.doEditAddress(0);
         }
     }
 
     addNewAddress() {
+        const user = this.user ? this.user : {};
         const newAddress = {
             id: 0,
-            customer_id: this.user.id,
-            firstname: this.user.firstname, 
-            lastname: this.user.lastname, 
-            street: ['', ''], 
-            city: "", 
+            customer_id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            street: ['', ''],
+            city: '',
             region: {
-                region_code: null, 
-                region: null, 
+                region_code: null,
+                region: null,
                 region_id: 0
             },
             region_id: 0,
-            country_id: "US",  
-            postcode: "",
-            telephone: ""
+            country_id: 'US',
+            postcode: '',
+            telephone: ''
         };
 
         this.userForm.controls['addresses'].push(this.initAddressForm(newAddress));
@@ -333,7 +335,7 @@ export class UserFormComponent implements OnInit {
     }
 
     noticeUserSaved = function() {
-        this.updatingMessage = "The customer details have been saved successfully!"; 
+        this.updatingMessage = 'The customer details have been saved successfully!'; 
         this.saveModalClose = true;
         this.abortModalClose = false;
     }
@@ -341,37 +343,43 @@ export class UserFormComponent implements OnInit {
     saveUser() {
         this.alert.clear();
         this.submitted = true;
-        if (this.userForm.valid) {                   
+        if (this.userForm.valid) {
             let userId = this.route.snapshot.params['id'];
-            userId = (userId)?userId:'';
+            userId = (userId) ? userId : '';
 
-            this.updatingMessage = "Uploading the Customer information...";
+            this.updatingMessage = 'Uploading the Customer information...';
             this.saveModalClose = false;
             this.abortModalClose = true;
             this.openSaveModal();
             this.saveRequests = [];
 
-            this.rest.saveItem(userId, {customer: this.userForm.value}, "customers/" + userId).subscribe(data => {
-                this.noticeUserSaved();                  
+            this.rest.saveItem(userId, {customer: this.userForm.value}, 'customers/' + userId).subscribe(data => {
+                this.noticeUserSaved();
+            }, err => {
+                const error = err.json();
+                this.saveModalClose = true;
+                this.abortModalClose = false;
+                this.modalRef.hide();
+                this.alert.error(error.message);
+                window.scroll(0, 0);
             });
         } else {
-            this.alert.error("Please check the form to enter all required details");            
+            this.alert.error('Please check the form to enter all required details');
         }
     }
-    
+
     openSaveModal() {
-      let config = {
+      this.modalRef = this.modalService.show(this.saveModal, {
         animated: true,
         keyboard: false,
         backdrop: true,
         ignoreBackdropClick: true
-      };
-      this.modalRef = this.modalService.show(this.saveModal, config);
+      });
     }
 
     abortSave() {
-      if(this.saveRequests && this.saveRequests.length > 0) {
-        this.saveRequests.map(sub=>sub?sub.unsubscribe():'');
+      if (this.saveRequests && this.saveRequests.length > 0) {
+        this.saveRequests.map(sub => sub ? sub.unsubscribe() : '');
       }
       this.modalRef.hide();
     }

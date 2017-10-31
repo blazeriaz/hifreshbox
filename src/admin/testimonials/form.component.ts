@@ -112,7 +112,7 @@ export class TestimonialFormComponent implements OnInit {
   }
 
   setStatusClass(type) {
-      if(this.getStatus() === type) {
+      if (this.getStatus() === type) {
           return 'btn-primary';
       } else {
           return 'btn-secondary';

@@ -24,7 +24,7 @@ export class NewslettersListComponent implements OnInit {
                 private router: Router,
                 private _fb : FormBuilder ) {
     }
-                
+
     ngOnInit(): void {
         this.initLoad = true;
         this.searchForm = this._fb.group({

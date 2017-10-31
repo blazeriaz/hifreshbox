@@ -52,12 +52,12 @@
         <div class="row py-3" *ngIf="loadedselectedRecipes">
             <div class="col-md-4 col-12" *ngFor="let recipe of recipes">
                 <div class="card px-3 py-4 text-center">
-                    <div (click)="selectRecipe(recipe.sku)">
+                    <div (click)="selectRecipe(recipe)">
                         <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!recipe.default_image" />
                         <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
                     </div>
                     <div class="card-title my-3">
-                        <h5 (click)="selectRecipe(recipe.sku)" class="text-uppercase">{{recipe.name}}</h5>
+                        <h5 (click)="selectRecipe(recipe)" class="text-uppercase">{{recipe.name}}</h5>
                     </div>
                     <div class="card-body" *ngIf="!recipe.showFacts">
                         <p>{{recipe.description}}</p>
@@ -110,7 +110,7 @@
                                 <span class="font-special color-spl-green">{{recipe.fat}}g</span>
                             </div>                    
                         </div>                   
-                        <button type="button" (click)="selectRecipe(recipe.sku)" class="btn btn-link">See full details >></button>
+                        <button type="button" (click)="selectRecipe(recipe)" class="btn btn-link">See full details >></button>
                         <div>
                             <a *ngIf="recipe.pdf_upload" 
                                 href="{{globalVariable.BASE_MEDIA + 'recipe-pdf/' + recipe.pdf_upload}}" 
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="favourite_star font-2xl" *ngIf="islogin">
+                <div class="favourite_star font-2xl" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="islogin">
                     <i class="fa fa-star" (click)="addToFavourite(recipe)" tooltip="Add to favourite"></i>
                 </div>
             </div>

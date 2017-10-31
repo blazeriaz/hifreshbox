@@ -19,7 +19,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     disableNextWeek;
     loadRecipesSub;
     loadedselectedRecipes;
-    recipes;
+    recipes = [];
+    favRecipes = [];
     selectedRecipe;
     days;
     islogin;
@@ -71,14 +72,14 @@ export class MenuComponent implements OnInit, OnDestroy {
             }
         };
 
-        let date = new Date();
-        this.currentYear = date.getFullYear();  
+        const date = new Date();
+        this.currentYear = date.getFullYear();
         this.startYear = 2017;
         this.endYear = this.currentYear + 10;
         this.days = {};
 
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
-            let tuesday = this.mealMenuService.getDateOfISOWeekStringFull(data.week, data.year);
+            const tuesday = this.mealMenuService.getDateOfISOWeekStringFull(data.week, data.year);
             this.selectedWeek = {id: data.week, text: tuesday, year: data.year};
 
             this.days = {
@@ -87,7 +88,7 @@ export class MenuComponent implements OnInit, OnDestroy {
             }
 
             this.disablePreviousWeek = false;
-            let prevTuesday = this.mealMenuService.getDateOfISOWeekString(data.week - 1, data.year);
+            const prevTuesday = this.mealMenuService.getDateOfISOWeekString(data.week - 1, data.year);
             if (data.year === this.startYear && !prevTuesday) {
                 this.disablePreviousWeek = true;
             }
@@ -113,7 +114,15 @@ export class MenuComponent implements OnInit, OnDestroy {
             });
         });
         this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
+            this.favRecipes = data.map(x => x.product_id);
         });
+    }
+
+    recipeFavouriteClass(recipe) {
+        if (this.favRecipes.indexOf(recipe.entity_id) !== -1) {
+            return 'text-success';
+        }
+        return '';
     }
 
     addToFavourite(recipe) {
@@ -122,6 +131,7 @@ export class MenuComponent implements OnInit, OnDestroy {
             return;
         }
         this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
+            this.favRecipes.push(recipe.entity_id);
         });
     }
 
@@ -138,25 +148,25 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.yearMonthSubs.unsubscribe();
     }
 
-    selectRecipe(sku) {
-        this.route.navigate(['menu', sku]);
+    selectRecipe(recipe) {
+        this.route.navigate(['menu', recipe.url_key]);
     }
 
     gotToPrevWeek() {
-        let prevTuesday = this.mealMenuService.getDateOfISOWeek(this.selectedWeek.id - 1, this.selectedWeek.year);
-        if(!prevTuesday) {
+        const prevTuesday = this.mealMenuService.getDateOfISOWeek(this.selectedWeek.id - 1, this.selectedWeek.year);
+        if (!prevTuesday) {
             return;
         }
-        let prevWeek = this.mealMenuService.getWeekNumber(prevTuesday);
+        const prevWeek = this.mealMenuService.getWeekNumber(prevTuesday);
         this.mealMenuService.setYearWeek(prevTuesday.getFullYear(), prevWeek);
     }
 
     gotToNextWeek() {
-        let nextTuesday = this.mealMenuService.getDateOfISOWeek(this.selectedWeek.id + 1, this.selectedWeek.year);
-        if(!nextTuesday) {
+        const nextTuesday = this.mealMenuService.getDateOfISOWeek(this.selectedWeek.id + 1, this.selectedWeek.year);
+        if (!nextTuesday) {
             return;
         }
-        let nextWeek = this.mealMenuService.getWeekNumber(nextTuesday);
+        const nextWeek = this.mealMenuService.getWeekNumber(nextTuesday);
         this.mealMenuService.setYearWeek(nextTuesday.getFullYear(), nextWeek);
     }
 }

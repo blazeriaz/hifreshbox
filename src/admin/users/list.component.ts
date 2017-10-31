@@ -1,8 +1,8 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, PagerService, RestService } from "services";
+import { UsersService, AlertService, PagerService, RestService } from 'services';
 
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
 
 export const pageSize = 10;
 
@@ -10,7 +10,7 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class UsersListComponent implements OnInit {
-    public users:any;
+    public users: any;
     public pager: any;
     searchForm;
     searchSubscripe;
@@ -18,14 +18,14 @@ export class UsersListComponent implements OnInit {
     initLoad;
     deleteItems;
 
-    constructor(private usersService: UsersService, 
+    constructor(private usersService: UsersService,
         private alert: AlertService,
         private rest: RestService,
         private pagerService: PagerService,
         public route: ActivatedRoute,
         public router: Router,
-        private _fb : FormBuilder ) { }
-    
+        private _fb: FormBuilder ) { }
+
     ngOnInit(): void {
         this.initLoad = true;
         this.deleteItems = [];
@@ -39,31 +39,34 @@ export class UsersListComponent implements OnInit {
 
         this.loadUsersList();
     }
-    
+
     loadUsersList(pageNo?) {
-        let filters = [];
-        let searchValues = this.searchForm.value;
+        const filters = [];
+        const searchValues = this.searchForm.value;
         if(searchValues && searchValues.name) {
-            let searchNameFilter = {
+            filters.push({
                 filters : [{
-                    field : "name",
-                    value : "%" + searchValues.name + "%",
+                    field : 'name',
+                    value : '%' + searchValues.name + '%',
                     condition_type : 'like'
                 }]
-            };
-            filters.push(searchNameFilter);
+            });
         }
-        if(this.searchSubscripe) {
+        if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
         }
+        const sortOrders = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, "customers/search").subscribe(users => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'customers/search', false, sortOrders).subscribe(users => {
             this.initLoad = false;
             this.loadingList = false;
             this.initUsersList(users, pageNo);
-        });        
+        });
     }
-    
+
     initUsersList(users, page?) {
         this.users = users.items;
         for (let user of this.users){

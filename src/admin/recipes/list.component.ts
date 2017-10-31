@@ -61,9 +61,13 @@ export class RecipesListComponent implements OnInit {
         }
         if(this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
-        }        
+        }
+        const sortOrders = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products').subscribe(recipes => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products', false, sortOrders).subscribe(recipes => {
             this.initLoad = false;
             this.loadingList = false;
             this.initRecipesList(recipes, pageNo);

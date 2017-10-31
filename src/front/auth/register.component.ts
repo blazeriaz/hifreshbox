@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
   registerForm: any;
   loading = false;
   returnUrl: string;
+  submitted = false;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -19,15 +20,16 @@ export class RegisterComponent implements OnInit {
               private formBuilder: FormBuilder,
               private alert: AlertService,
               private rest: RestService) {
+    const regExPassword = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$';
     this.registerForm = this.formBuilder.group({
       'email': ['', [Validators.required, Validators.email]],
       'firstname': ['', [Validators.required]],
       'lastname': ['', [Validators.required]],
-      'password' : ['', [Validators.required]],
+      'password' : ['', [Validators.required, Validators.pattern(regExPassword)]],
       'confirmation': ['', [Validators.required]]
     }, {validator: this.checkPasswords});
   }
-  
+
   checkPasswords(form) {
     const pass = form.controls.password.value;
     const confirmPass = form.controls.confirmation.value;
@@ -48,8 +50,32 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['auth/login']);
   }
 
+  isFieldInvalid(input) {
+    const field = this.registerForm.get(input);
+    if (this.registerForm.value.confirmation 
+        && input === 'confirmation' 
+        && this.registerForm.errors && this.registerForm.errors.notSame) {
+      return true;
+    }
+    return field.touched && field.invalid;
+  }
+
+  setInputErrorClass(input) {
+    if (this.isFieldInvalid(input)) {
+      return 'form-control-danger';
+    }
+  }
+
+  setContainerErrorClass(input) {
+    if (this.isFieldInvalid(input)) {
+      return 'has-danger';
+    }
+  }
+
   register() {
     this.alert.clear();
+    this.submitted = true;
+    window.scrollTo(0, 0);
     if (this.registerForm.valid) {
       this.rest.showLoader();
       const sendData = {
@@ -68,11 +94,8 @@ export class RegisterComponent implements OnInit {
                 this.router.navigate(['/', 'auth', 'login']);
             },
             error => {
-              if(error.status === 401) {
-                this.alert.error('Please check the register details');
-              } else {
-                this.alert.error('Server Error');
-              }
+              const err = error.json();
+              this.alert.error(err.message);
               this.rest.hideLoader();
             });
     } else {

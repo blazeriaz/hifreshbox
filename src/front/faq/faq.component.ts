@@ -22,7 +22,7 @@ export class FaqComponent implements OnInit {
         this.renderer.addClass(document.body, 'white-header');
         this.loadedFaq = false;
         this.faqs = [];
-        this.rest.getItem('', "faqlist").subscribe(faqs => {
+        this.rest.getItem('', 'faqlist').subscribe(faqs => {
             this.loadedFaq = true;
             this.faqs = faqs;
         });

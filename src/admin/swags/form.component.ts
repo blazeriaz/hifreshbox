@@ -194,8 +194,8 @@ export class SwagFormComponent implements OnInit {
       
       this.swagForm = this._fb.group({
         name : [this.swag.name, [Validators.required]],
-        status : this.swag.status?this.swag.status:1,
-        visibility: 1,
+        status : this.swag.status ? this.swag.status : 1,
+        visibility: 4,
         type_id : 'simple',
         price : [this.swag.price, [Validators.required]],
         attribute_set_id : 17,
@@ -206,12 +206,12 @@ export class SwagFormComponent implements OnInit {
             qty : [qty, [Validators.required]]
           })
         }),
-        custom_attributes : this._fb.array(customAttributesArray)     
+        custom_attributes : this._fb.array(customAttributesArray)
       });
     }
 
-    removedfile(file) {      
-      if(file.entry && file.entry.id) {
+    removedfile(file) {
+      if (file.entry && file.entry.id) {
         /**this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
           res=>res,
           error => {
@@ -222,7 +222,7 @@ export class SwagFormComponent implements OnInit {
             this.imagesDropZone.files.push(file);
           }
         );**/
-      } else if(file.addedIndex >= 0) {
+      } else if (file.addedIndex >= 0) {
         this.images = this.images.filter(image => image.addedIndex != file.addedIndex);
       }
     }

@@ -35,7 +35,7 @@
           </div>
 
           <div class="row py-2" *ngFor="let order of orders; let odd= odd;"
-              [ngClass]="{'bg-faded': odd, 'bg-danger': isDeleted(order.id)}">
+              [ngClass]="{'bg-faded': odd}">
             <div class="col-md-2">
               {{order.increment_id}}</div>
             <div class="col-md-2">
@@ -49,8 +49,7 @@
               {{order.customer_email}}</div>
             <div class="col-md-2">
               {{order.total_paid}} {{order.order_currency_code}}</div>
-            <div class="col-md-2">
-              {{order.order_currency_code}}</div>
+            <div class="col-md-2"></div>
             <div class="col-md-12">  
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>

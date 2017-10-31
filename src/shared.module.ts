@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 
 import { NAV_DROPDOWN_DIRECTIVES } from 'shared/nav-dropdown.directive';
 import { SIDEBAR_TOGGLE_DIRECTIVES } from 'shared/sidebar.directive';
@@ -8,16 +8,16 @@ import { AsideToggleDirective } from 'shared/aside.directive';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 
-import { HttpModule } from "@angular/http";
+import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService, AlertService, RestService, MealMenuService, RestDefaultService } from "services";
 
 import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
-import {TooltipModule} from "ngx-bootstrap";
-import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from "pipes";
+import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from 'pipes';
 import { AlertComponent } from 'components';
+import { HoverClassDirective } from 'shared/hover-class.directive';
 
 @NgModule({
   imports: [
@@ -25,13 +25,13 @@ import { AlertComponent } from 'components';
     RouterModule,
     ChartsModule,
     HttpModule,
-    ReactiveFormsModule,
-    TooltipModule
+    ReactiveFormsModule
   ],
-  declarations: [    
-    NAV_DROPDOWN_DIRECTIVES,    
+  declarations: [
+    NAV_DROPDOWN_DIRECTIVES,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    HoverClassDirective,
     AlertComponent,
     emptyLayoutComponent,
     mgCatalogImage,
@@ -40,10 +40,11 @@ import { AlertComponent } from 'components';
   ],
   providers: [
   ],
-  exports: [        
-    NAV_DROPDOWN_DIRECTIVES,    
+  exports: [
+    NAV_DROPDOWN_DIRECTIVES,
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective,
+    HoverClassDirective,
     AlertComponent,
     emptyLayoutComponent,
     mgCatalogImage,

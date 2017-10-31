@@ -204,7 +204,7 @@ export class RecipeFormComponent implements OnInit {
       customAttributesArray.push(this.addCustomArrtibute('category_ids', ['41'], false));
       this.recipeForm = this._fb.group({
         name : [this.recipe ? this.recipe.name : '', [Validators.required, Validators.minLength(5)]],
-        visibility: 1,
+        visibility: 4,
         type_id : 'simple',
         price : 0,
         status : 1,

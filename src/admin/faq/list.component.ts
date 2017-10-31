@@ -57,8 +57,12 @@ export class FaqsListComponent implements OnInit {
         if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
         }
+        const sortOrders = [{
+            field: 'creation_time',
+            direction: 'DESC'
+        }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'faqs/search', 'criteria').subscribe(faqs => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'faqs/search', 'criteria', sortOrders).subscribe(faqs => {
             this.initLoad = false;
             this.loadingList = false;
             this.initFaqsList(faqs, pageNo);

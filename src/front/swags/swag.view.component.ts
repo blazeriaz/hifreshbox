@@ -7,11 +7,11 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   templateUrl: 'swag.view.component.html'
 })
-export class SwagViewComponent implements OnInit {
+export class SwagViewComponent implements OnInit, OnDestroy {
     backgrounds;
 
-    loadedSwag; 
-    loadedSwagMedia; 
+    loadedSwag;
+    loadedSwagMedia;
     swag;
     swagMediaImages;
     mainImgSrc;
@@ -23,79 +23,80 @@ export class SwagViewComponent implements OnInit {
         private route: ActivatedRoute,
         private renderer: Renderer2
     ) { }
-  
+
     ngOnInit(): void {
         this.backgrounds = {
             header: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-week-menu.png)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'top-banner-week-menu.png)',
                 'background-position' : 'bottom',
-                'background-size': 'cover', 
+                'background-size': 'cover',
                 'background-attachment' : 'fixed',
                 'background-color' : '#2F2F30'
             },
-            recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
-            cap : GlobalVariable.htmlImages+'chef-cap-green.png',
-            culinery : GlobalVariable.htmlImages+'culinery.png',
-            whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
+            recipe : GlobalVariable.htmlImages + 'each-recipe-img.png',
+            cap : GlobalVariable.htmlImages + 'chef-cap-green.png',
+            culinery : GlobalVariable.htmlImages + 'culinery.png',
+            whatfreshbox : GlobalVariable.htmlImages + 'what-is-freshbox.png',
             gray : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'hiw-bg.png)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'hiw-bg.png)',
                 'background-position' : 'bottom',
                 'background-color' : '#DFDFDF',
-                'background-size': 'cover', 
+                'background-size': 'cover',
             },
             testimonials : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'testimonials.png)',
-                'background-size': 'cover', 
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'testimonials.png)',
+                'background-size': 'cover',
                 'background-position' : 'bottom'
             },
             orders : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'orders-bg.png)',
-                'background-size': '95% auto', 
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'orders-bg.png)',
+                'background-size': '95% auto',
                 'background-position' : 'top left',
                 'background-repeat' : 'no-repeat',
             },
             signup: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'newsletter-signup.png)',
-                'background-size': 'cover', 
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'newsletter-signup.png)',
+                'background-size': 'cover',
                 'background-position' : 'bottom'
             }
         };
 
         this.renderer.addClass(document.body, 'white-header');
-        this.mainImgSrc = this.backgrounds.recipe;
-        this.zoomedImgSrc = this.backgrounds.recipe;
+        /**this.mainImgSrc = this.backgrounds.recipe;
+        this.zoomedImgSrc = this.backgrounds.recipe;**/
         this.loadSwag();
-        this.loadMediaImages();
     }
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
     }
 
-    loadSwag() {        
+    loadSwag() {
         this.loadedSwag = false;
-        let swagSku = this.route.snapshot.params['sku']; 
-        this.rest.getItem(swagSku, "products/"+swagSku).subscribe(swag => {
+        const swagSku = this.route.snapshot.params['sku'];
+        this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {
             this.loadedSwag = true;
             this.swag = swag;
-        });        
+            this.loadMediaImages(swag.sku);
+        });
     }
-    
 
-    loadMediaImages() {
-        let swagSku = this.route.snapshot.params['sku'];
+    loadMediaImages(swagSku) {
         this.swagMediaImages = [];
-        if(!swagSku) return;
+        if (!swagSku) {
+            return;
+        }
         this.loadedSwagMedia = false;
-        this.rest.getItem('', 'products-gal/'+swagSku+'/media')
+        this.rest.getItem('', 'products-gal/' + swagSku + '/media')
             .subscribe(images => {
-              this.swagMediaImages = images;
-              this.loadedSwagMedia = true;
-              if(images.length > 0) this.changeMainImage(images[0]);
-            },
-           error => {
-               
-           });
+            this.swagMediaImages = images;
+            this.loadedSwagMedia = true;
+            if (images.length > 0) {
+                this.changeMainImage(images[0]);
+            }
+        },
+        error => {
+        });
     }
 
     changeMainImage(image) {

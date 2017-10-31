@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LocationStrategy, HashLocationStrategy, CommonModule, DatePipe } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, CommonModule, DatePipe, PathLocationStrategy } from '@angular/common';
 import { FrontComponent } from "front/front.component";
 import { HttpModule } from "@angular/http";
 import { SharedModule } from "shared.module";
@@ -27,11 +27,11 @@ import { ContactComponent } from 'front/contact/contact.component';
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
-    SharedModule.forRoot(),  
-    TabsModule.forRoot(),  
+    SharedModule.forRoot(),
+    TabsModule.forRoot(),
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
-	  ModalModule.forRoot(),
+    ModalModule.forRoot(),
     HttpModule,
     FrontRoutingModule,
     FormsModule,
@@ -54,7 +54,7 @@ import { ContactComponent } from 'front/contact/contact.component';
   providers: [
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
+      useClass: PathLocationStrategy
     }, DatePipe
   ],
   bootstrap: [ FrontComponent ]

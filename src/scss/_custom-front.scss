@@ -34,8 +34,10 @@
     max-width: 1900px;
 }
 
-.container {
-    width: 100%;
+@include media-breakpoint-down(sm) {
+    .container {
+        width: 100%;
+    }
 }
 
 .app {
@@ -48,6 +50,10 @@ body {
     font-size: 1rem;
     font-family: 'AvenirRoman', sans-serif;
     background-color: #FFFFFF;
+}
+
+.bg-light {
+    background-color: #FAFAFA;
 }
 
 .overlay_loading {
@@ -189,4 +195,8 @@ body {
     position: absolute;
     top: 10px;
     right: 25px;
+}
+
+.pointer {
+    cursor: pointer;
 }

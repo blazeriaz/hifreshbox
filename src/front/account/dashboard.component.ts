@@ -5,9 +5,9 @@ import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  templateUrl: 'account.component.html'
+  templateUrl: 'dashboard.component.html'
 })
-export class AccountComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
     user;
 
     constructor(
@@ -19,10 +19,15 @@ export class AccountComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        this.renderer.addClass(document.body, 'white-header');
+        this.rest.getItem('me', 'customers/me').subscribe(user => {
+            this.user = user;
+        })
+    }
+
+    goToAccountMenu(menu) {
+        this.router.navigate(['/', 'account', menu]);
     }
 
     ngOnDestroy() {
-        this.renderer.removeClass(document.body, 'white-header');
     }
 }

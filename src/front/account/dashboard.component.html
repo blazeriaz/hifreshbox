@@ -1,0 +1,120 @@
+<div class="container-fluid mb-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h6>Hello <span class="text-success">{{user?.firstname}} {{user?.lastname}}</span>! (not {{user?.firstname}}? <a [routerLink]="['/','auth','logout']" class="text-success">Sign Out</a>)</h6>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="container-fluid mb-5">
+    <div class="container text-center">	
+        <div class="row">
+			<div class="col-sm-4 p-0">
+				<div class="card rounded-0 m-0">
+					<div class="card-header bg-success text-white">
+						<h6 class="m-0">Your Upcoming Order</h6>
+					</div>
+					<div class="card-body bg-light px-2 py-3">
+						May 21st, 2017
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 p-0">
+				<div class="card rounded-0 m-0">
+					<div class="card-header bg-success text-white">
+						<h6 class="m-0">Change meal preferences by</h6>
+					</div>
+					<div class="card-body bg-light px-2 py-3">
+						May 21st, 2017
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 p-0">
+				<div class="card rounded-0 m-0">
+					<div class="card-header bg-success text-white">
+						<h6 class="m-0">Customer since</h6>
+					</div>
+					<div class="card-body bg-light px-2 py-3">
+						{{user?.created_at | date}}
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-3 mb-5">
+    <div class="container text-center">	
+        <div class="row">
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'">
+					<div class="card-body">
+						<h5 class="text-success">Orders &amp; Subscription</h5>
+						<span class="font-xs">Update, rate, or return your orders</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8 px-3 py-2 mt-sm-2">
+				<div class="card px-2 py-4">
+					<div class="card-body">
+						<span>Share this link to refer friends and receive $5: <a href="#">https:// eofjggfgg.f564.rgrter.rtet</a></span>
+					</div>
+				</div>
+			</div>
+        </div>
+		<div class="row">
+			<div class="col-sm-4 px-3 py-2" (click)="goToAccountMenu('profile')">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'">
+					<div class="card-body">
+						<h5 class="text-success">Login &amp; Security</h5>
+						<span class="font-xs">Edit Log In, Name, and Mobile number</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'">
+					<div class="card-body">
+						<h5 class="text-success">Payment Info</h5>
+						<span class="font-xs">Edit or add payment methods</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'">
+					<div class="card-body">
+						<h5 class="text-success">Gifts</h5>
+						<span class="font-xs">Purchase or redeem a box or gift card</span>
+					</div>
+				</div>
+			</div>
+        </div>
+		<div class="row">
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'">
+					<div class="card-body">
+						<h5 class="text-success">Meal Preferences</h5>
+						<span class="font-xs">Edit your meal preferences, add allergies.</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'" (click)="goToAccountMenu('addresses')">
+					<div class="card-body">
+						<h5 class="text-success">Addresses</h5>
+						<span class="font-xs">Edit addresses for orders and gifts</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 px-3 py-2">
+				<div class="card pointer px-2 py-4" [hoverClass]="'bg-light'" (click)="goToAccountMenu('my-recipes')">
+					<div class="card-body">
+						<h5 class="text-success">Recipes</h5>
+						<span class="font-xs">View my recipes and cookbook</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn btn-outline-green">Unsubscribe</button>
+    </div>
+</div>

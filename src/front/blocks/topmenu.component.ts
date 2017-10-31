@@ -9,12 +9,14 @@ import { AuthService } from 'services';
     templateUrl: 'topmenu.component.html'
 })
 export class TopmenuComponent implements OnInit {
-    islogin;
     constructor(
         private auth: AuthService
     ) { }
 
     ngOnInit(): void {
-        this.islogin = this.auth.isLogin();
+    }
+
+    islogin() {
+        return this.auth.isLogin();
     }
 }

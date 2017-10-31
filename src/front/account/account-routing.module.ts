@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AccountComponent } from './account.component';
+import { DashboardComponent } from './dashboard.component';
 import { AddressesComponent } from './addresses.component';
 import { ProfileComponent } from './profile.component';
 import { RecipesComponent } from './recipes.component';
@@ -12,10 +13,11 @@ const routes: Routes = [
     data: {
       title: 'Account'
     },
+    component: AccountComponent,
     children: [
       {
         path: '',
-        component: AccountComponent,
+        component: DashboardComponent,
         data: {
           title: 'Account'
         }

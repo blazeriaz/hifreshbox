@@ -184,15 +184,15 @@
   </div>
 </ng-template>
 <ng-template #editLoadModal>
-  <div class="modal-header" *ngIf="!user.id">
+  <div class="modal-header" *ngIf="!user || !user.id">
     <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Add Customer</h4>
   </div>
-  <div class="modal-header" *ngIf="user.id">
+  <div class="modal-header" *ngIf="user && user.id">
       <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Edit Customer</h4>
   </div>
   <div class="modal-body">
     Loading the required form datas...
-  </div>s
+  </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
         Abort

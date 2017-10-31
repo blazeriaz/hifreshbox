@@ -7,7 +7,7 @@ import { AlertService, RestService, AuthService } from 'services';
 @Component({
     templateUrl: 'recipe.component.html'
 })
-export class RecipeComponent implements OnInit {
+export class RecipeComponent implements OnInit, OnDestroy {
     backgrounds;
     loadedRecipe;
     recipe;
@@ -62,21 +62,20 @@ export class RecipeComponent implements OnInit {
         };
         this.loadRecipe();
     }
-    
-    loadRecipe() {        
+
+    loadRecipe() {
         this.loadedRecipe = false;
-        let recipeSku = this.route.snapshot.params['sku']; 
-        this.rest.getItem(recipeSku, "products/"+recipeSku).subscribe(recipe => {
+        const recipeSku = this.route.snapshot.params['sku'];
+        this.rest.getItem(recipeSku, 'recipedetail/' + recipeSku).subscribe(recipe => {
             this.loadedRecipe = true;
             this.recipe = recipe;
-        });        
+        });
     }
 
     backToMenu() {
         this.router.navigate(['menu']);
     }
 
-    // tslint:disable-next-line:use-life-cycle-interface
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
     }

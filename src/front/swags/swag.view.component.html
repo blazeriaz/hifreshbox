@@ -11,7 +11,7 @@
                 <div class="row mx-0">
                     <div class="col-auto">
                         <ul class="list-unstyled">
-                            <li style="width:50px;" *ngFor="let image of swagMediaImages" (click)="changeMainImage(image)">
+                            <li class="mb-1" style="width:50px;" *ngFor="let image of swagMediaImages" (click)="changeMainImage(image)">
                                 <img [src]="image.file.resized" class="img-fluid" />
                             </li>
                         </ul>

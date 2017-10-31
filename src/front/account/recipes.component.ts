@@ -1,29 +1,45 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, TemplateRef } from '@angular/core';
 import { RestService, AlertService, MealMenuService, AuthService } from 'services';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
+import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   templateUrl: 'recipes.component.html'
 })
 export class RecipesComponent implements OnInit, OnDestroy {
+    @ViewChild('addcbmodal') addcbmodal: TemplateRef<any>;
+    @ViewChild('viewcbrecipes') viewcbrecipes: TemplateRef<any>;
+
+    modalRef: BsModalRef;
+    modalViewRef: BsModalRef;
     globalVariable;
     loadRecipesSub;
     loadedselectedRecipes;
     recipes;
-    islogin;
+    loadedCookBooks;
+    cookbooks = [];
+    cbForm;
+    showExistingCB;
+    modelDisabled;
+    showCBSubmitButton;
+    selectRecipe;
+    singleCB;
 
     constructor(
-    private alert: AlertService,
-    private rest: RestService,
-    private route: Router,
-    private mealMenuService: MealMenuService,
-    private auth: AuthService
+        private alert: AlertService,
+        private rest: RestService,
+        private route: Router,
+        private mealMenuService: MealMenuService,
+        private auth: AuthService,
+        private renderer: Renderer2,
+        private modalService: BsModalService,
+        private _fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
-        this.islogin = this.auth.isLogin();
         this.globalVariable = GlobalVariable;
 
         // Get recipes of Menu
@@ -36,38 +52,138 @@ export class RecipesComponent implements OnInit, OnDestroy {
         if (this.loadRecipesSub) {
             this.loadRecipesSub.unsubscribe();
         }
-        this.loadRecipesSub = this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-            this.recipes = recipes.map(res => res.recipe_detail);
+
+        this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(recipes => {
+            this.recipes = recipes;
             this.loadedselectedRecipes = true;
         });
 
-        this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
+        this.loadedCookBooks = false;
+        this.rest.getItems(1, '', 10, 'cookbook/search', 'criteria').subscribe(cb => {
+            this.cookbooks = cb.items;
+            this.loadedCookBooks = true;
+        });
+
+        this.rest.getItem('me', 'customers/me').subscribe(user => {
+            this.cbForm = this._fb.group({
+                'user_id': user.id,
+                'is_active': 1,
+                'title': ['', Validators.required]
+            });
         });
     }
 
-    addToFavourite(recipe) {
-        if (!this.auth.isLogin()) {
-            this.islogin = this.auth.isLogin();
+    setInputErrorClass(form, input) {
+        const field = form.get(input);
+        const invalid = field.invalid && field.touched;
+        if (invalid) {
+            return 'form-control-danger';
+        }
+    }
+
+    setContainerErrorClass(form, input) {
+        const field = form.get(input);
+        const invalid = field.invalid && field.touched;
+        if (invalid) {
+            return 'has-danger';
+        }
+    }
+
+    saveCookBook() {
+        if (this.cbForm.invalid) {
             return;
         }
-        this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
+        this.modelDisabled = true;
+        this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
+            this.cookbooks.push(res);
+            this.modelDisabled = false;
+            this.addRecipeToCookBook(res);
         });
     }
 
-    removeFavourite(recipe) {
-        if (!this.auth.isLogin()) {
-            this.islogin = this.auth.isLogin();
+    addRecipeToCookBook(cookbook) {
+        this.modelDisabled = true;
+        if (!cookbook || !this.selectRecipe) {
+            this.modelDisabled = false;
+            this.modalRef.hide();
             return;
         }
-        this.rest.deleteItem('', 'ipwishlist/delete/' + recipe.entity_id).subscribe(data => {
+        const sendData = {cookbook_recipe : {
+            cookbook_id : cookbook.id,
+            recipe_id : this.selectRecipe.entity_id
+        }};
+        this.selectRecipe = null;
+        this.rest.saveItem(false, sendData, 'cookbook-recipe').subscribe(res => {
+            this.modelDisabled = false;
+            this.modalRef.hide();
+        });
+    }
+
+    addNewCookbook() {
+        this.selectRecipe = null;
+        this.showExistingCB = false;
+        this.showCBSubmitButton = true;
+        this.openAddCBModal();
+    }
+
+    addToCookbook(recipe) {
+        this.selectRecipe = recipe;
+        this.showExistingCB = this.cookbooks.length > 0;
+        this.showCBSubmitButton = !this.showExistingCB;
+        this.openAddCBModal();
+    }
+
+    openAddCBModal() {
+        this.cbForm.reset();
+        this.modalRef = this.modalService.show(this.addcbmodal, {
+            animated: true,
+            keyboard: false,
+            backdrop: true
+        });
+    }
+
+    viewCookbook(cookbook) {
+        this.singleCB = cookbook;
+        this.singleCB.loaded = false;
+        this.singleCB.recipes = [];
+        this.rest.saveItem(false, {}, 'cookbook/recipe-list/' + cookbook.id).subscribe(res => {
+            this.singleCB.recipes = res;
+            this.singleCB.loaded = true;
+        });
+        this.modalViewRef = this.modalService.show(this.viewcbrecipes, {
+            animated: true,
+            keyboard: false,
+            backdrop: true
+        });
+    }
+
+    removeFromFavuorite(wishlist_item_id) {
+        if (!confirm('Are you sure to remove from favourite?')) {
+            return;
+        }
+        this.rest.deleteItem(wishlist_item_id, 'ipwishlist/delete/' + wishlist_item_id).subscribe(res => {
+            this.recipes = this.recipes.filter(x => x.wishlist_item_id !== wishlist_item_id);
+        });
+    }
+
+    removeCookbook(cookbook_id) {
+        if (!confirm('Are you sure to remove the cookbook?')) {
+            return;
+        }
+        this.rest.deleteItem(cookbook_id, 'cookbook/' + cookbook_id).subscribe(res => {
+            this.cookbooks = this.cookbooks.filter(x => x.id !== cookbook_id);
+        });
+    }
+
+    removeRecipeFromCookbook(cookbook_id) {
+        if (!confirm('Are you sure to remove the cookbook?')) {
+            return;
+        }
+        this.rest.deleteItem(cookbook_id, 'cookbook/' + cookbook_id).subscribe(res => {
+            this.cookbooks = this.cookbooks.filter(x => x.id !== cookbook_id);
         });
     }
 
     ngOnDestroy() {
-
-    }
-
-    selectRecipe(sku) {
-        this.route.navigate(['menu', sku]);
     }
 }

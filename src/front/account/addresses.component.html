@@ -1,11 +1,24 @@
-<div class="container-fluid py-5">
-  <div class="container">
-      <div class="row text-center p-2">
-      </div>
-  </div>
-</div>
 <div class="container-fluid my-3">
   <div class="container">
+    <div class="row py-2 mb-3">
+        <div class="col-12">
+            <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
+            <span class="font-xs">>></span>
+            <span class="font-weight-bold text-success">Addresses</span>
+        </div>
+    </div>
+    <div class="row" *ngIf="!loadedFormData">
+      <div class="col-12">
+        <div class="card mb-0 border-0">
+          <div class="card-header p-0 border-0">
+            <h2>Addresses</h2>
+          </div>
+          <div class="card-block pt-3 pb-0 px-0 mb-10">
+            Please wait for sometime...
+          </div>
+        </div>
+      </div>
+    </div>
     <form [formGroup]="userForm" (submit)="saveUser()" novalidate *ngIf="loadedFormData">
       <div class="animated fadeIn">  
         <div class="row">
@@ -17,7 +30,7 @@
               </div>
               <div class="card-block pt-3 pb-0 px-0">
                 <div class="row">
-                  <div class="col-md-4" *ngFor="let address of userForm.get('addresses').value; let index = index;">
+                  <div class="col-md-4 col-sm-6" *ngFor="let address of userForm.get('addresses').value; let index = index;">
                     <div class="card card-faded">
                       <div class="card-block" [ngClass]="setAddressClass(index)">
                         <address>
