@@ -29,7 +29,7 @@ $n_slide = json_encode(['cart_item' => [
 						'sku' => '86373',						
 						//'sku' => '29645',						
 						'product_id' => '2057',						
-						'qty' => 1						
+						'qty' => 1					
 						]]);
 /*
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/carts/mine/items");
