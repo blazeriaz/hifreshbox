@@ -18,6 +18,7 @@ import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from 'pipes';
 import { AlertComponent } from 'components';
 import { HoverClassDirective } from 'shared/hover-class.directive';
+import { NewsletterComponent } from 'front/blocks/newsletter.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { HoverClassDirective } from 'shared/hover-class.directive';
     HoverClassDirective,
     AlertComponent,
     emptyLayoutComponent,
+    NewsletterComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad
@@ -47,6 +49,7 @@ import { HoverClassDirective } from 'shared/hover-class.directive';
     HoverClassDirective,
     AlertComponent,
     emptyLayoutComponent,
+    NewsletterComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad

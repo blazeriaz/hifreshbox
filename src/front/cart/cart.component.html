@@ -1,0 +1,45 @@
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row text-center p-2">
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <alert></alert>
+            </div>
+            <div class="col-md-8">
+                <h5 class="font-special text-success">SHOPPING CART</h5>
+                <hr />
+                <div class="row">
+                    <div class="col-6">Item</div>
+                    <div class="col-2">Item Price</div>
+                    <div class="col-2">Qty</div>
+                    <div class="col-2">Total Price</div>
+                </div>
+                <hr />
+                <div class="row py-2" *ngFor="let item of totals?.items">
+                    <div class="col-6">{{item.name}}</div>
+                    <div class="col-2">{{item.base_price | currency:'USD':true:'1.0'}}</div>
+                    <div class="col-2">{{item.qty}}</div>
+                    <div class="col-2">{{item.row_total | currency:'USD':true:'1.0'}}</div>
+                </div>
+                <hr />
+            </div>
+            <div class="col-md-4">
+                <h5 class="font-special text-success">ORDER SUMMARY</h5>
+                <hr />
+                <div class="row py-2 font-sm" *ngFor="let total of totals?.total_segments" [ngClass]="{'font-md font-weight-bold' : total.area === 'footer'}">
+                    <div class="col">{{total.title}}</div>
+                    <div class="col-auto text-right">{{total.value | currency:'USD':true:'1.2-2'}}</div>
+                </div>
+                <hr />
+                <div>
+                    <a [routerLink]="['/', 'cart', 'checkout']" class="btn btn-outline-green w-100 rounded-0">PROCEED TO CHECKOUT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

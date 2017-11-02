@@ -16,7 +16,7 @@
             <div class="col-12">
                 <div class="card px-3 py-4 text-center">         
                     <div class="card-title my-3">
-                        <h5 class="text-uppercase">No Favourite Recipes.</h5>
+                        <h5>No Favourite Recipes.</h5>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div class="col-12">
                 <div class="card px-3 py-4 text-center">         
                     <div class="card-title my-3">
-                        <h5 class="text-uppercase">Your Favourite Recipes loading...</h5>
+                        <h5>Your Favourite Recipes loading...</h5>
                     </div>
                     <div class="card-body">
                         <p>Please wait for sometime...</p>
@@ -35,19 +35,19 @@
         </div>
         <div class="row py-3" *ngIf="loadedselectedRecipes">
             <div class="col-md-4 col-sm-6 col-12" *ngFor="let recipe of recipes">
-                <div class="card bg-light px-2 py-3">
-                    <div class="card-title mb-1">
-                        <h5 class="text-uppercase m-0">{{recipe.product.name}} 
+                <div class="card bg-light px-0 py-3">
+                    <div class="card-title mb-2 px-3">
+                        <h5 class="m-0">{{recipe.product.name}} 
                         &nbsp;<i (click)="removeFromFavuorite(recipe.wishlist_item_id)" tooltip="Remove" class="fa fa-times-circle"></i></h5>
                     </div>
-                    <div class="card-body row mx-0">
-                        <div class="col-sm-5 p-0">
+                    <div class="card-body row mx-0 font-sm">
+                        <div class="col-sm-5 pr-0 pl-1">
                             <div class="text-center">
                                 <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!recipe.product.default_image" />
                                 <img class="img-fluid" [src]="recipe.product.default_image" *ngIf="recipe.product.default_image" />
                             </div>
                         </div>
-                        <div class="col-sm-7 pt-4 my-auto">
+                        <div class="col-sm-7 px-2 my-auto">
                             <div class="row pb-1 text-left">
                                 <div class="col-12">Prep time : {{recipe.product.cooking_time}}</div>
                             </div>
@@ -64,7 +64,7 @@
                                 <i class="fa fa-star" *ngIf="recipe.product.rating_summary < 100" aria-hidden="true"></i>
                             </div>
                         </div>
-                        <div class="col-12 text-center text-success mt-3">
+                        <div class="col-12 text-center text-success mt-3 px-1">
                             <a href="javascript://" class="text-success" (click)="addToCookbook(recipe.product)">Add to cookbook</a> | 
                             <a class="text-success" [routerLink]="['/', 'menu', recipe.product.url_key]">View</a>
                             <span *ngIf="recipe.product.pdf_upload"> | 
@@ -89,9 +89,47 @@
                         </h5>                        
                     </div>
                     <div class="card-body bg-light row mx-0">
-                        <div class="col-12 text-center text-success my-3">
-                            <a href="javascript://" class="text-success">Send as Gift</a> | 
-                            <a href="javascript://" (click)="viewCookbook(cookbook)" class="text-success">View</a> |
+                        <div class="col-12 py-4" *ngIf="cookbook.recipe.length == 0">
+                            No recipes added!
+                        </div>
+                        <div class="col-12 p-0 mt-3" *ngFor="let recipe of cookbook.recipe | slice:0:3">
+                            <div class="card bg-light border-0 p-0 mb-0">
+                                <div class="card-body row mx-0">
+                                    <div class="col-sm-4 p-0">
+                                        <div class="text-center">
+                                            <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 px-2 my-auto">
+                                        <div class="row pb-1 text-left">
+                                            <div class="col-12"><b class="m-0">{{recipe.name}}</b></div>
+                                            <div class="col-12 font-xs">Prep time : {{recipe.cooking_time}}</div>                            
+                                            <div class="col-12 font-xs">
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 20" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 40" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 60" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 80" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 100" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 20" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 40" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 60" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 80" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 100" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="col-12 text-left text-success font-xs">                        
+                                                <a class="text-success" (click)="modalViewRef.hide()" [routerLink]="['/', 'menu', recipe.url_key]">View</a>&nbsp;|&nbsp;
+                                                <a href="javascript://" class="text-success" (click)="removeRecipeFromCookbook(cookbook, recipe)">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center text-success my-3" *ngIf="cookbook.recipe.length > 0">
+                            <a href="javascript://" class="text-success">Send as Gift</a>&nbsp;|&nbsp;
+                            <span *ngIf="cookbook.recipe.length > 3">
+                                <a href="javascript://" (click)="viewCookbook(cookbook)" class="text-success">View</a>&nbsp;|&nbsp;
+                            </span>
                             <a href="javascript://" class="text-success">Download</a>
                         </div>
                     </div>
@@ -166,30 +204,23 @@
         </h5>
     </div>
     <div class="modal-body bg-light">
-        <div class="card" *ngIf="!singleCB.loaded">
-            <div class="card-body px-2 py-4">
-                Loading...
-            </div>
+        <div class="col-12 py-4" *ngIf="singleCB.recipe.length == 0">
+            No recipes added!
         </div>
-        <div class="card" *ngIf="singleCB.loaded && singleCB.recipes.length == 0">
-            <div class="card-body px-2 py-4">
-                No recipes added!
-            </div>
-        </div>
-        <div class="row p-0" *ngIf="singleCB.loaded && singleCB.recipes.length > 0">
-            <div class="col-12" *ngFor="let recipe of singleCB.recipes">
-                <div class="card bg-light border-0 p-0 mb-1">
+        <div class="row p-0" *ngIf="singleCB.recipe.length > 0">
+            <div class="col-12 p-0 mt-3" *ngFor="let recipe of singleCB.recipe">
+                <div class="card bg-light border-0 p-0 mb-0">
                     <div class="card-body row mx-0">
-                        <div class="col-sm-5 p-0">
+                        <div class="col-sm-4 p-0">
                             <div class="text-center">
                                 <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
                             </div>
                         </div>
-                        <div class="col-sm-7 pt-4 my-auto">
+                        <div class="col-sm-8 px-2 my-auto">
                             <div class="row pb-1 text-left">
-                                <div class="col-12"><h5 class="text-uppercase m-0">{{recipe.name}}</h5></div>
-                                <div class="col-12">Prep time : {{recipe.cooking_time}}</div>                            
-                                <div class="col-12 mt-2">
+                                <div class="col-12"><b class="m-0">{{recipe.name}}</b></div>
+                                <div class="col-12 font-xs">Prep time : {{recipe.cooking_time}}</div>                            
+                                <div class="col-12 font-xs">
                                     <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 20" aria-hidden="true"></i>
                                     <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 40" aria-hidden="true"></i>
                                     <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 60" aria-hidden="true"></i>
@@ -201,15 +232,12 @@
                                     <i class="fa fa-star" *ngIf="recipe.rating_summary < 80" aria-hidden="true"></i>
                                     <i class="fa fa-star" *ngIf="recipe.rating_summary < 100" aria-hidden="true"></i>
                                 </div>
-                                <div class="col-12 text-left text-success mt-3">                        
-                                    <a class="text-success" (click)="modalViewRef.hide()" [routerLink]="['/', 'menu', recipe.url_key]">View</a>
-                                    <span *ngIf="recipe.pdf_upload"> | 
-                                        <a target="_blank" [href]="globalVariable.BASE_MEDIA + 'recipe-pdf/' + recipe.pdf_upload" target="_blank" class="text-success">Download</a>
-                                    </span>
+                                <div class="col-12 text-left text-success font-xs">                        
+                                    <a class="text-success" (click)="modalViewRef.hide()" [routerLink]="['/', 'menu', recipe.url_key]">View</a>&nbsp;|&nbsp;
+                                    <a href="javascript://" class="text-success" (click)="removeRecipeFromCookbook(cookbook, recipe)">Remove</a>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>                                    
                     </div>
                 </div>
             </div>

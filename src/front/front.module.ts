@@ -15,7 +15,6 @@ import { RecipeComponent } from "front/recipe/recipe.component";
 import { SwagsComponent } from 'front/swags/swags.component';
 import { SwagViewComponent } from 'front/swags/swag.view.component';
 import { TabsModule, AccordionModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
-import { NewsletterComponent } from 'front/blocks/newsletter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
@@ -45,7 +44,6 @@ import { ContactComponent } from 'front/contact/contact.component';
     RecipeComponent,
     SwagsComponent,
     SwagViewComponent,
-    NewsletterComponent,
     FaqComponent,
     ContactComponent,
     SimpleLayoutComponent,
@@ -54,7 +52,7 @@ import { ContactComponent } from 'front/contact/contact.component';
   providers: [
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy
+      useClass: HashLocationStrategy
     }, DatePipe
   ],
   bootstrap: [ FrontComponent ]

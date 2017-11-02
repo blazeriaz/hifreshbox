@@ -77,6 +77,20 @@ export const routes: Routes = [
         loadChildren: './account/account.module#AccountModule',
       }]
     }, {
+      path: 'gift',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './gift/gift.module#GiftModule',
+      }]
+    }, {
+      path: 'cart',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './cart/cart.module#CartModule',
+      }]
+    }, {
       path: 'auth',
       component: SimpleLayoutComponent,
       children : [{

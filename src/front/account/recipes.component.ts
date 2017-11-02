@@ -95,6 +95,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
         this.modelDisabled = true;
         this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
+            res.recipe = [];
             this.cookbooks.push(res);
             this.modelDisabled = false;
             this.addRecipeToCookBook(res);
@@ -110,11 +111,14 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
         const sendData = {cookbook_recipe : {
             cookbook_id : cookbook.id,
-            recipe_id : this.selectRecipe.entity_id
+            recipe_id : this.selectRecipe.sku
         }};
-        this.selectRecipe = null;
         this.rest.saveItem(false, sendData, 'cookbook-recipe').subscribe(res => {
+            const cbIndex = this.cookbooks.findIndex(x => x.id === res.cookbook_id);
+            this.selectRecipe.cookbook_recipe_id = res.id;
+            this.cookbooks[cbIndex].recipe.push(this.selectRecipe);
             this.modelDisabled = false;
+            this.selectRecipe = null;
             this.modalRef.hide();
         });
     }
@@ -144,12 +148,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
     viewCookbook(cookbook) {
         this.singleCB = cookbook;
-        this.singleCB.loaded = false;
-        this.singleCB.recipes = [];
-        this.rest.saveItem(false, {}, 'cookbook/recipe-list/' + cookbook.id).subscribe(res => {
-            this.singleCB.recipes = res;
-            this.singleCB.loaded = true;
-        });
         this.modalViewRef = this.modalService.show(this.viewcbrecipes, {
             animated: true,
             keyboard: false,
@@ -175,12 +173,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
         });
     }
 
-    removeRecipeFromCookbook(cookbook_id) {
-        if (!confirm('Are you sure to remove the cookbook?')) {
+    removeRecipeFromCookbook(cookbook, recipe) {
+        if (!confirm('Are you sure to remove the revipe from cookbook?')) {
             return;
         }
-        this.rest.deleteItem(cookbook_id, 'cookbook/' + cookbook_id).subscribe(res => {
-            this.cookbooks = this.cookbooks.filter(x => x.id !== cookbook_id);
+        this.rest.deleteItem(recipe.cookbook_recipe_id, 'cookbook-recipe/' + recipe.cookbook_recipe_id).subscribe(res => {
+            const cbIndex = this.cookbooks.findIndex(x => x.id === cookbook.id);
+            this.cookbooks[cbIndex].recipe = this.cookbooks[cbIndex].recipe.filter(x => x.cookbook_recipe_id !== recipe.cookbook_recipe_id);
         });
     }
 

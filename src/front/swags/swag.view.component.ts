@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { RestService, AlertService } from 'services';
 
 import * as GlobalVariable from "global";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: 'swag.view.component.html'
@@ -16,10 +16,12 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     swagMediaImages;
     mainImgSrc;
     zoomedImgSrc;
+    swagProduct;
 
     constructor(
         private alert: AlertService,
         private rest: RestService,
+        private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2
     ) { }
@@ -65,6 +67,13 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         /**this.mainImgSrc = this.backgrounds.recipe;
         this.zoomedImgSrc = this.backgrounds.recipe;**/
         this.loadSwag();
+
+        this.swagProduct = {cart_item: {
+            quote_id: null,
+            sku: null,
+            qty: 1,
+            productOption: null
+        }};
     }
 
     ngOnDestroy() {
@@ -75,6 +84,10 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         this.loadedSwag = false;
         const swagSku = this.route.snapshot.params['sku'];
         this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {
+            this.swagProduct.cart_item.sku = swag.sku;
+            this.rest.saveItem(false, {}, 'carts/mine').subscribe(res => {
+                this.swagProduct.cart_item.quote_id = res;
+            });
             this.loadedSwag = true;
             this.swag = swag;
             this.loadMediaImages(swag.sku);
@@ -102,5 +115,16 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     changeMainImage(image) {
         this.mainImgSrc = image.file.medium_file;
         this.zoomedImgSrc = image.file.original_file_fullpath;
+    }
+
+    addSwagToCart() {
+        this.alert.clear();
+        this.rest.saveItem(false, this.swagProduct, 'carts/mine/items').subscribe(res => {
+            this.alert.success('Swag added to cart');
+            this.router.navigate(['/', 'cart']);
+        }, err => {
+            const e = err.json();
+            this.alert.error(e.message);
+        });
     }
 }

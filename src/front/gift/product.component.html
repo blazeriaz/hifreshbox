@@ -1,0 +1,165 @@
+<div *ngIf="step==1">
+    <div class="container-fluid flex-row pt-10 pb-5" [ngStyle]="backgrounds.header">
+        <div class="container">
+            <div class="row p-2 mt-5">
+                <div class="col-12 text-center text-white">
+                    <h1 class="font-wild display-1">Share the Love</h1>
+                    <h3 class="text-uppercase">Give the gift of freshness</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 py-3">
+                    <div class="row mx-0">
+                        <div class="col-12 text-center">
+                            <img class="img-fluid" [src]="backgrounds.recipe" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 py-3">
+                    <h6>Gift Amount</h6>
+                    <div class="btn-group mt-3">
+                        <button (click)="setProductOption(13, 23)" [ngClass]="getOptionButtonClass(13, 23)" type="button" class="btn rounded-0">
+                            {{'50' | currency:'USD':true:'1.0'}}</button>
+                        <button (click)="setProductOption(13, 24)" [ngClass]="getOptionButtonClass(13, 24)" type="button" class="btn rounded-0">
+                            {{'75' | currency:'USD':true:'1.0'}}</button>
+                        <button (click)="setProductOption(13, 25)" [ngClass]="getOptionButtonClass(13, 25)" type="button" class="btn rounded-0">
+                            {{'100' | currency:'USD':true:'1.0'}}</button>
+                        <button (click)="setProductOption(13, 26)" [ngClass]="getOptionButtonClass(13, 26)" type="button" class="btn rounded-0">
+                            {{'125' | currency:'USD':true:'1.0'}}</button>
+                    </div>
+
+                    <h6 class="mt-md-5 mt-3">Gift Delivery</h6>
+                    <div class="btn-group mt-3">
+                        <button (click)="setProductOption(14, 27)" [ngClass]="getOptionButtonClass(14, 27)" type="button" class="btn rounded-0">
+                            Email to recipient</button>
+                        <button (click)="setProductOption(14, 28)" [ngClass]="getOptionButtonClass(14, 28)" type="button" class="btn rounded-0">
+                            Print at home</button>
+                    </div>
+
+                    <h6 class="mt-md-5 mt-3">Quantity</h6>
+                    <div class="mt-3">
+                        <button (click)="decreseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">-</button>
+                        <span class="mx-2">{{giftProduct.cart_item.qty}}</span>
+                        <button (click)="increseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">+</button>
+                    </div>
+
+                    <div class="mt-md-5 mt-3">
+                        <button (click)="goToNextStep()" [disabled]="!quoteId" type="button" class="btn btn-outline-green px-5 rounded-0">NEXT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <newsletter></newsletter>
+</div>
+<div *ngIf="step==2">
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="row text-center p-2">
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid my-3">
+        <div class="container">
+            <div class="row py-2 mb-3">
+                <div class="col-12">
+                    <a class="text-muted" href="javascript://" (click)="goToPrevStep()">Gift</a>
+                    <span class="font-xs">>></span>
+                    <span class="font-weight-bold text-success">Recipient</span>
+                </div>
+            </div>
+
+            <div class="row py-2 mb-3">
+                <div class="col-12">
+                    <h3>Recipient Details</h3>
+                </div>
+            </div>
+
+            <div class="row py-2 mb-3 text-center">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-block">
+                            <h4 class="text-uppercase text-success">Email</h4>
+                            <p>We will directly send them a coupon for their gift Box to redeem</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-block">
+                            <h4 class="text-uppercase text-success">Print</h4>
+                            <p>Print your gift at home and deliver it in person</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <form [formGroup]="recipientForm" (submit)="addGiftToCart()" novalidate>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <alert></alert>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-12 px-0">
+                                <label  class="col-12 form-control-label">From:</label>
+                                <label for="your_name" class="col-12 form-control-label">Your Name</label>
+                                <div class="col-12" [ngClass]="setContainerErrorClass('your_name')">
+                                <input autofocus type="text" class="form-control" id="your_name" formControlName="your_name" 
+                                    [ngClass]="setInputErrorClass('your_name')" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12 px-0">
+                                <label  class="col-12 form-control-label">Recipient:</label>
+                            </div>
+                            <div class="col-sm-6 px-0">                                
+                                <label for="recipient_firstname" class="col-12 form-control-label">First Name</label>
+                                <div class="col-12" [ngClass]="setContainerErrorClass('recipient_firstname')">
+                                <input type="text" class="form-control" id="recipient_firstname" formControlName="recipient_firstname" 
+                                    [ngClass]="setInputErrorClass('recipient_firstname')" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 px-0">
+                                <label for="recipient_lastname" class="col-12 form-control-label">Last Name</label>
+                                <div class="col-12" [ngClass]="setContainerErrorClass('recipient_lastname')">
+                                <input type="text" class="form-control" id="recipient_lastname" formControlName="recipient_lastname" 
+                                    [ngClass]="setInputErrorClass('recipient_lastname')" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="recipient_email" class="col-12 form-control-label">Recipient Email</label>
+                            <div class="col-12" [ngClass]="setContainerErrorClass('recipient_email')">
+                                <input type="email" class="form-control" id="recipient_email" formControlName="recipient_email" 
+                                [ngClass]="setInputErrorClass('recipient_email')" />
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-12 px-0">
+                                <label for="gift_message" class="col-12 form-control-label">Message</label>
+                                <div class="col-12" [ngClass]="setContainerErrorClass('message')">
+                                <textarea rows="15" class="form-control" id="gift_message" formControlName="message" 
+                                    [ngClass]="setInputErrorClass('message')"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right my-5">
+                    <button type="submit" [disabled]="sentData" class="btn btn-outline-green rounded-0">PROCEED TO SHOPPING CART</button>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>

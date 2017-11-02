@@ -25,14 +25,14 @@ export class RestService {
     protected router: Router,
     protected auth: AuthService
   ) {
-    this.criteria = "searchCriteria";
+    this.criteria = 'searchCriteria';
     this.baseUrl = GlobalVariable.BASE_API_URL;
   }
 
   changeBaseUrl(url) {
     this.baseUrl = url;
   }
-  
+
   showLoader() {
       this.loaderSubject.next({show: true});
   }
