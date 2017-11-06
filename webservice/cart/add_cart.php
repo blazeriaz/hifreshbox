@@ -8,6 +8,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 
 $token = curl_exec($ch);
 
+
 $slide = json_encode([
 						'customer_id' => 15
 						
@@ -24,20 +25,15 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
  
  $quote_id_c = json_decode($quote_id);
 
+ $week_no = 23;
+ $meal_preference = 'Meat * 2 ,Pork * 2';
 $n_slide = json_encode(['cart_item' => [
 						'quote_id' => $quote_id_c,
-						'sku' => '86373',						
-						//'sku' => '29645',						
-						'product_id' => '2057',						
-						'qty' => 1					
+						'product_id' => '2078',						
+						'qty' => 1,
+						'options'=> array(20=>$week_no,21=>$meal_preference)
 						]]);
-/*
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/carts/mine/items");
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch, CURLOPT_POSTFIELDS, $n_slide);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
-*/
+
 
 
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/cart-add");
