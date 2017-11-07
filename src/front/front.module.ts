@@ -20,6 +20,7 @@ import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
 import { TopmenuComponent } from 'front/blocks/topmenu.component';
 import { ContactComponent } from 'front/contact/contact.component';
+import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { ContactComponent } from 'front/contact/contact.component';
     FaqComponent,
     ContactComponent,
     SimpleLayoutComponent,
-    TopmenuComponent
+    TopmenuComponent,
+    CheckoutSuccessComponent
   ],
   providers: [
     {

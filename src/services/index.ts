@@ -7,3 +7,4 @@ export * from './pager.service';
 export * from './rest.service';
 export * from './rest.default.service';
 export * from './menu.service';
+export * from './cart.service';

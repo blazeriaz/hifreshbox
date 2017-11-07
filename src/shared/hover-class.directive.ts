@@ -12,7 +12,6 @@ export class HoverClassDirective {
   ) { }
 
   @HostListener('mouseover') mouseover() {
-    console.log(this.hoverClass);
     this.hoverClass.split(' ').forEach(cls => {
       this.renderer.addClass(this.elementRef.nativeElement, cls);
     });

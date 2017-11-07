@@ -3,6 +3,7 @@ import { RestService, AlertService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CartService } from 'services/cart.service';
 
 @Component({
   templateUrl: 'cart.component.html'
@@ -10,24 +11,41 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CartComponent implements OnInit, OnDestroy {
     cart;
     totals;
+    showImages;
 
     constructor(
         private alert: AlertService,
         private rest: RestService,
         private router: Router,
         private route: ActivatedRoute,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
+        this.initCartPage();
+    }
 
-        this.rest.getItem('', 'carts/mine').subscribe(res => {
-            this.cart = res;
+    initCartPage() {
+        this.cartService.getCartTotal().subscribe(data => {
+            this.cart = data.cart;
+            this.showImages = data.showImages;
+            this.totals = data.totals;
         });
+    }
 
-        this.rest.getItem('', 'carts/mine/totals').subscribe(res => {
-            this.totals = res;
+    getImageFromCart(item_id) {
+        const item = this.cart.items.filter(x => x.item_id === item_id);
+        return item[0].extension_attributes.image_url;
+    }
+
+    removeCartItem(item_id) {
+        if (!confirm('Are you sure want remove item from cart?')) {
+            return;
+        }
+        this.cartService.removeCartItem(item_id).subscribe(res => {
+            this.cartService.setCartTotal();
         });
     }
 

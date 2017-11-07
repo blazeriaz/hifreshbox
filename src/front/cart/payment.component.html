@@ -1,0 +1,57 @@
+<div class="container-fluid">
+    <div class="container">
+        <form [formGroup]="checkoutPaymentForm" (submit)="saveCheckoutPayment()" novalidate>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-uppercase">Cridit Card Info</h2>
+                </div>
+                
+                <div class="col-md-8 mt-5">                
+                    <div class="form-group row">                        
+                        <div class="col-12" [ngClass]="setInputDivClass('cart_holder_name')">
+                            <label for="cart_holder_name" class="form-control-label">Card Holder's Name</label>
+                            <input type="text" class="form-control rounded-0" id="cart_holder_name" formControlName="cart_holder_name" 
+                                [ngClass]="setInputClass('cart_holder_name')" />
+                        </div>
+                    </div>
+                    <div class="form-group row">                        
+                        <div class="col-12" [ngClass]="setInputDivClass('cart_number')">
+                            <label for="cart_number" class="form-control-label">Credit Card Number</label>
+                            <input type="text" class="form-control rounded-0" id="cart_number" formControlName="cart_number" 
+                                [ngClass]="setInputClass('cart_number')" />
+                        </div>
+                    </div>
+                    <div class="form-group row px-3">                        
+                        <div class="col-auto mr-1" [ngClass]="setInputDivClass('cart_month')">
+                            <label for="cart_month" class="form-control-label">MM</label>
+                            <input size="1" type="text" class="form-control form-control-sm rounded-0" id="cart_month" formControlName="cart_month" 
+                                [ngClass]="setInputClass('cart_month')" />
+                        </div>
+                        <div class="col-auto" [ngClass]="setInputDivClass('cart_year')">
+                            <label for="cart_year" class="form-control-label">YY</label>
+                            <input size="1" type="text" class="form-control form-control-sm rounded-0" id="cart_year" formControlName="cart_year" 
+                                [ngClass]="setInputClass('cart_year')" />
+                        </div>
+                        <div class="col"></div>
+                        <div class="col-auto ml-auto" [ngClass]="setInputDivClass('cart_cvv')">
+                            <label for="cart_cvv" class="form-control-label">CVV</label>
+                            <input size="3" type="text" class="form-control form-control-sm rounded-0" id="cart_cvv" formControlName="cart_cvv" 
+                                [ngClass]="setInputClass('cart_cvv')" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-5">
+                    <hr />
+                    <div class="form-group row">
+                        <div class="col text-left">
+                            <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
+                        </div>
+                        <div class="col-auto text-right">
+                            <button type="submit" class="btn btn-outline-green">Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>        
+    </div>
+</div>

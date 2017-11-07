@@ -11,6 +11,10 @@ import { TabsModule, TooltipModule } from 'ngx-bootstrap';
 
 import { CartComponent } from './cart.component';
 import { CheckoutComponent } from './checkout.component';
+import { AddressComponent } from './address.component';
+import { ConfirmComponent } from './confirm.component';
+import { MealComponent } from './meal.component';
+import { PaymentComponent } from './payment.component';
 
 @NgModule({
   imports: [
@@ -25,7 +29,11 @@ import { CheckoutComponent } from './checkout.component';
   ],
   declarations: [
     CartComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    AddressComponent,
+    ConfirmComponent,
+    MealComponent,
+    PaymentComponent
   ],
   providers: [UsersService, PagerService]
 })

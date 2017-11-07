@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService } from 'services';
+import { RestService, AlertService, CartService } from 'services';
 
-import * as GlobalVariable from "global";
+import * as GlobalVariable from 'global';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -23,7 +23,8 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         private rest: RestService,
         private router: Router,
         private route: ActivatedRoute,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {
@@ -85,8 +86,10 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         const swagSku = this.route.snapshot.params['sku'];
         this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {
             this.swagProduct.cart_item.sku = swag.sku;
-            this.rest.saveItem(false, {}, 'carts/mine').subscribe(res => {
-                this.swagProduct.cart_item.quote_id = res;
+            this.cartService.getCartTotal().subscribe(res => {
+                if (res.cart && res.cart.id) {
+                    this.swagProduct.cart_item.quote_id = res.cart.id
+                }
             });
             this.loadedSwag = true;
             this.swag = swag;
@@ -119,9 +122,9 @@ export class SwagViewComponent implements OnInit, OnDestroy {
 
     addSwagToCart() {
         this.alert.clear();
-        this.rest.saveItem(false, this.swagProduct, 'carts/mine/items').subscribe(res => {
-            this.alert.success('Swag added to cart');
-            this.router.navigate(['/', 'cart']);
+        this.cartService.addItemToCart(this.swagProduct).subscribe(res => {
+            this.alert.success('Swag added to cart.');
+            this.cartService.setCartTotal();
         }, err => {
             const e = err.json();
             this.alert.error(e.message);

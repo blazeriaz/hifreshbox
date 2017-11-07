@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService } from 'services';
+import { RestService, AlertService, CartService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
@@ -11,7 +11,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class ProductComponent implements OnInit, OnDestroy {
     backgrounds;
     giftProduct;
-    quoteId;
     step = 1;
     customOptions = [];
     recipientForm;
@@ -22,7 +21,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         private rest: RestService,
         private router: Router,
         private renderer: Renderer2,
-        private _fb: FormBuilder
+        private _fb: FormBuilder,
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {
@@ -74,9 +74,10 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.setProductOption(13, 23);
         this.setProductOption(14, 27);
 
-        this.rest.saveItem(false, {}, 'carts/mine').subscribe(res => {
-            this.quoteId = res;
-            this.giftProduct.cart_item.quote_id = res;
+        this.cartService.getCartTotal().subscribe(res => {
+            if (res.cart && res.cart.id) {
+                this.giftProduct.cart_item.quote_id = res.cart.id
+            }
         });
 
         this.recipientForm = this._fb.group({
@@ -103,10 +104,13 @@ export class ProductComponent implements OnInit, OnDestroy {
                     customOptions: this.customOptions
                 }
             };
-            this.rest.saveItem(false, this.giftProduct, 'carts/mine/items').subscribe(res => {
+
+            this.cartService.addItemToCart(this.giftProduct).subscribe(res => {
                 this.sentData = false;
                 this.alert.success('Gift added to cart');
                 this.router.navigate(['/', 'cart']);
+                this.cartService.setCartTotal();
+                this.cartService.giftAdded = true;
             }, err => {
                 this.sentData = false;
                 const e = err.json();

@@ -7,14 +7,23 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import * as GlobalVariable from '../global';
-
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
   module;
+  private loginSubject = new BehaviorSubject({
+    action: null
+  });
 
-  constructor(private http: Http, 
-              private router: Router) {
+  constructor(
+    private http: Http,
+    private router: Router
+  ) {
+  }
+
+  getLoginSubject() {
+    return this.loginSubject.asObservable();
   }
 
   setAuthModule(module) {
@@ -52,6 +61,9 @@ export class AuthService {
         // login successful if there's a jwt token in the response
         const token = response.json();
         if (token) {
+          this.loginSubject.next({
+            action : 'login'
+          });
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem(this.module + '_token', token);
         }
@@ -61,6 +73,9 @@ export class AuthService {
   }
 
   logout() {
+    this.loginSubject.next({
+      action : 'logout'
+    });
     // remove user from local storage to log user out
     localStorage.removeItem(this.module + '_token');
   }

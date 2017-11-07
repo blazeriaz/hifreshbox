@@ -21,7 +21,8 @@ export class FullLayoutComponent implements OnInit {
                 'background-position' : 'bottom',
                 'background-color' : '#DFDFDF',
                 'background-size': 'cover', 
-            }
+            },
+            footer_logo: GlobalVariable.htmlImages + 'footer-logo.png'
         };
     }
 }

@@ -12,6 +12,7 @@ import { SwagViewComponent } from 'front/swags/swag.view.component';
 import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
 import { ContactComponent } from 'front/contact/contact.component';
+import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component';
 
 export const routes: Routes = [
   {
@@ -91,11 +92,25 @@ export const routes: Routes = [
         loadChildren: './cart/cart.module#CartModule',
       }]
     }, {
+      path: 'checkout-success',
+      component: SimpleLayoutComponent,
+      children : [{
+        path: '',
+        component: CheckoutSuccessComponent,
+      }]
+    }, {
       path: 'auth',
       component: SimpleLayoutComponent,
       children : [{
         path: '',
         loadChildren: './auth/auth.module#AuthModule',
+      }]
+    }, {
+      path: 'cookbook',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './recipes/recipes.module#RecipesModule',
       }]
     }]
   }

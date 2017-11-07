@@ -1,0 +1,62 @@
+<div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-uppercase">Confirm your order</h2>
+                </div>
+                <div class="col-md-6 mt-5 py-3 bg-light">
+                    <div class="row py-2 mx-0" *ngFor="let item of totals?.items">
+                        <div class="col-6">{{item.name}}</div>
+                        <div class="col-2">{{item.qty}}</div>
+                        <div class="col-4">{{item.row_total | currency:'USD':true:'1.0'}}</div>
+                        <div class="col-12"><hr /></div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-5 mt-5 py-3">
+                    <b>Delivery Address</b>
+                    <address *ngIf="shippingAddress">
+                        <span>{{shippingAddress.firstname}} {{shippingAddress.lastname}}</span><br>
+                        <span *ngFor="let str of shippingAddress.street">{{str}}<br *ngIf="str" /></span>
+                        <span *ngIf="shippingAddress.city">{{shippingAddress.city}}, </span>
+                        <span *ngIf="shippingAddress.region.region">{{shippingAddress.region.region}}, </span>
+                        <span>{{shippingAddress.country_id}} {{shippingAddress.postcode}}</span><br />
+                        <abbr title="Phone" *ngIf="shippingAddress.telephone">P:</abbr> {{shippingAddress.telephone}}
+                    </address>
+
+                    <b>Billing Address</b>
+                    <address *ngIf="billingAddress">
+                        <span>{{billingAddress.firstname}} {{billingAddress.lastname}}</span><br>
+                        <span *ngFor="let str of billingAddress.street">{{str}}<br *ngIf="str" /></span>
+                        <span *ngIf="billingAddress.city">{{shippingAddress.city}}, </span>
+                        <span *ngIf="billingAddress.region.region">{{billingAddress.region.region}}, </span>
+                        <span>{{billingAddress.country_id}} {{billingAddress.postcode}}</span><br />
+                        <abbr title="Phone" *ngIf="billingAddress.telephone">P:</abbr> {{billingAddress.telephone}}
+                    </address>
+                </div>
+                <div class="col-8 mt-5">
+                    <h5 class="font-special">Your order total</h5>
+                    <hr />
+                    <div class="row py-2 font-sm" *ngFor="let total of totals?.total_segments" [ngClass]="{'font-md font-weight-bold' : total.area === 'footer'}">
+                        <div class="col">{{total.title}}</div>
+                        <div class="col-auto text-right">{{total.value | currency:'USD':true:'1.2-2'}}</div>
+                    </div>
+                    <hr />
+                </div>                    
+                <div class="col-sm-12 mt-3">
+                    <label for="additional_info" class="form-control-label">Additional Notes:</label>
+                    <textarea rows="5" type="text" class="form-control rounded-0" id="additional_info"></textarea>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12"><hr /></div> 
+                <div class="col text-left">
+                    <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
+                </div>
+                <div class="col-auto text-right">
+                    <button (click)="confirmOrder()" type="button" class="btn btn-outline-green">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    

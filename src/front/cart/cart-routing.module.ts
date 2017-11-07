@@ -17,14 +17,15 @@ const routes: Routes = [
         data: {
           title: 'Cart'
         }
+      },
+      {
+        path: 'checkout',
+        component: CheckoutComponent,
+        data: {
+          title: 'Checkout'
+        }
       }
     ],
-  }, {
-    path: 'checkout',
-    data: {
-      title: 'Checout'
-    },
-    component: CheckoutComponent
   }
 ];
 

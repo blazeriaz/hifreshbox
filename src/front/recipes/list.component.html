@@ -1,0 +1,122 @@
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row text-center p-2">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-3 mb-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-0">
+          <div class="card-header border-0">
+            <h2 class="font-special">Cookbook</h2>
+          </div>
+          <div class="card-block">
+            <form [formGroup]="searchForm">
+            <div class="row py-2">
+              <label class="col-md-2 col-sm-4">Search : </label>
+              <div class="col-md-6 col-sm-8">              
+                <input type="text" class="form-control" formControlName="name" />
+              </div>
+            </div>
+            </form>
+            
+            <div class="row py-2" *ngIf="loadingList">
+              <div class="col">
+                Please wait! Loading the records...
+              </div>
+            </div>
+            
+            <div class="row py-2" *ngIf="!loadingList && recipes && recipes.length == 0">
+              <div class="col">
+                No records found.
+              </div>
+            </div>
+
+            <div class="row py-2">
+              <div class="col-md-4 col-12" *ngFor="let recipe of recipes">
+                <div class="card px-3 py-4 text-center">
+                  <div (click)="selectRecipe(recipe)">
+                      <img class="img-avatar img-fluid" 
+                        [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
+                        (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />      
+                  </div>
+                  <div class="card-title my-3">
+                      <h5 (click)="selectRecipe(recipe)" class="text-uppercase">{{recipe.name}}</h5>
+                  </div>
+                  <div class="card-body" *ngIf="!recipe.showFacts">
+                      <p>{{recipe.custom_attributes | mgCatalogAttribute:'description' | slice:0:80}}...</p>
+                      <div>
+                          <button type="button" 
+                              (click)="recipe.showFacts = 1" 
+                              class="btn btn-outline-green border-2 font-special font-lg px-3 rounded-0">Facts</button>
+                      </div>
+                  </div>
+                  <div class="card-body" *ngIf="recipe.showFacts">
+                      <div class="row py-2 text-left">
+                          <div class="col-7">Created By</div>
+                          <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute:'chef_name'}}</div>
+                      </div>
+                      <div class="row py-2 text-left">
+                          <div class="col-7">Serving Size</div>
+                          <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute:'servings'}}</div>
+                      </div>
+                      <div class="row py-2 text-left">
+                          <div class="col-7">Prep &amp; Cook time</div>
+                          <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute:'cooking_time'}}</div>
+                      </div> 
+                      <div class="row my-2">
+                          <div class="col">
+                              <b>Calories</b><br />
+                              <span class="font-special color-spl-green">{{recipe.custom_attributes | mgCatalogAttribute:'calories'}}</span>
+                          </div>
+                          <div class="col">
+                              <b>Protein</b><br />
+                              <span class="font-special color-spl-green">{{recipe.custom_attributes | mgCatalogAttribute:'protein'}}g</span>
+                          </div>
+                          <div class="col">
+                              <b>Carb</b><br />
+                              <span class="font-special color-spl-green">{{recipe.custom_attributes | mgCatalogAttribute:'carb'}}g</span>
+                          </div>
+                          <div class="col">
+                              <b>Fat</b><br />
+                              <span class="font-special color-spl-green">{{recipe.custom_attributes | mgCatalogAttribute:'fat'}}g</span>
+                          </div>                    
+                      </div>                   
+                      <button type="button" (click)="selectRecipe(recipe)" class="btn btn-link">See full details >></button>
+                      <div>
+                          <a *ngIf="recipe.custom_attributes | mgCatalogAttribute : 'pdf_upload'"
+                            href="{{recipe.custom_attributes | mgCatalogAttribute : 'pdf_upload'}}" 
+                            target="_blank" class="btn btn-outline-green">Download</a>
+                          <button type="button" 
+                              (click)="recipe.showFacts = 0" 
+                              class="btn btn-outline-green">Close</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="favourite_star font-2xl" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
+                    <i class="fa fa-star" (click)="addToFavourite(recipe)" tooltip="Add to favourite"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+              <ul class="pagination pull-right">
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+                <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+              </ul>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

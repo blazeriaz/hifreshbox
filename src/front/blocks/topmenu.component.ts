@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import * as GlobalVariable from 'global';
-import { AuthService, RestService } from 'services';
+import { AuthService, RestService, CartService } from 'services';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -12,12 +12,13 @@ export class TopmenuComponent implements OnInit {
     cart = null;
     constructor(
         private auth: AuthService,
-        private rest: RestService
+        private rest: RestService,
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {
-        this.rest.getItem('', 'carts/mine').subscribe(res => {
-            this.cart = res;
+        this.cartService.getCartTotal().subscribe(data => {
+            this.cart = data.cart;
         });
     }
 

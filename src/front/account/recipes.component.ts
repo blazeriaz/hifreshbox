@@ -94,11 +94,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
             return;
         }
         this.modelDisabled = true;
+        this.alert.clear();
         this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
             res.recipe = [];
             this.cookbooks.push(res);
             this.modelDisabled = false;
             this.addRecipeToCookBook(res);
+            this.alert.success('Cookbook has been saved successfully!');
         });
     }
 
@@ -113,6 +115,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
             cookbook_id : cookbook.id,
             recipe_id : this.selectRecipe.sku
         }};
+        this.alert.clear();
         this.rest.saveItem(false, sendData, 'cookbook-recipe').subscribe(res => {
             const cbIndex = this.cookbooks.findIndex(x => x.id === res.cookbook_id);
             this.selectRecipe.cookbook_recipe_id = res.id;
@@ -120,6 +123,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.modelDisabled = false;
             this.selectRecipe = null;
             this.modalRef.hide();
+            this.alert.success('Recipe added to the Cookbook successfully!');
+        }, err => {
+            const e = err.json();
+            this.modelDisabled = false;
+            this.selectRecipe = null;
+            this.modalRef.hide();
+            this.alert.error(e.message);
         });
     }
 
@@ -159,17 +169,21 @@ export class RecipesComponent implements OnInit, OnDestroy {
         if (!confirm('Are you sure to remove from favourite?')) {
             return;
         }
+        this.alert.clear();
         this.rest.deleteItem(wishlist_item_id, 'ipwishlist/delete/' + wishlist_item_id).subscribe(res => {
             this.recipes = this.recipes.filter(x => x.wishlist_item_id !== wishlist_item_id);
+            this.alert.success('Recipe had been removed from favourite!');
         });
     }
 
     removeCookbook(cookbook_id) {
-        if (!confirm('Are you sure to remove the cookbook?')) {
+        if (!confirm('Are you sure to delete the cookbook?')) {
             return;
         }
+        this.alert.clear();
         this.rest.deleteItem(cookbook_id, 'cookbook/' + cookbook_id).subscribe(res => {
             this.cookbooks = this.cookbooks.filter(x => x.id !== cookbook_id);
+            this.alert.success('Cookbook had been deleted!');
         });
     }
 
@@ -177,9 +191,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
         if (!confirm('Are you sure to remove the revipe from cookbook?')) {
             return;
         }
+        this.alert.clear();
         this.rest.deleteItem(recipe.cookbook_recipe_id, 'cookbook-recipe/' + recipe.cookbook_recipe_id).subscribe(res => {
             const cbIndex = this.cookbooks.findIndex(x => x.id === cookbook.id);
             this.cookbooks[cbIndex].recipe = this.cookbooks[cbIndex].recipe.filter(x => x.cookbook_recipe_id !== recipe.cookbook_recipe_id);
+            this.alert.success('Recipe had been removed from cookbook!');
         });
     }
 
