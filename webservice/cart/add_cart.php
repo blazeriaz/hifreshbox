@@ -31,7 +31,20 @@ $n_slide = json_encode(['cart_item' => [
 						'quote_id' => $quote_id_c,
 						'product_id' => '2078',						
 						'qty' => 1,
-						'options'=> array(20=>$week_no,21=>$meal_preference)
+						'howmuch_meals_week'=> 1,
+						'howmany_people'=> 1,
+						'meal_extra_notes'=>'extra',
+						//'options'=> array(20=>$week_no,21=>$meal_preference),
+						'preferences'=> array(1 => 
+											array(
+												array('option_id'=>1,'qty'=>2), // Meal Option Id 
+												array('option_id'=>2,'qty'=>1)
+												),
+											2 => array(
+													array('option_id'=>5,'qty'=>2),
+													array('option_id'=>6,'qty'=>1)
+												)
+										)
 						]]);
 
 
@@ -45,7 +58,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
 $result = curl_exec($ch);
 
 echo '<pre>';
-print_r($result);
+//print_r($result);
 print_r(json_decode($result)); 
 echo '</pre>'; 
 //var_dump($result);
