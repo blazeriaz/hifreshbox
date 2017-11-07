@@ -25,8 +25,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
  
  $quote_id_c = json_decode($quote_id);
 
- $week_no = 23;
- $meal_preference = 'Meat * 2 ,Pork * 2';
+ 
 $n_slide = json_encode(['cart_item' => [
 						'quote_id' => $quote_id_c,
 						'product_id' => '2078',						
@@ -34,7 +33,6 @@ $n_slide = json_encode(['cart_item' => [
 						'howmuch_meals_week'=> 1,
 						'howmany_people'=> 1,
 						'meal_extra_notes'=>'extra',
-						//'options'=> array(20=>$week_no,21=>$meal_preference),
 						'preferences'=> array(1 => 
 											array(
 												array('option_id'=>1,'qty'=>2), // Meal Option Id 
