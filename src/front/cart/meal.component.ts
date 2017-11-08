@@ -62,44 +62,36 @@ export class MealComponent implements OnInit, OnDestroy {
     }
 
     selectPreference(preference, option) {
-        if (!this.selectedPreferences[preference.preference_id]) {
-            this.selectedPreferences[preference.preference_id] = [];
-        }
-        const index = this.selectedPreferences[preference.preference_id].findIndex(x => {
+        const index = this.selectedPreferences.findIndex(x => {
             return x.option_id && x.option_id === option.preference_option_id
         });
         if (index === -1) {
-            this.selectedPreferences[preference.preference_id].push({
+            this.selectedPreferences.push({
+                question_id: preference.preference_id,
                 option_id: option.preference_option_id,
                 qty: 1
             });
             option.qty = 1;
         } else {
             const qty = option.qty + 1;
-            this.selectedPreferences[preference.preference_id][index].qty = qty;
+            this.selectedPreferences[index].qty = qty;
             option.qty = qty;
         }
     }
 
     decresePreference(preference, option) {
-        if (!this.selectedPreferences[preference.preference_id]) {
-            this.selectedPreferences[preference.preference_id] = [];
-        }
-        const index = this.selectedPreferences[preference.preference_id].findIndex(x => {
+        const index = this.selectedPreferences.findIndex(x => {
             return x.option_id && x.option_id === option.preference_option_id
         });
         if (index !== -1) {
             const qty = option.qty - 1;
-            this.selectedPreferences[preference.preference_id][index].qty = qty;
+            this.selectedPreferences[index].qty = qty;
             option.qty = qty;
         }
     }
 
     removePreference(preference, option) {
-        if (!this.selectedPreferences[preference.preference_id]) {
-            this.selectedPreferences[preference.preference_id] = [];
-        }
-        this.selectedPreferences[preference.preference_id] = this.selectedPreferences[preference.preference_id].filter(x => {
+        this.selectedPreferences = this.selectedPreferences.filter(x => {
             return x.option_id && x.option_id !== option.preference_option_id
         });
         option.qty = 0;
@@ -119,10 +111,10 @@ export class MealComponent implements OnInit, OnDestroy {
         this.checkoutMealSubmitted = true;
         this.alert.clear();
         if (this.checkoutMealForm.valid) {
-            this.MealProduct.howmuch_meals_week = this.checkoutMealForm.value.howmuch_meals_week,
-            this.MealProduct.howmany_people = this.checkoutMealForm.value.howmany_people,
-            this.MealProduct.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
-            this.MealProduct.preference = this.selectedPreferences.filter(x => x.length > 0);
+            this.MealProduct.cart_item.howmuch_meals_week = this.checkoutMealForm.value.howmuch_meals_week,
+            this.MealProduct.cart_item.howmany_people = this.checkoutMealForm.value.howmany_people,
+            this.MealProduct.cart_item.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
+            this.MealProduct.cart_item.preferences = this.selectedPreferences;
             this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
                 this.next.emit('meal');
                 this.cartService.setCartTotal();
