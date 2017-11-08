@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService, CartService } from 'services';
+import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     cart;
     totals;
     steps;
-    step;
+    currentStep;
 
     constructor(
         private alert: AlertService,
@@ -19,6 +19,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2,
+        private auth: AuthService,
         private cartService: CartService
     ) { }
 
@@ -35,13 +36,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
         this.steps = [{
             key: 'login',
-            title: 'Login'
-        }, {
-            key: 'address',
-            title: 'Address'
+            title: 'Login',
         }, {
             key: 'meal',
             title: 'Meal preference'
+        }, {
+            key: 'address',
+            title: 'Address'
         }, {
             key: 'payment',
             title: 'Payment Info'
@@ -50,15 +51,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             title: 'Order Summery'
         }];
 
-        this.step = 'address';
+        this.currentStep = 'login';
+
+        if (!this.cartService.mealAdded) {
+            this.steps = this.steps.filter(x => x.key !== 'meal');
+        }
+
+        if (this.auth.isLogin()) {
+            this.goNext('login');
+        }
     }
 
     goBack(step) {
         const index = this.steps.findIndex(x => x.key === step);
+        delete this.steps[index].complete;
         if (index <= 0) {
             this.router.navigate(['/', 'cart']);
         } else {
-            this.step = this.steps[index - 1].key;
+            const stepObj = this.steps[index - 1];
+            this.currentStep = stepObj.key;
         }
         window.scroll(0, 0);
     }
@@ -68,10 +79,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         if (index === -1) {
             this.router.navigate(['/', 'cart']);
         }
-        if (index > this.steps.length) {
-            this.router.navigate(['/', 'checkout-success']);
+        const stepObj = this.steps[index + 1];
+        if (stepObj && stepObj.key) {
+            this.steps[index].complete = 1;
+            this.currentStep = stepObj.key;
         } else {
-            this.step = this.steps[index + 1].key;
+            this.router.navigate(['/', 'checkout-success']);
         }
         window.scroll(0, 0);
     }

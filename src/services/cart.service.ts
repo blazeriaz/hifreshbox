@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import * as GlobalVariable from '../global';
-import { AuthService, RestService } from 'services';
+import { AuthService, RestService, RestDefaultService } from 'services';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
@@ -15,14 +15,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class CartService {
 
   private cartTotal = new BehaviorSubject({
+    guestCardId: null,
     cart: null,
     showImages: null,
     totals: null
   });
+  guestCardId;
   cart = null;
   totals = null;
   showImages = false;
-  giftAdded = false;
   mealAdded = false;
 
   constructor(
@@ -31,7 +32,33 @@ export class CartService {
     private auth: AuthService,
     private rest: RestService
   ) {
-    this.setCartTotal();
+    if (this.auth.isLogin()) {
+      localStorage.removeItem('guestCardId');
+    }
+    this.guestCardId = localStorage.getItem('guestCardId');
+    this.auth.getLoginSubject().subscribe(res => {
+      if (res.action === 'login') {
+        if (this.cart && this.cart.id && this.cart.items_count > 0 && this.guestCardId) {
+          this.rest.getItem('me', 'customers/me').subscribe(user => {
+              const sendData = {
+                customerId: user.id,
+                storeId: user.store_id
+              };
+              this.rest.saveItem(true, sendData, 'guest-carts/' + this.guestCardId).subscribe(x => {
+                this.setCartTotal();
+              }, e => {
+                this.setCartTotal();
+              })
+          });
+        } else {
+          this.setCartTotal();
+        }
+        localStorage.removeItem('guestCardId');
+        this.assignCartTotal();
+      } else {
+        this.setCartTotal();
+      }
+    });
   }
 
   getCartTotal() {
@@ -39,70 +66,56 @@ export class CartService {
   }
 
   setCartTotal() {
-    let cardId = 'mine';
+    let cartUrl = 'carts/mine';
     if (!this.auth.isLogin()) {
-      if (!this.cart || !this.cart.id) {alert("f");
-        this.rest.saveItem(false, {}, 'carts').sgubscribe(cartId => {
-          this.cart = {
-            id: cartId
-          };
+      if (!this.guestCardId) {
+        this.rest.saveItem(false, {}, 'guest-carts').subscribe(cartId => {
+          localStorage.setItem('guestCardId', cartId);
+          this.guestCardId = cartId;
           this.setCartTotal();
         });
         return;
       }
-      cardId = this.cart.id;
+      cartUrl = 'guest-carts/' + this.guestCardId;
     }
-    this.rest.getItem('', 'carts/' + cardId).subscribe(res => {
+    this.rest.getItem('', cartUrl).subscribe(res => {
         this.cart = res;
         this.showImages = true;
-        this.cartTotal.next({
-          cart: this.cart,
-          showImages: this.showImages,
-          totals: this.totals
-        });
+        this.assignCartTotal();
     });
 
-    this.rest.getItem('', 'carts/' + cardId + '/totals').subscribe(res => {
+    this.rest.getItem('', cartUrl + '/totals').subscribe(res => {
       this.totals = res;
-      this.cartTotal.next({
-        cart: this.cart,
-        showImages: this.showImages,
-        totals: this.totals
-      });
+      this.assignCartTotal();
     });
+  }
+
+  assignCartTotal() {
+    this.cartTotal.next({
+      guestCardId: this.guestCardId,
+      cart: this.cart,
+      showImages: this.showImages,
+      totals: this.totals
+    });
+  }
+
+  addMealToCart(item) {
+    return this.rest.saveItem(false, item, 'cart-add');
   }
 
   addItemToCart(item) {
-    let cardId = 'mine';
+    let cartUrl = 'carts/mine';
     if (!this.auth.isLogin()) {
-      if (!this.cart || !this.cart.id) {
-        this.setCartTotal();
-        return this.getCartTotal().subscribe(data => {
-          if (data.cart && data.cart.id) {
-            return this.addItemToCart(item);
-          }
-        });
-      } else {
-        cardId = this.cart.id;
-      }
+      cartUrl = 'guest-carts/' + this.cart.id;
     }
-    return this.rest.saveItem(false, item, 'carts/' + cardId + '/items');
+    return this.rest.saveItem(false, item, cartUrl + '/items');
   }
 
   removeCartItem(item_id) {
-    let cardId = 'mine';
+    let cartUrl = 'carts/mine';
     if (!this.auth.isLogin()) {
-      if (!this.cart || !this.cart.id) {
-        this.setCartTotal();
-        return this.getCartTotal().subscribe(data => {
-          if (data.cart && data.cart.id) {
-            return this.removeCartItem(item_id);
-          }
-        });
-      } else {
-        cardId = this.cart.id;
-      }
+      cartUrl = 'guest-carts/' + this.guestCardId;
     }
-    return this.rest.deleteItem(item_id, 'carts/' + cardId + '/items/' + item_id);
+    return this.rest.deleteItem(item_id, cartUrl + '/items/' + item_id);
   }
 }

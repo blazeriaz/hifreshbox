@@ -69,7 +69,7 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         this.zoomedImgSrc = this.backgrounds.recipe;**/
         this.loadSwag();
 
-        this.swagProduct = {cart_item: {
+        this.swagProduct = {cartItem: {
             quote_id: null,
             sku: null,
             qty: 1,
@@ -85,10 +85,12 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         this.loadedSwag = false;
         const swagSku = this.route.snapshot.params['sku'];
         this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {
-            this.swagProduct.cart_item.sku = swag.sku;
+            this.swagProduct.cartItem.sku = swag.sku;
             this.cartService.getCartTotal().subscribe(res => {
-                if (res.cart && res.cart.id) {
-                    this.swagProduct.cart_item.quote_id = res.cart.id
+                if (res.guestCardId) {
+                    this.swagProduct.cartItem.quote_id = res.guestCardId
+                } else if (res.cart && res.cart.id) {
+                    this.swagProduct.cartItem.quote_id = res.cart.id
                 }
             });
             this.loadedSwag = true;

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RestService, AlertService, MealMenuService, AuthService } from 'services';
+import { RestService, AlertService, MealMenuService, AuthService, CartService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
@@ -22,15 +22,16 @@ export class MenuComponent implements OnInit, OnDestroy {
     recipes = [];
     favRecipes = [];
     selectedRecipe;
-    days;
+    currentMenuDays;
     islogin;
 
     constructor(
     private alert: AlertService,
     private rest: RestService,
-    private route: Router,
+    private router: Router,
     private mealMenuService: MealMenuService,
-    private auth: AuthService
+    private auth: AuthService,
+    private cartService: CartService
     ) { }
 
     ngOnInit(): void {
@@ -76,16 +77,11 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.currentYear = date.getFullYear();
         this.startYear = 2017;
         this.endYear = this.currentYear + 10;
-        this.days = {};
+        this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
 
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
             const tuesday = this.mealMenuService.getDateOfISOWeekStringFull(data.week, data.year);
             this.selectedWeek = {id: data.week, text: tuesday, year: data.year};
-
-            this.days = {
-                friday: this.mealMenuService.getDateOfISOWeekFriday(data.week, data.year),
-                tuesday: this.mealMenuService.getDateOfISOWeek(data.week, data.year)
-            }
 
             this.disablePreviousWeek = false;
             const prevTuesday = this.mealMenuService.getDateOfISOWeekString(data.week - 1, data.year);
@@ -116,6 +112,11 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
             this.favRecipes = data.map(x => x.product_id);
         });
+    }
+
+    addMealToCart() {
+        this.cartService.mealAdded = true;
+        this.router.navigate(['/', 'cart', 'checkout']);
     }
 
     recipeFavouriteClass(recipe) {
@@ -149,7 +150,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
 
     selectRecipe(recipe) {
-        this.route.navigate(['menu', recipe.url_key]);
+        this.router.navigate(['menu', recipe.url_key]);
     }
 
     gotToPrevWeek() {

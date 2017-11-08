@@ -30,12 +30,21 @@
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let opt of preference.options">
                                     <div class="mx-auto pointer" style="max-width:100%; width: 120px; height: 120px;">
-                                        <div class="circle_main px-1 py-3" [hoverClass]="'bg-light'">
+                                        <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt)">
                                             <div class="circle_text_container">
                                                 <div class="circle_text">
                                                     {{opt.title}}
+                                                    <div *ngIf="opt.qty > 0">
+                                                        {{opt.qty}} x
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-1" *ngIf="opt.qty > 0">
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-secondary" tooltip="Decrease Quantity" (click)="decresePreference(preference, opt)">-</button>
+                                            <button type="button" class="btn btn-secondary" tooltip="Deselect Preference" (click)="removePreference(preference, opt)">x</button>
                                         </div>
                                     </div>
                                 </div>
@@ -43,9 +52,9 @@
                         </div>
                     </div>
                     <div class="form-group row mt-3">
-                        <div class="col-sm-12 mt-3">
-                            <label for="additional_meal_info" class="form-control-label">Didn’t find it? Please enter here:</label>
-                            <textarea rows="5" type="text" class="form-control rounded-0" id="additional_meal_info"></textarea>
+                        <div class="col-sm-12 mt-3" [ngClass]="setInputDivClass('meal_extra_notes')">
+                            <label for="meal_extra_notes" class="form-control-label">Didn’t find it? Please enter here:</label>
+                            <textarea rows="5" type="text" class="form-control rounded-0" id="meal_extra_notes" formControlName="meal_extra_notes" [ngClass]="setInputClass('meal_extra_notes')"></textarea>
                         </div>
                     </div>
                     <div class="form-group row mt-3">

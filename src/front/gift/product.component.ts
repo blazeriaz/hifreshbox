@@ -64,7 +64,7 @@ export class ProductComponent implements OnInit, OnDestroy {
             }
         };
 
-        this.giftProduct = {cart_item: {
+        this.giftProduct = {cartItem: {
             quote_id: null,
             sku: 'freshbox-gift',
             qty: 1,
@@ -75,8 +75,10 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.setProductOption(14, 27);
 
         this.cartService.getCartTotal().subscribe(res => {
-            if (res.cart && res.cart.id) {
-                this.giftProduct.cart_item.quote_id = res.cart.id
+            if (res.guestCardId) {
+                this.giftProduct.cartItem.quote_id = res.guestCardId
+            } else if (res.cart && res.cart.id) {
+                this.giftProduct.cartItem.quote_id = res.cart.id
             }
         });
 
@@ -99,7 +101,7 @@ export class ProductComponent implements OnInit, OnDestroy {
             this.setProductOption(17, this.recipientForm.value.recipient_lastname);
             this.setProductOption(18, this.recipientForm.value.recipient_email);
             this.setProductOption(19, this.recipientForm.value.message);
-            this.giftProduct.cart_item.productOption =  {
+            this.giftProduct.cartItem.productOption =  {
                 extensionAttributes: {
                     customOptions: this.customOptions
                 }
@@ -110,7 +112,6 @@ export class ProductComponent implements OnInit, OnDestroy {
                 this.alert.success('Gift added to cart');
                 this.router.navigate(['/', 'cart']);
                 this.cartService.setCartTotal();
-                this.cartService.giftAdded = true;
             }, err => {
                 this.sentData = false;
                 const e = err.json();
@@ -139,14 +140,14 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
 
     increseQty() {
-        this.giftProduct.cart_item.qty++;
+        this.giftProduct.cartItem.qty++;
     }
 
     decreseQty() {
-        if (this.giftProduct.cart_item.qty <= 1) {
-            this.giftProduct.cart_item.qty = 1;
+        if (this.giftProduct.cartItem.qty <= 1) {
+            this.giftProduct.cartItem.qty = 1;
         } else {
-            this.giftProduct.cart_item.qty--;
+            this.giftProduct.cartItem.qty--;
         }
     }
 

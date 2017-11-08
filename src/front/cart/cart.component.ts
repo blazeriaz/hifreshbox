@@ -37,7 +37,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     getImageFromCart(item_id) {
         const item = this.cart.items.filter(x => x.item_id === item_id);
-        return item[0].extension_attributes.image_url;
+        return item.length > 0 ? item[0].extension_attributes.image_url : '';
     }
 
     removeCartItem(item_id) {

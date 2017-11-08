@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService } from 'services';
+import { RestService, AlertService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +13,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     constructor(
         private alert: AlertService,
         private rest: RestService,
+        private auth: AuthService,
         private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2

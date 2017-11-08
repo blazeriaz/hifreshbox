@@ -1,6 +1,6 @@
 import { Component, OnInit, Injectable, ViewChild, TemplateRef, Renderer2, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, RestService } from 'services';
+import { UsersService, AlertService, RestService, AuthService } from 'services';
 import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
@@ -33,6 +33,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     constructor(
         private usersService: UsersService,
         private alert: AlertService,
+        private auth: AuthService,
         private rest: RestService,
         private _fb: FormBuilder,
         private route: ActivatedRoute,
@@ -103,12 +104,21 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     loadFormData() {
-        this.loadFormRequests.push(
-            this.rest.getItem('me', 'customers/me').subscribe(user => {
+        this.auth.getUserInfo().subscribe(user => {
+            if (user) {
                 this.user = user;
                 this.checkAllFormDataLoaded();
-            })
-        );
+            } else {
+                setTimeout(() => {
+                    if (!this.user || !this.user.id) {
+                        this.countLoadedFormReqs--;
+                        this.loadedFormData = false;
+                        this.auth.initLoggedInUserInfo();
+                        this.loadFormData();
+                    }
+                }, 2000);
+            }
+        });
         this.countLoadedFormReqs++;
     }
 
@@ -344,6 +354,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
             this.saveRequests = [];
 
             this.rest.saveItem('me', {customer: this.userForm.value}, 'customers/me').subscribe(data => {
+                this.auth.initLoggedInUserInfo();
                 this.noticeUserSaved();
             });
         } else {

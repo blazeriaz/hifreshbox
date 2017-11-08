@@ -214,16 +214,25 @@ input, select, textarea {
     border : 1px solid $brand-info;
 }
 
+.bg-light.circle_main, .bg-light .circle_main {
+    color: #222222;
+    border : 1px solid $gray-light;
+    background-color: #FAFAFA;
+}
 .bg-green.circle_main, .bg-green .circle_main {
     color: $white;
     border : 1px solid $brand-success;
     background-color: $brand-success;
 }
-
-.bg-light.circle_main, .bg-light .circle_main {
-    color: #222222;
-    border : 1px solid #222222;
-    background-color: #FAFAFA;
+.bg-dark.circle_main, .bg-dark .circle_main {
+    color: $white;
+    border : 1px solid $gray-light;
+    background-color: $gray-dark;
+}
+.bg-gray.circle_main, .bg-gray .circle_main {
+    color: $white;
+    border : 1px solid $gray-dark;
+    background-color: $gray;
 }
 /* Circle Main draws the actual circle */
 .circle_main

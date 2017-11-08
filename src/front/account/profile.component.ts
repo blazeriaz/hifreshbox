@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Injectable, ViewChild, TemplateRef, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { UsersService, AlertService, RestService } from 'services';
+import { AlertService, RestService, AuthService } from 'services';
 import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
@@ -24,14 +24,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     loadFormRequests;
 
     constructor(
-        private usersService: UsersService,
         private alert: AlertService,
         private rest: RestService,
         private _fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private modalService: BsModalService,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private auth: AuthService
     ) {
 
     }
@@ -43,21 +43,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.loadFormData();
     }
 
-    checkAllFormDataLoaded() {
-      if (--this.countLoadedFormReqs === 0) {
-        this.initEditForm();
-        this.loadedFormData = true;
-      }
-    }
-
     loadFormData() {
-        this.loadFormRequests.push(
-            this.rest.getItem('me', 'customers/me').subscribe(user => {
+        this.auth.getUserInfo().subscribe(user => {
+            if (user) {
                 this.user = user;
-                this.checkAllFormDataLoaded();
-            })
-        );
-        this.countLoadedFormReqs++;
+                this.initEditForm();
+                this.loadedFormData = true;
+            }
+        });
+        setTimeout(() => {
+            if (!this.user || !this.user.id) {
+                this.auth.initLoggedInUserInfo();
+                this.loadFormData();
+            }
+        }, 2000);
     }
 
     initEditForm() {
@@ -112,6 +111,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.rest.saveItem('me', {customer: this.userForm.value}, 'customers/me').subscribe(data => {
                 this.sentData = false;
                 this.submitted = false;
+                this.auth.initLoggedInUserInfo();
                 this.alert.success('Account details are updated!');
             });
         } else {

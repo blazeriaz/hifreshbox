@@ -27,6 +27,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     showCBSubmitButton;
     selectRecipe;
     singleCB;
+    user;
 
     constructor(
         private alert: AlertService,
@@ -64,13 +65,26 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.loadedCookBooks = true;
         });
 
-        this.rest.getItem('me', 'customers/me').subscribe(user => {
-            this.cbForm = this._fb.group({
-                'user_id': user.id,
-                'is_active': 1,
-                'title': ['', Validators.required]
-            });
+        this.loadFormData();
+    }
+
+    loadFormData() {
+        this.auth.getUserInfo().subscribe(user => {
+            if (user) {
+                this.user = user;
+                this.cbForm = this._fb.group({
+                    'user_id': user.id,
+                    'is_active': 1,
+                    'title': ['', Validators.required]
+                });
+            }
         });
+        setTimeout(() => {
+            if (!this.user || !this.user.id) {
+                this.auth.initLoggedInUserInfo();
+                this.loadFormData();
+            }
+        }, 2000);
     }
 
     setInputErrorClass(form, input) {

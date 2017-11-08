@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { DatePipe } from '@angular/common';
@@ -8,20 +8,36 @@ import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class MealMenuService {
-	private subject = new BehaviorSubject({year:2017,week:1});
+	private subject = new BehaviorSubject({year: 2017, week: 1});
 
 	constructor(
 		private router: Router,
-		private datePipe : DatePipe
+		private datePipe: DatePipe
 		) {
-	    let date = new Date();
-	    let currentYear = date.getFullYear();
+		const data = this.getCurrentyearMonth();
+	    this.setYearWeek(data.year, data.week);
+	}
+
+	getCurrentyearMonth() {
+		const date = new Date();
+	    const currentYear = date.getFullYear();
 		let currentWeek = this.getWeekNumber(date);
 		currentWeek++;
-	    if(date.getDay() >= 5) {
+	    if (date.getDay() >= 5) {
 	    	currentWeek++;
 	    }
-	    this.setYearWeek(currentYear, currentWeek);
+		return {
+			year: currentYear,
+			week: currentWeek
+		};
+	}
+
+	getCurrentMenuDays() {
+		const data = this.getCurrentyearMonth();
+		return {
+			friday: this.getDateOfISOWeekFriday(data.week, data.year),
+			tuesday: this.getDateOfISOWeek(data.week, data.year)
+		};
 	}
 
 	getYearWeek(): Observable<any> {
@@ -29,69 +45,73 @@ export class MealMenuService {
 	}
 
 	setYearWeek(year, week) {
-		if(!week) {
-			let tuesday = this.getDateOfISOWeekString(1, year);
-			week = tuesday?1:2;
+		if (!week) {
+			const tuesday = this.getDateOfISOWeekString(1, year);
+			week = tuesday ? 1 : 2;
 		}
 	    this.subject.next({ year: year, week : week});
 	}
 
 	getWeekNumber = function(date) {
-	  let onejan = new Date(date.getFullYear(), 0, 1);
-	  let oneJonDay = onejan.getDay();
-	  let oneJonTime = onejan.getTime();
+	  const onejan = new Date(date.getFullYear(), 0, 1);
+	  const oneJonDay = onejan.getDay();
+	  const oneJonTime = onejan.getTime();
 	  return Math.ceil((((date.getTime() - oneJonTime) / 86400000) + oneJonDay + 1) / 7);
 	}
 
 	getDateOfISOWeek(w, y) {
-		var simple = new Date(y, 0, 1 + (w - 1) * 7);
-		var dow = simple.getDay();
-		var ISOweekStart = simple;
-		if (dow <= 4)
+		const simple = new Date(y, 0, 1 + (w - 1) * 7);
+		const dow = simple.getDay();
+		const ISOweekStart = simple;
+		if (dow <= 4) {
 		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 2);
-		else
-		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
+		} else {
+			ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
+		}
 		return ISOweekStart;
 	}
 
 	getDateOfISOWeekFriday(w, y) {
-		var simple = new Date(y, 0, 1 + (w - 2) * 7);
-		var dow = simple.getDay();
-		var ISOweekStart = simple;
-		if (dow <= 4)
+		const simple = new Date(y, 0, 1 + (w - 2) * 7);
+		const dow = simple.getDay();
+		const ISOweekStart = simple;
+		if (dow <= 4) {
 		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 5);
-		else
-		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 5);
+		} else {
+			ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 5);
+		}
 		return ISOweekStart;
 	}
 
 	getDateOfISOWeekString(w, y) {
-		var simple = new Date(y, 0, 1 + (w - 1) * 7);
-		var dow = simple.getDay();
-		var ISOweekStart = simple;
-		if (dow <= 4)
+		const simple = new Date(y, 0, 1 + (w - 1) * 7);
+		const dow = simple.getDay();
+		const ISOweekStart = simple;
+		if (dow <= 4) {
 		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 2);
-		else
-		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
-		if(ISOweekStart.getFullYear() != y) {
+		} else {
+			ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
+		}
+		if (ISOweekStart.getFullYear() !== y) {
 		  return false;
 		}
-		return this.datePipe.transform(ISOweekStart, "MMM d");
+		return this.datePipe.transform(ISOweekStart, 'MMM d');
 	}
 
 	getDateOfISOWeekStringFull(w, y, format?) {
-		var simple = new Date(y, 0, 1 + (w - 1) * 7);
-		var dow = simple.getDay();
-		var ISOweekStart = simple;
-		if (dow <= 4)
+		const simple = new Date(y, 0, 1 + (w - 1) * 7);
+		const dow = simple.getDay();
+		const ISOweekStart = simple;
+		if (dow <= 4) {
 		    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 2);
-		else
-		    ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
-		if(ISOweekStart.getFullYear() != y) {
+		} else {
+			ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
+		}
+		if (ISOweekStart.getFullYear() !== y) {
 		  return false;
 		}
-		if(!format) {
-			format = "longDate";
+		if (!format) {
+			format = 'longDate';
 		}
 		return this.datePipe.transform(ISOweekStart, format);
 	}

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, 
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService, RestService, AuthService } from 'services';
+import { AlertService, RestService, AuthService, CartService, MealMenuService } from 'services';
 
 @Component({
     templateUrl: 'recipe.component.html'
@@ -12,6 +12,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
     loadedRecipe;
     recipe;
     islogin;
+    currentMenuRecipes;
 
     constructor(
         private alert: AlertService,
@@ -19,11 +20,12 @@ export class RecipeComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private renderer: Renderer2,
-        private auth: AuthService
+        private auth: AuthService,
+        private mealMenuService: MealMenuService,
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {
-        this.islogin = this.auth.isLogin();
         this.renderer.addClass(document.body, 'white-header');
         this.backgrounds = {
             header: {
@@ -63,12 +65,33 @@ export class RecipeComponent implements OnInit, OnDestroy {
         this.loadRecipe();
     }
 
+    isLogin() {
+        this.auth.isLogin();
+    }
+
+    addMealToCart() {
+        this.cartService.mealAdded = true;
+        this.router.navigate(['/', 'cart', 'checkout']);
+    }
+
     loadRecipe() {
         this.loadedRecipe = false;
         const recipeSku = this.route.snapshot.params['sku'];
         this.rest.getItem(recipeSku, 'recipedetail/' + recipeSku).subscribe(recipe => {
             this.loadedRecipe = true;
             this.recipe = recipe;
+            const currentMenuDays = this.mealMenuService.getCurrentyearMonth();
+            const sendData = {week_data : {
+                sku : 'freshbox-subscription',
+                week_no : currentMenuDays.week,
+                year : currentMenuDays.year
+            }}
+            this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
+                const index = recipes.findIndex(x => x.recipe_detail.sku === this.recipe.sku);
+                if(index !== -1) {
+                    this.recipe.inCurrentMenu = 1;
+                }
+            });
         });
     }
 

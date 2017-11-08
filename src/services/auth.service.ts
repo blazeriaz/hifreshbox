@@ -12,6 +12,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class AuthService {
   module;
+  baseUrl;
+  private userInfo = new BehaviorSubject(null);
   private loginSubject = new BehaviorSubject({
     action: null
   });
@@ -20,6 +22,28 @@ export class AuthService {
     private http: Http,
     private router: Router
   ) {
+    this.initLoggedInUserInfo();
+    this.baseUrl = GlobalVariable.BASE_API_URL;
+  }
+
+  initLoggedInUserInfo() {
+    if (this.isLogin()) {
+      this.getItem('customers/me').subscribe(user => {
+        this.userInfo.next(user);
+      });
+    }
+  }
+
+  getUserInfo() {
+    return this.userInfo.asObservable();
+  }
+
+  getItem(url) {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization', 'Bearer ' + this.getToken());
+    const options = new RequestOptions({ headers: headers });
+    return this.http.get(this.baseUrl + url, options)
+      .map((response: Response) => response.json());
   }
 
   getLoginSubject() {
@@ -61,11 +85,12 @@ export class AuthService {
         // login successful if there's a jwt token in the response
         const token = response.json();
         if (token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem(this.module + '_token', token);
           this.loginSubject.next({
             action : 'login'
           });
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem(this.module + '_token', token);
+          this.initLoggedInUserInfo();
         }
 
         return token;

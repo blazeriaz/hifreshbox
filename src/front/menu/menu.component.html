@@ -136,7 +136,8 @@
         <div class="col-sm-12 col-md-6 text-white text-center px-5 py-3">
             <div class="px-5 py-4">
                 <img class="mb-3" [src]="backgrounds.cap" />
-                <h5>All orders must be placed by {{days.friday | date : 'EEEE, MMMM d'}} for {{days.tuesday | date : 'EEEE, MMMM d'}}</h5>
+                <h5>All orders must be placed by {{currentMenuDays.friday | date : 'EEEE, MMMM d'}} for {{currentMenuDays.tuesday | date : 'EEEE, MMMM d'}}</h5>
+                <button type="button" class="btn btn-outline-green" (click)="addMealToCart()">Order Now</button>
             </div>
         </div>
     </div>

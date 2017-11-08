@@ -32,10 +32,9 @@
                     </div>
                     <div class="col">
                         <div class="input-group">
-                            <input [(ngModel)]="swagProduct.cart_item.qty" class="form-control py-2" type="number" value="1" min="1" />
-                        
+                            <input [(ngModel)]="swagProduct.cartItem.qty" class="form-control py-2 rounded-0" type="number" value="1" min="1" />                        
                             <span class="input-group-btn ml-3">
-                                <button [disabled]="!swagProduct.cart_item.quote_id" (click)="addSwagToCart()" class="btn btn-outline-green px-2 py-2">Add to cart</button>
+                                <button [disabled]="!swagProduct.cartItem.quote_id" (click)="addSwagToCart()" class="btn btn-outline-green px-2 py-2 rounded-0">Add to cart</button>
                             </span>
                         </div>
                     </div>

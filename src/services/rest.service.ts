@@ -114,7 +114,7 @@ export class RestService {
         return "[direction]=";
     }
 
-getItem(itemId, url?) {
+ getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
@@ -124,8 +124,7 @@ getItem(itemId, url?) {
     }
 
     url = this.baseUrl + url;
-    
-    
+ 
     return this.http.get(url, options)
       .map((response: Response) => response.json())
       .catch(this.onCatch)
@@ -206,7 +205,7 @@ getItem(itemId, url?) {
     console.log('Request successful');
   }
 
-  private onError(res: Response): void {console.log(res);
+  private onError(res: Response): void {
     console.log('Error, status code: ' + res.status);
   }
 

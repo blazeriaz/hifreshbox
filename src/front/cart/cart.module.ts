@@ -15,6 +15,7 @@ import { AddressComponent } from './address.component';
 import { ConfirmComponent } from './confirm.component';
 import { MealComponent } from './meal.component';
 import { PaymentComponent } from './payment.component';
+import { LoginComponent } from './login.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { PaymentComponent } from './payment.component';
     AddressComponent,
     ConfirmComponent,
     MealComponent,
-    PaymentComponent
+    PaymentComponent,
+    LoginComponent
   ],
   providers: [UsersService, PagerService]
 })
