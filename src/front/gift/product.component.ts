@@ -110,8 +110,8 @@ export class ProductComponent implements OnInit, OnDestroy {
             this.cartService.addItemToCart(this.giftProduct).subscribe(res => {
                 this.sentData = false;
                 this.alert.success('Gift added to cart');
+                this.cartService.increaseCartItem(res);
                 this.router.navigate(['/', 'cart']);
-                this.cartService.setCartTotal();
             }, err => {
                 this.sentData = false;
                 const e = err.json();

@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
-import { AlertService, Alert, AlertType } from "services";
+import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { AlertService, Alert, AlertType } from 'services';
 
 
 @Component({
@@ -9,18 +8,25 @@ import { AlertService, Alert, AlertType } from "services";
     templateUrl: 'alert.component.html'
 })
 
-export class AlertComponent implements OnInit {
+export class AlertComponent implements OnInit, AfterViewInit {
     alerts: Alert[] = [];
 
-    constructor(private alertService: AlertService) { }
+    constructor(
+        private elRef: ElementRef,
+        private alertService: AlertService
+    ) { }
 
     ngOnInit() {
+    }
+    ngAfterViewInit() {
         this.alertService.getAlert().subscribe((alert: Alert) => {
             if (!alert) {
                 // clear alerts when an empty alert is received
                 this.alerts = [];
                 return;
             }
+
+            this.elRef.nativeElement.scrollIntoView();
 
             // add alert to array
             this.alerts.push(alert);

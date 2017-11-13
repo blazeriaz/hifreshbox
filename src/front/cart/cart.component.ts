@@ -29,9 +29,11 @@ export class CartComponent implements OnInit, OnDestroy {
 
     initCartPage() {
         this.cartService.getCartTotal().subscribe(data => {
-            this.cart = data.cart;
-            this.showImages = data.showImages;
-            this.totals = data.totals;
+            if (data.cart || data.totals) {
+                this.cart = data.cart;
+                this.showImages = data.showImages;
+                this.totals = data.totals;
+            }
         });
     }
 
@@ -40,12 +42,17 @@ export class CartComponent implements OnInit, OnDestroy {
         return item.length > 0 ? item[0].extension_attributes.image_url : '';
     }
 
+    getFromCartTotal(item_id, key) {
+        const item = this.totals.items.filter(x => x.item_id === item_id);
+        return item.length > 0 ? item[0][key] : null;
+    }
+
     removeCartItem(item_id) {
         if (!confirm('Are you sure want remove item from cart?')) {
             return;
         }
         this.cartService.removeCartItem(item_id).subscribe(res => {
-            this.cartService.setCartTotal();
+            this.cartService.decreaseCartItem(item_id);
         });
     }
 

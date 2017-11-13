@@ -125,8 +125,8 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     addSwagToCart() {
         this.alert.clear();
         this.cartService.addItemToCart(this.swagProduct).subscribe(res => {
+            this.cartService.increaseCartItem(res);
             this.alert.success('Swag added to cart.');
-            this.cartService.setCartTotal();
         }, err => {
             const e = err.json();
             this.alert.error(e.message);

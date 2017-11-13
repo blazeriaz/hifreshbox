@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     @Output() next = new EventEmitter();
 
     checkoutLoginForm;
+    loading;
 
     constructor(
         private alert: AlertService,
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-
+        this.loading = false;
         const regExPassword = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$';
         this.checkoutLoginForm = this._fb.group({
           'email': ['', [Validators.required, Validators.email]],
@@ -83,6 +84,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             },
             password : this.checkoutLoginForm.value.password
           };
+          this.loading = true;
           this.rest.saveItem('', sendData, 'customers')
             .subscribe(
                 data => {
@@ -103,6 +105,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 error => {
                   const err = error.json();
                   this.alert.error(err.message);
+                  this.loading = false;
                   this.rest.hideLoader();
                 });
         } else {

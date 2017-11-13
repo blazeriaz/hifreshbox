@@ -22,7 +22,6 @@ export class MealMenuService {
 		const date = new Date();
 	    const currentYear = date.getFullYear();
 		let currentWeek = this.getWeekNumber(date);
-		currentWeek++;
 	    if (date.getDay() >= 5) {
 	    	currentWeek++;
 	    }

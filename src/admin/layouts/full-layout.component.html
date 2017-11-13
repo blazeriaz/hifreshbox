@@ -33,14 +33,23 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']">
             <i class="icon-speedometer"></i> Dashboard</a>
         </li>        
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/menu']">
-            <i class="icon-list"></i> Menu</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/recipes']">
-            <i class="icon-list"></i> Recipes</a>
-        </li> 
+        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+            <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle><i class="icon-list"></i> Meal</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal']">
+                    <i class="icon-list"></i> Meal Preferences</a>
+                </li>
+               <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'menu']">
+                    <i class="icon-list"></i> Week Menu</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'recipes']">
+                    <i class="icon-list"></i> Recipes</a>
+                </li> 
+            </ul>
+        </li>         
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/swags']">
             <i class="icon-list"></i> Swags</a>

@@ -4,8 +4,6 @@ import { FormBuilder, Validators, FormArray } from "@angular/forms";
 import { RestService, AlertService, MealMenuService } from 'services';
 
 @Component({
-  // tslint:disable-next-line
-  selector: 'menu-list',
   templateUrl: 'menu.component.html'
 })
 export class MenuComponent implements OnInit {

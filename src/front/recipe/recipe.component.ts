@@ -11,8 +11,8 @@ export class RecipeComponent implements OnInit, OnDestroy {
     backgrounds;
     loadedRecipe;
     recipe;
-    islogin;
     currentMenuRecipes;
+    mealMenuProduct;
 
     constructor(
         private alert: AlertService,
@@ -62,16 +62,39 @@ export class RecipeComponent implements OnInit, OnDestroy {
                 'background-position' : 'bottom'
             }
         };
+
+        this.mealMenuProduct = {cartItem: {
+            quote_id: null,
+            sku: 'freshbox-subscription',
+            qty: 1,
+            productOption: null
+        }};
+
+        this.cartService.getCartTotal().subscribe(res => {
+            if (res.guestCardId) {
+                this.mealMenuProduct.cartItem.quote_id = res.guestCardId
+            } else if (res.cart && res.cart.id) {
+                this.mealMenuProduct.cartItem.quote_id = res.cart.id
+            }
+        });
         this.loadRecipe();
     }
 
     isLogin() {
-        this.auth.isLogin();
+        return this.auth.isLogin();
     }
 
     addMealToCart() {
-        this.cartService.mealAdded = true;
-        this.router.navigate(['/', 'cart', 'checkout']);
+        this.alert.clear();
+        this.rest.showLoader();
+        this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
+            this.cartService.increaseCartItem(res);
+            this.router.navigate(['/', 'cart', 'checkout']);
+        }, err => {
+            this.rest.hideLoader();
+            this.alert.error(err);
+        });
+        window.scroll(0, 0);
     }
 
     loadRecipe() {

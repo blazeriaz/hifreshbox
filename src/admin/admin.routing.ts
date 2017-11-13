@@ -14,7 +14,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: FullLayoutComponent,    
+    component: FullLayoutComponent,
     data: {
       title: 'Home'
     },
@@ -30,11 +30,6 @@ export const routes: Routes = [
         loadChildren: './users/users.module#UsersModule'
       },
       {
-        path: 'recipes',
-        canActivate: [AuthService],
-        loadChildren: './recipes/recipes.module#RecipesModule'
-      },
-      {
         path: 'swags',
         canActivate: [AuthService],
         loadChildren: './swags/swags.module#SwagsModule'
@@ -45,9 +40,9 @@ export const routes: Routes = [
         loadChildren: './orders/orders.module#OrdersModule'
       },
       {
-        path: 'menu',
+        path: 'meal',
         canActivate: [AuthService],
-        loadChildren: './menu/menu.module#MenuModule'
+        loadChildren: './meal/meal.module#MealModule'
       },
       {
         path: 'masters',

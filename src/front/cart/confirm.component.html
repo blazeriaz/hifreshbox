@@ -1,62 +1,123 @@
-<div class="container-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h2 class="text-uppercase">Confirm your order</h2>
+<div class="row">
+    <div class="col-12 text-center">
+        <h2 class="text-uppercase">Confirm your order</h2>
+    </div>
+    <div class="col-md-6">
+        <div class="row mt-5 mx-0 bg-light pt-md-5 pt-3" *ngIf="mealCartItem && mealCartItem.options">
+            <div class="col-12 px-md-5 px-4">
+                <h6>Meals Per Week</h6>
+                <div class="row my-3 px-3">
+                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealCartItem.how_much_meals_week}}</span></div>
+                    <div class="col my-auto">Meals</div>
                 </div>
-                <div class="col-md-6 mt-5 py-3 bg-light">
-                    <div class="row py-2 mx-0" *ngFor="let item of totals?.items">
-                        <div class="col-6">{{item.name}}</div>
-                        <div class="col-2">{{item.qty}}</div>
-                        <div class="col-4">{{item.row_total | currency:'USD':true:'1.0'}}</div>
-                        <div class="col-12"><hr /></div>
-                    </div>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-5 mt-5 py-3">
-                    <b>Delivery Address</b>
-                    <address *ngIf="shippingAddress">
-                        <span>{{shippingAddress.firstname}} {{shippingAddress.lastname}}</span><br>
-                        <span *ngFor="let str of shippingAddress.street">{{str}}<br *ngIf="str" /></span>
-                        <span *ngIf="shippingAddress.city">{{shippingAddress.city}}, </span>
-                        <span *ngIf="shippingAddress.region.region">{{shippingAddress.region.region}}, </span>
-                        <span>{{shippingAddress.country_id}} {{shippingAddress.postcode}}</span><br />
-                        <abbr title="Phone" *ngIf="shippingAddress.telephone">P:</abbr> {{shippingAddress.telephone}}
-                    </address>
-
-                    <b>Billing Address</b>
-                    <address *ngIf="billingAddress">
-                        <span>{{billingAddress.firstname}} {{billingAddress.lastname}}</span><br>
-                        <span *ngFor="let str of billingAddress.street">{{str}}<br *ngIf="str" /></span>
-                        <span *ngIf="billingAddress.city">{{shippingAddress.city}}, </span>
-                        <span *ngIf="billingAddress.region.region">{{billingAddress.region.region}}, </span>
-                        <span>{{billingAddress.country_id}} {{billingAddress.postcode}}</span><br />
-                        <abbr title="Phone" *ngIf="billingAddress.telephone">P:</abbr> {{billingAddress.telephone}}
-                    </address>
-                </div>
-                <div class="col-8 mt-5">
-                    <h5 class="font-special">Your order total</h5>
-                    <hr />
-                    <div class="row py-2 font-sm" *ngFor="let total of totals?.total_segments" [ngClass]="{'font-md font-weight-bold' : total.area === 'footer'}">
-                        <div class="col">{{total.title}}</div>
-                        <div class="col-auto text-right">{{total.value | currency:'USD':true:'1.2-2'}}</div>
-                    </div>
-                    <hr />
-                </div>                    
-                <div class="col-sm-12 mt-3">
-                    <label for="additional_info" class="form-control-label">Additional Notes:</label>
-                    <textarea rows="5" type="text" class="form-control rounded-0" id="additional_info"></textarea>
+                <h6>Servings Per People</h6>
+                <div class="row my-3 px-3">
+                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealCartItem.how_many_people}}</span></div>
+                    <div class="col my-auto">Servings</div>
+                </div>                
+            </div>
+            <div class="col-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row mx-0 bg-light pt-3 pb-md-5 pb-3 px-md-5 px-4" *ngIf="mealCartItem && mealCartItem.options">                
+            <div class="col">
+                <h6>Dietary Preferences</h6>
+                <ul class="list-unstyled mb-0">
+                    <li *ngFor="let preference of mealCartItem.meal_preference">{{preference}}</li>
+                    <li *ngIf="!mealCartItem.meal_preference">NA</li>
+                </ul>
+            </div>
+            <div class="col-auto mt-auto">
+                <button (click)="goCheckoutStep('meal')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
+            </div>
+        </div>
+        <div class="row mt-5 mx-0 pt-3 pb-0 bg-light" *ngIf="showCartItems">   
+            <div class="col mx-auto">
+                <h4 class="mb-0">Cart Items</h4>
+            </div>  
+            <div class="col-auto">
+                <button (click)="goCheckoutStep('cart')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
+            </div>                   
+            <div class="col-12">                            
+                <hr />
+                <div class="row py-2 mx-0 py-2 bg-light" *ngFor="let item of totals?.items;let first = first;">                        
+                    <div class="col-6">{{item.name}}</div>
+                    <div class="col-2">{{item.qty}}</div>
+                    <div class="col-4 text-right">{{item.row_total | currency:'USD':true:'1.0'}}</div>
+                    <div class="col-12"><hr /></div>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-12"><hr /></div> 
-                <div class="col text-left">
-                    <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
-                </div>
-                <div class="col-auto text-right">
-                    <button (click)="confirmOrder()" type="button" class="btn btn-outline-green">Confirm</button>
-                </div>
+        </div>        
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-5 mt-auto">
+        <div class="row mt-5">
+            <div class="col">
+                <h6>Delivery on:</h6>
+                <p>{{currentMenuDays.tuesday | date}}</p>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col">
+                <h6>Delivery Address</h6>
+                <address class="m-0" *ngIf="shippingAddress">
+                    <span>{{shippingAddress.firstname}} {{shippingAddress.lastname}}</span><br>
+                    <span *ngFor="let str of shippingAddress.street">{{str}}<br *ngIf="str" /></span>
+                    <span *ngIf="shippingAddress.city">{{shippingAddress.city}}, </span>
+                    <span *ngIf="shippingAddress.region.region">{{shippingAddress.region.region}}, </span>
+                    <span>{{shippingAddress.country_id}} {{shippingAddress.postcode}}</span><br />
+                    <abbr title="Phone" *ngIf="shippingAddress.telephone">P:</abbr> {{shippingAddress.telephone}}
+                </address>
+            </div>
+            <div class="col-auto mt-auto">
+                <button (click)="goCheckoutStep('address')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col">
+                <h6>Billing Address</h6>
+                <address class="m-0" *ngIf="billingAddress">
+                    <span>{{billingAddress.firstname}} {{billingAddress.lastname}}</span><br>
+                    <span *ngFor="let str of billingAddress.street">{{str}}<br *ngIf="str" /></span>
+                    <span *ngIf="billingAddress.city">{{shippingAddress.city}}, </span>
+                    <span *ngIf="billingAddress.region.region">{{billingAddress.region.region}}, </span>
+                    <span>{{billingAddress.country_id}} {{billingAddress.postcode}}</span><br />
+                    <abbr title="Phone" *ngIf="billingAddress.telephone">P:</abbr> {{billingAddress.telephone}}
+                </address>
+            </div>
+            <div class="col-auto mt-auto">
+                <button (click)="goCheckoutStep('address')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
             </div>
         </div>
     </div>
-    
+</div>
+<div class="row">
+    <div class="col-12 mt-5">
+        <h5 class="font-special">Your order total</h5>
+        <hr />
+    </div>
+    <div class="col-md-8">
+        <div class="row py-2 font-sm" *ngFor="let total of totals?.total_segments" [ngClass]="{'font-3xl font-weight-bold' : total.area === 'footer'}">
+            <div class="col">{{total.title}}</div>
+            <div class="col-auto text-right">{{total.value | currency:'USD':true:'1.2-2'}}</div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 mt-3">
+        <label for="additional_info" class="form-control-label">Additional Notes:</label>
+        <textarea rows="5" type="text" class="form-control rounded-0" id="additional_info"></textarea>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-12"><hr /></div> 
+    <div class="col text-left">
+        <button type="button" [disabled]="loading" class="btn btn-outline-green" (click)="goBack()">Back</button>
+    </div>
+    <div class="col-auto text-right">
+        <button (click)="confirmOrder()" type="button" class="btn btn-outline-green" *ngIf="!loading" >Confirm</button>
+        <button type="button" class="btn btn-outline-green" disabled *ngIf="loading">Loading...</button>
+    </div>
+</div>

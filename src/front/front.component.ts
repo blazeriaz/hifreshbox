@@ -18,7 +18,7 @@ import { Router, Event as RouterEvent, NavigationStart,
     <router-outlet></router-outlet>
   `
 })
-export class FrontComponent implements OnInit {
+export class FrontComponent implements OnInit, OnDestroy, AfterContentInit {
   // Sets initial value to true to show loading spinner on first load
   public loading = true;
   public time;
@@ -26,14 +26,14 @@ export class FrontComponent implements OnInit {
   public  subscription: Subscription;
 
   @HostListener('window:scroll', ['$event']) private onScroll($event:Event):void {
-    if(window.pageYOffset > 80) {
+    if (window.pageYOffset > 80) {
       this.elementRef.nativeElement.classList.add('scrolled-down');
     } else {
       this.elementRef.nativeElement.classList.remove('scrolled-down');
     }
   };
 
-  constructor(private router: Router, 
+  constructor(private router: Router,
     private rest: RestService,
     private auth: AuthService,
     private elementRef: ElementRef ) {
@@ -45,14 +45,14 @@ export class FrontComponent implements OnInit {
   ngAfterContentInit() {
     this.bodyclass.forEach(className => {
       this.elementRef.nativeElement.classList.add(className);
-    });    
+    });
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.auth.setAuthModule('customer');
-    this.bodyclass = "app header-fixed sidebar-hidden aside-menu-fixed aside-menu-hidden".split(" ");
+    this.bodyclass = 'app header-fixed sidebar-hidden aside-menu-fixed aside-menu-hidden'.split(' ');
     this.subscription = this.rest.loaderState
-        .subscribe((state:any) => {
+        .subscribe((state: any) => {
             this.loading = state.show;
         });
   }
@@ -60,13 +60,13 @@ export class FrontComponent implements OnInit {
 
   // Shows and hides the loading spinner during RouterEvent changes
   navigationInterceptor(event: RouterEvent): void {
-    if (event instanceof NavigationStart) { 
-      console.log("Nav start");
+    if (event instanceof NavigationStart) {
+      console.log('Nav start');
       this.time = Date.now();
       this.loading = true
     }
     if (event instanceof NavigationEnd) {
-      console.log("Nav End");
+      console.log('Nav End');
       console.log(( Date.now() - this.time));
       this.loading = false;
       window.scroll(0, 0);

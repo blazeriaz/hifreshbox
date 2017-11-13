@@ -24,6 +24,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     selectedRecipe;
     currentMenuDays;
     islogin;
+    mealMenuProduct;
 
     constructor(
     private alert: AlertService,
@@ -73,6 +74,21 @@ export class MenuComponent implements OnInit, OnDestroy {
             }
         };
 
+        this.mealMenuProduct = {cartItem: {
+            quote_id: null,
+            sku: 'freshbox-subscription',
+            qty: 1,
+            productOption: null
+        }};
+
+        this.cartService.getCartTotal().subscribe(res => {
+            if (res.guestCardId) {
+                this.mealMenuProduct.cartItem.quote_id = res.guestCardId
+            } else if (res.cart && res.cart.id) {
+                this.mealMenuProduct.cartItem.quote_id = res.cart.id
+            }
+        });
+
         const date = new Date();
         this.currentYear = date.getFullYear();
         this.startYear = 2017;
@@ -115,8 +131,16 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
 
     addMealToCart() {
-        this.cartService.mealAdded = true;
-        this.router.navigate(['/', 'cart', 'checkout']);
+        this.alert.clear();
+        this.rest.showLoader();
+        this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
+            this.cartService.increaseCartItem(res);
+            this.router.navigate(['/', 'cart', 'checkout']);
+        }, err => {
+            this.rest.hideLoader();
+            this.alert.error(err);
+        });
+        window.scroll(0, 0);
     }
 
     recipeFavouriteClass(recipe) {

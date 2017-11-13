@@ -1,73 +1,70 @@
-<div class="container-fluid">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2 class="text-uppercase">Choose a meal plan and preferences</h2>
-                <p>You can update your preferences at anytime through your hiFreshbox account.</p>
+<div class="row">
+    <div class="col-12 text-center">
+        <h2 class="text-uppercase">Choose a meal plan and preferences</h2>
+        <p>You can update your preferences at anytime through your hiFreshbox account.</p>
+    </div>
+    <div class="col-12 mt-5">
+        <form [formGroup]="checkoutMealForm" (submit)="saveCheckoutMeal()" novalidate>
+            <div class="form-group row">                        
+                <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmuch_meals_week')">
+                    <label for="howmuch_meals_week" class="w-100 form-control-label">How many meals would <br class="hidden-sm-down" />you like each week?</label>
+                    <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmuch_meals_week" formControlName="howmuch_meals_week" 
+                        [ngClass]="setInputClass('howmuch_meals_week')">
+                        <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="opt">{{opt}}</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmany_people')">
+                    <label for="howmany_people" class="w-100 form-control-label">How many people are <br class="hidden-sm-down" />you cooking for?</label>
+                    <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmany_people" formControlName="howmany_people" 
+                        [ngClass]="setInputClass('howmany_people')">
+                        <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="opt">{{opt}}</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-12 mt-5">
-                <form [formGroup]="checkoutMealForm" (submit)="saveCheckoutMeal()" novalidate>
-                    <div class="form-group row">                        
-                        <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmuch_meals_week')">
-                            <label for="howmuch_meals_week" class="w-100 form-control-label">How many meals would <br class="hidden-sm-down" />you like each week?</label>
-                            <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmuch_meals_week" formControlName="howmuch_meals_week" 
-                                [ngClass]="setInputClass('howmuch_meals_week')">
-                                <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="opt">{{opt}}</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmany_people')">
-                            <label for="howmany_people" class="w-100 form-control-label">How many people are <br class="hidden-sm-down" />you cooking for?</label>
-                            <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmany_people" formControlName="howmany_people" 
-                                [ngClass]="setInputClass('howmany_people')">
-                                <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="opt">{{opt}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-5" *ngFor="let preference of preferences;">
-                        <div class="col-12">
-                            <label class="w-100 form-control-label">{{preference.title}}</label>
-                            <div class="row">
-                                <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let opt of preference.options">
-                                    <div class="mx-auto pointer" style="max-width:100%; width: 120px; height: 120px;">
-                                        <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt)">
-                                            <div class="circle_text_container">
-                                                <div class="circle_text">
-                                                    {{opt.title}}
-                                                    <div *ngIf="opt.qty > 0">
-                                                        {{opt.qty}} x
-                                                    </div>
-                                                </div>
+            <div class="row mt-5" *ngFor="let preference of preferences;">
+                <div class="col-12">
+                    <label class="w-100 form-control-label">{{preference.title}}</label>
+                    <div class="row">                        
+                        <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let opt of preference.options">                            
+                            <div class="mx-auto pointer" style="max-width:100%; width: 120px; height: 120px;">
+                                <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt)">
+                                    <div class="circle_text_container">
+                                        <div class="circle_text">
+                                            {{opt.title}}
+                                            <div *ngIf="opt.qty_enabled == 1 && opt.qty > 0">
+                                                {{opt.qty}} x
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-center mt-1" *ngIf="opt.qty > 0">
-                                        <div class="btn-group btn-group-sm">
-                                            <button type="button" class="btn btn-secondary" tooltip="Decrease Quantity" (click)="decresePreference(preference, opt)">-</button>
-                                            <button type="button" class="btn btn-secondary" tooltip="Deselect Preference" (click)="removePreference(preference, opt)">x</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="text-center mt-1" *ngIf="opt.qty > 0">
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-secondary" tooltip="Decrease Quantity" (click)="decresePreference(preference, opt)" *ngIf="opt.qty_enabled == 1 && opt.qty > 1">-</button>
+                                    <button type="button" class="btn btn-secondary" tooltip="Deselect Preference" (click)="removePreference(preference, opt)">x</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row mt-3">
-                        <div class="col-sm-12 mt-3" [ngClass]="setInputDivClass('meal_extra_notes')">
-                            <label for="meal_extra_notes" class="form-control-label">Didn’t find it? Please enter here:</label>
-                            <textarea rows="5" type="text" class="form-control rounded-0" id="meal_extra_notes" formControlName="meal_extra_notes" [ngClass]="setInputClass('meal_extra_notes')"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row mt-3">
-                        <div class="col-12"><hr /></div> 
-                        <div class="col text-left">
-                            <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
-                        </div>
-                        <div class="col-auto text-right">
-                            <button type="submit" class="btn btn-outline-green">Continue</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+            <div class="form-group row mt-3">
+                <div class="col-sm-12 mt-3" [ngClass]="setInputDivClass('meal_extra_notes')">
+                    <label for="meal_extra_notes" class="form-control-label">Didn’t find it? Please enter here:</label>
+                    <textarea rows="5" type="text" class="form-control rounded-0" id="meal_extra_notes" formControlName="meal_extra_notes" [ngClass]="setInputClass('meal_extra_notes')"></textarea>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-12"><hr /></div> 
+                <div class="col text-left">
+                    <button type="button" [disabled]="loading" class="btn btn-outline-green" (click)="goBack()">Back</button>
+                </div>
+                <div class="col-auto text-right">
+                    <button type="submit" class="btn btn-outline-green" *ngIf="!loading">Continue</button>
+                    <button type="button" class="btn btn-outline-green" disabled *ngIf="loading">Loading...</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

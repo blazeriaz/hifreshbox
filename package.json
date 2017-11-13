@@ -16,6 +16,7 @@
     "app": "ng serve --app app --port 4200 --open",
     "buildAdmin": "ng build --app admin --prod --deploy-url scripts/",
     "build": "ng build --app front --prod --deploy-url scripts/",
+    "buildAll": "npm run build & npm run buildAdmin",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

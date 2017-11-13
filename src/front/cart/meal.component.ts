@@ -18,6 +18,7 @@ export class MealComponent implements OnInit, OnDestroy {
     preferences;
     selectedPreferences = [];
     MealProduct;
+    loading;
 
     constructor(
         private alert: AlertService,
@@ -31,7 +32,7 @@ export class MealComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-
+        this.loading = false;
         this.checkoutMealForm = this._fb.group({
             howmuch_meals_week: [1, [Validators.required]],
             howmany_people: [1, [Validators.required]],
@@ -58,6 +59,11 @@ export class MealComponent implements OnInit, OnDestroy {
 
         this.rest.getItems(1, [], 1000, 'meals/search', 'criteria').subscribe(res => {
             this.preferences = res.items;
+            this.preferences.map(x => {
+                x.options = x.options.filter(y => parseInt(y.is_active, 10) === 1);
+                return x;
+            });
+            this.preferences = this.preferences.filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
         });
     }
 
@@ -73,7 +79,10 @@ export class MealComponent implements OnInit, OnDestroy {
             });
             option.qty = 1;
         } else {
-            const qty = option.qty + 1;
+            let qty = 1;
+            if (option.qty_enabled === '1' || option.qty_enabled === 1) {
+                qty = option.qty + 1;
+            }
             this.selectedPreferences[index].qty = qty;
             option.qty = qty;
         }
@@ -115,9 +124,14 @@ export class MealComponent implements OnInit, OnDestroy {
             this.MealProduct.cart_item.howmany_people = this.checkoutMealForm.value.howmany_people,
             this.MealProduct.cart_item.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
             this.MealProduct.cart_item.preferences = this.selectedPreferences;
+            this.loading = true;
             this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
                 this.next.emit('meal');
-                this.cartService.setCartTotal();
+                this.cartService.setCartTotal(true);
+            }, e => {
+                const err = e.json();
+                this.loading = false;
+                this.alert.error(err.message);
             })
         } else {
             this.alert.error('Please check the form to enter all required details');

@@ -10,7 +10,10 @@
             <div class="col-12">
                 <alert></alert>
             </div>
-            <div class="col-12 mb-5">
+            <div class="col-12 my-5" *ngIf="!currentStep">
+                Please wait for loading details...
+            </div>
+            <div class="col-12 mb-5" *ngIf="currentStep">
                 <div class="mx-auto" style="position: relative;" [ngStyle]="{width: ((steps.length * (35+50)) - 50) + 'px'}">
                     <hr style="position: absolute; top:0;left:0;border: 1px solid #9A9A9A; width: 100%;" />
                     <div *ngFor="let st of steps;let index = index;let last = last;" [hoverClass]="'text-info'" class="float-left pointer"
@@ -40,7 +43,7 @@
                 <checkout-payment (back)="goBack($event)" (next)="goNext($event)"></checkout-payment>
             </div>
             <div class="col-12" *ngIf="currentStep == 'confirm'">
-                <checkout-confirm (back)="goBack($event)" (next)="goNext($event)"></checkout-confirm>
+                <checkout-confirm (goStep)="goCheckoutStep($event)" (back)="goBack($event)" (next)="goNext($event)"></checkout-confirm>
             </div>
         </div>
     </div>

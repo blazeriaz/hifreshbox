@@ -19,6 +19,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     UsregionsAll;
     checkoutAddressForm;
     checkoutAddressSubmitted;
+    loading;
     sameAddress = true;
 
     constructor(
@@ -33,7 +34,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-
+        this.loading = false;
         this.US_regions = [];
         this.UsregionsAll = [];
         this.rest.getItems(1, [], 1000, 'directory/countries/US').subscribe(country => {
@@ -60,19 +61,27 @@ export class AddressComponent implements OnInit, OnDestroy {
             });
         })
 
-        this.rest.getItem('', 'carts/mine').subscribe(res => {
-            this.cart = res;
-        });
-
-        this.rest.getItem('', 'carts/mine/totals').subscribe(res => {
-            this.totals = res;
-        });
-
         this.checkoutAddressForm = this._fb.group({
             shipping_address: this.addNewAddress(),
             billing_address: this.addNewAddress(),
             shipping_carrier_code : 'tablerate',
             shipping_method_code : 'bestway'
+        });
+
+        this.cartService.getCartTotal().subscribe(data => {
+            if (!data.cart) {
+                return;
+            }
+            this.cart = data.cart;
+            this.totals = data.totals;
+            if (data.billingAddress) {
+                this.sameAddress = data.billingAddress.same_as_billing;
+                this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
+            }
+            if (data.shippingAddress) {
+                this.sameAddress = data.shippingAddress.same_as_billing;
+                this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
+            }
         });
     }
 
@@ -90,7 +99,9 @@ export class AddressComponent implements OnInit, OnDestroy {
             region_id: 0,
             country_id: 'US',
             postcode: '',
-            telephone: ''
+            telephone: '',
+            same_as_billing: 0,
+            save_in_address_book: 0
         };
 
         return this.initAddressForm(newAddress);
@@ -102,16 +113,18 @@ export class AddressComponent implements OnInit, OnDestroy {
             'lastname': [address.lastname, [Validators.required]],
             'street': this._fb.array([
                 new FormControl(address.street[0], Validators.required),
-                new FormControl(address.street[1]?address.street[1]:'')
+                new FormControl(address.street[1] ? address.street[1] : '')
             ]),
             'email': address.email,
             'city': address.city,
             'country_id': [address.country_id, [Validators.required]],
-            'region_id': (address.region)?address.region.region_id:'',
-            'region_code': [(address.region)?address.region.region_code:'', Validators.required],
-            'region': [(address.region)?address.region.region:'', Validators.required],
+            'region_id': (address.region) ? address.region.region_id : '',
+            'region_code': [(address.region) ? address.region.region_code : '', Validators.required],
+            'region': [(address.region) ? address.region.region : '', Validators.required],
             'postcode' : [address.postcode, [Validators.required]],
-            'telephone' : [address.telephone, [Validators.required]]
+            'telephone' : [address.telephone, [Validators.required]],
+            'same_as_billing': address.same_as_billing,
+            'save_in_address_book': address.save_in_address_book
         });
     }
 
@@ -143,15 +156,23 @@ export class AddressComponent implements OnInit, OnDestroy {
         this.checkoutAddressSubmitted = true;
         this.alert.clear();
         if (this.sameAddress) {
+            this.checkoutAddressForm.controls['shipping_address'].patchValue({
+                same_as_billing: 1
+            });
             this.checkoutAddressForm.controls['billing_address'].patchValue(
                 this.checkoutAddressForm.controls['shipping_address'].value
             );
         }
         if (this.checkoutAddressForm.valid) {
+            this.loading = true;
             const sendData = {addressInformation : this.checkoutAddressForm.value};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.next.emit('address');
-                this.cartService.setCartTotal();
+                this.cartService.setCartTotal(true);
+            }, e => {
+                this.loading = false;
+                const err = e.json();
+                this.alert.error(err.message);
             })
         } else {
             this.alert.error('Please check the form to enter all required details');

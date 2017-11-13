@@ -35,7 +35,7 @@
         </div>
         <div class="row py-3" *ngIf="loadedSwagsList">
             <div class="col-md-4 col-sm-4 col-12" *ngFor="let swag of swags">
-                <div class="card" 
+                <div class="pointer card" 
                         (click)="goToSwag(swag)" 
                         [ngClass]="{'card-success text-white' : swag.hover==1}"
                         (mouseover)="swag.hover=1" 

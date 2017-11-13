@@ -5,7 +5,7 @@ import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
-import * as GlobalVariable from "../../global";
+import * as GlobalVariable from 'global';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 
 @Component({
@@ -612,6 +612,6 @@ export class RecipeFormComponent implements OnInit {
     }
 
     goToList() {
-      this.router.navigate(['recipes']);
+      this.router.navigate(['/', 'meal', 'recipes']);
     }
 }

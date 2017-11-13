@@ -117,14 +117,14 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     }
 
     goToBack() {
-        this.router.navigate(['menu']);
+        this.router.navigate(['/', 'meal', 'menu']);
     }
 
     addRecipeToMenu(recipe_sku) {
-        let sendData = {menu : {
+        const sendData = {menu : {
             product_sku : 'freshbox-subscription',
             week_no : this.yearWeek.week,
-            week_year : this.yearWeek.year, 
+            week_year : this.yearWeek.year,
             recipe_sku : recipe_sku,
             menu_type : 'week'
         }};

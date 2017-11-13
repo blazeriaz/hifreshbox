@@ -12,6 +12,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     totals;
     steps;
     currentStep;
+    needDestroyServices;
 
     constructor(
         private alert: AlertService,
@@ -25,15 +26,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-
-        this.rest.getItem('', 'carts/mine').subscribe(res => {
-            this.cart = res;
-        });
-
-        this.rest.getItem('', 'carts/mine/totals').subscribe(res => {
-            this.totals = res;
-        });
-
         this.steps = [{
             key: 'login',
             title: 'Login',
@@ -51,15 +43,43 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             title: 'Order Summery'
         }];
 
-        this.currentStep = 'login';
+        this.needDestroyServices = [];
+        this.needDestroyServices.push(
+            this.cartService.getCartTotal().subscribe(data => {
+                this.cart = data.cart;
+                this.totals = data.totals;
 
-        if (!this.cartService.mealAdded) {
-            this.steps = this.steps.filter(x => x.key !== 'meal');
-        }
+                if (!this.validateHaveCartItems(data)) {
+                    this.alert.error('No items added for checkout.', true);
+                    this.router.navigate(['/', 'cart']);
+                }
+                if (!(data.mealAdded || data.cart) || this.currentStep) {
+                    return;
+                }
+                this.currentStep = 'login';
 
-        if (this.auth.isLogin()) {
-            this.goNext('login');
+                if (!data.mealAdded) {
+                    this.steps = this.steps.filter(x => x.key !== 'meal');
+                }
+
+                if (this.auth.isLogin()) {
+                    this.goNext('login');
+                }
+            })
+        );
+    }
+
+    validateHaveCartItems(data) {
+        if (data.mealAdded) {
+            return true;
         }
+        if (!data.loading && data.cart && data.cart.items_qty !== 0) {
+            return true;
+        }
+        if (!data.loading && data.totals && data.totals.items_qty !== 0) {
+            return true;
+        }
+        return data.loading;
     }
 
     goBack(step) {
@@ -89,7 +109,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         window.scroll(0, 0);
     }
 
+    goCheckoutStep(step) {
+        const index = this.steps.findIndex(x => x.key === step);
+        if (step === 'cart' || index === -1) {
+            this.router.navigate(['/', 'cart']);
+            return;
+        }
+        this.currentStep = step;
+    }
+
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needDestroyServices.forEach(sub => {console.log(sub);
+            if (sub) {
+                sub.unsubscribe();
+            }
+        });
     }
 }

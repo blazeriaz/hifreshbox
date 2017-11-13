@@ -15,6 +15,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     checkoutPaymentForm;
     checkoutPaymentSubmitted;
+    loading;
 
     constructor(
         private alert: AlertService,
@@ -27,7 +28,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-
+        this.loading = false;
         this.checkoutPaymentForm = this._fb.group({
             'cart_holder_name': ['', [Validators.required]],
             'cart_number': ['', [Validators.required]],

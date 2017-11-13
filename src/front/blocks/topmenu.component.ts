@@ -18,7 +18,9 @@ export class TopmenuComponent implements OnInit {
 
     ngOnInit(): void {
         this.cartService.getCartTotal().subscribe(data => {
-            this.cart = data.cart;
+            if (data.cart) {
+                this.cart = data.cart;
+            }
         });
     }
 
