@@ -1,8 +1,9 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angular/router';
-import { AlertService, PagerService, RestService } from "services";
+import { AlertService, PagerService, RestService } from 'services';
 
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { BASE_URL } from 'global';
 
 export const pageSize = 10;
 
@@ -10,7 +11,7 @@ export const pageSize = 10;
     templateUrl: 'list.component.html'
 })
 export class RecipesListComponent implements OnInit {
-    recipes:any;
+    recipes: any;
     pager: any;
     searchForm;
     searchSubscripe;
@@ -23,9 +24,9 @@ export class RecipesListComponent implements OnInit {
                 private pagerService: PagerService,
                 private route: ActivatedRoute,
                 private router: Router,
-                private _fb : FormBuilder ) {
+                private _fb: FormBuilder ) {
     }
-                
+
     ngOnInit(): void {
         this.deleteItems = [];
         this.initLoad = true;
@@ -38,28 +39,32 @@ export class RecipesListComponent implements OnInit {
         this.loadRecipesList(1);
     }
 
+    recipePreviewLink(recipe) {
+        const i = recipe.custom_attributes.findIndex(x => x.attribute_code === 'url_key');
+        const url_key = recipe.custom_attributes[i].value;
+        return BASE_URL + '#' + 'menu/' + url_key;
+    }
+
     loadRecipesList(pageNo?) {
-        let searchValues = this.searchForm.value;
-        let filters = [];
-        let iniFilter = {
+        const searchValues = this.searchForm.value;
+        const filters = [];
+        filters.push({
             filters : [{
-                field : "category_id",
+                field : 'category_id',
                 value : 41,
                 condition_type : 'eq'
             }]
-        };
-        filters.push(iniFilter);
-        if(searchValues && searchValues.name) {
-            let searchNameFilter = {
+        });
+        if (searchValues && searchValues.name) {
+            filters.push({
                 filters : [{
-                    field : "name",
-                    value : "%" + searchValues.name + "%",
+                    field : 'name',
+                    value : '%' + searchValues.name + '%',
                     condition_type : 'like'
                 }]
-            };
-            filters.push(searchNameFilter);
+            });
         }
-        if(this.searchSubscripe) {
+        if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
         }
         const sortOrders = [{
@@ -71,18 +76,20 @@ export class RecipesListComponent implements OnInit {
             this.initLoad = false;
             this.loadingList = false;
             this.initRecipesList(recipes, pageNo);
-        });        
+        });
     }
-    
+
     initRecipesList(recipes, page?) {
-        this.recipes = recipes.items;        
+        this.recipes = recipes.items;
         // get pager object from service
-        page = page?page:1;
-        this.pager = this.pagerService.getPager(recipes.total_count, page, pageSize);        
+        page = page ? page : 1;
+        this.pager = this.pagerService.getPager(recipes.total_count, page, pageSize);
     }
 
     abortSearch() {
-        this.searchSubscripe && this.searchSubscripe.unsubscribe();
+        if (this.searchSubscripe) {
+            this.searchSubscripe.unsubscribe();
+        }
         this.loadingList = false;
     }
 
@@ -91,35 +98,37 @@ export class RecipesListComponent implements OnInit {
     }
 
     isDeleted(sku) {
-        return this.deleteItems.findIndex(item => item.sku == sku) !== -1;
+        return this.deleteItems.findIndex(item => item.sku === sku) !== -1;
     }
 
     cancelDelete(sku) {
-        let i = this.deleteItems.findIndex(item => item.sku == sku);
-        this.deleteItems[i].subscribe.unsubscribe();
-        this.deleteItems.splice(i,1);
+        const i = this.deleteItems.findIndex(item => item.sku === sku);
+        if (i !== -1) {
+            this.deleteItems[i].subscribe.unsubscribe();
+            this.deleteItems.splice(i, 1);
+        }
     }
 
     deleteReceipe(recipeSku, page) {
-        if(!confirm("Are you sure to delete the recipe?")) {
+        if (!confirm('Are you sure to delete the recipe?')) {
             return;
         }
         this.alert.clear();
-        let deleteSubscribe = this.rest.deleteItem(recipeSku, 'products/'+recipeSku).subscribe(data => {
-            if(data) {                
-                this.deleteItems = this.deleteItems.filter(item => item.sku != recipeSku);
-                this.recipes = this.recipes.filter(item => item.sku != recipeSku);
-                if(this.deleteItems.length == 0) {
-                    this.alert.success("The recipes deleted successfully!", true);
+        const deleteSubscribe = this.rest.deleteItem(recipeSku, 'products/' + recipeSku).subscribe(data => {
+            if (data) {
+                this.deleteItems = this.deleteItems.filter(item => item.sku = recipeSku);
+                this.recipes = this.recipes.filter(item => item.sku = recipeSku);
+                if (this.deleteItems.length === 0) {
+                    this.alert.success('The recipes deleted successfully!', true);
                     this.initLoad = true;
                     this.loadRecipesList(page);
                 }
             } else {
-                this.deleteItems = this.deleteItems.filter(item => item.sku != recipeSku);
-                this.alert.error("The recipe can't be deleted!", true);
+                this.deleteItems = this.deleteItems.filter(item => item.sku = recipeSku);
+                this.alert.error('The recipe can\'t be deleted!', true);
             }
         });
-        let deleteItem = {
+        const deleteItem = {
             sku : recipeSku,
             subscribe : deleteSubscribe
         };

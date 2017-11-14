@@ -3,6 +3,7 @@ import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angula
 import { RestDefaultService, AlertService, PagerService } from 'services';
 
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { BASE_URL } from 'global';
 
 export const pageSize = 10;
 
@@ -38,6 +39,12 @@ export class SwagsListComponent implements OnInit {
             .debounceTime(500)
             .subscribe(values => this.loadSwagsList(1));
         this.loadSwagsList(1);
+    }
+
+    swagPreviewLink(swag) {
+        const i = swag.custom_attributes.findIndex(x => x.attribute_code === 'url_key');
+        const url_key = swag.custom_attributes[i].value;
+        return BASE_URL + '#' + 'sqwg/' + url_key;
     }
 
     loadSwagsList(pageNo?) {

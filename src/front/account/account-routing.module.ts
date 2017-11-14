@@ -39,6 +39,12 @@ const routes: Routes = [
         data: {
           title: 'My Recipes'
         }
+      }, {
+        path: 'orders',
+        loadChildren: './orders/orders.module#OrdersModule',
+        data: {
+          title: 'Orders'
+        }
       }
     ]
   }

@@ -47,21 +47,16 @@ export class CartService {
     this.guestCardId = localStorage.getItem('guestCardId');
     this.auth.getLoginSubject().subscribe(res => {
       if (res.action === 'login') {
-        if (this.cart && this.cart.id && this.cart.items_count > 0 && this.guestCardId) {
-          this.rest.getItem('me', 'customers/me').subscribe(user => {
-              const sendData = {
-                customerId: user.id,
-                storeId: user.store_id
-              };
-              this.rest.saveItem(true, sendData, 'guest-carts/' + this.guestCardId).subscribe(x => {
-                this.setCartTotal(true);
-              }, e => {
-                this.setCartTotal(true);
-              })
-          });
+        if (this.guestCardId && this.cart && this.cart.id) {
+          this.rest.saveItem(false, {}, 'guest-customer-cart/' + this.cart.id).subscribe(x => {
+            this.setCartTotal(true);
+          }, e => {
+            this.setCartTotal(true);
+          })
         } else {
           this.setCartTotal(true);
         }
+        this.guestCardId = null;
         localStorage.removeItem('guestCardId');
         this.assignCartTotal();
       } else {
@@ -71,7 +66,6 @@ export class CartService {
   }
 
   initVariables() {
-    this.guestCardId = null;
     this.cart = null;
     this.showImages = false;
     this.totals = null;

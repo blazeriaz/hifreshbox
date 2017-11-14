@@ -55,6 +55,7 @@
                 <button type="button" class="btn btn-link px-0" (click)="cancelDelete(recipe.sku)">Cancel Delete</button>
               </div>
               <div class="col px-0 btn-group btn-group-sm" *ngIf="!isDeleted(recipe.sku)">
+                <a [href]="recipePreviewLink(recipe)" target="_blank" class="btn btn-link pl-0">Preview</a>
                 <a [routerLink]="['edit', recipe.sku]" class="btn btn-link pl-0">Edit</a>
                 <button type="button" class="btn btn-link px-0" (click)="deleteReceipe(recipe.sku, pager.page)">Delete</button>
               </div>

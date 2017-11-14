@@ -160,7 +160,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header">
           what customer will need
@@ -189,7 +189,36 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+            Equipment Needed
+        </div>
+        <div class="card-block">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="newEquipmentNeeded" [ngModelOptions]="{standalone: true}" />
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" [disabled]="!equipmentNeeded" (click)="addEquipmentNeeded()" type="button">Add</button>
+                </span>
+              </div>
+              <ul class="list-group" *ngFor="let equipment_need of equipment_needs; let index = index;">
+                <li class="list-group-item row p-1 mx-0">
+                  <span class="col">{{equipment_need}}</span> 
+                  <span class="col-auto px-1">
+                    <button class="btn btn-link p-0" type="button" (click)="removeEquipmentNeeded(index)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </span>
+                </li>
+              </ul>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
       <div class="card">
         <div class="card-header">
             Allergies

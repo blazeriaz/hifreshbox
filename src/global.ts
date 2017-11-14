@@ -1,4 +1,5 @@
 'use strict';
+export const BASE_URL = 'http://freshbox.white-space-studio-dev.com/';
 export const BASE_MEDIA = 'http://freshbox.white-space-studio-dev.com/api/pub/media/';
 export const BASE_API_URL = 'http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/';
 export const BASE_DEFAULT_API_URL = 'http://freshbox.white-space-studio-dev.com/api/index.php/rest/default/V1/';

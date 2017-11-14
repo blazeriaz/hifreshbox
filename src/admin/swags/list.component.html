@@ -54,6 +54,7 @@
                   <button type="button" class="btn btn-link px-0" (click)="cancelDelete(swag.sku)">Cancel Delete</button>
                 </div>
               <div class="btn-group btn-group-sm" *ngIf="!isDeleted(swag.sku)">
+                  <a [href]="swagPreviewLink(swag)" target="_blank" class="btn btn-link pl-0">Preview</a>
                 <a [routerLink]="['edit', swag.sku]" class="btn btn-link pl-0">Edit</a>
                 <button type="button" class="btn btn-link px-0" (click)="deleteSwag(swag.sku)">Delete</button>
               </div>
