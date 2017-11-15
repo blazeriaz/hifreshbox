@@ -8,12 +8,20 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 
 $token = curl_exec($ch);
 
+
+
+$meal_preference_setting = json_encode(array(
+							array('question_id' => 1,'option_id'=>1,'qty'=>2), // Meal Option Id  and quantity
+							array('question_id' => 1,'option_id'=>2,'qty'=>1),
+							array('question_id' => 2,'option_id'=>5,'qty'=>2),
+							array('question_id' => 2,'option_id'=>6,'qty'=>1)
+							));
+
 $n_slide = json_encode(['subscribepreference' => [
-						'user_id'=>123,
-						'meal_preference_setting' => 'hello',
-						'is_subscribed' => '0',						
-						'is_paused' => '0',											
-						'is_order_created' => '1'						
+						'meal_preference_setting' => $meal_preference_setting,
+						'howmuch_meals_week'=> 2,
+						'howmany_people'=>4,
+						'meal_extra_notes'=>'extra notes 444444'												
 						]]);
 						
 						
