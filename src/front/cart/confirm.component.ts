@@ -22,6 +22,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     shippingAddress;
     currentMenuDays;
     showCartItems;
+    mealPreferences;
     loading;
 
     constructor(
@@ -51,6 +52,24 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             this.showCartItems = false;
             if (this.mealCartItem && this.cart && this.cart.items_count > 1) {
                 this.showCartItems = true;
+            }
+            this.mealPreferences = {};
+            if (data.mealPreferences && data.mealPreferences.length > 0) {
+                data.mealPreferences.forEach((x, i) => {
+                    if (i === 0) {
+                        const selected_options = [];
+                        x.forEach(y => {
+                            y.options.forEach(z => {
+                                if (z.is_selected) {
+                                    selected_options.push(z);
+                                }
+                            });
+                        });
+                        this.mealPreferences = Object.assign({}, this.mealPreferences, {selected_options: selected_options});
+                    } else {
+                        this.mealPreferences = Object.assign({}, this.mealPreferences, x);
+                    }
+                });
             }
         });
         setTimeout(() => this.cartService.setCartTotal(true), 200);

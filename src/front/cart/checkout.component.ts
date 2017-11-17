@@ -10,7 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CheckoutComponent implements OnInit, OnDestroy {
     cart;
     totals;
-    steps;
+    allSteps;
+    steps = [];
     currentStep;
     needDestroyServices;
 
@@ -26,7 +27,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-        this.steps = [{
+        this.allSteps = [{
             key: 'login',
             title: 'Login',
         }, {
@@ -53,17 +54,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                     this.alert.error('No items added for checkout.', true);
                     this.router.navigate(['/', 'cart']);
                 }
-                if (!(data.mealAdded || data.cart) || this.currentStep) {
+
+                if (!data.mealAdded) {
+                    this.steps = this.allSteps.filter(x => x.key !== 'meal');
+                } else if (data.mealPreferences && data.mealPreferences.length > 0) {
+                    this.steps = this.allSteps.filter(x => {
+                        if (x.key === 'meal' && x.complete !== 1 && this.currentStep !== 'login') {
+                            this.goToStep('meal');
+                        }
+                        return true;
+                    });
+                }
+
+                if (!data.cart || this.currentStep) {
                     return;
                 }
                 this.currentStep = 'login';
 
-                if (!data.mealAdded) {
-                    this.steps = this.steps.filter(x => x.key !== 'meal');
-                }
-
                 if (this.auth.isLogin()) {
-                    this.goNext('login');
+                    this.goToStep('address');
                 }
             })
         );
@@ -80,6 +89,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             return true;
         }
         return data.loading;
+    }
+
+    goToStep(step) {
+        let check = false;
+        const index = this.steps.forEach(x => {
+            if (x.key === step) {
+                check = true;
+            }
+            if (check) {
+                delete x.complete;
+            }
+        });
+        this.currentStep = step;
+        window.scroll(0, 0);
     }
 
     goBack(step) {

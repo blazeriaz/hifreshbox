@@ -22,6 +22,7 @@ export class CartService {
     loading: true,
     mealAdded: false,
     mealCartItem: null,
+    mealPreferences: null,
     billingAddress: null,
     shippingAddress: null
   });
@@ -34,6 +35,7 @@ export class CartService {
   mealCartItem = null;
   billingAddress = null;
   shippingAddress = null;
+  mealPreferences = null;
 
   constructor(
     private http: Http,
@@ -71,6 +73,7 @@ export class CartService {
     this.totals = null;
     this.loading = true;
     this.mealAdded = false
+    this.mealPreferences = null;
     this.mealCartItem = null;
     this.billingAddress = null;
     this.shippingAddress = null;
@@ -126,6 +129,18 @@ export class CartService {
 
   assignCartTotal() {
     if (this.cart && this.totals && this.totals.items.length > 0 && this.checkMealAddedInCart(this.cart.items)) {
+      if (!this.mealPreferences || this.mealPreferences.length === 0) {
+        this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(res => {
+          this.mealPreferences = res;
+          this.mealPreferences[0].map(x => {
+              x.options = x.options.filter(y => parseInt(y.is_active, 10) === 1);
+              return x;
+          });
+          this.mealPreferences[0] = this.mealPreferences[0].filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
+          console.log(this.mealPreferences);
+          this.assignCartTotal();
+        });
+      }
       this.mealAdded = true;
       this.mealCartItem = this.getMealItemFromCart();
       this.mealCartItem = Object.assign({}, this.mealCartItem, this.totals.items.filter(x => x.item_id === this.mealCartItem.item_id)[0]);
@@ -153,6 +168,7 @@ export class CartService {
       loading: this.loading,
       mealAdded: this.mealAdded,
       mealCartItem: this.mealCartItem,
+      mealPreferences: this.mealPreferences,
       billingAddress: this.billingAddress,
       shippingAddress: this.shippingAddress
     });

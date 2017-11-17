@@ -48,6 +48,13 @@ export class AddressComponent implements OnInit, OnDestroy {
             }
         })
 
+        this.checkoutAddressForm = this._fb.group({
+            shipping_address: this.addNewAddress(),
+            billing_address: this.addNewAddress(),
+            shipping_carrier_code : 'tablerate',
+            shipping_method_code : 'bestway'
+        });
+
         this.rest.getItem('me', 'customers/me').subscribe(user => {
             this.checkoutAddressForm.controls['shipping_address'].patchValue({
                 firstname : user.firstname,
@@ -61,13 +68,6 @@ export class AddressComponent implements OnInit, OnDestroy {
             });
         })
 
-        this.checkoutAddressForm = this._fb.group({
-            shipping_address: this.addNewAddress(),
-            billing_address: this.addNewAddress(),
-            shipping_carrier_code : 'tablerate',
-            shipping_method_code : 'bestway'
-        });
-
         this.cartService.getCartTotal().subscribe(data => {
             if (!data.cart) {
                 return;
@@ -76,11 +76,15 @@ export class AddressComponent implements OnInit, OnDestroy {
             this.totals = data.totals;
             if (data.billingAddress) {
                 this.sameAddress = data.billingAddress.same_as_billing;
-                this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
+                if (data.billingAddress.country_id) {
+                    this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
+                }
             }
             if (data.shippingAddress) {
                 this.sameAddress = data.shippingAddress.same_as_billing;
-                this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
+                if (data.billingAddress.country_id) {
+                    this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
+                }
             }
         });
     }
@@ -100,8 +104,7 @@ export class AddressComponent implements OnInit, OnDestroy {
             country_id: 'US',
             postcode: '',
             telephone: '',
-            same_as_billing: 0,
-            save_in_address_book: 0
+            same_as_billing: 1
         };
 
         return this.initAddressForm(newAddress);
@@ -123,8 +126,7 @@ export class AddressComponent implements OnInit, OnDestroy {
             'region': [(address.region) ? address.region.region : '', Validators.required],
             'postcode' : [address.postcode, [Validators.required]],
             'telephone' : [address.telephone, [Validators.required]],
-            'same_as_billing': address.same_as_billing,
-            'save_in_address_book': address.save_in_address_book
+            'same_as_billing': address.same_as_billing
         });
     }
 
@@ -156,14 +158,14 @@ export class AddressComponent implements OnInit, OnDestroy {
         this.checkoutAddressSubmitted = true;
         this.alert.clear();
         if (this.sameAddress) {
-            this.checkoutAddressForm.controls['shipping_address'].patchValue({
-                same_as_billing: 1
-            });
             this.checkoutAddressForm.controls['billing_address'].patchValue(
                 this.checkoutAddressForm.controls['shipping_address'].value
             );
+            this.checkoutAddressForm.controls['shipping_address'].patchValue({
+                same_as_billing: 1
+            });
         }
-        if (this.checkoutAddressForm.valid) {
+        if (!this.checkoutAddressForm.errors) {
             this.loading = true;
             const sendData = {addressInformation : this.checkoutAddressForm.value};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {

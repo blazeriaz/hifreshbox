@@ -22,7 +22,7 @@ export class OrderViewComponent implements OnInit {
 
     ngOnInit(): void {
         const orderId = this.route.snapshot.params['id'];
-        this.loadViewRequest = this.rest.getItem('', 'orders/mine/' + orderId).subscribe(res => {
+        this.loadViewRequest = this.rest.getItem('', 'customer-orders/' + orderId).subscribe(res => {
             this.orderItem = res;
         });
     }

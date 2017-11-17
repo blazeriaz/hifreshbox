@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { AddressesComponent } from './addresses.component';
 import { ProfileComponent } from './profile.component';
 import { RecipesComponent } from './recipes.component';
+import { MealComponent } from './meal.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,12 @@ const routes: Routes = [
         component: RecipesComponent,
         data: {
           title: 'My Recipes'
+        }
+      }, {
+        path: 'meal-preference',
+        component: MealComponent,
+        data: {
+          title: 'Change Meal preference'
         }
       }, {
         path: 'orders',

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Injectable, TemplateRef, ViewChild } from '@angular/core';
-import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute,
+  Event as RouterEvent, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { ProductsService, AlertService, RestService } from 'services';
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
 
@@ -54,6 +55,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   modalEditRef;
 
   timeouts;
+  needToDestroyEvents = [];
   destroyed;
 
   constructor(
@@ -65,6 +67,21 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private modalService: BsModalService
   ) {
+    this.needToDestroyEvents.push(router.events.subscribe((event: RouterEvent) => {
+      this.navigationInterceptor(event)
+    }));
+  }
+
+  navigationInterceptor(event: RouterEvent): void {
+    if (event instanceof NavigationStart) {
+      this.destroyed = true;
+    }
+    if (event instanceof NavigationEnd) {
+    }
+    if (event instanceof NavigationCancel) {
+    }
+    if (event instanceof NavigationError) {
+    }
   }
 
   ngOnInit(): void {
@@ -73,6 +90,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     this.recipeSteps = [];
     this.customerNeeds = [];
     this.allergies = [];
+    this.equipment_needs = [];
     this.ingredientsOptions = null;
     this.images = [];
     this.serverMediaImages = [];
@@ -92,7 +110,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destroyed = true;
+    this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
   }
 
   openEditModal() {
@@ -357,23 +375,24 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   removedImage(file) {
-    if (file.entry && file.entry.id) {
-      console.log(this.destroyed, file);
-      /**this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
-        res=>{
-          this.serverMediaImages = this.serverMediaImages.filter(image => image.id != file.entry.id);
-        },
-        error => {
-          this.imagesDropZone.emit('addedfile', file);
-          this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
-          this.imagesDropZone.emit('success', file);
-          this.imagesDropZone.emit('complete', file);
-          this.imagesDropZone.files.push(file);
-        }
-      );**/
-    } else if (file.addedIndex >= 0) {
-      this.images = this.images.filter(image => image.addedIndex !== file.addedIndex);
-    }
+    setTimeout(() => {
+      if (file.entry && file.entry.id && !this.destroyed) {
+        this.rest.deleteItem('', 'products/' + this.recipe.sku + '/media/' + file.entry.id).subscribe(
+          res => {
+            this.serverMediaImages = this.serverMediaImages.filter(image => image.id != file.entry.id);
+          },
+          error => {
+            this.imagesDropZone.emit('addedfile', file);
+            this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
+            this.imagesDropZone.emit('success', file);
+            this.imagesDropZone.emit('complete', file);
+            this.imagesDropZone.files.push(file);
+          }
+        );
+      } else if (file.addedIndex >= 0) {
+        this.images = this.images.filter(image => image.addedIndex !== file.addedIndex);
+      }
+    }, 100);
   }
 
   addCustomArrtibute(attribute_code, value, required) {

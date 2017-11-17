@@ -200,7 +200,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" [(ngModel)]="newEquipmentNeeded" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" [disabled]="!equipmentNeeded" (click)="addEquipmentNeeded()" type="button">Add</button>
+                  <button class="btn btn-primary" [disabled]="!newEquipmentNeeded" (click)="addEquipmentNeeded()" type="button">Add</button>
                 </span>
               </div>
               <ul class="list-group" *ngFor="let equipment_need of equipment_needs; let index = index;">

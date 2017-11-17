@@ -60,7 +60,7 @@ export class OrdersListComponent implements OnInit {
             direction: 'DESC'
         }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'orders/mine', false, sortOrders).subscribe(orders => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'custom-order', criteria, sortOrders).subscribe(orders => {
             this.initLoad = false;
             this.loadingList = false;
             this.initOrdersList(orders, pageNo);

@@ -1,25 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, Event as RouterEvent, NavigationStart, 
-  NavigationEnd, NavigationCancel, NavigationError } from "@angular/router";
+  NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
  import { Subscription } from 'rxjs/Subscription';
- import { AuthService, AlertService, RestService } from "services";
+ import { AuthService, AlertService, RestService } from 'services';
 
 @Component({
   // tslint:disable-next-line
   selector: 'body',
   template: `
-    <div class="body_bg"></div>
-    <div class="overlay_loading app flex-row align-items-center" *ngIf="loading">
-      <div class="sk-three-bounce">
-        <div class="sk-child sk-bounce1"></div>
-        <div class="sk-child sk-bounce2"></div>
-        <div class="sk-child sk-bounce3"></div>
+    <div class='body_bg'></div>
+    <div class='overlay_loading app flex-row align-items-center' *ngIf='loading'>
+      <div class='sk-three-bounce'>
+        <div class='sk-child sk-bounce1'></div>
+        <div class='sk-child sk-bounce2'></div>
+        <div class='sk-child sk-bounce3'></div>
       </div>
     </div>
     <router-outlet></router-outlet>
   `
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   // Sets initial value to true to show loading spinner on first load
   loading = true
   time;
@@ -37,9 +37,9 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.auth.setAuthModule('admin');
-    this.bodyclass = "app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden";
+    this.bodyclass = 'app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden';
     this.subscription = this.rest.loaderState
-        .subscribe((state:any) => {console.log(state);
+        .subscribe((state: any) => {
             this.loading = state.show;
         });
   }
@@ -51,13 +51,13 @@ export class AdminComponent implements OnInit {
 
   // Shows and hides the loading spinner during RouterEvent changes
   navigationInterceptor(event: RouterEvent): void {
-    if (event instanceof NavigationStart) { 
-      console.log("Nav start");
+    if (event instanceof NavigationStart) {
+      console.log('Nav start');
       this.time = Date.now();
       this.loading = true
     }
     if (event instanceof NavigationEnd) {
-      console.log("Nav End");
+      console.log('Nav End');
       console.log(( Date.now() - this.time));
       this.loading = false
     }

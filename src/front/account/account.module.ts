@@ -11,21 +11,22 @@ import { ProfileComponent } from './profile.component';
 import { AccountRoutingModule } from './account-routing.module';
 import { UsersService, PagerService } from 'services';
 import { RecipesComponent } from './recipes.component';
+import { MealComponent } from './meal.component';
 import { TabsModule, TooltipModule } from 'ngx-bootstrap';
 
 @NgModule({
-  imports: [ 
-    SharedModule, 
-    SelectModule, 
-    AccountRoutingModule, 
-    CommonModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
+  imports: [
+    SharedModule,
+    SelectModule,
+    AccountRoutingModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     TabsModule,
     TooltipModule
   ],
   declarations: [
-    AccountComponent, DashboardComponent, AddressesComponent, ProfileComponent, RecipesComponent
+    AccountComponent, DashboardComponent, AddressesComponent, ProfileComponent, RecipesComponent, MealComponent
   ],
   providers: [UsersService, PagerService]
 })

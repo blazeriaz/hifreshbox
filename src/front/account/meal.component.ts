@@ -6,17 +6,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'checkout-meal',
     templateUrl: 'meal.component.html'
 })
 export class MealComponent implements OnInit, OnDestroy {
-    @Output() back = new EventEmitter();
-    @Output() next = new EventEmitter();
-
-    checkoutMealForm;
-    checkoutMealSubmitted;
+    userMealPrefForm;
+    userMealPrefSubmitted;
     preferences;
-    MealProduct;
+    userMealPrefData;
     loading;
 
     constructor(
@@ -30,33 +26,24 @@ export class MealComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        this.renderer.addClass(document.body, 'white-header');
         this.loading = false;
-        this.checkoutMealForm = this._fb.group({
+        this.userMealPrefForm = this._fb.group({
             howmuch_meals_week: [1, [Validators.required]],
             howmany_people: [1, [Validators.required]],
             meal_extra_notes: '',
         });
 
-        this.MealProduct = {cart_item: {
-            quote_id: null,
-            product_id: 2078,
-            qty: 1,
-            preferences: null,
+        this.userMealPrefData = {subscribepreference: {
+            meal_preference_setting: null,
             howmuch_meals_week: 1,
             howmany_people: 1,
-            meal_extra_notes: 1
-        }};
+            meal_extra_notes: ''
+        }}; 
 
-        this.cartService.getCartTotal().subscribe(data => {
-            if (data.guestCardId) {
-                this.MealProduct.cart_item.quote_id = data.guestCardId
-            } else if (data.cart && data.cart.id) {
-                this.MealProduct.cart_item.quote_id = data.cart.id
-            }
-            if (data.mealPreferences && data.mealPreferences.length > 0) {
+        this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(mealPreferences => {
+            if (mealPreferences && mealPreferences.length > 0) {
                 const formValues = {};
-                data.mealPreferences.forEach((x, i) => {
+                mealPreferences.forEach((x, i) => {
                     if (i === 0) {
                         this.preferences = x;
                     } else {
@@ -65,7 +52,7 @@ export class MealComponent implements OnInit, OnDestroy {
                         });
                     }
                 });
-                this.checkoutMealForm.patchValue(formValues);
+                this.userMealPrefForm.patchValue(formValues);
             }
         });
     }
@@ -80,7 +67,6 @@ export class MealComponent implements OnInit, OnDestroy {
         if (!option.qty_enabled || option.qty_enabled === '0' || option.qty_enabled === 0) {
             option.selected_qty = 1;
         }
-        console.log(option);
     }
 
     decresePreference(preference, option) {
@@ -96,27 +82,27 @@ export class MealComponent implements OnInit, OnDestroy {
     }
 
     setInputClass(input) {
-        const invalid = this.checkoutMealForm.get(input).invalid;
-        return (invalid && this.checkoutMealSubmitted) ? 'form-control-danger' : '';
+        const invalid = this.userMealPrefForm.get(input).invalid;
+        return (invalid && this.userMealPrefSubmitted) ? 'form-control-danger' : '';
     }
 
     setInputDivClass(input) {
-        const invalid = this.checkoutMealForm.get(input).invalid;
-        return (invalid && this.checkoutMealSubmitted) ? 'has-danger' : '';
+        const invalid = this.userMealPrefForm.get(input).invalid;
+        return (invalid && this.userMealPrefSubmitted) ? 'has-danger' : '';
     }
 
-    saveCheckoutMeal() {
-        this.checkoutMealSubmitted = true;
+    saveUserMealPref() {
+        this.userMealPrefSubmitted = true;
         this.alert.clear();
-        if (this.checkoutMealForm.valid) {
-            this.MealProduct.cart_item.howmuch_meals_week = this.checkoutMealForm.value.howmuch_meals_week,
-            this.MealProduct.cart_item.howmany_people = this.checkoutMealForm.value.howmany_people,
-            this.MealProduct.cart_item.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
-            this.MealProduct.cart_item.preferences = [];
+        if (this.userMealPrefForm.valid) {
+            this.userMealPrefData.subscribepreference.howmuch_meals_week = this.userMealPrefForm.value.howmuch_meals_week,
+            this.userMealPrefData.subscribepreference.howmany_people = this.userMealPrefForm.value.howmany_people,
+            this.userMealPrefData.subscribepreference.meal_extra_notes = this.userMealPrefForm.value.meal_extra_notes;
+            this.userMealPrefData.subscribepreference.meal_preference_setting = [];
             this.preferences.forEach(x => {
                 x.options.forEach(y => {
                     if (y.is_selected) {
-                        this.MealProduct.cart_item.preferences.push({
+                        this.userMealPrefData.subscribepreference.meal_preference_setting.push({
                             question_id: y.preference_id,
                             option_id: y.preference_option_id,
                             qty: y.selected_qty
@@ -125,9 +111,8 @@ export class MealComponent implements OnInit, OnDestroy {
                 })
             });
             this.loading = true;
-            this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
-                this.next.emit('meal');
-                this.cartService.setCartTotal(true);
+            this.rest.saveItem(false, this.userMealPrefData, 'meal-settings').subscribe(res => {
+                this.alert.success('User meal preference succesfully updated!');
             }, e => {
                 const err = e.json();
                 this.loading = false;
@@ -138,11 +123,6 @@ export class MealComponent implements OnInit, OnDestroy {
         }
     }
 
-    goBack() {
-        this.back.emit('meal');
-    }
-
     ngOnDestroy() {
-        this.renderer.removeClass(document.body, 'white-header');
     }
 }

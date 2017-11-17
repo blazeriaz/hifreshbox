@@ -7,12 +7,12 @@
             <div class="col-12 px-md-5 px-4">
                 <h6>Meals Per Week</h6>
                 <div class="row my-3 px-3">
-                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealCartItem.how_much_meals_week}}</span></div>
+                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealPreferences.howmuch_meals_week}}</span></div>
                     <div class="col my-auto">Meals</div>
                 </div>
                 <h6>Servings Per People</h6>
                 <div class="row my-3 px-3">
-                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealCartItem.how_many_people}}</span></div>
+                    <div class="col-auto px-2"><span class="font-5xl text-success">{{mealPreferences.howmany_people}}</span></div>
                     <div class="col my-auto">Servings</div>
                 </div>                
             </div>
@@ -20,11 +20,13 @@
                 <hr />
             </div>
         </div>
-        <div class="row mx-0 bg-light pt-3 pb-md-5 pb-3 px-md-5 px-4" *ngIf="mealCartItem && mealCartItem.options">                
+        <div class="row mx-0 bg-light pt-3 pb-md-5 pb-3 px-md-5 px-4" *ngIf="mealPreferences && mealPreferences.selected_options">                
             <div class="col">
                 <h6>Dietary Preferences</h6>
                 <ul class="list-unstyled mb-0">
-                    <li *ngFor="let preference of mealCartItem.meal_preference">{{preference}}</li>
+                    <li *ngFor="let option of mealCartItem.selected_options">
+                        {{option.title}} <span *ngIf="option.qty_enabled == 1">* {{option.selected_qty}}</span>
+                    </li>
                     <li *ngIf="!mealCartItem.meal_preference">NA</li>
                 </ul>
             </div>
