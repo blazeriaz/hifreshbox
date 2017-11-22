@@ -9,7 +9,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 $token = curl_exec($ch);
 
 $slide = json_encode(['meals' => [
-						'title' => 'which of the following do you prefer ?',
+						'title' => 'Do you NOT want any of these?',
 						'is_active' => 1
 						
 						]]);

@@ -9,9 +9,11 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 $token = curl_exec($ch);
 
 $slide = json_encode(['preference_options' => [
-						'preference_id' => 2,
-						'title' => 'option 1',
-						'price'=> '20.00'
+						'preference_id' => 1,
+						'title' => 'Mushrooms',
+						'price'=> '10.00',
+						'qty_enabled'=>1,
+						'sort_order'=>4
 						
 						]]);
 						
