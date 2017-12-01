@@ -49,9 +49,9 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             this.totals = data.totals;
             this.billingAddress = data.billingAddress;
             this.shippingAddress = data.shippingAddress;
-            this.showCartItems = false;
-            if (this.mealCartItem && this.cart && this.cart.items_count > 1) {
-                this.showCartItems = true;
+            this.showCartItems = true;
+            if (this.mealCartItem && this.cart && this.cart.items_count === 1) {
+                this.showCartItems = false;
             }
             this.mealPreferences = {};
             if (data.mealPreferences && data.mealPreferences.length > 0) {
@@ -92,6 +92,9 @@ export class ConfirmComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.rest.saveItem(false, sendData, 'carts/mine/payment-information').subscribe(res => {
             this.next.emit('confirm');
+            this.rest.saveItem(false, [], 'carts/mine').subscribe(x => {
+                this.cartService.setCartTotal(true);
+            });
         }, e => {
             const err = e.json();
             this.loading = false;

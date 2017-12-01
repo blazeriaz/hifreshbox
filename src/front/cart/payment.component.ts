@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, Renderer2, Output, EventEmitter } from '@angular/core';
-import { RestService, AlertService } from 'services';
+import { RestService, AlertService, CartService, MealMenuService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { CreditCardValidator } from 'angular-cc-library';
 
 @Component({
     selector: 'checkout-payment',
@@ -12,10 +13,19 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 export class PaymentComponent implements OnInit, OnDestroy {
     @Output() back = new EventEmitter();
     @Output() next = new EventEmitter();
+    @Output() goStep = new EventEmitter();
 
     checkoutPaymentForm;
     checkoutPaymentSubmitted;
     loading;
+
+    cart;
+    totals;
+    showImages;
+    mealCartItem;
+    billingAddress;
+    shippingAddress;
+    currentMenuDays;
 
     constructor(
         private alert: AlertService,
@@ -24,18 +34,33 @@ export class PaymentComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private renderer: Renderer2,
         private _fb: FormBuilder,
+        private cartService: CartService,
+        private mealMenuService: MealMenuService
     ) { }
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
         this.loading = false;
         this.checkoutPaymentForm = this._fb.group({
-            'cart_holder_name': ['', [Validators.required]],
-            'cart_number': ['', [Validators.required]],
-            'cart_month': ['', [Validators.required]],
-            'cart_year': ['', [Validators.required]],
-            'cart_cvv': ['', [Validators.required]]
+            'card_holder_name': ['', [Validators.required]],
+            'card_number': ['', [Validators.required]],
+            'card_month_year': ['', [CreditCardValidator.validateExpDate]],
+            'card_cvv': ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]]
         });
+
+        this.cartService.getCartTotal().subscribe(data => {
+            if (!data.cart) {
+                return;
+            }
+            this.cart = data.cart;
+            this.showImages = data.showImages;
+            this.mealCartItem = data.mealCartItem;
+            this.totals = data.totals;
+            this.billingAddress = data.billingAddress;
+            this.shippingAddress = data.shippingAddress;
+        });
+
+        this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
     }
 
     setInputClass(input) {
@@ -60,6 +85,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     goBack() {
         this.back.emit('payment');
+    }
+
+    goCheckoutStep(step) {
+        this.goStep.emit(step);
     }
 
     ngOnDestroy() {

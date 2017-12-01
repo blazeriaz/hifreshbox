@@ -14,7 +14,7 @@ import { FullLayoutComponent } from "front/layouts/full-layout.component";
 import { RecipeComponent } from "front/recipe/recipe.component";
 import { SwagsComponent } from 'front/swags/swags.component';
 import { SwagViewComponent } from 'front/swags/swag.view.component';
-import { TabsModule, AccordionModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
+import { TabsModule, AccordionModule, ModalModule, TooltipModule, CarouselModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FaqComponent } from 'front/faq/faq.component';
 import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
@@ -32,6 +32,7 @@ import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component'
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
     ModalModule.forRoot(),
+    CarouselModule.forRoot(),
     HttpModule,
     FrontRoutingModule,
     FormsModule,

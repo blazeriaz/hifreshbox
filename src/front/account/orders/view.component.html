@@ -6,7 +6,7 @@
           <span class="font-xs">>></span>
           <a class="text-muted" [routerLink]="['/', 'account', 'orders']">Your Orders</a>
           <span class="font-xs">>></span>
-          <span class="font-weight-bold text-success">#{{orderItem.increment_id}}</span>
+          <span class="font-weight-bold text-success" *ngIf="orderItem">#{{orderItem.increment_id}}</span>
       </div>
     </div>
     <div class="row" *ngIf="!orderItem">

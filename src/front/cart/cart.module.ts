@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {SelectModule} from 'ng2-select';
 import { SharedModule } from 'shared.module';
-
+import { CreditCardDirectivesModule } from 'angular-cc-library';
 
 import { CartRoutingModule } from './cart-routing.module';
 import { UsersService, PagerService } from 'services';
@@ -21,6 +21,7 @@ import { LoginComponent } from './login.component';
   imports: [
     SharedModule,
     SelectModule,
+    CreditCardDirectivesModule,
     CartRoutingModule,
     CommonModule,
     FormsModule,

@@ -60,7 +60,7 @@ export class OrdersListComponent implements OnInit {
             direction: 'DESC'
         }];
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'custom-order', criteria, sortOrders).subscribe(orders => {
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'custom-order', 'criteria', sortOrders).subscribe(orders => {
             this.initLoad = false;
             this.loadingList = false;
             this.initOrdersList(orders, pageNo);
@@ -68,10 +68,10 @@ export class OrdersListComponent implements OnInit {
     }
 
     initOrdersList(orders, page?) {
-        this.orders = orders.items;
+        this.orders = orders[0];
         // get pager object from service
         page = page ? page : 1;
-        this.pager = this.pagerService.getPager(orders.total_count, page, pageSize);
+        this.pager = this.pagerService.getPager(orders[3].total_record, page, pageSize);
     }
 
     abortSearch() {

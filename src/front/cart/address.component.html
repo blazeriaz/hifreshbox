@@ -3,9 +3,29 @@
         <h2 class="text-uppercase">Your Shipping Details</h2>
         <p>Free shipping anywhere on Oahu and $8 for outter islands</p>
     </div>
+    <div class="col-12 mt-5" *ngIf="userAddress.length > 0">
+        <div class="row">
+            <div class="col-md-4 col-sm-6" *ngFor="let address of userAddress; let index = index;">
+              <div class="card card-faded" (click)="newShippingAddress= false; selectedShippingAddress=address;">
+                <div class="card-block" [ngClass]="setAddressClass(address, index)">
+                  <address>
+                    <strong>{{address.firstname}} {{address.lastname}}</strong><br>
+                    <span *ngFor="let str of address.street">{{str}}<br *ngIf="str" /></span>
+                    <span *ngIf="address.city">{{address.city}}, </span>
+                    <span *ngIf="address.region.region">{{address.region.region}}, </span>
+                    <span>{{address.country_id}} {{address.postcode}}</span><br />
+                    <abbr title="Phone" *ngIf="address.telephone">P:</abbr> {{address.telephone}}
+                  </address>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt-0 px-0" *ngIf="userAddress.length > 0">
+        <button type="button" class="btn btn-outline-green" (click)="selectedShippingAddress = null; newShippingAddress= true;">Add New Address</button>
+    </div>
     <div class="col-12 mt-5">
         <form [formGroup]="checkoutAddressForm" (submit)="saveCheckoutAddress()" novalidate>
-            <div class="form-group row" formGroupName='shipping_address'>                        
+            <div class="form-group row" formGroupName='shipping_address' *ngIf="newShippingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname', 'shipping_address')">
                     <label for="address_first_name" class="form-control-label">First Name</label>
                     <input type="text" class="form-control rounded-0" id="address_first_name" formControlName="firstname" 
@@ -18,7 +38,7 @@
                         [ngClass]="setAddressInputClass('lastname', 'shipping_address')" />
                 </div>
             </div>
-            <div class="form-group row" formGroupName='shipping_address'>                        
+            <div class="form-group row" formGroupName='shipping_address' *ngIf="newShippingAddress">                        
                 <div formArrayName="street" class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('street', 'shipping_address')">
                     <label for="address_street_0" class="form-control-label">Street Address</label>
                     <input type="text" class="form-control rounded-0" id="address_street_0" formControlName="0" 
@@ -31,7 +51,7 @@
                         [ngClass]="setAddressInputClass('city', 'shipping_address')" />
                 </div>
             </div>
-            <div class="form-group row" formGroupName='shipping_address'>                        
+            <div class="form-group row" formGroupName='shipping_address' *ngIf="newShippingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'shipping_address')" >
                     <label for="address_region" class="form-control-label">Region</label>
                     <ng-select [allowClear]="true" [multiple]="false"
@@ -49,7 +69,7 @@
                     <span class="font-sm">We will notify you when the box is delivered</span>
                 </div>
             </div>
-            <div class="form-group row" formGroupName='shipping_address'>                        
+            <div class="form-group row" formGroupName='shipping_address' *ngIf="newShippingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'shipping_address')">
                     <label for="address_postcode" class="form-control-label">Zip Code</label>
                     <input type="text" class="form-control rounded-0" id="address_postcode" formControlName="postcode" 
@@ -62,10 +82,35 @@
                     <span class="pointer" (click)="sameAddress = !sameAddress">Use this as my bill info</span>
                 </div>
             </div>
-            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress">
+            <div class="row" *ngIf="!sameAddress">
                 <div class="col-12 text-center my-5">
                     <h2 class="text-uppercase">Your Billing Details</h2>
-                </div>                    
+                </div>
+            </div>
+            <div class="row" *ngIf="!sameAddress">
+                <div class="col-12 mt-5" *ngIf="userAddress.length > 0">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6" *ngFor="let address of userAddress; let index = index;">
+                            <div class="card card-faded" (click)="newBillingAddress= false; selectedBillingAddress=address;">
+                                <div class="card-block" [ngClass]="setBillingAddressClass(address, index)">
+                                    <address>
+                                        <strong>{{address.firstname}} {{address.lastname}}</strong><br>
+                                        <span *ngFor="let str of address.street">{{str}}<br *ngIf="str" /></span>
+                                        <span *ngIf="address.city">{{address.city}}, </span>
+                                        <span *ngIf="address.region.region">{{address.region.region}}, </span>
+                                        <span>{{address.country_id}} {{address.postcode}}</span><br />
+                                        <abbr title="Phone" *ngIf="address.telephone">P:</abbr> {{address.telephone}}
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-0 px-0" *ngIf="userAddress.length > 0">
+                    <button type="button" class="btn btn-outline-green" (click)="selectedBillingAddress = null; newBillingAddress= true;">Add New Address</button>
+                </div>
+            </div>
+            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress && newBillingAddress">
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname', 'billing_address')">
                     <label for="billing_address_first_name" class="form-control-label">First Name</label>
                     <input type="text" class="form-control rounded-0" id="billing_address_first_name" formControlName="firstname" 
@@ -78,7 +123,7 @@
                         [ngClass]="setAddressInputClass('lastname', 'billing_address')" />
                 </div>
             </div>
-            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress">                        
+            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress && newBillingAddress">                        
                 <div formArrayName="street" class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('street', 'billing_address')">
                     <label for="billing_address_street_0" class="form-control-label">Street Address</label>
                     <input type="text" class="form-control rounded-0" id="billing_address_street_0" formControlName="0" 
@@ -91,7 +136,7 @@
                         [ngClass]="setAddressInputClass('city', 'billing_address')" />
                 </div>
             </div>
-            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress">                        
+            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress && newBillingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'billing_address')" >
                     <label for="billing_address_region" class="form-control-label">Region</label>
                     <ng-select [allowClear]="true" [multiple]="false"
@@ -109,7 +154,7 @@
                     <span class="font-sm">We will notify you when the box is delivered</span>
                 </div>
             </div>
-            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress">                        
+            <div class="form-group row" formGroupName='billing_address' *ngIf="!sameAddress && newBillingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'billing_address')">
                     <label for="billing_address_postcode" class="form-control-label">Zip Code</label>
                     <input type="text" class="form-control rounded-0" id="billing_address_postcode" formControlName="postcode" 

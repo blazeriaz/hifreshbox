@@ -13,6 +13,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class AuthService {
   module;
   baseUrl;
+  user;
   private userInfo = new BehaviorSubject(null);
   private loginSubject = new BehaviorSubject({
     action: null
@@ -22,19 +23,23 @@ export class AuthService {
     private http: Http,
     private router: Router
   ) {
-    this.initLoggedInUserInfo();
     this.baseUrl = GlobalVariable.BASE_API_URL;
   }
 
   initLoggedInUserInfo() {
+    this.user = null;
     if (this.isLogin()) {
       this.getItem('customers/me').subscribe(user => {
+        this.user = user;
         this.userInfo.next(user);
       });
     }
   }
 
   getUserInfo() {
+    if (!this.user) {
+      this.initLoggedInUserInfo();
+    }
     return this.userInfo.asObservable();
   }
 

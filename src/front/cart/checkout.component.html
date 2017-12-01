@@ -40,7 +40,7 @@
                 <checkout-address (back)="goBack($event)" (next)="goNext($event)"></checkout-address>
             </div>
             <div class="col-12" *ngIf="currentStep == 'payment'">
-                <checkout-payment (back)="goBack($event)" (next)="goNext($event)"></checkout-payment>
+                <checkout-payment (goStep)="goCheckoutStep($event)" (back)="goBack($event)" (next)="goNext($event)"></checkout-payment>
             </div>
             <div class="col-12" *ngIf="currentStep == 'confirm'">
                 <checkout-confirm (goStep)="goCheckoutStep($event)" (back)="goBack($event)" (next)="goNext($event)"></checkout-confirm>

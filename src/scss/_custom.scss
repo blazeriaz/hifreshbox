@@ -26,3 +26,81 @@
     background-color: #efefef;
     opacity: 0.6;
 }
+
+.text-success.circle_main, .text-success .circle_main {
+    color: $brand-success;
+    border : 1px solid $brand-success;
+}
+.text-info.circle_main, .text-info .circle_main {
+    color: $brand-info;
+    border : 1px solid $brand-info;
+}
+
+.bg-light.circle_main, .bg-light .circle_main {
+    color: #222222;
+    border : 1px solid $gray-light;
+    background-color: #FAFAFA;
+}
+.bg-green.circle_main, .bg-green .circle_main {
+    color: $white;
+    border : 1px solid $brand-success;
+    background-color: $brand-success;
+}
+.bg-dark.circle_main, .bg-dark .circle_main {
+    color: $white;
+    border : 1px solid $gray-light;
+    background-color: $gray-dark;
+}
+.bg-gray.circle_main, .bg-gray .circle_main {
+    color: $white;
+    border : 1px solid $gray-dark;
+    background-color: $gray;
+}
+/* Circle Main draws the actual circle */
+.circle_main
+{
+	width : 100%;
+	height : 100%;
+    border-radius : 50%;
+    color: $gray-light;
+	border : 1px solid $gray-light;	/* can alter thickness and colour of circle on this line */
+	margin : 0;
+    padding : 0;
+    position: relative;
+    z-index: 2;
+    background: #FFFFFF;
+}
+
+/* Circle Text Container - constrains text area to within the circle */
+.circle_text_container
+{
+	/* area constraints */
+	width : 70%;
+	height : 70%;
+	max-width : 70%;
+	max-height : 70%;
+	margin : 0;
+	padding : 0;
+
+	/* some position nudging to center the text area */
+	position : relative;
+	left : 15%;
+	top : 15%;
+	
+	/* preserve 3d prevents blurring sometimes caused by the text centering in the next class */
+	transform-style : preserve-3d;
+	
+	/*border : 1px solid green;*/
+}
+
+/* Circle Text - the appearance of the text within the circle plus vertical centering */
+.circle_text
+{
+    word-wrap: break-word;
+	text-align : center;
+	
+	/* vertical centering technique */
+	position : relative;
+	top : 50%;
+	transform : translateY(-50%);
+}

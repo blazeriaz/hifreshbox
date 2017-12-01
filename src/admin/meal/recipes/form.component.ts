@@ -468,7 +468,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
 
   addEquipmentNeeded() {
     this.equipment_needs.push(this.newEquipmentNeeded);
-    this.newAllerigy = '';
+    this.newEquipmentNeeded = '';
   }
 
   removeEquipmentNeeded(i: number) {

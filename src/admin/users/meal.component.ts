@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2, Output, EventEmitter } from '@angular/core';
-import { RestService, AlertService, CartService } from 'services';
+import { RestService, AlertService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,8 +21,7 @@ export class MealComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2,
-        private _fb: FormBuilder,
-        private cartService: CartService
+        private _fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
@@ -33,14 +32,18 @@ export class MealComponent implements OnInit, OnDestroy {
             meal_extra_notes: '',
         });
 
-        this.userMealPrefData = {subscribepreference: {
-            meal_preference_setting: null,
-            howmuch_meals_week: 1,
-            howmany_people: 1,
-            meal_extra_notes: ''
-        }}; 
+        const userId = this.route.snapshot.params['id'];
+        this.userMealPrefData = {
+            subscribepreference: {
+                meal_preference_setting: null,
+                howmuch_meals_week: 1,
+                howmany_people: 1,
+                meal_extra_notes: ''
+            },
+            customer_id: userId
+        };
 
-        this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(mealPreferences => {
+        this.rest.getItems(1, [], 1000, 'meals/user-admin-meal-search/' + userId, 'criteria').subscribe(mealPreferences => {
             if (mealPreferences && mealPreferences.length > 0) {
                 const formValues = {};
                 mealPreferences.forEach((x, i) => {
@@ -111,7 +114,7 @@ export class MealComponent implements OnInit, OnDestroy {
                 })
             });
             this.loading = true;
-            this.rest.saveItem(false, this.userMealPrefData, 'meal-settings').subscribe(res => {
+            this.rest.saveItem(false, this.userMealPrefData, 'admin-meal-settings').subscribe(res => {
                 this.alert.success('User meal preference succesfully updated!');
                 this.loading = false;
             }, e => {

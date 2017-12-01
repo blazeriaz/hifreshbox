@@ -166,6 +166,14 @@ body {
     }
 }
 
+.carousel-item > .item {
+    width: 100%
+}
+
+.carousel-indicators {
+    bottom: -30px;
+}
+
 @include media-breakpoint-down(md) {
     .app-header {        
         .navbar-brand {
@@ -281,4 +289,8 @@ input, select, textarea {
 	position : relative;
 	top : 50%;
 	transform : translateY(-50%);
+}
+
+.carousel-control {
+    cursor: pointer;
 }

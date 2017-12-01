@@ -1,0 +1,28 @@
+<div class="container-fluid p-0" [ngStyle]="backgrounds.testimonials">    
+    <div class="row">
+        <div class="col-sm-12 text-center text-white py-10">
+            <h1 class="font-special color-spl-green text-uppercase">testimonials</h1>       
+            <carousel>
+                <slide *ngFor="let testimonial of testimonials">
+                    <div class="container mx-auto">
+                        <div class="row">
+                            <div class="col-md-3 col-1"></div>
+                            <div class="col-md-6 col-10">
+                                <blockquote class="my-3">
+                                    <p>{{testimonial.content}}</p>
+                                </blockquote>
+                                <div class="my-3">
+                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
+                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
+                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </div>    
+                                <h6>{{testimonial.name}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </slide>
+            </carousel>
+        </div> 
+    </div>        
+</div>

@@ -4,6 +4,7 @@ import { Routes,
 
 import { UsersListComponent } from './list.component';
 import { UserFormComponent } from "./form.component";
+import { MealComponent } from "./meal.component";
 import { FullLayoutComponent } from "../layouts/full-layout.component";
 import { emptyLayoutComponent } from "../layouts/empty-layout.component";
 
@@ -27,6 +28,13 @@ const routes: Routes = [
         component: UserFormComponent,
         data: {
             title: 'Edit'
+        }
+    },
+    {
+        path: 'edit/:id/preference',
+        component: MealComponent,
+        data: {
+            title: 'Edit Meal Preference'
         }
     }
     

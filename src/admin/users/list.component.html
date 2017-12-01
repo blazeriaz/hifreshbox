@@ -52,6 +52,7 @@
               </div>
               <div class="btn-group btn-group-sm" *ngIf="!isDeleted(user.id)">
                 <a [routerLink]="['edit', user.id]" class="btn btn-link pl-0">Edit</a>
+                <a [routerLink]="['edit', user.id, 'preference']" class="btn btn-link pl-0">Meal Preference</a>
                 <button type="button" class="btn btn-link px-0" (click)="deleteUser(user.id)">Delete</button>
               </div>
             </div>

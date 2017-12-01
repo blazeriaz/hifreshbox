@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2, Output, EventEmitter } from '@angular/core';
-import { RestService, AlertService, CartService } from 'services';
+import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,12 +19,19 @@ export class AddressComponent implements OnInit, OnDestroy {
     UsregionsAll;
     checkoutAddressForm;
     checkoutAddressSubmitted;
+    userAddress = [];
     loading;
     sameAddress = true;
+    selectedShippingAddress = null;
+    newShippingAddress = false;
+    selectedBillingAddress = null;
+    newBillingAddress = false;
+
 
     constructor(
         private alert: AlertService,
         private rest: RestService,
+        private auth: AuthService,
         private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2,
@@ -55,17 +62,32 @@ export class AddressComponent implements OnInit, OnDestroy {
             shipping_method_code : 'bestway'
         });
 
-        this.rest.getItem('me', 'customers/me').subscribe(user => {
-            this.checkoutAddressForm.controls['shipping_address'].patchValue({
-                firstname : user.firstname,
-                lastname : user.lastname,
-                email : user.email
-            });
-            this.checkoutAddressForm.controls['billing_address'].patchValue({
-                firstname : user.firstname,
-                lastname : user.lastname,
-                email : user.email
-            });
+        this.auth.getUserInfo().subscribe(user => {
+            if (user) {
+                this.checkoutAddressForm.controls['shipping_address'].patchValue({
+                    firstname : user.firstname,
+                    lastname : user.lastname,
+                    email : user.email
+                });
+                this.checkoutAddressForm.controls['billing_address'].patchValue({
+                    firstname : user.firstname,
+                    lastname : user.lastname,
+                    email : user.email
+                });
+                if (user.addresses.length > 0) {
+                    this.userAddress = user.addresses;
+                    this.selectedShippingAddress = this.userAddress.find(x => x.default_shipping);
+                    this.selectedBillingAddress = this.userAddress.find(x => x.default_billing);
+                    this.newShippingAddress = false;
+                    this.newBillingAddress = false;
+                } else {
+                    this.userAddress = [];
+                    this.selectedShippingAddress = null;
+                    this.selectedBillingAddress = null;
+                    this.newShippingAddress = true;
+                    this.newBillingAddress = true;
+                }
+            }
         })
 
         this.cartService.getCartTotal().subscribe(data => {
@@ -76,17 +98,37 @@ export class AddressComponent implements OnInit, OnDestroy {
             this.totals = data.totals;
             if (data.billingAddress) {
                 this.sameAddress = data.billingAddress.same_as_billing;
-                if (data.billingAddress.country_id) {
+                if (data.billingAddress.customer_address_id && this.userAddress.length > 0) {
+                    this.newShippingAddress = false;
+                    this.selectedBillingAddress = this.userAddress.find(x => x.id === data.billingAddress.customer_address_id);
+                } else if (data.billingAddress.country_id) {
+                    this.newShippingAddress = true;
                     this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
                 }
             }
             if (data.shippingAddress) {
                 this.sameAddress = data.shippingAddress.same_as_billing;
-                if (data.billingAddress.country_id) {
+                if (data.shippingAddress.customer_address_id && this.userAddress.length > 0) {
+                    this.newBillingAddress = false;
+                    this.selectedShippingAddress = this.userAddress.find(x => x.id === data.shippingAddress.customer_address_id);
+                } else if (data.shippingAddress.country_id) {
+                    this.newBillingAddress = true;
                     this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
                 }
             }
         });
+    }
+
+    setAddressClass(address, i: number) {
+        return {
+            'bg-primary text-white' : this.selectedShippingAddress && this.selectedShippingAddress.id === address.id
+        };
+    }
+
+    setBillingAddressClass(address, i: number) {
+        return {
+            'bg-primary text-white' : this.selectedBillingAddress && this.selectedBillingAddress.id === address.id
+        };
     }
 
     addNewAddress() {
@@ -112,6 +154,8 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     initAddressForm(address) {
         return this._fb.group({
+            'customer_address_id': '',
+            'customer_id': '',
             'firstname': [address.firstname, Validators.required],
             'lastname': [address.lastname, [Validators.required]],
             'street': this._fb.array([
@@ -157,6 +201,30 @@ export class AddressComponent implements OnInit, OnDestroy {
     saveCheckoutAddress() {
         this.checkoutAddressSubmitted = true;
         this.alert.clear();
+        if (this.selectedShippingAddress) {
+            const selectedShippingAddress = {};
+            Object.keys(this.selectedShippingAddress).forEach(x => {
+                if (x === 'region') {
+                    Object.assign({}, selectedShippingAddress, this.selectedShippingAddress[x]);
+                } else if (x === 'id') {
+                    selectedShippingAddress['customer_address_id'] = this.selectedShippingAddress[x];
+                } else {
+                    selectedShippingAddress[x] = this.selectedShippingAddress[x];
+                }
+            });
+            this.checkoutAddressForm.controls['shipping_address'].patchValue(selectedShippingAddress);
+        }
+        if (this.selectedBillingAddress) {
+            const selectedBillingAddress = {};
+            Object.keys(this.selectedBillingAddress).forEach(x => {
+                if (x === 'region') {
+                    Object.assign({}, selectedBillingAddress, this.selectedBillingAddress[x]);
+                } else {
+                    selectedBillingAddress[x] = this.selectedBillingAddress[x];
+                }
+            });
+            this.checkoutAddressForm.controls['billing_address'].patchValue(selectedBillingAddress);
+        }
         if (this.sameAddress) {
             this.checkoutAddressForm.controls['billing_address'].patchValue(
                 this.checkoutAddressForm.controls['shipping_address'].value

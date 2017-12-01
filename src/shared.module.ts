@@ -19,6 +19,8 @@ import { mgCatalogAttribute, mgCatalogImage, jsonParse, zeropad } from 'pipes';
 import { AlertComponent } from 'components';
 import { HoverClassDirective } from 'shared/hover-class.directive';
 import { NewsletterComponent } from 'front/blocks/newsletter.component';
+import { TestimonialComponent } from 'front/blocks/testimonial.component';
+import { CarouselModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -26,7 +28,8 @@ import { NewsletterComponent } from 'front/blocks/newsletter.component';
     RouterModule,
     ChartsModule,
     HttpModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CarouselModule.forRoot()
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,
@@ -36,6 +39,7 @@ import { NewsletterComponent } from 'front/blocks/newsletter.component';
     AlertComponent,
     emptyLayoutComponent,
     NewsletterComponent,
+    TestimonialComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad
@@ -50,6 +54,7 @@ import { NewsletterComponent } from 'front/blocks/newsletter.component';
     AlertComponent,
     emptyLayoutComponent,
     NewsletterComponent,
+    TestimonialComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad

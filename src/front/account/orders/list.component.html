@@ -9,9 +9,9 @@
     </div>   
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            <h2>Orders</h2>
+        <div class="card border-0">
+          <div class="card-header border-0 p-0 mb-3">
+            <h2 class="mb-0">Orders</h2>
           </div>
           <div class="card-block">
             <div class="row py-2 bg-primary">
@@ -28,6 +28,12 @@
               </div>
             </div>
 
+            <div class="row py-2 bg-info" *ngIf="!loadingList && orders.length == 0">
+              <div class="col">
+                No orders...
+              </div>
+            </div>
+
             <div class="row py-2" *ngFor="let order of orders; let odd= odd;"
                 [ngClass]="{'bg-faded': odd}">
               <div class="col-md-2">
@@ -35,8 +41,8 @@
               <div class="col-md-3">
                 {{order.created_at | date}}</div>
               <div class="col-md-2">
-                {{order.total_paid}} {{order.order_currency_code}}</div>
-              <div class="col-md-3"></div>
+                {{order.total_paid ? order.total_paid : order.total_due}} {{order.order_currency_code}}</div>
+              <div class="col-md-3">{{order.status}}</div>
               <div class="col-md-2">  
                 <div class="btn-group btn-group-sm">
                   <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>

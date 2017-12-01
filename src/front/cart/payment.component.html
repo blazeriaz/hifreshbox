@@ -1,40 +1,77 @@
 <form [formGroup]="checkoutPaymentForm" (submit)="saveCheckoutPayment()" novalidate>
     <div class="row">
         <div class="col-12 text-center">
-            <h2 class="text-uppercase">Cridit Card Info</h2>
+            <h2 class="text-uppercase">Credit Card Info</h2>
         </div>
         
-        <div class="col-md-8 mt-5">                
+        <div class="col-md-6 mt-5">                
             <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('cart_holder_name')">
-                    <label for="cart_holder_name" class="form-control-label">Card Holder's Name</label>
-                    <input type="text" class="form-control rounded-0" id="cart_holder_name" formControlName="cart_holder_name" 
-                        [ngClass]="setInputClass('cart_holder_name')" />
+                <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
+                    <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
+                    <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
+                        [ngClass]="setInputClass('card_holder_name')" />
                 </div>
             </div>
             <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('cart_number')">
-                    <label for="cart_number" class="form-control-label">Credit Card Number</label>
-                    <input type="text" class="form-control rounded-0" id="cart_number" formControlName="cart_number" 
-                        [ngClass]="setInputClass('cart_number')" />
+                <div class="col-12" [ngClass]="setInputDivClass('card_number')">
+                    <label for="card_number" class="form-control-label">Credit Card Number</label>
+                    <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
+                        autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
                 </div>
             </div>
             <div class="form-group row px-3">                        
-                <div class="col-auto mr-1" [ngClass]="setInputDivClass('cart_month')">
-                    <label for="cart_month" class="form-control-label">MM</label>
-                    <input size="1" type="text" class="form-control form-control-sm rounded-0" id="cart_month" formControlName="cart_month" 
-                        [ngClass]="setInputClass('cart_month')" />
-                </div>
-                <div class="col-auto" [ngClass]="setInputDivClass('cart_year')">
-                    <label for="cart_year" class="form-control-label">YY</label>
-                    <input size="1" type="text" class="form-control form-control-sm rounded-0" id="cart_year" formControlName="cart_year" 
-                        [ngClass]="setInputClass('cart_year')" />
+                <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
+                    <label for="card_month_year" class="form-control-label">Expiry Date</label>
+                    <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" 
+                        autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
                 </div>
                 <div class="col"></div>
-                <div class="col-auto ml-auto" [ngClass]="setInputDivClass('cart_cvv')">
-                    <label for="cart_cvv" class="form-control-label">CVV</label>
-                    <input size="3" type="text" class="form-control form-control-sm rounded-0" id="cart_cvv" formControlName="cart_cvv" 
-                        [ngClass]="setInputClass('cart_cvv')" />
+                <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
+                    <label for="card_cvv" class="form-control-label">CVV</label>
+                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="tel" 
+                        autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-5 mt-auto">
+            <div class="row mt-5">
+                <div class="col">
+                    <h6>Delivery on:</h6>
+                    <p>{{currentMenuDays.tuesday | date}}</p>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col">
+                    <h6>Delivery Address</h6>
+                    <address class="m-0" *ngIf="shippingAddress">
+                        <span>{{shippingAddress.firstname}} {{shippingAddress.lastname}}</span><br>
+                        <span *ngFor="let str of shippingAddress.street">{{str}}<br *ngIf="str" /></span>
+                        <span *ngIf="shippingAddress.city">{{shippingAddress.city}}, </span>
+                        <span *ngIf="shippingAddress.region.region">{{shippingAddress.region.region}}, </span>
+                        <span>{{shippingAddress.country_id}} {{shippingAddress.postcode}}</span><br />
+                        <abbr title="Phone" *ngIf="shippingAddress.telephone">P:</abbr> {{shippingAddress.telephone}}
+                    </address>
+                </div>
+                <div class="col-auto mt-auto">
+                    <button (click)="goCheckoutStep('address')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
+                </div>
+            </div>
+    
+            <div class="row mt-5">
+                <div class="col">
+                    <h6>Billing Address</h6>
+                    <address class="m-0" *ngIf="billingAddress">
+                        <span>{{billingAddress.firstname}} {{billingAddress.lastname}}</span><br>
+                        <span *ngFor="let str of billingAddress.street">{{str}}<br *ngIf="str" /></span>
+                        <span *ngIf="billingAddress.city">{{shippingAddress.city}}, </span>
+                        <span *ngIf="billingAddress.region.region">{{billingAddress.region.region}}, </span>
+                        <span>{{billingAddress.country_id}} {{billingAddress.postcode}}</span><br />
+                        <abbr title="Phone" *ngIf="billingAddress.telephone">P:</abbr> {{billingAddress.telephone}}
+                    </address>
+                </div>
+                <div class="col-auto mt-auto">
+                    <button (click)="goCheckoutStep('address')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
                 </div>
             </div>
         </div>
