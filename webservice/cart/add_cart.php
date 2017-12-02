@@ -33,15 +33,12 @@ $n_slide = json_encode(['cart_item' => [
 						'howmuch_meals_week'=> 1,
 						'howmany_people'=> 1,
 						'meal_extra_notes'=>'extra',
-						'preferences'=> array(1 => 
-											array(
-												array('option_id'=>1,'qty'=>2), // Meal Option Id 
-												array('option_id'=>2,'qty'=>1)
-												),
-											2 => array(
-													array('option_id'=>5,'qty'=>2),
-													array('option_id'=>6,'qty'=>1)
-												)
+						'preferences'=> array(
+												array('question_id' => 1,'option_id'=>1,'qty'=>2), // Meal Option Id  and quantity
+												array('question_id' => 1,'option_id'=>2,'qty'=>1),
+												array('question_id' => 2,'option_id'=>5,'qty'=>2),
+												array('question_id' => 2,'option_id'=>6,'qty'=>1)
+												
 										)
 						]]);
 

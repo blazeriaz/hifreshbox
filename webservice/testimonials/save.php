@@ -12,6 +12,7 @@ $slide = json_encode(['testimonial' => [
 						'name' => 'Rafsan',
 						'email'=>'riaintouch+01@gmail.com',
 						'content'=>'this is my content',
+						'rating'=>4,
 						'creation_time'=>date('Y-m-d H:i:s'),
 						'update_time'=>date('Y-m-d H:i:s'),
 						'is_active'=>1
