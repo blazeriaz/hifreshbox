@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="container"> 
+    <div class="row py-2 mb-3">
+      <div class="col-12">
+          <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
+          <span class="font-xs">>></span>
+          <span class="font-weight-bold text-success">Your Cards</span>
+      </div>
+    </div>   
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-0">
+          <div class="card-header border-0 p-0 mb-3">
+            <h2 class="mb-0">Cards</h2>
+          </div>
+          <div class="card-block">
+            <div class="row py-2 bg-primary">
+              <div class="col-md-6">Card</div>
+              <div class="col-md-4">Expires</div>
+              <div class="col-md-2"></div>
+            </div>  
+            
+            <div class="row py-2 bg-info" *ngIf="loadingList">
+              <div class="col">
+                Loading cards...
+              </div>
+            </div>
+
+            <div class="row py-2 bg-info" *ngIf="!loadingList && cards.length == 0">
+              <div class="col">
+                No cards...
+              </div>
+            </div>
+
+            <div class="row py-2" *ngFor="let card of cards; let odd= odd;"
+                [ngClass]="{'bg-faded': odd}">
+              <div class="col-md-6">{{card.details.type}} ending in {{card.details.maskedCC}}</div>
+              <div class="col-md-4">{{card.details.expirationDate}}</div>
+              <div class="col-md-2">  
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-standard">Delete</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+              <ul class="pagination pull-right">
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+                <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+              </ul>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

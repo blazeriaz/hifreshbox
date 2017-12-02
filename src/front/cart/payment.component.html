@@ -4,32 +4,47 @@
             <h2 class="text-uppercase">Credit Card Info</h2>
         </div>
         
-        <div class="col-md-6 mt-5">                
-            <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
-                    <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
-                    <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
-                        [ngClass]="setInputClass('card_holder_name')" />
+        <div class="col-md-6 mt-5 bg-light">
+            <div class="row py-2" *ngFor="let card of cards; let odd= odd;" 
+                    [ngClass]="{'bg-faded': odd, 'bg-primary': card.entity_id == selectedCard.entity_id}" (click)="selectPaymentCard(card)">
+                <div class="col-8">
+                    {{card.details.type}} ending in {{card.details.maskedCC}}<br />
+                    {{card.details.expirationDate}}
+                </div>
+                <div class="col-4">
+                    <input size="3" class="form-control form-control-sm rounded-0" type="tel" placeholder="CVV" autocomplete="off" ccCVC />
                 </div>
             </div>
-            <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('card_number')">
-                    <label for="card_number" class="form-control-label">Credit Card Number</label>
-                    <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
-                        autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
-                </div>
+            <div class="row py-2" *ngIf="cards.length > 0 && !newCard">
+                <button class="btn btn-outline-green"(click)="newCard=1">New Card</button>
             </div>
-            <div class="form-group row px-3">                        
-                <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
-                    <label for="card_month_year" class="form-control-label">Expiry Date</label>
-                    <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" 
-                        autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
+            <div *ngIf="cards.length === 0 || newCard">
+                <div class="form-group row">                        
+                    <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
+                        <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
+                        <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
+                            [ngClass]="setInputClass('card_holder_name')" />
+                    </div>
                 </div>
-                <div class="col"></div>
-                <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
-                    <label for="card_cvv" class="form-control-label">CVV</label>
-                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="tel" 
-                        autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
+                <div class="form-group row">                        
+                    <div class="col-12" [ngClass]="setInputDivClass('card_number')">
+                        <label for="card_number" class="form-control-label">Credit Card Number</label>
+                        <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
+                            autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
+                    </div>
+                </div>
+                <div class="form-group row px-3">                        
+                    <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
+                        <label for="card_month_year" class="form-control-label">Expiry Date</label>
+                        <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" 
+                            autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
+                    </div>
+                    <div class="col"></div>
+                    <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
+                        <label for="card_cvv" class="form-control-label">CVV</label>
+                        <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="tel" 
+                            autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
+                    </div>
                 </div>
             </div>
         </div>

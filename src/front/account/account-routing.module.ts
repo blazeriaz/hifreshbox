@@ -52,6 +52,12 @@ const routes: Routes = [
         data: {
           title: 'Orders'
         }
+      }, {
+        path: 'cards',
+        loadChildren: './cards/cards.module#CardsModule',
+        data: {
+          title: 'Cards'
+        }
       }
     ]
   }

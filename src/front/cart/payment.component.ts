@@ -22,10 +22,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
     cart;
     totals;
     showImages;
+    cards = [];
     mealCartItem;
     billingAddress;
     shippingAddress;
     currentMenuDays;
+    newCard;
+    selectedCard;
 
     constructor(
         private alert: AlertService,
@@ -60,7 +63,28 @@ export class PaymentComponent implements OnInit, OnDestroy {
             this.shippingAddress = data.shippingAddress;
         });
 
+        const filters = [];
+        const sortCards = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
+
+        this.newCard = true;
+        this.rest
+            .getItems(1, filters, 1000, 'payment/listcreditcard', 'criteria', sortCards)
+            .subscribe(cards => {
+                this.newCard = cards.length === 0;
+                this.cards = cards.map(x => {
+                    x.details = JSON.parse(x.details);
+                    return x;
+                });
+        });
+
         this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
+    }
+
+    selectPaymentCard(card) {
+        this.selectedCard = card;
     }
 
     setInputClass(input) {
