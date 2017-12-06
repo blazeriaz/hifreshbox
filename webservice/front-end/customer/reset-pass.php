@@ -1,6 +1,6 @@
 <?php
 
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/rest/V1/customer/reset-password/riaintouch+011@gmail.com/0fcecbf046e75b80197aa4a6660aa67e/Riaz@123");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/rest/V1/customer/reset-password/md.riaz.samsys@gmail.com/79d44ee937e45375ee3e871488dba761/Nazreen@143");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET"); // Put method
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($emailcontent));

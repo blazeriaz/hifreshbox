@@ -11,13 +11,13 @@ $token = curl_exec($ch);
 	
 $review_data =  json_encode([
 						'productId' => 	2081,					
-						'nickname' => 'nickname',					
+						'nickname' => 'nickname sample',					
 						'title' => 'test title',					
 						'detail' => 'test detail',					
 						'ratingValue' => 4,					
 						//'customerId' => 0,					
 						'storeId' => 1,	
-						'weekNo' => 23,
+						'weekNo' => 39, 
 						]);
 
  
