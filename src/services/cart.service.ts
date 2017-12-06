@@ -36,6 +36,7 @@ export class CartService {
   billingAddress = null;
   shippingAddress = null;
   mealPreferences = null;
+  paymentInfo = null;
 
   constructor(
     private http: Http,
@@ -78,6 +79,14 @@ export class CartService {
     this.billingAddress = null;
     this.shippingAddress = null;
     this.assignCartTotal();
+  }
+
+  setPaymentInfo(data) {
+    this.paymentInfo = data;
+  }
+
+  getPaymentInfo() {
+    return this.paymentInfo;
   }
 
   getCartTotal() {

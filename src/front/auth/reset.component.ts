@@ -48,14 +48,14 @@ export class ResetComponent implements OnInit {
     const token = this.route.snapshot.params.token;
     this.resetForm = this.formBuilder.group({
       'id': customerId,
-      'token': token,
-      'password': ['', [Validators.required]],
+      'reset_token': token,
+      'new_password': ['', [Validators.required]],
       'confirmation': ['', [Validators.required]]
     }, {validator: this.checkPasswords});
   }
 
   checkPasswords(resetForm) {
-    const pass = resetForm.controls.password.value;
+    const pass = resetForm.controls.new_password.value;
     const confirmPass = resetForm.controls.confirmation.value;
 
     return pass === confirmPass ? null : { notSame: true }

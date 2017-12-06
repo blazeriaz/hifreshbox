@@ -18,6 +18,7 @@ export class RestService {
   private url: string;
   private loaderSubject = new Subject();
   private baseUrl;
+  baseAPICard;
   loaderState = this.loaderSubject.asObservable();
 
   constructor(
@@ -27,6 +28,7 @@ export class RestService {
   ) {
     this.criteria = 'searchCriteria';
     this.baseUrl = GlobalVariable.BASE_API_URL;
+    this.baseAPICard = GlobalVariable.BASE_URL;
   }
 
   changeBaseUrl(url) {
@@ -48,6 +50,26 @@ export class RestService {
   setRestCriteria(criteria) {
     this.criteria = criteria;
     return this;
+  }
+
+  addCrditCard(data) {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.append('Authorization', 'Bearer ' + this.auth.getToken());
+    let options = new RequestOptions({ headers: headers });
+    const url = this.baseAPICard + 'api/add_card.php';
+    return this.http.post(url, data, options)
+      .map((response: Response) => {
+        return response.text();
+      })
+      .catch(this.onCatch)
+      .do((res: Response) => {
+         this.onSuccess(res);
+      }, (error: any) => {
+         this.onError(error);
+      })
+      .finally(() => {
+         this.onEnd();
+      });
   }
 
   getItems(page?, filterGroups?, pageSize?, url?, criteria?, sortOrders?) {
@@ -109,10 +131,6 @@ export class RestService {
          this.onEnd();
       });
   }
-
-    private newFunction() {
-        return "[direction]=";
-    }
 
  getItem(itemId, url?) {
     let headers = new Headers({ 'Content-Type': 'application/json' });

@@ -4,21 +4,20 @@
             <h2 class="text-uppercase">Credit Card Info</h2>
         </div>
         
-        <div class="col-md-6 mt-5 bg-light">
-            <div class="row py-2" *ngFor="let card of cards; let odd= odd;" 
-                    [ngClass]="{'bg-faded': odd, 'bg-primary': card.entity_id == selectedCard.entity_id}" (click)="selectPaymentCard(card)">
-                <div class="col-8">
-                    {{card.details.type}} ending in {{card.details.maskedCC}}<br />
-                    {{card.details.expirationDate}}
-                </div>
-                <div class="col-4">
-                    <input size="3" class="form-control form-control-sm rounded-0" type="tel" placeholder="CVV" autocomplete="off" ccCVC />
+        <div class="col-md-6 mt-5 px-0">
+            <div class="mb-5 bg-light" *ngIf="cards.length > 0">
+                <div class="row py-2 mx-0 pointer" *ngFor="let card of cards; let odd= odd;" 
+                        [ngClass]="{'bg-faded': odd, 'bg-primary': selectedCard && card.entity_id == selectedCard.entity_id}" (click)="selectPaymentCard(card)">
+                    <div class="col-12">
+                        {{card.details.type}} ending in {{card.details.maskedCC}}<br />
+                        {{card.details.expirationDate}}
+                    </div>
                 </div>
             </div>
-            <div class="row py-2" *ngIf="cards.length > 0 && !newCard">
-                <button class="btn btn-outline-green"(click)="newCard=1">New Card</button>
+            <div class="row py-2 mx-0" *ngIf="cards.length > 0 && !newCard">
+                <button class="btn btn-outline-green"(click)="selectedCard=null;newCard=1">New Card</button>
             </div>
-            <div *ngIf="cards.length === 0 || newCard">
+            <div class="bg-light p-2" *ngIf="cards.length === 0 || newCard">
                 <div class="form-group row">                        
                     <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
                         <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>

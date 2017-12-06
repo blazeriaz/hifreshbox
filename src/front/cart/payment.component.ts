@@ -5,6 +5,7 @@ import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CreditCardValidator } from 'angular-cc-library';
+import { error } from 'selenium-webdriver';
 
 @Component({
     selector: 'checkout-payment',
@@ -84,7 +85,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
 
     selectPaymentCard(card) {
+        card.cvc = '';
         this.selectedCard = card;
+        this.newCard = false;
     }
 
     setInputClass(input) {
@@ -98,13 +101,52 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
 
     saveCheckoutPayment() {
-        this.checkoutPaymentSubmitted = true;
         this.alert.clear();
+        if(this.selectedCard) {
+            this.loading = true;
+            this.savePaymentInfoHash(this.selectedCard.public_hash);
+            return;
+        }
+        this.checkoutPaymentSubmitted = true;
         if (this.checkoutPaymentForm.valid) {
-            this.next.emit('payment');
+            const mon_yr = this.checkoutPaymentForm.value.card_month_year.split("/");
+            const data = {
+                customer_id: this.cart.customer.id,
+                card_number: this.checkoutPaymentForm.value.card_number,
+                month: mon_yr[0].trim(),
+                year: mon_yr[1].trim(),
+                cvv: this.checkoutPaymentForm.value.card_cvv,
+            }
+            this.rest.addCrditCard(data).subscribe(public_hash => {
+                if(public_hash.substring(0, 5).toLowerCase() === 'error') {
+                    this.alert.error(public_hash);
+                } else {
+                    this.savePaymentInfoHash(public_hash)
+                }
+            }, err => {
+                this.alert.error(err);
+            });
         } else {
             this.alert.error('Please check the form to enter all required details');
         }
+    }
+
+    savePaymentInfoHash(public_hash) {
+        const data = {
+            'public_hash': public_hash
+        };
+        this.rest.saveItem(false, data, 'payment/getpaymentnonce').subscribe(res => {
+            this.cartService.setPaymentInfo({
+                payment_method_nonce: res,
+                public_hash: public_hash,
+                is_active_payment_token_enabler: true
+            });
+            this.next.emit('payment');
+            this.loading = false;
+        }, err => {
+            this.loading = false;
+            this.alert.error('Please check with administrator');
+        }); 
     }
 
     goBack() {

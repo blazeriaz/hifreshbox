@@ -86,9 +86,15 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     }
 
     confirmOrder() {
-        const sendData = {paymentMethod : {
-            method: 'cashondelivery'
-        }};
+        const billingAddress = this.billingAddress;
+        delete billingAddress.id;
+        const sendData = {
+            paymentMethod : {
+                method: 'braintree_cc_vault',
+                additional_data: this.cartService.getPaymentInfo()
+            },
+            billing_address: billingAddress
+        };
         this.loading = true;
         this.rest.saveItem(false, sendData, 'carts/mine/payment-information').subscribe(res => {
             this.next.emit('confirm');
