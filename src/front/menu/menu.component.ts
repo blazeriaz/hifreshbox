@@ -125,9 +125,12 @@ export class MenuComponent implements OnInit, OnDestroy {
                 this.loadedselectedRecipes = true;
             });
         });
-        this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
-            this.favRecipes = data.map(x => x.product_id);
-        });
+
+        if (this.auth.isLogin()) {
+            this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
+                this.favRecipes = data;
+            });
+        }
     }
 
     addMealToCart() {
@@ -142,21 +145,42 @@ export class MenuComponent implements OnInit, OnDestroy {
         });
         window.scroll(0, 0);
     }
+    
+    inFavRecipe(id) {
+        return this.favRecipes.findIndex(x => x.product_id === id) !== -1;
+    }
 
     recipeFavouriteClass(recipe) {
-        if (this.favRecipes.indexOf(recipe.entity_id) !== -1) {
+        if (this.inFavRecipe(recipe.entity_id)) {
             return 'text-success';
         }
         return '';
     }
 
-    addToFavourite(recipe) {
+    toggleFavourite(recipe) {
         if (!this.auth.isLogin()) {
             this.islogin = this.auth.isLogin();
             return;
         }
-        this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
-            this.favRecipes.push(recipe.entity_id);
+        if (this.inFavRecipe(recipe.entity_id)) {
+            const item = this.favRecipes.find(x => x.product_id === recipe.entity_id);
+            this.removeFromFavuorite(item);
+        } else {
+            this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
+                this.favRecipes.push(data);
+                this.alert.success('Recipe had been added to favourite!');
+            });
+        }        
+    }
+
+    removeFromFavuorite(item) {
+        if (!confirm('Are you sure to remove from favourite?')) {
+            return;
+        }
+        this.alert.clear();
+        this.rest.deleteItem(item.wishlist_item_id, 'ipwishlist/delete/' + item.wishlist_item_id).subscribe(res => {
+            this.favRecipes = this.favRecipes.filter(x => x.wishlist_item_id !== item.wishlist_item_id);
+            this.alert.success('Recipe had been removed from favourite!');
         });
     }
 

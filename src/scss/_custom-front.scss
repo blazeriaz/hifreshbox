@@ -209,10 +209,6 @@ body {
     cursor: pointer;
 } 
 
-input, select, textarea {
-    border: 1px solid $gray-dark !important;
-}
-
 .text-success.circle_main, .text-success .circle_main {
     color: $brand-success;
     border : 1px solid $brand-success;

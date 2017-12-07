@@ -63,16 +63,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
             this.billingAddress = data.billingAddress;
             this.shippingAddress = data.shippingAddress;
         });
-
-        const filters = [];
-        const sortCards = [{
-            field: 'created_at',
-            direction: 'DESC'
-        }];
-
+        
         this.newCard = true;
         this.rest
-            .getItems(1, filters, 1000, 'payment/listcreditcard', 'criteria', sortCards)
+            .getItem(1, 'payment/listcreditcard')
             .subscribe(cards => {
                 this.newCard = cards.length === 0;
                 this.cards = cards.map(x => {

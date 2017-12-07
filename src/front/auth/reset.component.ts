@@ -71,13 +71,14 @@ export class ResetComponent implements OnInit {
       this.rest.showLoader();
       this.rest.saveItem('', this.resetForm.value, 'customer/reset-password').subscribe(
         data => {
-          if (data !== 'success') {
-            this.alert.error(data);
-            this.rest.hideLoader();
-          } else {
+          console.log(data);
+          if (data) {
             this.rest.hideLoader();
             this.alert.success('Please login with new password', true);
             this.goToLogin();
+          } else {
+            this.alert.error(data);
+            this.rest.hideLoader();
           }
         },
         error => {

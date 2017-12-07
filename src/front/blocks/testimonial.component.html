@@ -11,11 +11,12 @@
                                 <blockquote class="my-3">
                                     <p>{{testimonial.content}}</p>
                                 </blockquote>
-                                <div class="my-3">
-                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                                    <i class="fa fa-star" aria-hidden="true"></i>&nbsp;
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                <div class="my-3 text-muted" *ngIf="testimonial.rating > 0">
+                                    <i class="fa fa-star" [ngClass]="{'text-white': testimonial.rating>=1}"></i>&nbsp;
+                                    <i class="fa fa-star" [ngClass]="{'text-white': testimonial.rating>=2}"></i>&nbsp;
+                                    <i class="fa fa-star" [ngClass]="{'text-white': testimonial.rating>=3}"></i>&nbsp;
+                                    <i class="fa fa-star" [ngClass]="{'text-white': testimonial.rating>=4}"></i>&nbsp;
+                                    <i class="fa fa-star" [ngClass]="{'text-white': testimonial.rating>=5}"></i>
                                 </div>    
                                 <h6>{{testimonial.name}}</h6>
                             </div>

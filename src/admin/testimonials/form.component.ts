@@ -53,6 +53,17 @@ export class TestimonialFormComponent implements OnInit {
     }
   }
 
+  setTestmonialRate(rate) {
+    this.testimonialForm.patchValue({rating: rate});
+    this.testimonial.rating = rate;
+  }
+
+  ratingStarClass(rate) {
+    if(this.testimonial && this.testimonial.rating && rate <= this.testimonial.rating) {
+      return 'text-success';
+    }
+  }
+
   openEditModal() {
     this.modalEditRef = this.modalService.show(this.editLoadModal, {
       animated: true,
@@ -96,9 +107,10 @@ export class TestimonialFormComponent implements OnInit {
 
   initEditForm() {
     this.testimonialForm = this._fb.group({
-      name : [this.testimonial.name, [Validators.required]],
-      email : [this.testimonial.email, [Validators.required, Validators.email]],
-      content : [this.testimonial.content, [Validators.required]],
+      name: [this.testimonial.name, [Validators.required]],
+      email: [this.testimonial.email, [Validators.required, Validators.email]],
+      content: [this.testimonial.content, [Validators.required]],
+      rating: this.testimonial.rating,
       is_active : this.testimonial.is_active ? this.testimonial.is_active : 1,
     });
   }

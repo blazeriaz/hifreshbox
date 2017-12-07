@@ -3,7 +3,6 @@ import { Routes,
          RouterModule } from '@angular/router';
 
 import { CardsListComponent } from './list.component';
-import { OrderViewComponent } from './view.component';
 import { FullLayoutComponent } from 'front/layouts/full-layout.component';
 
 const routes: Routes = [
@@ -12,13 +11,6 @@ const routes: Routes = [
         component: CardsListComponent,
         data: {
             title: 'Cards'
-        }
-    },
-    {
-        path: 'view/:id',
-        component: OrderViewComponent,
-        data: {
-            title: 'View Order'
         }
     }
 ];

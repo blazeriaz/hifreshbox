@@ -47,12 +47,12 @@
             <div class="col-md-2">{{review.created_at | date}}</div>
             <div class="col-md-3">{{review.title}}</div>
             <div class="col-md-2">
-              <span *ngIf="review.ravitng_votes.length > 0">
-                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=1"></i>
-                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=2"></i>
-                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=3"></i>
-                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=4"></i>
-                <i class="fa fa-star" *ngIf="review.ravitng_votes[0].value>=5"></i>
+              <span class="text-muted">
+                <i class="fa fa-star" [ngClass]="{'text-success': review.ravitng_votes[0] && review.ravitng_votes[0].value>=1}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': review.ravitng_votes[0] && review.ravitng_votes[0].value>=2}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': review.ravitng_votes[0] && review.ravitng_votes[0].value>=3}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': review.ravitng_votes[0] && review.ravitng_votes[0].value>=4}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': review.ravitng_votes[0] && review.ravitng_votes[0].value>=5}"></i>
               </span>
             </div>
             <div class="col-md-2">{{getReviewStatus(review.status_id)}}</div>            

@@ -41,7 +41,7 @@
           <div class="row py-2" *ngFor="let testimonial of testimonials;let odd=odd;" 
               [ngClass]="{'bg-faded': odd, 'bg-danger': isDeleted(testimonial.id)}">            
             <div class="col-md-3">
-              <div>{{testimonial.name}}</div>
+              <div>{{testimonial.name}}<br />{{testimonial.email}}</div>
               <div class="btn-group btn-group-sm" *ngIf="isDeleted(testimonial.id)">
                   <button type="button" class="btn btn-link px-0" (click)="cancelDelete(testimonial.id)">Cancel Delete</button>
                 </div>
@@ -51,14 +51,20 @@
               </div>
             </div>
             <div class="col-md-3">
-              {{testimonial.email}}
+              <span class="text-muted">
+                <i class="fa fa-star" [ngClass]="{'text-success': testimonial.rating>=1}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': testimonial.rating>=2}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': testimonial.rating>=3}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': testimonial.rating>=4}"></i>
+                <i class="fa fa-star" [ngClass]="{'text-success': testimonial.rating>=5}"></i>
+              </span>
             </div>
             <div class="col-md-4">
               {{testimonial.content}}
             </div>
             <div class="col-md-2">
               <button type="button" class="btn btn-success" *ngIf="testimonial.is_active == 1">Enable</button>
-              <button type="button" class="btn btn-danger" *ngIf="testimonial.is_active == 2">Disable</button>
+              <button type="button" class="btn btn-danger" *ngIf="testimonial.is_active != 1">Disable</button>
             </div>
           </div>
 
