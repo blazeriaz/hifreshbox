@@ -46,7 +46,8 @@
       "prefix": "front",
       "styles": [
         "scss/front.scss",
-        "assets/css/font-awesome.min.css"
+        "assets/css/font-awesome.min.css",
+        "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

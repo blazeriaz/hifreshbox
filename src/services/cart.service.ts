@@ -24,7 +24,8 @@ export class CartService {
     mealCartItem: null,
     mealPreferences: null,
     billingAddress: null,
-    shippingAddress: null
+    shippingAddress: null,
+    subscription: null
   });
   guestCardId;
   cart = null;
@@ -37,6 +38,7 @@ export class CartService {
   shippingAddress = null;
   mealPreferences = null;
   paymentInfo = null;
+  subscription = null;
 
   constructor(
     private http: Http,
@@ -46,6 +48,7 @@ export class CartService {
   ) {
     if (this.auth.isLogin()) {
       localStorage.removeItem('guestCardId');
+      this.initUserSubscription();
     }
     this.guestCardId = localStorage.getItem('guestCardId');
     this.auth.getLoginSubject().subscribe(res => {
@@ -62,10 +65,41 @@ export class CartService {
         this.guestCardId = null;
         localStorage.removeItem('guestCardId');
         this.assignCartTotal();
+        this.initUserSubscription();
       } else {
         this.setCartTotal(true);
       }
     });
+  }
+
+  setOrderSubscriptionNull() {
+    this.subscription = null;
+    this.assignCartTotal();
+  }
+
+  initUserSubscription() {
+    this.rest.getItem(1, 'my-subscription').subscribe(subs => {
+      if(subs[0] <= 0) {
+        this.subscription = null;
+        this.assignCartTotal();
+        return;
+      }
+      let currentSub = subs[1].find(x => x.is_active == 1);
+      if(!currentSub) {
+        this.subscription = null;
+        this.assignCartTotal();
+        return;
+      }
+      this.rest.getItem(1, 'view-subscription-details/' + currentSub.subscription_id).subscribe(sub => {
+        if(!sub || !sub[0]) {
+          this.subscription = null;
+          this.assignCartTotal();
+          return;
+        }
+        this.subscription = Object.assign({}, currentSub, sub[0]);
+        this.assignCartTotal();
+      })
+    })
   }
 
   initVariables() {
@@ -146,7 +180,6 @@ export class CartService {
               return x;
           });
           this.mealPreferences[0] = this.mealPreferences[0].filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
-          console.log(this.mealPreferences);
           this.assignCartTotal();
         });
       }
@@ -179,7 +212,8 @@ export class CartService {
       mealCartItem: this.mealCartItem,
       mealPreferences: this.mealPreferences,
       billingAddress: this.billingAddress,
-      shippingAddress: this.shippingAddress
+      shippingAddress: this.shippingAddress,
+      subscription: this.subscription
     });
   }
 

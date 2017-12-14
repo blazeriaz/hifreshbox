@@ -88,6 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.rest.saveItem('', sendData, 'customers')
             .subscribe(
                 data => {
+                    this.router.navigate(['/', 'auth', 'confirm-register']);/**
                     this.rest.showLoader();
                     this.auth.login(this.checkoutLoginForm.value.email, this.checkoutLoginForm.value.password).subscribe(res => {
                         this.next.emit('login');
@@ -100,7 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                             this.alert.error('Server Error');
                         }
                         this.rest.hideLoader();
-                    });
+                    });**/
                 },
                 error => {
                   const err = error.json();

@@ -20,16 +20,19 @@ import { AlertComponent } from 'components';
 import { HoverClassDirective } from 'shared/hover-class.directive';
 import { NewsletterComponent } from 'front/blocks/newsletter.component';
 import { TestimonialComponent } from 'front/blocks/testimonial.component';
-import { CarouselModule } from 'ngx-bootstrap';
+import { SubscriptionInfoComponent } from 'front/blocks/subscription.info.component';
+import { CarouselModule, BsDatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     ChartsModule,
     HttpModule,
     ReactiveFormsModule,
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,
@@ -40,6 +43,7 @@ import { CarouselModule } from 'ngx-bootstrap';
     emptyLayoutComponent,
     NewsletterComponent,
     TestimonialComponent,
+    SubscriptionInfoComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad
@@ -55,6 +59,7 @@ import { CarouselModule } from 'ngx-bootstrap';
     emptyLayoutComponent,
     NewsletterComponent,
     TestimonialComponent,
+    SubscriptionInfoComponent,
     mgCatalogImage,
     mgCatalogAttribute,
     jsonParse, zeropad

@@ -1,7 +1,7 @@
 <?php
 $n_slide = json_encode(['recurring' => [
-						'parent_order_id'=>123,
-						'order_id' => '11100000',
+						'parent_order_id'=>4,
+						'order_id' => '000000053',
 						'user_id'=>15,
 						'is_active' => 1,
 						'sort_order' => 1

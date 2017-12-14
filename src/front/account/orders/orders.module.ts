@@ -7,10 +7,11 @@ import { PagerService } from 'services';
 import { OrderViewComponent } from './view.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {SelectModule} from 'ng2-select';
+import { SharedModule } from 'shared.module';
 
 @NgModule({
     imports: [
-        SelectModule, OrdersRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
+        SelectModule, SharedModule, OrdersRoutingModule, CommonModule, FormsModule, ReactiveFormsModule
     ],
     declarations: [ OrdersListComponent, OrderViewComponent ],
     providers: [ PagerService]

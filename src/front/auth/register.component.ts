@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
       this.rest.saveItem('', sendData, 'customers')
         .subscribe(
             data => {
-                this.router.navigate(['/', 'auth', 'login']);
+                this.router.navigate(['/', 'auth', 'confirm-register']);
             },
             error => {
               const err = error.json();

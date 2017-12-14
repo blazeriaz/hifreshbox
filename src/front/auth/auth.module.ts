@@ -8,7 +8,8 @@ import { ResetComponent, checkRestTokenResolve } from './reset.component';
 import { RegisterComponent } from './register.component';
 import { TabsModule, AccordionModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { CommonModule } from '@angular/common';
-
+import { ConfirmRegisterComponent } from './confirm.register.component';
+import { ActivateComponent, checkActivateTokenResolve } from './activate.component';
 
 @NgModule({
   imports: [
@@ -21,10 +22,10 @@ import { CommonModule } from '@angular/common';
     ModalModule.forRoot()
   ],
   declarations: [
-    LoginComponent, LogoutComponent, ForgetComponent, ResetComponent, RegisterComponent
+    ActivateComponent, LoginComponent, LogoutComponent, ForgetComponent, ResetComponent, RegisterComponent, ConfirmRegisterComponent
   ],
   providers: [
-    checkRestTokenResolve
+    checkRestTokenResolve, checkActivateTokenResolve
   ]
 })
 export class AuthModule { }

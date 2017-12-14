@@ -5,6 +5,8 @@ import { LoginComponent, LogoutComponent } from './login.component';
 import { ForgetComponent } from './forget.component';
 import { ResetComponent, checkRestTokenResolve } from "./reset.component";
 import { RegisterComponent } from './register.component';
+import { ConfirmRegisterComponent } from './confirm.register.component';
+import { ActivateComponent, checkActivateTokenResolve } from './activate.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,21 @@ const routes: Routes = [
         },
         data: {
           title: 'Reset Password'
+        }
+      }, {
+        path: 'confirm-register',
+        component: ConfirmRegisterComponent,
+        data: {
+          title: 'Confirm Register'
+        }
+      }, {
+        path: 'activate/:id/:token',
+        component: ActivateComponent,        
+        resolve: {
+          check: checkActivateTokenResolve
+        },
+        data: {
+          title: 'Activate Register'
         }
       }
     ]

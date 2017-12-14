@@ -83,6 +83,9 @@ export class MealMenuService {
 	}
 
 	getDateOfISOWeekString(w, y) {
+		if (w <= 0) {
+			return '';
+		}
 		const simple = new Date(y, 0, 1 + (w - 1) * 7);
 		const dow = simple.getDay();
 		const ISOweekStart = simple;
@@ -91,7 +94,7 @@ export class MealMenuService {
 		} else {
 			ISOweekStart.setDate(simple.getDate() + 7 - simple.getDay() + 2);
 		}
-		if (ISOweekStart.getFullYear() !== y) {
+		if (ISOweekStart.getFullYear() != y) {
 		  return false;
 		}
 		return this.datePipe.transform(ISOweekStart, 'MMM d');

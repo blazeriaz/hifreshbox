@@ -26,7 +26,12 @@ import { TabsModule, TooltipModule } from 'ngx-bootstrap';
     TooltipModule
   ],
   declarations: [
-    AccountComponent, DashboardComponent, AddressesComponent, ProfileComponent, RecipesComponent, MealComponent
+    AccountComponent, 
+    DashboardComponent, 
+    AddressesComponent, 
+    ProfileComponent, 
+    RecipesComponent, 
+    MealComponent
   ],
   providers: [UsersService, PagerService]
 })

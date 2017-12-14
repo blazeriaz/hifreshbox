@@ -1,69 +1,130 @@
-<div class="container-fluid">
-  <div class="container"> 
-    <div class="row py-2 mb-3">
-      <div class="col-12">
-          <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
-          <span class="font-xs">>></span>
-          <span class="font-weight-bold text-success">Your Orders</span>
+<div class="container"> 
+  <div class="row py-2 mb-3">
+    <div class="col-12">
+        <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
+        <span class="font-xs">>></span>
+        <span class="font-weight-bold text-success">Orders and Subscriptions</span>
+    </div>
+  </div>
+  <subscription_info></subscription_info>   
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card border-0">
+        <div class="card-header border-0 p-0 mb-3">
+          <h4 class="mb-0">Subscription History</h4>
+        </div>
+        <div class="card-block p-0">
+          <div class="row mx-0 py-2 bg-success text-center">
+            <div class="col-md-3">Menu for the week</div>
+            <div class="col-md-4">Meals</div>
+            <div class="col-md-2">Price</div>
+            <div class="col-md-3">Feedback</div>
+          </div>  
+          
+          <div class="row mx-0 py-2 bg-success" *ngIf="loadingSubList">
+            <div class="col">
+              Loading subscriptions...
+            </div>
+          </div>
+
+          <div class="row mx-0 py-2 bg-warning" *ngIf="!loadingSubList && subscriptions.length == 0">
+            <div class="col">
+              No subscriptions...
+            </div>
+          </div>
+
+          <div class="row mx-0 py-2 text-center" *ngFor="let sub of subscriptions; let even= even;" [ngClass]="{'bg-faded': even}">
+            <div class="col-md-3 my-auto">Week {{sub.week_no}} - {{sub.weekDate}}, {{sub.year}}</div>
+            <div class="col-md-4">
+              <div *ngFor="let pro of sub.product_list">
+                {{pro.name}}
+              </div>
+            </div>
+            <div class="col-md-2 my-auto">{{sub.grand_total | currency:'USD':true:'1.2-2'}}</div>
+            <div class="col-md-3">
+              <div class="text-muted" *ngFor="let pro of sub.product_list">
+                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': false}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': false}"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0 mt-2" *ngIf="pagerSub && pagerSub.totalPages > 1"><div class="col-md-12">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pagerSub.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setSubscriptionPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pagerSub.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setSubscriptionPage(pagerSub.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pagerSub.pages" [ngClass]="{active:pagerSub.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setSubscriptionPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pagerSub.currentPage === pagerSub.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setSubscriptionPage(pagerSub.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
+        </div>
       </div>
-    </div>   
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card border-0">
-          <div class="card-header border-0 p-0 mb-3">
-            <h2 class="mb-0">Orders</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card border-0">
+        <div class="card-header border-0 p-0 mb-3">
+          <h4 class="mb-0">Orders History</h4>
+        </div>
+        <div class="card-block p-0">
+          <div class="row mx-0 py-2 bg-success">
+            <div class="col-md-2">ID</div>
+            <div class="col-md-3">Purchase Date</div>
+            <div class="col-md-2">Total</div>
+            <div class="col-md-3">Status</div>
+            <div class="col-md-2"></div>
+          </div>  
+          
+          <div class="row mx-0 py-2 bg-success" *ngIf="loadingList">
+            <div class="col">
+              Loading orders...
+            </div>
           </div>
-          <div class="card-block">
-            <div class="row py-2 bg-primary">
-              <div class="col-md-2">ID</div>
-              <div class="col-md-3">Purchase Date</div>
-              <div class="col-md-2">Total</div>
-              <div class="col-md-3">Status</div>
-              <div class="col-md-2"></div>
-            </div>  
-            
-            <div class="row py-2 bg-info" *ngIf="loadingList">
-              <div class="col">
-                Loading orders...
-              </div>
-            </div>
 
-            <div class="row py-2 bg-info" *ngIf="!loadingList && orders.length == 0">
-              <div class="col">
-                No orders...
-              </div>
+          <div class="row mx-0 py-2 bg-warning" *ngIf="!loadingList && orders.length == 0">
+            <div class="col">
+              No orders...
             </div>
-
-            <div class="row py-2" *ngFor="let order of orders; let odd= odd;"
-                [ngClass]="{'bg-faded': odd}">
-              <div class="col-md-2">
-                {{order.increment_id}}</div>
-              <div class="col-md-3">
-                {{order.created_at | date}}</div>
-              <div class="col-md-2">
-                {{order.total_paid ? order.total_paid : order.total_due}} {{order.order_currency_code}}</div>
-              <div class="col-md-3">{{order.status}}</div>
-              <div class="col-md-2">  
-                <div class="btn-group btn-group-sm">
-                  <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
-              <ul class="pagination pull-right">
-                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
-                  <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
-                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
-                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
-                <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                  <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
-                </li>
-                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                  <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
-              </ul>
-            </div></div>
           </div>
+
+          <div class="row mx-0 py-2" *ngFor="let order of orders; let even= even;"
+              [ngClass]="{'bg-faded': even}">
+            <div class="col-md-2">
+              {{order.increment_id}}</div>
+            <div class="col-md-3">
+              {{order.created_at | date}}</div>
+            <div class="col-md-2">{{order.displayTotal | currency:'USD':true:'1.2-2'}}</div>
+            <div class="col-md-3">{{order.status}}</div>
+            <div class="col-md-2">  
+              <div class="btn-group btn-group-sm">
+                <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0 mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
         </div>
       </div>
     </div>

@@ -1,0 +1,58 @@
+<div class="row" *ngIf="!orderSubscription">
+    <div class="col-12">
+        No subscription found. <a [routerLink]="['/','menu']">Click here</a> to subscripe the meal.
+    </div>
+</div>
+<div class="row" *ngIf="orderSubscription">
+    <div class="col-md-8 col-sm-6 mb-3">
+        <div class="row">
+            <div class="col-md-4 mb-md-0 mb-2">
+                <div class="row mb-2">
+                    <div class="col-sm"><h5 class="m-0">Upcoming Order:</h5></div>
+                    <div class="col-sm-auto px-sm-1 px-3 my-auto">{{orderSubscription.next_order_date | date: 'MMM d'}}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm"><h5 class="m-0">Delivery Date:</h5></div>
+                    <div class="col-sm-auto px-sm-1 px-3 my-auto">{{orderSubscription.next_delivery_date | date: 'EEEE'}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a class="btn btn-link p-0 font-xl text-muted" [routerLink]="['/','menu']"><u>See the Menus</u> >></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 pl-md-5">
+                <div class="row">
+                    <div class="col-12">
+                        <button [disabled]="loading" 
+                            (click)="cancelSub(orderSubscription.week_no, orderSubscription.year)" 
+                            class="btn btn-outline-green text-uppercase font-sm py-1 mb-2">Cancel</button>
+                        <p class="mb-0 font-xs">*The cancellation cut off date is the Friday of the week before</p>
+                    </div>
+                </div>
+            </div>
+        </div>				
+    </div>
+    <div class="col-md-4 col-sm-6 mb-3 text-center">
+        <div class="row">
+            <div class="col-12"><h5 class="m-0">Customer Since:</h5></div>
+            <div class="col-12 mb-2">{{orderSubscription.subscribed_on | date: 'MMM d, y'}}</div>
+            <div class="col-12"><button [disabled]="loading" (click)="unSubscribe()" class="btn btn-outline-green text-uppercase font-sm py-1">UnSubscribe</button></div>
+        </div>        
+    </div>    
+</div>
+<hr />
+<div class="row" *ngIf="orderSubscription">
+    <div class="col-auto px-3">
+        Modify the Blocked weeks
+    </div>
+    <div class="col-md-4 col-sm-6 col">
+        <div class="input-group">
+            <input class="form-control border-0" readonly [disabled]="loading"
+                [minDate]="minDate" #drp="bsDaterangepicker" 
+                bsDaterangepicker [(ngModel)]="orderSubscription.blocked" />
+            <button [disabled]="loading" type="button" class="btn btn-success" (click)="modifyBlockDates()">Submit</button>
+        </div>
+    </div>
+</div>
+<hr *ngIf="orderSubscription" />
