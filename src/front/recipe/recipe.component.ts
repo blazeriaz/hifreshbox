@@ -13,6 +13,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
     recipe;
     currentMenuRecipes;
     mealMenuProduct;
+    orderSubscription;
 
     constructor(
         private alert: AlertService,
@@ -70,11 +71,15 @@ export class RecipeComponent implements OnInit, OnDestroy {
             productOption: null
         }};
 
+        this.orderSubscription = null;
         this.cartService.getCartTotal().subscribe(res => {
             if (res.guestCardId) {
                 this.mealMenuProduct.cartItem.quote_id = res.guestCardId
             } else if (res.cart && res.cart.id) {
                 this.mealMenuProduct.cartItem.quote_id = res.cart.id
+            }
+            if(res.subscription) {
+                this.orderSubscription = res.subscription;
             }
         });
         this.loadRecipe();

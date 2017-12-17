@@ -110,6 +110,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
     this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
   }
 

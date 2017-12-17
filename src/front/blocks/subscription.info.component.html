@@ -23,11 +23,17 @@
             </div>
             <div class="col-md-8 pl-md-5">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-12" *ngIf="!orderSubscription.is_current_week_blocked">
                         <button [disabled]="loading" 
                             (click)="cancelSub(orderSubscription.week_no, orderSubscription.year)" 
                             class="btn btn-outline-green text-uppercase font-sm py-1 mb-2">Cancel</button>
                         <p class="mb-0 font-xs">*The cancellation cut off date is the Friday of the week before</p>
+                    </div>
+                    <div class="col-12" *ngIf="orderSubscription.is_current_week_blocked">
+                        <button [disabled]="loading" 
+                            (click)="retriveSub(orderSubscription.paused_id)" 
+                            class="btn btn-outline-green text-uppercase font-sm py-1 mb-2">Cancel</button>
+                        <p class="mb-0 font-xs">*You can retrive the cancelled subscription before the Friday of the week before</p>
                     </div>
                 </div>
             </div>

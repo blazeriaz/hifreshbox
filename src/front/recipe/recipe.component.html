@@ -99,7 +99,7 @@
             <div class="col-12 mb-3" *ngIf="recipe.inCurrentMenu && !isLogin()">
                 <button [disabled]="!mealMenuProduct.cartItem.quote_id" type="button" (click)="addMealToCart()" class="btn btn-outline-green text-uppercase">Sign up to order</button>
             </div>
-            <div class="col-12 mb-3" *ngIf="recipe.inCurrentMenu && isLogin()">
+            <div class="col-12 mb-3" *ngIf="recipe.inCurrentMenu && isLogin() && !orderSubscription.has_subscription">
                 <button [disabled]="!mealMenuProduct.cartItem.quote_id" type="button" (click)="addMealToCart()" class="btn btn-outline-green text-uppercase">Order Now</button>
             </div>
             <div class="col-12 mb-3" *ngIf="recipe.custom_attributes | mgCatalogAttribute : 'pdf_upload'">

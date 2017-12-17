@@ -235,7 +235,20 @@ export class AddressComponent implements OnInit, OnDestroy {
         }
         if (!this.checkoutAddressForm.errors) {
             this.loading = true;
-            const sendData = {addressInformation : this.checkoutAddressForm.value};
+            const formValues = this.checkoutAddressForm.value;
+            if (!formValues['billing_address'].customer_address_id) {
+                delete formValues['billing_address'].customer_address_id;
+            }
+            if (!formValues['shipping_address'].customer_address_id) {
+                delete formValues['shipping_address'].customer_address_id;
+            }
+            if (!formValues['billing_address'].customer_id) {
+                delete formValues['billing_address'].customer_id;
+            }
+            if (!formValues['shipping_address'].customer_id) {
+                delete formValues['shipping_address'].customer_id;
+            }
+            const sendData = {addressInformation : formValues};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.next.emit('address');
                 this.cartService.setCartTotal(true);

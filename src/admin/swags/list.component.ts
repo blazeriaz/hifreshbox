@@ -44,7 +44,7 @@ export class SwagsListComponent implements OnInit {
     swagPreviewLink(swag) {
         const i = swag.custom_attributes.findIndex(x => x.attribute_code === 'url_key');
         const url_key = swag.custom_attributes[i].value;
-        return BASE_URL + '#' + 'sqwg/' + url_key;
+        return BASE_URL + '#' + 'swags/' + url_key;
     }
 
     loadSwagsList(pageNo?) {

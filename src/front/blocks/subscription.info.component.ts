@@ -31,9 +31,13 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
         this.minDate = new Date();
         this.loading = true;
         this.needToUnsubscribe.push(this.cartService.getCartTotal().subscribe(data => {
-            if(data.subscription) {
+            if(data.subscription && data.subscription.has_subscription) {
                 this.orderSubscription = data.subscription;
-                this.orderSubscription.blocked = [new Date(), new Date()];
+                if (data.subscription.blocked_week_start && data.subscription.blocked_week_end) {
+                    const s = new Date(data.subscription.blocked_week_start);
+                    const e = new Date(data.subscription.blocked_week_end);
+                    this.orderSubscription.blocked = [s, e];
+                }
                 this.loading = false;
             }
         }));
@@ -75,6 +79,13 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
             this.cartService.initUserSubscription();
             this.alert.success("The upcoming meal order had been cancelled successfully");
         }));
+    }
+
+    retriveSub(id) {
+        this.rest.deleteItem('', 'subscription/resumesubscription/' + id).subscribe(r => {
+            this.cartService.initUserSubscription();
+            this.alert.success("The upcoming meal order had been retreived successfully");
+        });
     }
 
     unSubscribe() {

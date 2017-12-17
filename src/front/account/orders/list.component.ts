@@ -33,9 +33,11 @@ export class OrdersListComponent implements OnInit {
         this.loadOrdersList();        
         this.loadingSubList = true;
         this.needToUnsubscribe.push(this.cartService.getCartTotal().subscribe(data => {
-            if(data.subscription) {
+            if(data.subscription && data.subscription.has_subscription) {
                 this.orderSubscription = data.subscription;
                 this.loadSubscriptionList(1);
+            } else {
+                this.loadingSubList = false;
             }
         }));
     }
@@ -86,6 +88,8 @@ export class OrdersListComponent implements OnInit {
                 .subscribe(subs => {
                     this.loadingSubList = false;
                     this.initSubscriptionList(subs, pageNo);
+            }, e=> {
+                this.loadingSubList = false;
             })
         );
     }

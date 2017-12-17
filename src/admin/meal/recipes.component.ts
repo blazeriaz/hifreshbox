@@ -111,9 +111,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     }
 
     setPage(page) {
-        this.rest.getItems(page, filterGroups, pageSize).subscribe(recipes => {
-            this.initRecipesList(recipes, page);
-        });
+        this.loadRecipesList(page);
     }
 
     goToBack() {

@@ -25,6 +25,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     currentMenuDays;
     islogin;
     mealMenuProduct;
+    orderSubscription;
 
     constructor(
     private alert: AlertService,
@@ -36,7 +37,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        this.islogin = this.auth.isLogin();
         this.globalVariable = GlobalVariable;
         this.backgrounds = {
             header: {
@@ -81,11 +81,16 @@ export class MenuComponent implements OnInit, OnDestroy {
             productOption: null
         }};
 
+        this.orderSubscription = null;
         this.cartService.getCartTotal().subscribe(res => {
             if (res.guestCardId) {
                 this.mealMenuProduct.cartItem.quote_id = res.guestCardId
             } else if (res.cart && res.cart.id) {
                 this.mealMenuProduct.cartItem.quote_id = res.cart.id
+            }
+
+            if(res.subscription) {
+                this.orderSubscription = res.subscription;
             }
         });
 
@@ -131,6 +136,10 @@ export class MenuComponent implements OnInit, OnDestroy {
                 this.favRecipes = data;
             });
         }
+    }    
+
+    isLogin() {
+        return this.auth.isLogin();
     }
 
     addMealToCart() {

@@ -65,7 +65,6 @@ export class CartService {
         this.guestCardId = null;
         localStorage.removeItem('guestCardId');
         this.assignCartTotal();
-        this.initUserSubscription();
       } else {
         this.setCartTotal(true);
       }
@@ -80,13 +79,17 @@ export class CartService {
   initUserSubscription() {
     this.rest.getItem(1, 'my-subscription').subscribe(subs => {
       if(subs[0] <= 0) {
-        this.subscription = null;
+        this.subscription = {
+          has_subscription: false
+        };
         this.assignCartTotal();
         return;
       }
       let currentSub = subs[1].find(x => x.is_active == 1);
       if(!currentSub) {
-        this.subscription = null;
+        this.subscription = {
+          has_subscription: false
+        };
         this.assignCartTotal();
         return;
       }
@@ -96,7 +99,7 @@ export class CartService {
           this.assignCartTotal();
           return;
         }
-        this.subscription = Object.assign({}, currentSub, sub[0]);
+        this.subscription = Object.assign({has_subscription: true}, currentSub, sub[0]);
         this.assignCartTotal();
       })
     })
@@ -131,7 +134,7 @@ export class CartService {
     let cartUrl = 'carts/mine';
     if (init) {
       this.initVariables();
-    }
+    } 
     if (!this.auth.isLogin()) {
       if (!this.guestCardId) {
         this.rest.saveItem(false, {}, 'guest-carts').subscribe(cartId => {
@@ -142,6 +145,8 @@ export class CartService {
         return;
       }
       cartUrl = 'guest-carts/' + this.guestCardId;
+    } else {             
+      this.initUserSubscription();
     }
     this.rest.getItem('', cartUrl).subscribe(res => {
         this.cart = res;

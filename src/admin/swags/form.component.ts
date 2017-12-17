@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute,
   Event as RouterEvent, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { ProductsService, AlertService, RestDefaultService } from 'services';
@@ -12,7 +12,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
     templateUrl: 'form.component.html'
 })
-export class SwagFormComponent implements OnInit {
+export class SwagFormComponent implements OnInit, OnDestroy {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
   @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
 
@@ -89,6 +89,10 @@ export class SwagFormComponent implements OnInit {
       this.openEditModal();
     }
     this.destroyed = false;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed = true;
   }
 
   openEditModal() {
