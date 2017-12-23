@@ -46,12 +46,17 @@ export class MealComponent implements OnInit, OnDestroy {
         this.rest.getItems(1, [], 1000, 'meals/user-admin-meal-search/' + userId, 'criteria').subscribe(mealPreferences => {
             if (mealPreferences && mealPreferences.length > 0) {
                 const formValues = {};
-                mealPreferences.forEach((x, i) => {
+                mealPreferences.forEach((y, i) => {
                     if (i === 0) {
-                        this.preferences = x;
+                        this.preferences = y;
+                        this.preferences.map(x => {
+                            x.options = x.options.filter(y => parseInt(y.is_active, 10) === 1);
+                            return x;
+                        });
+                        this.preferences = this.preferences.filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
                     } else {
-                        Object.keys(x).forEach((key) => {
-                            formValues[key] = parseInt(x[key], 10) ? parseInt(x[key], 10) : x[key];
+                        Object.keys(y).forEach((key) => {
+                            formValues[key] = parseInt(y[key], 10) ? parseInt(y[key], 10) : y[key];
                         });
                     }
                 });

@@ -2,10 +2,10 @@ import { NgModule }             from '@angular/core';
 import { Routes,
          RouterModule }         from '@angular/router';
 
-import { IngredientsListComponent, IngredientListResolve } from './ingredients';
+import { IngredientsListComponent } from './ingredients';
 import { FullLayoutComponent } from "../layouts/full-layout.component";
 import { emptyLayoutComponent } from "../layouts/empty-layout.component";
-import { PortionsListComponent, PortionListResolve } from "./portions";
+import { PortionsListComponent } from "./portions";
 
 const routes: Routes = [
     {
@@ -17,9 +17,6 @@ const routes: Routes = [
         children:[{
             path: 'ingredients',
             component: IngredientsListComponent,
-            resolve: {
-                items: IngredientListResolve
-            },
             data: {
                 title: 'Ingredients'
             }
@@ -27,9 +24,6 @@ const routes: Routes = [
         {
             path: 'portions',
             component: PortionsListComponent,
-            resolve: {
-                items: PortionListResolve
-            },
             data: {
                 title: 'Portions'
             }

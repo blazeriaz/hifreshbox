@@ -116,15 +116,15 @@ export class RecipesListComponent implements OnInit {
         this.alert.clear();
         const deleteSubscribe = this.rest.deleteItem(recipeSku, 'products/' + recipeSku).subscribe(data => {
             if (data) {
-                this.deleteItems = this.deleteItems.filter(item => item.sku = recipeSku);
-                this.recipes = this.recipes.filter(item => item.sku = recipeSku);
+                this.deleteItems = this.deleteItems.filter(item => item.sku !== recipeSku);
+                this.recipes = this.recipes.filter(item => item.sku !== recipeSku);
                 if (this.deleteItems.length === 0) {
                     this.alert.success('The recipes deleted successfully!', true);
                     this.initLoad = true;
                     this.loadRecipesList(page);
                 }
             } else {
-                this.deleteItems = this.deleteItems.filter(item => item.sku = recipeSku);
+                this.deleteItems = this.deleteItems.filter(item => item.sku !== recipeSku);
                 this.alert.error('The recipe can\'t be deleted!', true);
             }
         });

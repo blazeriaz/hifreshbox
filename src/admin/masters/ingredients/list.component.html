@@ -1,12 +1,12 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      <form class="form-group row" [formGroup]="masterForm">
+      <form class="form-group row" [formGroup]="masterForm" (submit)="saveItem(masterForm, false)">
         <div class="col-md-6 col-sm-12"> 
-          <div class="input-group" [ngClass]="setContainerErrorClass('title')">
-            <input type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass('title')"/>
+          <div class="input-group" [ngClass]="setContainerErrorClass('title', masterForm, true)">
+            <input type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass('title', masterForm, true)" (focus)="editItem = false" />
             <span class="input-group-btn">
-              <button class="btn btn-primary" type="button" (click)="saveItem()">Save</button>
+              <button [disabled]="loadingSave" class="btn btn-primary" type="submit">Save</button>
             </span>
           </div>
         </div>
@@ -16,28 +16,50 @@
           <i class="fa fa-users"></i> Ingredients
         </div>
         <div class="card-block">
-          <div class="row py-2 bg-info">
-            <div class="col-sm-6">Name</div>
-            <div class="col-sm-3">Status</div>
-            <div class="col-sm-3"></div>
-          </div>  
-
-          <div class="row py-2" [ngClass]="{'bg-faded': odd}" *ngFor="let item of items; let odd= odd;">
-            <div class="col-sm-6">
-              {{item.title}}
-            </div>
-            <div class="col-sm-3">
-              <button type="button" class="btn btn-success" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 1">Active</button>
-              <button type="button" class="btn btn-danger" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 0">Inactive</button>
-            </div>
-            <div class="col-sm-3">              
-              <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-secondary" (click)="doEditItem(item)">Edit</button>
+          <form [formGroup]="searchForm">
+            <div class="row py-2">
+              <label class="col-md-2 col-sm-4">Search : </label>
+              <div class="col-md-6 col-sm-8">              
+                <input type="text" class="form-control" formControlName="name" (focus)="editItem = false" />
               </div>
+            </div>
+          </form>
+          <div class="row py-2 bg-info">
+            <div class="col-sm-9">Name</div>
+            <div class="col-sm-3">Status</div>
+          </div>
+
+          <div class="row py-2 bg-info" *ngIf="loadingList">
+            <div class="col">
+              Loading items...
             </div>
           </div>
 
-          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+          <div class="row py-2" [ngClass]="{'bg-faded': odd}" *ngFor="let item of items; let odd= odd;">
+            <div class="col-sm-9" title="click to Edit" (click)="doEditItem(item)" *ngIf="!checkItemOnEdit(item)">
+              {{item.title}}
+              <button type="button" class="btn btn-sm btn-link btn-secondary"><i class="fa fa-edit"></i></button>
+            </div>
+            <div class="col-sm-9" *ngIf="checkItemOnEdit(item)">
+              <form class="form-group row" [formGroup]="editForm[item.id]" (submit)="saveItem(editForm[item.id], item)">
+                <div class="input-group" [ngClass]="setContainerErrorClass('title', editForm[item.id], false)">
+                  <input #editInput type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass('title', editForm[item.id], false)"/>
+                  <span class="input-group-btn">
+                    <button [disabled]="loadingSave" class="btn btn-primary" type="submit">Save</button>
+                  </span>
+                  <span class="input-group-btn">
+                    <button [disabled]="loadingSave" class="btn btn-secondary" type="button" (click)="editItem = false">Cancel</button>
+                  </span>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-3">
+              <button [disabled]="loadingSave" type="button" class="btn btn-success" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 1">Active</button>
+              <button [disabled]="loadingSave" type="button" class="btn btn-danger" (click)="toggleStatusItem(item)" *ngIf="item.is_active == 0">Inactive</button>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="!loadingSave && pager && pager.totalPages > 1"><div class="col-md-12">
             <ul class="pagination pull-right">
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>

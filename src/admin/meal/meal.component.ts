@@ -98,7 +98,7 @@ export class MealComponent implements OnInit {
       this.alert.clear();
       this.submitted = true;
       if (this.optionForm.valid) {
-        const sendData = this.optionForm.value;
+        const sendData = Object.assign({}, this.optionForm.value);
         const option_id = sendData.preference_option_id;
         let url = 'meals-option';
         if (option_id) {

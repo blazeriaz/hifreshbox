@@ -55,8 +55,8 @@
 							<div class="col-auto px-2">Price: {{opt.price | currency:'USD':true:'1.0'}}</div>
 							<div class="col-auto px-2">
 								<div class="btn-group btn-group-sm">
-									<button type="button" class="btn btn-success" *ngIf="opt.is_active">Active</button>
-									<button type="button" class="btn btn-danger" *ngIf="!opt.is_active">In-Active</button>
+									<button type="button" class="btn btn-success" *ngIf="opt.is_active == 1">Active</button>
+									<button type="button" class="btn btn-danger" *ngIf="opt.is_active != 1">In-Active</button>
 									<button type="button" class="btn btn-secondary" (click)="openOptionForm(preference.id, opt)">Edit</button>
 									<button type="button" class="btn btn-secondary" (click)="deleteMealOption(preference.id, opt)">Delete</button>
 								</div>
@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div class="card-footer text-right">
-				<button type="button" class="btn btn-primary" (click)="openOptionForm(0)">Add New Option</button>
+				<button type="button" class="btn btn-primary" (click)="openOptionForm(preference.id)">Add New Option</button>
 			</div>
 		</div>
 	</div>

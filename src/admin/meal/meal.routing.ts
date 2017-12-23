@@ -9,7 +9,7 @@ import { MealComponent } from './meal.component';
 import { AuthService } from 'services';
 
 const routes: Routes = [{
-    path: '',
+    path: 'preference',
     component: MealComponent
 }, {
     path: 'menu',

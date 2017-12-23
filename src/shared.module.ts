@@ -7,6 +7,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES } from 'shared/sidebar.directive';
 import { AsideToggleDirective } from 'shared/aside.directive';
 
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import {DndModule} from 'ng2-dnd';
 
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +33,8 @@ import { CarouselModule, BsDatepickerModule } from 'ngx-bootstrap';
     HttpModule,
     ReactiveFormsModule,
     CarouselModule.forRoot(),
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    DndModule.forRoot()
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,

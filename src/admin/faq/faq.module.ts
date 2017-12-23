@@ -9,10 +9,11 @@ import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
 
 import {SharedModule} from 'shared.module';
+import {DndModule} from 'ng2-dnd';
 
 @NgModule({
     imports: [
-        SelectModule, FaqRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
+        SelectModule, FaqRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule, DndModule
     ],
     declarations: [ FaqsListComponent, FaqFormComponent ],
     providers: [PagerService]

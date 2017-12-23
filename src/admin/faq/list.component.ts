@@ -12,10 +12,8 @@ export const pageSize = 10;
 export class FaqsListComponent implements OnInit {
     faqs: any;
     pager: any;
-    searchForm;
-    searchSubscripe;
     loadingList;
-    initLoad;
+    searchSubscripe;
     deleteItems;
 
     constructor(private rest: RestService,
@@ -27,33 +25,12 @@ export class FaqsListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.initLoad = true;
         this.deleteItems = [];
-        this.searchForm = this._fb.group({
-            name : ''
-        });
-        this.searchForm.valueChanges
-            .debounceTime(500)
-            .subscribe(values => this.loadFaqsList(1));
         this.loadFaqsList(1);
     }
 
     loadFaqsList(pageNo?) {
         const filters = [];
-        const searchValues = this.searchForm.value;
-        if (searchValues && searchValues.name) {
-            filters.push({
-                filters : [{
-                    field : 'question',
-                    value : '%' + searchValues.name + '%',
-                    condition_type : 'like'
-                }, {
-                    field : 'answer',
-                    value : '%' + searchValues.name + '%',
-                    condition_type : 'like'
-                }]
-            });
-        }
         if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();
         }
@@ -63,14 +40,21 @@ export class FaqsListComponent implements OnInit {
         }];
         this.loadingList = true;
         this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'faqs/search', 'criteria', sortOrders).subscribe(faqs => {
-            this.initLoad = false;
             this.loadingList = false;
             this.initFaqsList(faqs, pageNo);
         });
     }
 
     initFaqsList(faqs, page?) {
-        this.faqs = faqs.items;
+        this.faqs = faqs.items.sort((a: any, b: any) => {
+            if (a.sort_order < b.sort_order) {
+                return -1;
+            } else if (a.sort_order > b.sort_order) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });;
         // get pager object from service
         page = page ? page : 1;
         this.pager = this.pagerService.getPager(faqs.total_count, page, pageSize);
@@ -107,7 +91,6 @@ export class FaqsListComponent implements OnInit {
                 this.faqs = this.faqs.filter(item => item.id !== faqId);
                 if (this.deleteItems.length === 0) {
                     this.alert.success('The faqs deleted successfully!', true);
-                    this.initLoad = true;
                     this.loadFaqsList(this.pager.currentPage); 
                 }
             } else {
@@ -121,5 +104,10 @@ export class FaqsListComponent implements OnInit {
             subscribe : deleteSubscribe
         };
         this.deleteItems.push(deleteItem);
+    }
+
+    sortFaqItems($event: any) {
+        console.log($event);
+        console.log(this.faqs.findIndex(x => x.id === $event.id));
     }
 }

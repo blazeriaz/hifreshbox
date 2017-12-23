@@ -19,6 +19,7 @@ export class MenuListComponent implements OnInit {
     pager: any;
     yearMonthSubs;
     disableEdit;
+    loading;
 
     constructor(
         private rest: RestService,
@@ -31,25 +32,26 @@ export class MenuListComponent implements OnInit {
                 
     ngOnInit(): void {
         this.recipes = [];
-        this.disableEdit = true;
+        this.disableEdit = true;        
+        const date = new Date();
+        const currentWeek = this.mealMenuService.getWeekNumber(date);
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
-            let date = new Date();
-            let currentWeek = this.mealMenuService.getWeekNumber(date);
-            if(date.getDay() <=5 && data.week >= currentWeek + 1) {
+            console.log(data.week, currentWeek, date.getFullYear(), data.year)
+            if(data.week >= currentWeek || date.getFullYear() < data.year) {
                 this.disableEdit = false;
             }
-            if(date.getDay() > 5 && data.week > currentWeek) {
-                this.disableEdit = false;
-            }
+
             let sendData = {week_data : {
                 sku : 'freshbox-subscription',
                 week_no : data.week,
                 year : data.year
             }}
             //Get recipes of Menu
+            this.loading = true;
             this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
                 this.recipes = recipes;
-            });
+                this.loading = false;
+            }, e => this.loading = false);
         });
     }
 
@@ -62,10 +64,10 @@ export class MenuListComponent implements OnInit {
             return;
         }
         this.alert.clear();
+        this.loading = true;
         this.rest.deleteItem('', "menus/" + menu_id).subscribe(data => {
             if(data) {
                 this.alert.success("The recipe remvoed successfully!", true);
-
                 this.recipes = this.recipes.filter(function(data, i){
                     if(data.menu_id == menu_id) {
                         return false;
@@ -74,7 +76,8 @@ export class MenuListComponent implements OnInit {
                 });
             } else {
                 this.alert.error("The recipe can't be removed!", true);
-            }
-        });
+            }            
+            this.loading = false
+        }, e => this.loading = false);
     }
 }

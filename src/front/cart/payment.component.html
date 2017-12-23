@@ -9,6 +9,8 @@
                 <div class="row py-2 mx-0 pointer" *ngFor="let card of cards; let odd= odd;" 
                         [ngClass]="{'bg-faded': odd, 'bg-primary': selectedCard && card.entity_id == selectedCard.entity_id}" (click)="selectPaymentCard(card)">
                     <div class="col-12">
+                        <i class="fa fa-square text-muted" *ngIf="!selectedCard || card.entity_id != selectedCard.entity_id"></i>
+                        <i class="fa fa-check-square text-white" *ngIf="selectedCard && card.entity_id == selectedCard.entity_id"></i>
                         {{card.details.type}} ending in {{card.details.maskedCC}}<br />
                         {{card.details.expirationDate}}
                     </div>
@@ -35,13 +37,13 @@
                 <div class="form-group row px-3">                        
                     <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
                         <label for="card_month_year" class="form-control-label">Expiry Date</label>
-                        <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" 
+                        <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" placeholder="MM / YYYY"
                             autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
                     </div>
                     <div class="col"></div>
                     <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
                         <label for="card_cvv" class="form-control-label">CVV</label>
-                        <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="tel" 
+                        <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="password" placeholder="xxx"
                             autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
                     </div>
                 </div>

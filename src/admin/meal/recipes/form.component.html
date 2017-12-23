@@ -94,13 +94,13 @@
         <div class="card-block">
           <div class="form-group row mb-1" *ngIf="ingredientsOptions">
             <div class="col-md-12">
-              <ng-select [allowClear]="true" [multiple]="false"
+              <ng-select #ingredientsOptionsSelect [allowClear]="true" [multiple]="false"
                 [items]="ingredientsOptions.ingredients" 
                 (data)="refreshIngredientOptionValue($event)"
                 placeholder="No Integredient selected">
               </ng-select>
               <div class="input-group">                
-                <input class="form-control" type="number" [(ngModel)]="newIngredient.qty" [ngModelOptions]="{standalone: true}" />
+                <input class="form-control" (keydown)="checkEnterPressed($event, 'ingredient')" type="number" min="0" [(ngModel)]="newIngredient.qty" [ngModelOptions]="{standalone: true}" />
                 <select class="form-control" [(ngModel)]="newIngredient.portion" [ngModelOptions]="{standalone: true}">
                   <option></option>
                   <option *ngFor="let portion of ingredientsOptions.portions" [ngValue]="portion">{{portion.text}}</option>
@@ -111,18 +111,21 @@
               </div>
             </div>
           </div>
-          <ul class="list-group" *ngFor="let ingredient of ingredients; let index = index;">
-            <li class="list-group-item row p-1 mx-0">
-              <span class="col">{{ingredient.ingredient.text}}</span> 
-              <span class="col-auto">{{ingredient.qty}}</span> 
-              <span class="col-auto" *ngIf="ingredient.portion">{{ingredient.portion.text}}</span>
-              <span class="col-auto px-1">
-                <button class="btn btn-link p-0" type="button" (click)="removeIngredient(index)">
-                  <i class="fa fa-remove"></i>
-                </button>
-              </span>
-            </li>
-          </ul>
+          <div dnd-sortable-container [sortableData]="ingredients">
+            <ul class="list-group" *ngFor="let ingredient of ingredients; let i = index;" dnd-sortable [sortableIndex]="i">
+              <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
+                <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
+                <span class="col">{{ingredient.ingredient.text}}</span> 
+                <span class="col-auto">{{ingredient.qty}}</span> 
+                <span class="col-auto" *ngIf="ingredient.portion">{{ingredient.portion.text}}</span>
+                <span class="col-auto px-1">
+                  <button class="btn btn-link p-0" type="button" (click)="removeIngredient(i)">
+                    <i class="fa fa-remove"></i>
+                  </button>
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -145,16 +148,19 @@
               </div>
             </div>
           </div>
-          <ul class="list-group" *ngFor="let step of recipeSteps; let index = index;">
-            <li class="list-group-item row p-1 mx-0">
-              <p class="col">{{step}}</p>
-              <span class="col-auto px-1">
-                <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(index)">
-                  <i class="fa fa-remove"></i>
-                </button>
-              </span>
-            </li>
-          </ul> 
+          <div dnd-sortable-container [sortableData]="recipeSteps">
+            <ul class="list-group" *ngFor="let step of recipeSteps; let i = index;" dnd-sortable [sortableIndex]="i">
+              <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
+                <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
+                <p class="col">{{step}}</p>
+                <span class="col-auto px-1">
+                  <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(index)">
+                    <i class="fa fa-remove"></i>
+                  </button>
+                </span>
+              </li>
+            </ul> 
+          </div>
         </div>
       </div>
     </div>
@@ -169,21 +175,24 @@
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="newCustomerNeed" [ngModelOptions]="{standalone: true}" />
+                <input type="text" (keydown)="checkEnterPressed($event, 'customer_need')" class="form-control" [(ngModel)]="newCustomerNeed" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
                   <button class="btn btn-primary" [disabled]="!newCustomerNeed" (click)="addYouNeeds()" type="button">Add</button>
                 </span>
               </div>
-              <ul class="list-group" *ngFor="let youNeed of customerNeeds; let index = index;">
-                <li class="list-group-item row p-1 mx-0">
-                  <span class="col">{{youNeed}}</span> 
-                  <span class="col-auto px-1">
-                    <button class="btn btn-link p-0" type="button" (click)="removeYouNeed(index)">
-                      <i class="fa fa-remove"></i>
-                    </button>
-                  </span>
-                </li>
-              </ul>
+              <div dnd-sortable-container [sortableData]="customerNeeds">
+                <ul class="list-group" *ngFor="let youNeed of customerNeeds; let i = index;" dnd-sortable [sortableIndex]="i">
+                  <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
+                    <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
+                    <span class="col">{{youNeed}}</span> 
+                    <span class="col-auto px-1">
+                      <button class="btn btn-link p-0" type="button" (click)="removeYouNeed(i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -198,21 +207,24 @@
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="newEquipmentNeeded" [ngModelOptions]="{standalone: true}" />
+                <input type="text" (keydown)="checkEnterPressed($event, 'equipment_needed')" class="form-control" [(ngModel)]="newEquipmentNeeded" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
                   <button class="btn btn-primary" [disabled]="!newEquipmentNeeded" (click)="addEquipmentNeeded()" type="button">Add</button>
                 </span>
               </div>
-              <ul class="list-group" *ngFor="let equipment_need of equipment_needs; let index = index;">
-                <li class="list-group-item row p-1 mx-0">
-                  <span class="col">{{equipment_need}}</span> 
-                  <span class="col-auto px-1">
-                    <button class="btn btn-link p-0" type="button" (click)="removeEquipmentNeeded(index)">
-                      <i class="fa fa-remove"></i>
-                    </button>
-                  </span>
-                </li>
-              </ul>
+              <div dnd-sortable-container [sortableData]="equipment_needs">
+                <ul class="list-group" *ngFor="let equipment_need of equipment_needs; let i = index;" dnd-sortable [sortableIndex]="i">
+                  <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
+                    <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
+                    <span class="col">{{equipment_need}}</span> 
+                    <span class="col-auto px-1">
+                      <button class="btn btn-link p-0" type="button" (click)="removeEquipmentNeeded(i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>            
           </div>
         </div>
@@ -227,21 +239,24 @@
           <div class="form-group row">
             <div class="col-md-12">
               <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="newAllerigy" [ngModelOptions]="{standalone: true}" />
+                <input type="text" (keydown)="checkEnterPressed($event, 'allergy')" class="form-control" [(ngModel)]="newAllerigy" [ngModelOptions]="{standalone: true}" />
                 <span class="input-group-btn">
                   <button class="btn btn-primary" [disabled]="!newAllerigy" (click)="addAllergy()" type="button">Add</button>
                 </span>
               </div>
-              <ul class="list-group" *ngFor="let allergy of allergies; let index = index;">
-                <li class="list-group-item row p-1 mx-0">
-                  <span class="col">{{allergy}}</span> 
-                  <span class="col-auto px-1">
-                    <button class="btn btn-link p-0" type="button" (click)="removeAllergy(index)">
-                      <i class="fa fa-remove"></i>
-                    </button>
-                  </span>
-                </li>
-              </ul>
+              <div dnd-sortable-container [sortableData]="allergies">
+                <ul class="list-group" *ngFor="let allergy of allergies; let i = index;" dnd-sortable [sortableIndex]="i">
+                  <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
+                    <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
+                    <span class="col">{{allergy}}</span> 
+                    <span class="col-auto px-1">
+                      <button class="btn btn-link p-0" type="button" (click)="removeAllergy(i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>            
           </div>
         </div>
@@ -255,7 +270,7 @@
       </div>
       <div class="card">
         <div class="card-block">
-            <dropzone (removedfile)="removedImage($event)" [config]="imageUploadConfig" [message]="'Click or drag images here to upload'"></dropzone>
+            <dropzone (removedfile)="removedImage($event)" [config]="imageUploadConfig" [message]="'Click or drag image here to upload'"></dropzone>
         </div>
       </div>
     </div>

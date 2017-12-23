@@ -35,7 +35,8 @@
             <div class="col-md-2">{{recipe.recipe_detail.chef_name}}</div>
             <div class="col-md-3">
               <div class="btn-group btn-group-sm" *ngIf="!disableEdit">                
-                <button type="button" class="btn btn-link px-0" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
+                <button type="button" class="btn btn-link px-0" 
+                  [disabled]="loading" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
               </div>
             </div>
           </div>

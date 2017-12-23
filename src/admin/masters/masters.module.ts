@@ -5,8 +5,8 @@ import { MasterRoutingModule } from './masters-routing.module';
 import { RestService, PagerService } from 'services';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IngredientListResolve, IngredientsListComponent } from './ingredients';
-import { PortionListResolve, PortionsListComponent } from './portions';
+import { IngredientsListComponent } from './ingredients';
+import { PortionsListComponent } from './portions';
 
 import { SharedModule } from 'shared.module';
 
@@ -16,6 +16,6 @@ import { SharedModule } from 'shared.module';
         MasterRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule 
     ],
     declarations: [ IngredientsListComponent, PortionsListComponent ],
-    providers: [RestService, PagerService, IngredientListResolve, PortionListResolve]
+    providers: [RestService, PagerService]
 })
 export class MastersModule { }

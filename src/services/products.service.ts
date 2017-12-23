@@ -25,7 +25,12 @@ export class ProductsService {
     let options = new RequestOptions({ headers: headers });
     return this.http.get(
         GlobalVariable.BASE_API_URL + 'listselection', options
-    ).map((response: Response) => response.json());
+    ).map((response: Response) => response.json())
+    .map(x => {
+      x[0].ingredients = x[0].ingredients.filter(y => y.is_active == 1);
+      x[0].portions = x[0].portions.filter(y => y.is_active == 1);
+      return x;
+    });
   }
 
   saveProductImage(Productsku, image) {

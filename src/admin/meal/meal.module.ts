@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from 'shared.module';
+import { DndModule } from 'ng2-dnd';
 
 import { MenuComponent } from './menu.component';
 import { MealRoutingModule } from './meal.routing';
@@ -15,7 +16,7 @@ import { MealComponent } from './meal.component';
 
 @NgModule({
     imports: [
-        SelectModule, MealRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
+        SelectModule, MealRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule, DndModule
     ],
     declarations: [MealComponent, MenuComponent, RecipesListComponent, MenuListComponent],
     providers: [DatePipe, PagerService, MealMenuService]

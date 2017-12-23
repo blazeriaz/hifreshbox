@@ -10,6 +10,8 @@ import {SelectModule} from 'ng2-select';
 import { PagerService } from 'services/index'
 
 import {SharedModule} from "shared.module";
+import { DndModule } from 'ng2-dnd';
+import { TooltipModule } from 'ngx-bootstrap';
 import { DropzoneModule, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import * as Dropzone from 'dropzone';
 Dropzone.autoDiscover = false;
@@ -24,7 +26,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
 @NgModule({
     imports: [
         SelectModule, RecipesRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, 
-        SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG)
+        SharedModule, DropzoneModule.forRoot(DROPZONE_CONFIG), DndModule, TooltipModule.forRoot()
     ],
     declarations: [ RecipesListComponent, RecipeFormComponent ],
     providers: [ProductsService, PagerService]

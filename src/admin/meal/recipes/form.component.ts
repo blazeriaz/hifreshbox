@@ -8,6 +8,7 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
 import * as GlobalVariable from 'global';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { SelectComponent } from 'ng2-select';
 
 @Component({
     templateUrl: 'form.component.html'
@@ -15,6 +16,8 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 export class RecipeFormComponent implements OnInit, OnDestroy {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
   @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
+  @ViewChild('ingredientsOptionsSelect') ingredientsOptionsSelect: SelectComponent;
+  
   recipe: any;
   recipeForm: any;
   customAttributes: any;
@@ -206,7 +209,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, true));
     });
 
-    ['ingredients', 'steps', 'customer_needs', 'allergies'].map(attribute_code => {
+    ['ingredients', 'steps', 'customer_needs', 'equipment_needed', 'allergies'].map(attribute_code => {
       let value: any = [];
       if (this.recipe && this.recipe.custom_attributes) {
         const attribute = this.recipe.custom_attributes.find(x => x.attribute_code === attribute_code);
@@ -225,6 +228,9 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
       }
       if (attribute_code === 'customer_needs') {
         this.customerNeeds = value;
+      }
+      if (attribute_code === 'equipment_needed') {
+        this.equipment_needs = value;
       }
       if (attribute_code === 'allergies') {
         this.allergies = value;
@@ -340,6 +346,12 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
           ctrl.images.push(file);
           ctrl.addImageIndex++;
           ctrl.removeFileSizeElement(file);
+
+          this.files.map(f => {
+            if (f !== file) {
+              this.removeFile(f);
+            }
+          });
         }
       })(this),
       init : (function(ctrl){
@@ -423,6 +435,24 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  checkEnterPressed(e, subForm) {
+    if(e.keyCode == 13) {
+      e.preventDefault();
+      if (subForm == 'allergy' && this.newAllerigy) {
+        this.addAllergy();
+      }
+      if (subForm == 'equipment_needed' && this.newEquipmentNeeded) {
+        this.addEquipmentNeeded();
+      }
+      if (subForm == 'customer_need' && this.newCustomerNeed) {
+        this.addYouNeeds();
+      }
+      if (subForm == 'ingredient' && !this.ingredientDisable()) {
+        this.addIngredient();
+      }
+    }
+  }
+
   ingredientDisable() {
     return !(this.newIngredient.ingredient && this.newIngredient.qty);
   }
@@ -434,6 +464,7 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   addIngredient() {
     this.ingredients.push(this.newIngredient);
     this.newIngredient = {};
+    this.ingredientsOptionsSelect.writeValue(null);
   }
 
   removeIngredient(i: number) {

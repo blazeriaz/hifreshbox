@@ -20,7 +20,8 @@
       "styles": [
         "scss/style.scss",
         "assets/css/font-awesome.min.css",
-        "assets/css/simple-line-icons.css"
+        "assets/css/simple-line-icons.css",
+        "../node_modules/ng2-dnd/bundles/style.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",

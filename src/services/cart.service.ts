@@ -185,6 +185,7 @@ export class CartService {
               return x;
           });
           this.mealPreferences[0] = this.mealPreferences[0].filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
+          console.log(this.mealPreferences[0]);
           this.assignCartTotal();
         });
       }
