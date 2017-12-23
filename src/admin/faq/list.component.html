@@ -28,7 +28,7 @@
           <div dnd-sortable-container [sortableData]="faqs">
             <div class="row py-2" *ngFor="let faq of faqs;let odd=odd;let i = index;" 
                 [ngClass]="{'bg-faded': odd, 'bg-danger': isDeleted(faq.id)}"
-                dnd-sortable [sortableIndex]="i" [dragData]="faq" (onDragSuccess)="sortFaqItems($event)">            
+                dnd-sortable [sortableIndex]="i" [dragData]="faq" (onDropSuccess)="sortFaqItems($event)">            
               <div class="col-sm-4">
                 <div>{{faq.question}}</div>
                 <div class="btn-group btn-group-sm" *ngIf="isDeleted(faq.id)">

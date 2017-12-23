@@ -1,15 +1,15 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, Resolve, ActivatedRoute } from '@angular/router';
 import { RestService, AlertService, PagerService } from 'services';
 
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
 
-export const pageSize = 10;
+export const pageSize = 100;
 
 @Component({
     templateUrl: 'list.component.html'
 })
-export class FaqsListComponent implements OnInit {
+export class FaqsListComponent implements OnInit, OnDestroy {
     faqs: any;
     pager: any;
     loadingList;
@@ -27,6 +27,12 @@ export class FaqsListComponent implements OnInit {
     ngOnInit(): void {
         this.deleteItems = [];
         this.loadFaqsList(1);
+    }
+
+    ngOnDestroy(): void {
+        if (this.searchSubscripe) {
+            this.searchSubscripe.unsubscribe();
+        }
     }
 
     loadFaqsList(pageNo?) {
@@ -107,7 +113,24 @@ export class FaqsListComponent implements OnInit {
     }
 
     sortFaqItems($event: any) {
-        console.log($event);
-        console.log(this.faqs.findIndex(x => x.id === $event.id));
+        const new_position = this.faqs.findIndex(x => x.id === $event.id) + 1;
+        if(new_position == $event.sort_order) {
+            return;
+        }
+        const sendData = {
+            faq_data: {
+                faq_id: $event.id,
+                old_position: $event.sort_order,
+                new_position: new_position
+            }
+        };
+        this.alert.clear();
+        this.rest.saveItem(false, sendData, 'faqs/change-order').subscribe(d => {
+            this.alert.success('Faq order was changed succesfully');
+            this.loadFaqsList(1);
+        }, e => {
+            this.alert.error('Server error.');
+            this.loadFaqsList(1);
+        });
     }
 }
