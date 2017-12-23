@@ -1,5 +1,6 @@
 <?php
-$userData = ["username" => "riaintouc008@gmail.com", "password" => "Admin@123"];
+//$userData = ["username" => "riaintouc008@gmail.com", "password" => "Admin@123"];
+$userData = ["username" => "riaintouch+20@gmail.com", "password" => "Admin@123"];
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/rest/V1/integration/customer/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));

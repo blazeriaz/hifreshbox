@@ -11,7 +11,7 @@ $n_slide = json_encode(['paymentMethod' => [
 						'method' => "braintree_cc_vault",
 						'additional_data'=> [
 							  //"payment_method_nonce"=>"39c3239f-ba4c-0ee6-718f-39df3a7d07ff", 
-							  "payment_method_nonce"=>"dbcb366d-f3b1-00fb-5ba9-dd5eecbd1bbb", 
+							  "payment_method_nonce"=>"3cad5e88-3a1a-0559-55ee-a7d5e794fd48", 
 							  "public_hash"=>"9b2427a7fa90d984ad978f217711b29619fa1651d74eb524b5631f7546688c58",
 							  "is_active_payment_token_enabler"=>true
 							 

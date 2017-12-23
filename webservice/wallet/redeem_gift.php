@@ -8,14 +8,21 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 
 $token = curl_exec($ch);
 
+$n_slide = json_encode(['redeem_data' => [
+						
+						'redeemed_code'=> 'riaz1234'
+						
+						
+						]]);
 
-
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/rest/V1/payment/customer-transcation");
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-//curl_setopt($ch, CURLOPT_POSTFIELDS, $slide);
+						
+						
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/wallet/redeem");
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $n_slide);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));
-
+ 
 $result = curl_exec($ch);
 
 echo '<pre>';

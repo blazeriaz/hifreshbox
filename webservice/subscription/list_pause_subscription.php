@@ -13,8 +13,8 @@ $searchCriteria = '{
             {
                 "filters": [
                     {
-                        "field": "",
-                        "value": "%",
+                        "field": "user_id",
+                        "value": "15",
                         "condition_type": "like"
                     }
                 ]

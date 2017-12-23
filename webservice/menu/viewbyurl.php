@@ -1,6 +1,6 @@
 <?php
 					
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/recipedetail/prawn-recipe");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/recipedetail/will-chen-test-1");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

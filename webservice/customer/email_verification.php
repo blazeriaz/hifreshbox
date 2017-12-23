@@ -2,11 +2,12 @@
 
 
 $customerData = [
-    'confirmationKey' => "934618826da62686132b6c5ca13d9cd3"
+    'confirmationKey' => "8114f821ae11834d59c96a82f17de416",
+    'customerId' => "58"
 ];
 
-$email_user = urlencode('riaintouch+9@gmail.com'); 
-$url = "http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/customers/".$email_user.'/activateuser';
+$email_user = 58; 
+$url = "http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/customers/activateuser";
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
