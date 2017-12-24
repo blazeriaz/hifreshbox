@@ -49,8 +49,12 @@ export class UsersListComponent implements OnInit {
                     field : 'name',
                     value : '%' + searchValues.name + '%',
                     condition_type : 'like'
+                }, {
+                    field : 'email',
+                    value : '%' + searchValues.name + '%',
+                    condition_type : 'like'
                 }]
-            });
+            });console.log(filters);
         }
         if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();

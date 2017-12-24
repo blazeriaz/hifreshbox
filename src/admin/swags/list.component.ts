@@ -109,6 +109,19 @@ export class SwagsListComponent implements OnInit {
         this.deleteItems.splice(i, 1);
     }
 
+    toggleStatus(swag, status) {
+        this.alert.clear();
+        swag.statusLoading = true;
+        this.rest.saveItem(true, {product : {status: status}}, 'products/' + swag.sku).subscribe(data => {
+            swag.status = data.status;
+            this.alert.success('The swag status changed successfully!', true);
+            swag.statusLoading = false;
+        }, e => {
+            this.alert.error('The swag status was not changed!', true);
+            swag.statusLoading = false;
+        });
+    }
+
     deleteSwag(swagSku) {
         if(!confirm('Are you sure to delete the swag?')) {
             return;

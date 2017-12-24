@@ -44,7 +44,6 @@
                 <img class="img-avatar" 
                   [src]="swag.custom_attributes | mgCatalogAttribute:'thumbnail'"
                   (error)="swag.imageHide=1" *ngIf="!swag.imageHide" />
-                <span class="avatar-status badge-success"></span>
               </div>
             </div>
             
@@ -63,8 +62,8 @@
               {{swag.price}} USD
             </div>
             <div class="col-md-4">
-              <button type="button" class="btn btn-success" *ngIf="swag.status == 1">Enable</button>
-              <button type="button" class="btn btn-danger" *ngIf="swag.status == 2">Disable</button>
+              <button [disabled]="swag.statusLoading" type="button" class="btn btn-success" *ngIf="swag.status == 1" (click)="toggleStatus(swag, 2)" tooltip="Click to Disable">Enable</button>
+              <button [disabled]="swag.statusLoading" type="button" class="btn btn-danger" *ngIf="swag.status == 2" (click)="toggleStatus(swag, 1)" tooltip="Click to Enable">Disable</button>
             </div>
           </div>
 

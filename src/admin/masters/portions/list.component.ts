@@ -96,15 +96,27 @@ export class PortionsListComponent implements OnInit, OnDestroy {
         this.loadingSave = true;
         this.restService.saveItem(item.id, sendData, 'portions/' + item.id).subscribe(data => {
             if (data) {
-                this.alert.success('The portion status changed successfully!', true);
+                this.alert.success('The portion status changed successfully!');
                 item.is_active = !item.is_active;
             } else {
-                this.alert.error('Somthing went wrong!', true);
+                this.alert.error('Something went wrong!');
             }
             this.loadingSave = false;
         }, err => {
-            this.alert.error('Somthing went wrong!', true);
+            this.alert.error('Something went wrong!');
             this.loadingSave = false;
+        });
+    }
+
+    deleteItem(item) {
+        if (!confirm('Are you sure to delete the portion?')) {
+            return;
+        }
+        this.alert.clear();
+        this.restService.deleteItem(item.id, 'portions/' + item.id).subscribe(r => {
+            this.alert.success('The portion had been deleted successfully!');
+        }, e => {
+            this.alert.error('Something went wrong!');
         });
     }
 

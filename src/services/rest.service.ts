@@ -93,10 +93,10 @@ export class RestService {
     filterGroups.map((data, index) => {
       let key = criteria + '[filter_groups][' + index + ']';
       data.filters.map((filter, i) => {
-        key += '[filters][' + i + ']';
-        searchParams[pIndex++] = key + '[field]=' + filter.field;
-        searchParams[pIndex++] = key + '[value]=' + filter.value;
-        searchParams[pIndex++] = key + '[condition_type]=' + filter.condition_type;
+        let key1 = key + '[filters][' + i + ']';
+        searchParams[pIndex++] = key1 + '[field]=' + filter.field;
+        searchParams[pIndex++] = key1 + '[value]=' + filter.value;
+        searchParams[pIndex++] = key1 + '[condition_type]=' + filter.condition_type;
       })
     });
 

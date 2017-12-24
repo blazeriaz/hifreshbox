@@ -116,8 +116,8 @@ export class SwagFormComponent implements OnInit, OnDestroy {
     if (--this.countLoadedFormReqs <= 0) {
       this.modalEditRef ? this.modalEditRef.hide() : (function(){})();
       this.initEditForm();
+      this.loadedFormData = true;      
       this.initImagesDropZone();
-      this.loadedFormData = true;
     }
   }
 
@@ -176,24 +176,32 @@ export class SwagFormComponent implements OnInit, OnDestroy {
   }
 
   attachMediaImagesToDropzone(imagesDropZone) {
-    this.imagesDropZone = imagesDropZone;
-    if (!this.swag || !this.swag.custom_attributes || this.serverMediaImages.length == 0) {
+    if(this.imagesDropZone) {
       return;
     }
-    this.serverMediaImages.map(image => {
-      const mockFile = {
-        name: image.label,
-        entry : image,
-        accepted: true,
-        previewTemplate : document.createElement('div')
-      };
-      imagesDropZone.emit('addedfile', mockFile);
-      imagesDropZone.emit('thumbnail', mockFile, image.file.resized);
-      imagesDropZone.emit('success', mockFile);
-      imagesDropZone.emit('complete', mockFile);
-      imagesDropZone.files.push(mockFile);
-      this.removeFileSizeElement(mockFile);
-    });
+    this.imagesDropZone = imagesDropZone;
+    if (!this.swag || !this.swag.custom_attributes || this.serverMediaImages.length == 0  || !this.loadedFormData) {
+      return;
+    }
+    setTimeout(() => {
+      this.serverMediaImages.forEach(image => {
+        const mockFile = {
+          name: image.label,
+          entry : image,
+          accepted: true,
+          previewTemplate : document.createElement('div')
+        };
+        console.log(imagesDropZone.files);
+        if (imagesDropZone.files.findIndex(x => x.entry.id == image.id) === -1) {
+          imagesDropZone.emit('addedfile', mockFile);
+          imagesDropZone.emit('thumbnail', mockFile, image.file.resized);
+          imagesDropZone.emit('success', mockFile);
+          imagesDropZone.emit('complete', mockFile);
+          imagesDropZone.files.push(mockFile);
+          this.removeFileSizeElement(mockFile);
+        }
+      }, 1500);
+    });    
   }
 
   removeFileSizeElement(mockFile) {
@@ -238,17 +246,22 @@ export class SwagFormComponent implements OnInit, OnDestroy {
 
   removedfile(file) {
     setTimeout(() => {
-      if (file.entry && file.entry.id && !this.destroyed) {
-        this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
-          res => res,
-          error => {
-            this.imagesDropZone.emit('addedfile', file);
-            this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
-            this.imagesDropZone.emit('success', file);
-            this.imagesDropZone.emit('complete', file);
-            this.imagesDropZone.files.push(file);
+      if (file.entry && file.entry.id && this.loadedFormData) {
+        setTimeout(() => {
+          if(this.destroyed) {
+            return;
           }
-        );
+          this.rest.deleteItem('', 'products/' + this.swag.sku + '/media/' + file.entry.id).subscribe(
+            res => res,
+            error => {
+              this.imagesDropZone.emit('addedfile', file);
+              this.imagesDropZone.emit('thumbnail', file, file.entry.file.resized);
+              this.imagesDropZone.emit('success', file);
+              this.imagesDropZone.emit('complete', file);
+              this.imagesDropZone.files.push(file);
+            }
+          );
+        }, 500);       
       } else if (file.addedIndex >= 0) {
         this.images = this.images.filter(image => image.addedIndex !== file.addedIndex);
       }

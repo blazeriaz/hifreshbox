@@ -96,15 +96,27 @@ export class IngredientsListComponent implements OnInit, OnDestroy {
         this.loadingSave = true;
         this.restService.saveItem(item.id, sendData, 'ingredients/' + item.id).subscribe(data => {
             if (data) {
-                this.alert.success('The ingredient status changed successfully!', true);
+                this.alert.success('The ingredient status changed successfully!');
                 item.is_active = !item.is_active;
             } else {
-                this.alert.error('Somthing went wrong!', true);
+                this.alert.error('Something went wrong!');
             }
             this.loadingSave = false;
         }, err => {
-            this.alert.error('Somthing went wrong!', true);
+            this.alert.error('Something went wrong!');
             this.loadingSave = false;
+        });
+    }
+
+    deleteItem(item) {
+        if (!confirm('Are you sure to delete the ingredient?')) {
+            return;
+        }
+        this.alert.clear();
+        this.restService.deleteItem(item.id, 'ingredients/' + item.id).subscribe(r => {
+            this.alert.success('The ingredient had been deleted successfully!');
+        }, e => {
+            this.alert.error('Something went wrong!');
         });
     }
 

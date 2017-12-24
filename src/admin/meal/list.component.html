@@ -18,25 +18,27 @@
           <div class="row py-2" *ngIf="recipes.length == 0">
               <div class="col-md-12">No reipes added to the menu!</div>
           </div>
-          <div class="row py-2" *ngFor="let recipe of recipes; let odd=odd;" [ngClass]="{'bg-faded': odd}">
-            <div class="col-md-1">
-              <div class="avatar">
-                <img class="img-avatar" 
-                  [src]="recipe.recipe_detail.thumbnail | mgCatalogImage"
-                  (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
-                <span class="avatar-status badge-success"></span>
+          <div dnd-sortable-container [sortableData]="recipes">
+            <div class="row py-2" *ngFor="let recipe of recipes; let odd=odd; let i = index;" [ngClass]="{'bg-faded': odd}"
+                dnd-sortable [sortableIndex]="i" [dragData]="recipe" (onDropSuccess)="sortRecipeItems($event)">
+              <div class="col-md-1">
+                <div class="avatar">
+                  <img class="img-avatar" 
+                    [src]="recipe.recipe_detail.thumbnail | mgCatalogImage"
+                    (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />
+                </div>
               </div>
-            </div>
-            <div class="col-md-2">
-              {{recipe.recipe_detail.name}}
-            </div>
-            <div class="col-md-2">{{recipe.recipe_detail.servings}}</div>
-            <div class="col-md-2">{{recipe.recipe_detail.cooking_time}}</div>
-            <div class="col-md-2">{{recipe.recipe_detail.chef_name}}</div>
-            <div class="col-md-3">
-              <div class="btn-group btn-group-sm" *ngIf="!disableEdit">                
-                <button type="button" class="btn btn-link px-0" 
-                  [disabled]="loading" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
+              <div class="col-md-2">
+                {{recipe.recipe_detail.name}}
+              </div>
+              <div class="col-md-2">{{recipe.recipe_detail.servings}}</div>
+              <div class="col-md-2">{{recipe.recipe_detail.cooking_time}}</div>
+              <div class="col-md-2">{{recipe.recipe_detail.chef_name}}</div>
+              <div class="col-md-3">
+                <div class="btn-group btn-group-sm" *ngIf="!disableEdit">                
+                  <button type="button" class="btn btn-link px-0" 
+                    [disabled]="loading" (click)="removeRecipeFromMenu(recipe.menu_id)">Remove</button>
+                </div>
               </div>
             </div>
           </div>

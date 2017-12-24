@@ -58,12 +58,12 @@ export class TestimonialsListComponent implements OnInit {
             this.searchSubscripe.unsubscribe();
         }
         const sortOrders = [{
-            field: 'update_time',
-            direction: 'DESC'
+            field: 'sort_order',
+            direction: 'ASC'
         }];
         this.loadingList = true;
         this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize,
-            'testimonials/search', 'criteria').subscribe(testimonials => {
+            'testimonials/search', 'criteria', sortOrders).subscribe(testimonials => {
             this.initLoad = false;
             this.loadingList = false;
             this.initTestimonialsList(testimonials, pageNo);
@@ -122,5 +122,27 @@ export class TestimonialsListComponent implements OnInit {
             subscribe : deleteSubscribe
         };
         this.deleteItems.push(deleteItem);
+    }
+
+    sortTestimonialItems ($event: any) {
+        const new_position = this.testimonials.findIndex(x => x.id === $event.id) + 1;
+        if(new_position == $event.sort_order) {
+            return;
+        }
+        const sendData = {
+            testimonial_data: {
+                testimonial_id: $event.id,
+                old_position: $event.sort_order,
+                new_position: new_position
+            }
+        };
+        this.alert.clear();
+        this.rest.saveItem(false, sendData, 'testimonials/change-order').subscribe(d => {
+            this.alert.success('Testimonial order was changed succesfully');
+            this.loadTestimonialsList(this.pager.currentPage);
+        }, e => {
+            this.alert.error('Server error.');
+            this.loadTestimonialsList(this.pager.currentPage);
+        });
     }
 }

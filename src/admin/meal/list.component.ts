@@ -20,6 +20,7 @@ export class MenuListComponent implements OnInit {
     yearMonthSubs;
     disableEdit;
     loading;
+    weekData;
 
     constructor(
         private rest: RestService,
@@ -36,23 +37,26 @@ export class MenuListComponent implements OnInit {
         const date = new Date();
         const currentWeek = this.mealMenuService.getWeekNumber(date);
         this.yearMonthSubs = this.mealMenuService.getYearWeek().subscribe(data => {
-            console.log(data.week, currentWeek, date.getFullYear(), data.year)
             if(data.week >= currentWeek || date.getFullYear() < data.year) {
                 this.disableEdit = false;
             }
+            this.weekData = data;
+            this.loadRecipesList();
+        })
+    }
 
-            let sendData = {week_data : {
-                sku : 'freshbox-subscription',
-                week_no : data.week,
-                year : data.year
-            }}
-            //Get recipes of Menu
-            this.loading = true;
-            this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-                this.recipes = recipes;
-                this.loading = false;
-            }, e => this.loading = false);
-        });
+    loadRecipesList() {
+        let sendData = {week_data : {
+            sku : 'freshbox-subscription',
+            week_no : this.weekData.week,
+            year : this.weekData.year
+        }}
+        //Get recipes of Menu
+        this.loading = true;
+        this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
+            this.recipes = recipes;
+            this.loading = false;
+        }, e => this.loading = false);
     }
 
     ngOnDestroy() {
@@ -79,5 +83,27 @@ export class MenuListComponent implements OnInit {
             }            
             this.loading = false
         }, e => this.loading = false);
+    }    
+
+    sortRecipeItems($event: any) {
+        const new_position = this.recipes.findIndex(x => x.menu_id === $event.menu_id) + 1;
+        if(new_position == $event.sort_order) {
+            return;
+        }
+        const sendData = {
+            menu_data: {
+                menu_id: $event.menu_id,
+                old_position: $event.sort_order,
+                new_position: new_position
+            }
+        };
+        this.alert.clear();
+        this.rest.saveItem(false, sendData, 'menus/weeklist/change-order').subscribe(d => {
+            this.alert.success('Menu Recipe order was changed succesfully');
+            this.loadRecipesList();
+        }, e => {
+            this.alert.error('Server error.');
+            this.loadRecipesList();
+        });
     }
 }

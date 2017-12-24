@@ -115,13 +115,13 @@
                     <div class="form-group row">
                       <label for="address_postcode" class="col-md-2 form-control-label">Post Code</label>
                       <div class="col-md-10" [ngClass]="setAddressDivClass('postcode')">
-                        <input type="text" class="form-control" id="address_postcode" formControlName="postcode" 
+                        <input type="number" class="form-control" id="address_postcode" formControlName="postcode" 
                            [ngClass]="setAddressInputClass('postcode')" /></div>
                     </div>
                     <div class="form-group row" [ngClass]="setAddressDivClass('telephone')">
                       <label for="address_telephone" class="col-md-2 form-control-label">Phone</label>
                       <div class="col-md-10">
-                        <input type="text" class="form-control" id="address_telephone" formControlName="telephone" 
+                        <input type="number" class="form-control" id="address_telephone" formControlName="telephone" 
                            [ngClass]="setAddressInputClass('telephone')" /></div>
                     </div>
                     <div class="form-group row">

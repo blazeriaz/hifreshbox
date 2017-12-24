@@ -211,7 +211,7 @@ export class UserFormComponent implements OnInit {
             return;
         }
         const region_id = this.userForm.value.addresses[this.indexEditAddress].region_id;
-        return regions.filter(x => x.id === region_id);
+        return regions.filter(x => x.id == region_id);
     }
 
     refreshCountryValue(country) {
@@ -353,7 +353,13 @@ export class UserFormComponent implements OnInit {
             this.openSaveModal();
             this.saveRequests = [];
 
-            this.rest.saveItem(userId, {customer: this.userForm.value}, 'customers/' + userId).subscribe(data => {
+            let sendData = {
+                customer: this.userForm.value
+            };
+
+            delete sendData.customer.addresses;
+
+            this.rest.saveItem(userId, sendData, 'customers/' + userId).subscribe(data => {
                 this.noticeUserSaved();
             }, err => {
                 const error = err.json();

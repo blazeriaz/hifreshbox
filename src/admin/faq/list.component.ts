@@ -41,8 +41,8 @@ export class FaqsListComponent implements OnInit, OnDestroy {
             this.searchSubscripe.unsubscribe();
         }
         const sortOrders = [{
-            field: 'creation_time',
-            direction: 'DESC'
+            field: 'sort_order',
+            direction: 'ASC'
         }];
         this.loadingList = true;
         this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'faqs/search', 'criteria', sortOrders).subscribe(faqs => {
@@ -52,15 +52,7 @@ export class FaqsListComponent implements OnInit, OnDestroy {
     }
 
     initFaqsList(faqs, page?) {
-        this.faqs = faqs.items.sort((a: any, b: any) => {
-            if (a.sort_order < b.sort_order) {
-                return -1;
-            } else if (a.sort_order > b.sort_order) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });;
+        this.faqs = faqs.items;
         // get pager object from service
         page = page ? page : 1;
         this.pager = this.pagerService.getPager(faqs.total_count, page, pageSize);
@@ -127,10 +119,10 @@ export class FaqsListComponent implements OnInit, OnDestroy {
         this.alert.clear();
         this.rest.saveItem(false, sendData, 'faqs/change-order').subscribe(d => {
             this.alert.success('Faq order was changed succesfully');
-            this.loadFaqsList(1);
+            this.loadFaqsList(this.pager.currentPage);
         }, e => {
             this.alert.error('Server error.');
-            this.loadFaqsList(1);
+            this.loadFaqsList(this.pager.currentPage);
         });
     }
 }
