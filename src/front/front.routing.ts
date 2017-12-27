@@ -2,17 +2,18 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //Layouts
-import { FrontComponent } from 'front/front.component';
-import { HomeComponent } from 'front/home/home.component';
-import { MenuComponent } from 'front/menu/menu.component';
-import { FullLayoutComponent } from 'front/layouts/full-layout.component';
-import { RecipeComponent } from 'front/recipe/recipe.component';
-import { SwagsComponent } from 'front/swags/swags.component';
-import { SwagViewComponent } from 'front/swags/swag.view.component';
-import { FaqComponent } from 'front/faq/faq.component';
-import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
-import { ContactComponent } from 'front/contact/contact.component';
-import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component';
+import { FrontComponent } from './front.component';
+import { HomeComponent } from './home/home.component';
+import { MenuComponent } from './menu/menu.component';
+import { FullLayoutComponent } from './layouts/full-layout.component';
+import { RecipeComponent } from './recipe/recipe.component';
+import { SwagsComponent } from './swags/swags.component';
+import { SwagViewComponent } from './swags/swag.view.component';
+import { FaqComponent } from './faq/faq.component';
+import { SimpleLayoutComponent } from './layouts/simple-layout.component';
+import { ContactComponent } from './contact/contact.component';
+import { CheckoutSuccessComponent } from './cart/checkout-success.component';
+import { SuccessComponent } from './success.component';
 
 export const routes: Routes = [
   {
@@ -97,6 +98,13 @@ export const routes: Routes = [
       children : [{
         path: '',
         component: CheckoutSuccessComponent,
+      }]
+    }, {
+      path: 'success',
+      component: SimpleLayoutComponent,
+      children : [{
+        path: '',
+        component: SuccessComponent,
       }]
     }, {
       path: 'auth',

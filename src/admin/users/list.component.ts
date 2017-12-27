@@ -54,7 +54,7 @@ export class UsersListComponent implements OnInit {
                     value : '%' + searchValues.name + '%',
                     condition_type : 'like'
                 }]
-            });console.log(filters);
+            });
         }
         if (this.searchSubscripe) {
             this.searchSubscripe.unsubscribe();

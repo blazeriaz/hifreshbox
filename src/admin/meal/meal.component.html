@@ -39,8 +39,8 @@
 					<div class="col">{{preference.title}}</div>
 					<div class="col-auto px-2">
 						<div class="btn-group btn-group-sm">
-							<button type="button" class="btn btn-success" *ngIf="preference.is_active">Active</button>
-							<button type="button" class="btn btn-danger" *ngIf="!preference.is_active">In-Active</button>
+							<button [disabled]="preference.statusLoading" (click)="toggleMealPreftatus(preference, 0)" type="button" class="btn btn-success" *ngIf="preference.is_active == 1">Active</button>
+							<button [disabled]="preference.statusLoading" (click)="toggleMealPreftatus(preference, 1)" type="button" class="btn btn-danger" *ngIf="preference.is_active != 1">In-Active</button>
 							<button type="button" class="btn btn-secondary" (click)="openMealPrefForm(preference)">Edit</button>
 							<button type="button" class="btn btn-secondary" *ngIf="preference.options.length === 0" (click)="deleteMealPref(preference.id)">Delete</button>
 						</div>
@@ -55,8 +55,8 @@
 							<div class="col-auto px-2">Price: {{opt.price | currency:'USD':true:'1.0'}}</div>
 							<div class="col-auto px-2">
 								<div class="btn-group btn-group-sm">
-									<button type="button" class="btn btn-success" *ngIf="opt.is_active == 1">Active</button>
-									<button type="button" class="btn btn-danger" *ngIf="opt.is_active != 1">In-Active</button>
+									<button [disabled]="opt.statusLoading" (click)="toggleMealOptionStatus(preference, opt, 0)" type="button" class="btn btn-success" *ngIf="opt.is_active == 1">Active</button>
+									<button [disabled]="opt.statusLoading" (click)="toggleMealOptionStatus(preference, opt, 1)" type="button" class="btn btn-danger" *ngIf="opt.is_active != 1">In-Active</button>
 									<button type="button" class="btn btn-secondary" (click)="openOptionForm(preference.id, opt)">Edit</button>
 									<button type="button" class="btn btn-secondary" (click)="deleteMealOption(preference.id, opt)">Delete</button>
 								</div>
@@ -95,7 +95,7 @@
 		<div class="form-group row">
 			<label for="option_sort_order" class="col-12 form-control-label">Sort Order</label>
 			<div class="col-12" [ngClass]="setContainerErrorClass('sort_order', optionForm)">
-				<input type="number" class="form-control" id="option_sort_order"
+				<input type="number" min="1" class="form-control" id="option_sort_order"
 					formControlName="sort_order" [ngClass]="setInputErrorClass('sort_order', optionForm)" />
 			</div>
 		</div>

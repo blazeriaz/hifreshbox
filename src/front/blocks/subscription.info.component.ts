@@ -29,8 +29,9 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.minDate = new Date();
-        this.loading = true;
+        this.loading = true;        
         this.needToUnsubscribe.push(this.cartService.getCartTotal().subscribe(data => {
+            this.orderSubscription = null;
             if(data.subscription && data.subscription.has_subscription) {
                 this.orderSubscription = data.subscription;
                 if (data.subscription.blocked_week_start && data.subscription.blocked_week_end) {
@@ -38,8 +39,8 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
                     const e = new Date(data.subscription.blocked_week_end);
                     this.orderSubscription.blocked = [s, e];
                 }
-                this.loading = false;
-            }
+            }            
+            this.loading = false;
         }));
     }
 

@@ -356,9 +356,6 @@ export class UserFormComponent implements OnInit {
             let sendData = {
                 customer: this.userForm.value
             };
-
-            delete sendData.customer.addresses;
-
             this.rest.saveItem(userId, sendData, 'customers/' + userId).subscribe(data => {
                 this.noticeUserSaved();
             }, err => {

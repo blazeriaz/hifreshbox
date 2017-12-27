@@ -120,6 +120,23 @@ export class MealComponent implements OnInit {
           // this.alert.error('Please check the form to enter all required details');
       }
   }
+  
+  toggleMealOptionStatus(preference, mealOption, status) {
+    if (!confirm('Are you sure want to change the status of meal option?')) {
+      return;
+    }
+    this.alert.clear();
+    mealOption.statusLoading = true;
+    const option_id = mealOption.preference_option_id;
+    this.rest.saveItem(true, {preference_options : {is_active: status}}, 'meals-option/' + option_id).subscribe(data => {
+      mealOption.is_active = data.is_active;
+      this.alert.success('The meal option status changed successfully!', true);
+      mealOption.statusLoading = false;
+    }, e => {
+      this.alert.error('The meal option status was not changed!', true);
+      mealOption.statusLoading = false;
+    });
+  }
 
   deleteMealOption(preference_id, option) {
     if (!confirm('Are you sure want to delete the option?')) {
@@ -182,6 +199,22 @@ export class MealComponent implements OnInit {
     } else {
         // this.alert.error('Please check the form to enter all required details');
     }
+  }
+  
+  toggleMealPreftatus(preference, status) {
+    if (!confirm('Are you sure want to change the status of meal pereference?')) {
+      return;
+    }
+    this.alert.clear();
+    preference.statusLoading = true;
+    this.rest.saveItem(true, {preference : {is_active: status}}, 'meals/' + preference.id).subscribe(data => {
+      preference.is_active = data.is_active;
+      this.alert.success('The meal pereference status changed successfully!', true);
+      preference.statusLoading = false;
+    }, e => {
+      this.alert.error('The meal pereference status was not changed!', true);
+      preference.statusLoading = false;
+    });
   }
 
   deleteMealPref(preference_id) {

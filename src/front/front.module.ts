@@ -2,25 +2,26 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy, CommonModule, DatePipe, PathLocationStrategy } from '@angular/common';
-import { FrontComponent } from "front/front.component";
+import { FrontComponent } from "./front.component";
 import { HttpModule } from "@angular/http";
 import { SharedModule } from "shared.module";
-import { FrontRoutingModule } from "front/front.routing";
+import { FrontRoutingModule } from "./front.routing";
 
 import { AuthService, AlertService, RestService } from "services";
-import { HomeComponent } from "front/home/home.component";
-import { MenuComponent } from "front/menu/menu.component";
-import { FullLayoutComponent } from "front/layouts/full-layout.component";
-import { RecipeComponent } from "front/recipe/recipe.component";
-import { SwagsComponent } from 'front/swags/swags.component';
-import { SwagViewComponent } from 'front/swags/swag.view.component';
+import { HomeComponent } from "./home/home.component";
+import { MenuComponent } from "./menu/menu.component";
+import { FullLayoutComponent } from "./layouts/full-layout.component";
+import { RecipeComponent } from "./recipe/recipe.component";
+import { SwagsComponent } from './swags/swags.component';
+import { SwagViewComponent } from './swags/swag.view.component';
 import { TabsModule, AccordionModule, ModalModule, TooltipModule, CarouselModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FaqComponent } from 'front/faq/faq.component';
-import { SimpleLayoutComponent } from 'front/layouts/simple-layout.component';
-import { TopmenuComponent } from 'front/blocks/topmenu.component';
-import { ContactComponent } from 'front/contact/contact.component';
-import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component';
+import { FaqComponent } from './faq/faq.component';
+import { SimpleLayoutComponent } from './layouts/simple-layout.component';
+import { TopmenuComponent } from './blocks/topmenu.component';
+import { ContactComponent } from './contact/contact.component';
+import { CheckoutSuccessComponent } from './cart/checkout-success.component';
+import { SuccessComponent } from './success.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { CheckoutSuccessComponent } from 'front/cart/checkout-success.component'
     ContactComponent,
     SimpleLayoutComponent,
     TopmenuComponent,
-    CheckoutSuccessComponent
+    CheckoutSuccessComponent,
+    SuccessComponent
   ],
   providers: [
     {

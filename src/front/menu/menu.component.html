@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="favourite_star font-2xl" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
+                <div class="favourite_star font-2xl btn p-0 border-0" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
                     <i class="fa fa-star" (click)="toggleFavourite(recipe)" tooltip="Toggle favourite"></i>
                 </div>
             </div>

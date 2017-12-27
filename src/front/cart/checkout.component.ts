@@ -3,6 +3,7 @@ import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
+import { concat } from 'rxjs/operator/concat';
 
 @Component({
   templateUrl: 'checkout.component.html'
@@ -60,7 +61,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 } else if (data.mealPreferences && data.mealPreferences.length > 0) {
                     this.steps = this.allSteps.filter(x => {
                         if (x.key === 'meal' && x.complete !== 1 && this.currentStep !== 'login') {
-                            this.goToStep('meal');
+                            this.goToStep('meal', true);
                         }
                         return true;
                     });
@@ -72,7 +73,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 this.currentStep = 'login';
 
                 if (this.auth.isLogin()) {
-                    this.goToStep('address');
+                    this.goToStep('address', true);
                 }
             })
         );
@@ -91,13 +92,27 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         return data.loading;
     }
 
-    goToStep(step) {
-        let check = false;
-        const index = this.steps.forEach(x => {
-            if (x.key === step) {
-                check = true;
-            }
-            if (check) {
+    checkStepDisabled(step) {
+        if (this.currentStep === step.key) {
+            return false;
+        }
+        if(step.key == 'login' && this.auth.isLogin()) {
+            return true;
+        }
+        return !step.complete;
+    }
+
+    goToStep(step, force = false) {
+        if(step == 'login' && this.auth.isLogin()) {
+            return;
+        }
+        const index = this.steps.findIndex(x => x.key === step);
+        const index1 = this.steps.findIndex(x => x.key === this.currentStep);        
+        if (!force && index1 <= index) {
+            return;
+        }
+        this.steps.forEach((x, i) => {
+            if (i > index) {
                 delete x.complete;
             }
         });

@@ -26,7 +26,7 @@ export class AlertComponent implements OnInit, AfterViewInit {
                 return;
             }
 
-            this.elRef.nativeElement.scrollIntoView();
+            window.scroll(0, 0);
 
             // add alert to array
             this.alerts.push(alert);

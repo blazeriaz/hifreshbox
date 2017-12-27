@@ -30,13 +30,13 @@
             <div class="form-group row">                        
                 <div class="col-12" [ngClass]="setContainerErrorClass('password')">
                     <label for="user_password" class="form-control-label">Password</label>
-                    <input type="text" class="form-control rounded-0" id="user_password" formControlName="password" 
+                    <input type="password" class="form-control rounded-0" id="user_password" formControlName="password" 
                         [ngClass]="setInputErrorClass('password')" />
                 </div>
                 
                 <div class="col-12" [ngClass]="setContainerErrorClass('confirmation')">
                     <label for="user_confirmation_pass" class="form-control-label">Confirm Password</label>
-                    <input type="text" class="form-control rounded-0" id="user_confirmation_pass" formControlName="confirmation" 
+                    <input type="password" class="form-control rounded-0" id="user_confirmation_pass" formControlName="confirmation" 
                         [ngClass]="setInputErrorClass('confirmation')" />
                 </div>
             </div>

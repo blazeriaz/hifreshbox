@@ -156,17 +156,24 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
     
     inFavRecipe(id) {
-        return this.favRecipes.findIndex(x => x.product_id === id) !== -1;
+        return this.favRecipes.findIndex(x => x.product_id == id) !== -1;
     }
 
     recipeFavouriteClass(recipe) {
-        if (this.inFavRecipe(recipe.entity_id)) {
-            return 'text-success';
+        let className = [];
+        if (recipe.statusLoading) {
+            className.push('disabled');
         }
-        return '';
+        if (this.inFavRecipe(recipe.entity_id)) {
+            className.push('text-success');
+        }
+        return className;
     }
 
     toggleFavourite(recipe) {
+        if (recipe.statusLoading) {
+            return;
+        }
         if (!this.auth.isLogin()) {
             this.islogin = this.auth.isLogin();
             return;
@@ -175,10 +182,12 @@ export class MenuComponent implements OnInit, OnDestroy {
             const item = this.favRecipes.find(x => x.product_id === recipe.entity_id);
             this.removeFromFavuorite(item);
         } else {
-            this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {
-                this.favRecipes.push(data);
+            recipe.statusLoading = true;
+            this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {                
+                this.favRecipes.push(data[0]);
                 this.alert.success('Recipe had been added to favourite!');
-            });
+                recipe.statusLoading = false;
+            }, e => recipe.statusLoading = false);
         }        
     }
 
@@ -187,10 +196,12 @@ export class MenuComponent implements OnInit, OnDestroy {
             return;
         }
         this.alert.clear();
+        item.statusLoading = false;
         this.rest.deleteItem(item.wishlist_item_id, 'ipwishlist/delete/' + item.wishlist_item_id).subscribe(res => {
             this.favRecipes = this.favRecipes.filter(x => x.wishlist_item_id !== item.wishlist_item_id);
             this.alert.success('Recipe had been removed from favourite!');
-        });
+            item.statusLoading = false;
+        }, e => item.statusLoading = false);
     }
 
     removeFavourite(recipe) {

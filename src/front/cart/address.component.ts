@@ -146,7 +146,8 @@ export class AddressComponent implements OnInit, OnDestroy {
             country_id: 'US',
             postcode: '',
             telephone: '',
-            same_as_billing: 1
+            same_as_billing: 1,
+            save_in_address_book: 1
         };
 
         return this.initAddressForm(newAddress);
@@ -170,7 +171,8 @@ export class AddressComponent implements OnInit, OnDestroy {
             'region': [(address.region) ? address.region.region : '', Validators.required],
             'postcode' : [address.postcode, [Validators.required]],
             'telephone' : [address.telephone, [Validators.required]],
-            'same_as_billing': address.same_as_billing
+            'same_as_billing': address.same_as_billing,
+            'save_in_address_book': 1//address.save_in_address_book
         });
     }
 
@@ -248,6 +250,8 @@ export class AddressComponent implements OnInit, OnDestroy {
             if (!formValues['shipping_address'].customer_id) {
                 delete formValues['shipping_address'].customer_id;
             }
+            formValues['billing_address'].save_in_address_book = 1;
+            formValues['shipping_address'].save_in_address_book = 1;
             const sendData = {addressInformation : formValues};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.next.emit('address');

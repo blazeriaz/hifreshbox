@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as GlobalVariable from 'global';
 import { RestService } from 'services';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -16,7 +17,8 @@ export class NewsletterComponent implements OnInit {
 
     constructor(
         private rest: RestService,
-        private _fb: FormBuilder
+        private _fb: FormBuilder,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -37,11 +39,7 @@ export class NewsletterComponent implements OnInit {
 
     submit(): void {
         this.rest.saveItem('', this.nlForm.value, 'newsletter/add').subscribe(() => {
-            this.subscribed = true;
-            setTimeout(() => {
-                this.subscribed = false;
-            }, 3000);
-            this.nlForm.reset();
+            this.router.navigate(['/', 'success']);
         });
     }
 }

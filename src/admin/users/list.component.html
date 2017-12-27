@@ -27,8 +27,11 @@
             <div class="col">
               Loading users...
             </div>
-            <div class="col-auto px-2" *ngIf="!initLoad">
-              <button type="button" class="btn btn-danger" (click)="abortSearch()">Abort</button>
+          </div>
+
+          <div class="row py-2 bg-warning" *ngIf="!loadingList && users.length == 0">
+            <div class="col">
+              No users
             </div>
           </div>
 

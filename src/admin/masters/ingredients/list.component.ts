@@ -65,7 +65,7 @@ export class IngredientsListComponent implements OnInit, OnDestroy {
             this.searchSubscripe.unsubscribe();
         }
         const sortOrders = [{
-            field: 'created_at',
+            field: 'creation_time',
             direction: 'DESC'
         }];
         
@@ -114,6 +114,7 @@ export class IngredientsListComponent implements OnInit, OnDestroy {
         }
         this.alert.clear();
         this.restService.deleteItem(item.id, 'ingredients/' + item.id).subscribe(r => {
+            this.loadItemsList(this.pager.currentPage);
             this.alert.success('The ingredient had been deleted successfully!');
         }, e => {
             this.alert.error('Something went wrong!');
@@ -174,6 +175,7 @@ export class IngredientsListComponent implements OnInit, OnDestroy {
                     form.patchValue({
                         title : ''
                     });
+                    this.loadItemsList(this.pager.currentPage);
                     this.loadingSave = false;
                 },
                 e => this.loadingSave = false

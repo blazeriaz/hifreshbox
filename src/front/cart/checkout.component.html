@@ -15,10 +15,11 @@
             </div>
             <div class="col-12 mb-5" *ngIf="currentStep">
                 <div class="mx-auto" style="position: relative;" [ngStyle]="{width: ((steps.length * (35+50)) - 50) + 'px'}">
-                    <hr style="position: absolute; top:0;left:0;border: 1px solid #9A9A9A; width: 100%;" />
-                    <div *ngFor="let st of steps;let index = index;let last = last;" [hoverClass]="'text-info'" class="float-left pointer"
-                            [ngClass]="{'text-success' : st.key === currentStep, 'mr-0' : last, 'bg-light': st.complete}"
-                            style="width: 35px; height: 35px; margin-right:50px;">
+                    <hr style="position: absolute; top:0;left:0;border: 1px solid #9A9A9A; width: 100%;;" />
+                    <div *ngFor="let st of steps;let index = index;let last = last;" (click)="goToStep(st.key)" [hoverClass]="'text-info'" 
+                            class="float-left pointer btn p-0 border-0"
+                            [ngClass]="{'text-success' : st.key === currentStep, 'mr-0' : last, 'disabled': checkStepDisabled(st)}"
+                            style="width: 35px; height: 35px; margin-right:50px; opacity: 1">
                         <div class="circle_main" [tooltip]="st.title">
                             <div class="circle_text_container">
                                 <div class="circle_text">
