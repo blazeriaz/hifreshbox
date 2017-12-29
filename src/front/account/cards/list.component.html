@@ -10,36 +10,46 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card border-0">
-          <div class="card-header border-0 p-0 mb-3">
-            <h2 class="mb-0">Cards</h2>
-            <button type="button" class="btn btn-outline-green pull-right mt-0" (click)="openCardFormModal()">Add New Card</button>
+          <div class="card-header border-0 p-0 mb-2">
+            <h4 class="mb-4">Manage Saved Cards</h4>
+            <div>
+              <button type="button" class="btn btn-outline-green text-left pl-1 pr-3" (click)="openCardFormModal()">
+                <i class="fa fa fa-plus-circle px-1"></i> Add New Card              
+              </button>
+            </div>
           </div>
-          <div class="card-block">
-            <div class="row py-2 bg-primary">
-              <div class="col-md-6">Card</div>
-              <div class="col-md-4">Expires</div>
-              <div class="col-md-2"></div>
-            </div>  
-            
-            <div class="row py-2 bg-info" *ngIf="loadingList">
+          <div class="card-block p-0">
+            <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
               <div class="col">
                 Loading cards...
               </div>
             </div>
 
-            <div class="row py-2 bg-info" *ngIf="!loadingList && cards.length == 0">
+            <div class="row mx-0 py-2 bg-info" *ngIf="!loadingList && cards.length == 0">
               <div class="col">
                 No cards...
               </div>
             </div>
 
-            <div class="row py-2" *ngFor="let card of cards; let odd= odd;"
-                [ngClass]="{'bg-faded': odd}">
-              <div class="col-md-6">{{card.details.type}} ending in {{card.details.maskedCC}}</div>
-              <div class="col-md-4">{{card.details.expirationDate}}</div>
-              <div class="col-md-2">  
-                <div class="btn-group btn-group-sm">
-                  <a class="btn btn-link" (click)="deleteCard(card)">Delete</a>
+            <div class="card m-0" *ngFor="let card of cards; let odd= odd;">
+              <div class="row py-4 mx-0">
+                <div class="col px-0">
+                  <div class="row mx-0">
+                    <div class="col-auto my-auto pl-3">
+                      <i class="fa fa-credit-card-alt"></i>                      
+                    </div>
+                    <div class="col">
+                      {{card.details.type}} **** **** **** {{card.details.maskedCC}}<br />
+                      Expires on {{card.details.expirationDate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto px-3">  
+                  <div class="btn-group btn-group-sm">
+                    <a class="btn btn-secondary pointer" (click)="setDefaultCard(card)" title="Set Default" *ngIf="card.is_default != 1"><i class="fa fa-star-o"></i></a>
+                    <a class="btn btn-secondary" title="Default Card" *ngIf="card.is_default == 1"><i class="fa fa-star text-success"></i></a>
+                    <a class="btn btn-secondary pointer" (click)="deleteCard(card)" title="Delete"><i class="fa fa-trash-o text-warning"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -73,13 +83,13 @@
             <div class="form-group row px-3">                        
                 <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
                     <label for="card_month_year" class="form-control-label">Expiry Date</label>
-                    <input size="5" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" 
+                    <input size="6" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" placeholder="MM / YYYY"
                         autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
                 </div>
                 <div class="col"></div>
                 <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
                     <label for="card_cvv" class="form-control-label">CVV</label>
-                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="tel" 
+                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="password" placeholder="xxx"
                         autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
                 </div>
             </div>

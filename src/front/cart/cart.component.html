@@ -11,13 +11,13 @@
                 <alert></alert>
             </div>
 
-            <div class="col-12" *ngIf="cart?.items.length == 0">
+            <div class="col-12" *ngIf="cart?.items?.length == 0">
                 <h5 class="font-special text-success">SHOPPING CART</h5>
                 <hr />
                 No items.
             </div>
             
-            <div class="col-md-8" *ngIf="cart?.items.length > 0">
+            <div class="col-md-8" *ngIf="cart?.items && cart?.items.length > 0">
                 <h5 class="font-special text-success">SHOPPING CART</h5>
                 <hr />
                 <div class="row">

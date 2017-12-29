@@ -93,6 +93,7 @@ export class CardsListComponent implements OnInit {
                     this.alert.error(public_hash);
                 } else {
                     this.modalRef.hide();
+                    this.loadCardsList();
                     this.alert.success('New card details saved succesfully!');
                 }
             }, err => {

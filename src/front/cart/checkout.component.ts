@@ -51,6 +51,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 this.cart = data.cart;
                 this.totals = data.totals;
 
+                if(!this.cart || this.cart.loading || this.cart.mealPreferenceLoading) {
+                    return;
+                }
+
                 if (!this.validateHaveCartItems(data)) {
                     this.alert.error('No items added for checkout.', true);
                     this.router.navigate(['/', 'cart']);

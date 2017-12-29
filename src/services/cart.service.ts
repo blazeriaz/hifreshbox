@@ -135,6 +135,7 @@ export class CartService {
     if (init) {
       this.initVariables();
     } 
+    this.cart = {loading: true};
     if (!this.auth.isLogin()) {
       if (!this.guestCardId) {
         this.rest.saveItem(false, {}, 'guest-carts').subscribe(cartId => {
@@ -147,9 +148,10 @@ export class CartService {
       cartUrl = 'guest-carts/' + this.guestCardId;
     } else {             
       this.initUserSubscription();
-    }
+    }    
     this.rest.getItem('', cartUrl).subscribe(res => {
         this.cart = res;
+        this.cart.loading = false;
         this.showImages = true;
         this.loading = false;
         this.assignCartTotal();
@@ -178,6 +180,7 @@ export class CartService {
   assignCartTotal() {
     if (this.cart && this.totals && this.totals.items.length > 0 && this.checkMealAddedInCart(this.cart.items)) {
       if (!this.mealPreferences || this.mealPreferences.length === 0) {
+        this.cart.mealPreferenceLoading = true;
         this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(res => {
           this.mealPreferences = res;
           this.mealPreferences[0].map(x => {
@@ -185,7 +188,7 @@ export class CartService {
               return x;
           });
           this.mealPreferences[0] = this.mealPreferences[0].filter(x => x.options.length > 0 && parseInt(x.is_active, 10) === 1);
-          console.log(this.mealPreferences[0]);
+          this.cart.mealPreferenceLoading = false;
           this.assignCartTotal();
         });
       }
