@@ -2,30 +2,21 @@ import { Component, OnInit, Injectable, ViewChild, TemplateRef, Renderer2, OnDes
 import { Router, ActivatedRoute, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { UsersService, AlertService, RestService, AuthService } from 'services';
 import { FormBuilder, Validators, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     templateUrl: 'addresses.component.html'
 })
 export class AddressesComponent implements OnInit, OnDestroy {
-    @ViewChild('savemodal') saveModal: TemplateRef<any>;
-    @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
-
     countries: any;
     available_regions: any;
     regionsAll: any;
     user: any;
     userForm: any;
-    indexEditAddress: number;
+    indexEditAddress: number = -1;
     indexDefaultAddress: number;
     submitted: boolean;
-
-    updatingMessage;
-    saveModalClose;
-    abortModalClose;
-    saveRequests;
-    modalRef: BsModalRef;
-    modalEditRef: BsModalRef;
+    saveLoading: boolean;
+    
     loadedFormData;
     countLoadedFormReqs;
     loadFormRequests;
@@ -38,7 +29,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private _fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private modalService: BsModalService,
         private renderer: Renderer2
     ) {
 
@@ -48,31 +38,12 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.loadFormRequests = [];
         this.countLoadedFormReqs = 0;
         this.loadedFormData = false;
-        // this.openEditModal();
         this.loadCountries();
         this.loadFormData();
     }
 
-    openEditModal() {
-      this.modalEditRef = this.modalService.show(this.editLoadModal, {
-        animated: true,
-        keyboard: false,
-        backdrop: true,
-        ignoreBackdropClick: true
-      });
-    }
-
-    abortEdit() {
-      if (this.loadFormRequests && this.loadFormRequests.length > 0) {
-        this.loadFormRequests.map(sub => sub ? sub.unsubscribe() : '');
-      }
-      this.modalEditRef.hide();
-      this.goToList();
-    }
-
     checkAllFormDataLoaded() {
       if (--this.countLoadedFormReqs === 0) {
-        // this.modalEditRef.hide();
         this.initEditForm();
         this.loadedFormData = true;
       }
@@ -134,7 +105,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
             'addresses' : this._fb.array([])
         });
 
-        let doAddNewAddress = true;
         if (this.user.id) {
             this.user.addresses.map((address, i) => {
                 if (address.default_shipping) {
@@ -142,18 +112,10 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 }
                 this.userForm.controls['addresses'].push(this.initAddressForm(address));
             });
-            if (this.user.addresses.length > 0) {
-                doAddNewAddress = false;
-                this.doEditAddress(0);
-            }
-        }
-        if (doAddNewAddress) {
-            this.addNewAddress();
-            this.setDefaultAddress(0, true);
         }
 
         this.userForm.valueChanges.subscribe(data => {
-            if (!this.indexEditAddress) return;
+            if (!this.indexEditAddress || !data.addresses[this.indexEditAddress]) return;
 
             let region_id = data.addresses[this.indexEditAddress].region_id;
             let region_name = data.addresses[this.indexEditAddress].region.region;
@@ -228,14 +190,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
         });
     }
 
-    setAddressClass(i: number) {
-        return {
-            'bg-primary text-white' : this.indexDefaultAddress == i,
-            'bg-warning text-white' : this.indexEditAddress == i,
-            'bg-danger text-white' : this.submitted && this.userForm.controls.addresses.controls[i].invalid,          
-        };
-    }
-
     setGender(gender) {
         this.userForm.patchValue({gender : gender});
     }
@@ -291,6 +245,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 default_shipping : true,
                 default_billing : true
             });
+            this.saveUser();
         }
     }
 
@@ -300,17 +255,16 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     deleteAddress(i: number) {
-        if (i === this.indexDefaultAddress) {
-            alert('You can\'t delete the default address');
-            return;
-        }
         if (confirm('Are you sure want to delete the address?')) {
-            this.doEditAddress(0);
             this.userForm.controls['addresses'].removeAt(i);
+            this.saveUser();
         }
     }
 
     addNewAddress() {
+        if(this.saveLoading) {
+            return;
+        }
         const newAddress = {
             id: 0,
             customer_id: this.user.id,
@@ -334,48 +288,32 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.doEditAddress(this.userForm.controls['addresses'].controls.length - 1);
     }
 
-    noticeUserSaved = function() {
-        this.alert.success('The customer addressess have been saved successfully!');
-        /**
-        this.updatingMessage = 'The customer details have been saved successfully!';
-        this.saveModalClose = true;
-        this.abortModalClose = false;
-        */
+    cancelSave() {
+        if(this.userForm.controls['addresses'].controls[this.indexEditAddress].value.id == 0) {
+            this.userForm.controls['addresses'].removeAt(this.indexEditAddress);
+        }        
+        this.indexEditAddress = -1;
+        this.auth.initLoggedInUserInfo();
     }
 
     saveUser() {
         this.alert.clear();
         this.submitted = true;
         if (this.userForm.valid) {
-            this.updatingMessage = 'Uploading the Customer information...';
-            this.saveModalClose = false;
-            this.abortModalClose = true;
-            // this.openSaveModal();
-            this.saveRequests = [];
-
+            this.saveLoading = true;
             this.rest.saveItem('me', {customer: this.userForm.value}, 'customers/me').subscribe(data => {
                 this.auth.initLoggedInUserInfo();
-                this.noticeUserSaved();
+                this.indexEditAddress = -1;
+                this.alert.success('The customer addressess have been saved successfully!');
+                this.saveLoading = false;
+            }, e => {
+                const err = e.json();
+                this.alert.error(err.message);
+                this.saveLoading = false
             });
         } else {
             this.alert.error('Please check the form to enter all required details');
         }
-    }
-
-    openSaveModal() {
-      this.modalRef = this.modalService.show(this.saveModal, {
-        animated: true,
-        keyboard: false,
-        backdrop: true,
-        ignoreBackdropClick: true
-      });
-    }
-
-    abortSave() {
-      if (this.saveRequests && this.saveRequests.length > 0) {
-        this.saveRequests.map(sub => sub ? sub.unsubscribe() : '');
-      }
-      this.modalRef.hide();
     }
 
     goToList() {
