@@ -1,4 +1,0 @@
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Freshbox\Portions\Api\Data\QuantityInterface" type="Freshbox\Portions\Model\Quantity" />
-    <preference for="Freshbox\Portions\Api\QuantityRepositoryInterface" type="Freshbox\Portions\Model\QuantityRepository" />
-</config>
