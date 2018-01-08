@@ -1,0 +1,16 @@
+[04-Nov-2017 03:49:42 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/cart/payment-method-brain.php on line 13
+[04-Nov-2017 03:50:09 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/cart/payment-method-brain.php on line 13
+[04-Nov-2017 03:50:25 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/cart/payment-method-brain.php on line 13
+[04-Nov-2017 03:50:28 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/cart/payment-method-brain.php on line 13
+[04-Nov-2017 03:50:28 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/cart/payment-method-brain.php on line 13
+[07-Nov-2017 08:32:14 UTC] PHP Parse error:  syntax error, unexpected '2' (T_LNUMBER), expecting ')' in /home/whitespacestudio/public_html/freshbox/webservices/cart/add_cart.php on line 40
+[12-Nov-2017 13:49:12 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 18
+[12-Nov-2017 13:50:51 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[12-Nov-2017 13:52:41 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[12-Nov-2017 13:55:02 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[12-Nov-2017 14:48:14 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[13-Nov-2017 14:33:37 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[13-Nov-2017 14:33:51 UTC] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/guest_cart.php on line 15
+[21-Nov-2017 08:04:24 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/cart/add_cart.php on line 22
+[27-Nov-2017 04:21:26 Pacific/Honolulu] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/cart/add_card.php on line 6
+[27-Nov-2017 04:21:26 Pacific/Honolulu] PHP Notice:  Undefined variable: token in /home/whitespacestudio/public_html/freshbox/webservices/cart/add_card.php on line 8

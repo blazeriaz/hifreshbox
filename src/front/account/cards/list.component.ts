@@ -56,6 +56,7 @@ export class CardsListComponent implements OnInit {
 
     openCardFormModal() {
         this.alert.clear();
+        this.userPaymentForm.reset();
         this.userPaymentSubmitted = false;
         this.modalRef = this.modalService.show(this.cardFormModal, {
             animated: true,
@@ -105,10 +106,25 @@ export class CardsListComponent implements OnInit {
         }
     }
 
+    setDefaultCard(card) {
+        if(!confirm("Are you sure want to change the default card?")) {
+            return;
+        }
+        this.alert.clear();
+        this.rest.saveItem(false, {primary_card: {card_id: card.entity_id}}, 'payment/card/default').subscribe(res => {
+            this.alert.success('The default card was changed succesfully!');
+            card.is_default = 1;
+            this.loadCardsList();
+        }, err => {
+            this.alert.error('Server error!');            
+        })
+    }
+
     deleteCard(card) {
         if(!confirm("Are you sure want to delete the card detail?")) {
             return;
         }
+        this.alert.clear();
         this.rest.saveItem(false, {public_hash: card.public_hash}, 'payment/delete/card').subscribe(res => {
             this.alert.success('The card details deleted succesfully!');
             this.loadCardsList();

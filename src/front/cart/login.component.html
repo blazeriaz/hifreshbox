@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-3 col-sm-12"></div>
     <div class="col-md-6 col-sm-12 mt-3">
-            <form [formGroup]="checkoutLoginForm" (submit)="checkoutRegister()" novalidate>
+        <form [formGroup]="checkoutLoginForm" (submit)="checkoutRegister()" novalidate>
             <div class="form-group row">                        
                 <div class="col-12" [ngClass]="setContainerErrorClass('email')">
                     <label for="user_email" class="form-control-label">Email</label>
@@ -32,6 +32,7 @@
                     <label for="user_password" class="form-control-label">Password</label>
                     <input type="password" class="form-control rounded-0" id="user_password" formControlName="password" 
                         [ngClass]="setInputErrorClass('password')" />
+                        <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>
                 </div>
                 
                 <div class="col-12" [ngClass]="setContainerErrorClass('confirmation')">

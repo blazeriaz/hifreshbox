@@ -115,6 +115,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.modelDisabled = false;
             this.addRecipeToCookBook(res);
             this.alert.success('Cookbook has been saved successfully!');
+        }, e => {
+            this.modelDisabled = false;
+            var err = e.json();
+            this.alert.error(err.message, false, 'popup');
         });
     }
 

@@ -94,6 +94,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
         return (invalid && this.checkoutPaymentSubmitted) ? 'has-danger' : '';
     }
 
+    addNewCard() {
+        this.selectedCard=null;
+        this.newCard=1;
+        this.checkoutPaymentForm.reset();
+    }    
+
     saveCheckoutPayment() {
         this.alert.clear();
         if(this.selectedCard) {

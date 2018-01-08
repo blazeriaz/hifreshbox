@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Freshbox_Meals::top" title="Freshbox meals">
+                    <resource id="Freshbox_Meals::config" title="Freshbox Meals" sortOrder="10"/>
+                    <resource id="Freshbox_Meals::preference_save" title="Save Meals" sortOrder="20" />
+                    <resource id="Freshbox_Meals::preference_delete" title="Delete Meals" sortOrder="30" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

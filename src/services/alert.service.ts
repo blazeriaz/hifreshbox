@@ -29,25 +29,25 @@ export class AlertService {
         return this.subject.asObservable();
     }
 
-    success(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.Success, message, keepAfterRouteChange);
+    success(message: string, keepAfterRouteChange = false, displayId: string = 'default') {
+        this.alert(AlertType.Success, message, keepAfterRouteChange, displayId);
     }
 
-    error(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.Error, message, keepAfterRouteChange);
+    error(message: string, keepAfterRouteChange = false, displayId: string = 'default') {
+        this.alert(AlertType.Error, message, keepAfterRouteChange, displayId);
     }
 
-    info(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.Info, message, keepAfterRouteChange);
+    info(message: string, keepAfterRouteChange = false, displayId: string = 'default') {
+        this.alert(AlertType.Info, message, keepAfterRouteChange, displayId);
     }
 
-    warn(message: string, keepAfterRouteChange = false) {
-        this.alert(AlertType.Warning, message, keepAfterRouteChange);
+    warn(message: string, keepAfterRouteChange = false, displayId: string = 'default') {
+        this.alert(AlertType.Warning, message, keepAfterRouteChange, displayId);
     }
 
-    alert(type: AlertType, message: string, keepAfterRouteChange = false) {
+    alert(type: AlertType, message: string, keepAfterRouteChange = false, displayId: string = 'default') {
         this.keepAfterRouteChange = keepAfterRouteChange;
-        this.subject.next(<Alert>{ type: type, message: message });
+        this.subject.next(<Alert>{ type: type, displayId: displayId, message: message });
     }
 
     clear() {

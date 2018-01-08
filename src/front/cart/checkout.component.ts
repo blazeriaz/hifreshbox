@@ -97,36 +97,31 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     checkStepDisabled(step) {
+        if (!this.steps) {
+            return;
+        }
         if (this.currentStep === step.key) {
             return false;
         }
         if(step.key == 'login' && this.auth.isLogin()) {
+            step.complete = 1;
             return true;
         }
-        return !step.complete;
+        const index = this.steps.findIndex(x => x.key === step);
+        return this.steps[index - 1] && !this.steps[index - 1].complete;
     }
 
     goToStep(step, force = false) {
-        if(step == 'login' && this.auth.isLogin()) {
+        if (!force && this.checkStepDisabled(step)) {
             return;
         }
-        const index = this.steps.findIndex(x => x.key === step);
-        const index1 = this.steps.findIndex(x => x.key === this.currentStep);        
-        if (!force && index1 <= index) {
-            return;
-        }
-        this.steps.forEach((x, i) => {
-            if (i > index) {
-                delete x.complete;
-            }
-        });
+        
         this.currentStep = step;
         window.scroll(0, 0);
     }
 
     goBack(step) {
         const index = this.steps.findIndex(x => x.key === step);
-        delete this.steps[index].complete;
         if (index <= 0) {
             this.router.navigate(['/', 'cart']);
         } else {

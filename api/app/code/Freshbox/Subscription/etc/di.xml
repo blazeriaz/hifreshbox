@@ -1,0 +1,10 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Subscription\Api\Data\MainInterface" type="Freshbox\Subscription\Model\Main" />
+    <preference for="Freshbox\Subscription\Api\MainRepositoryInterface" type="Freshbox\Subscription\Model\MainRepository" />
+	<preference for="Freshbox\Subscription\Api\Data\RecurringInterface" type="Freshbox\Subscription\Model\Recurring" />
+    <preference for="Freshbox\Subscription\Api\RecurringRepositoryInterface" type="Freshbox\Subscription\Model\RecurringRepository" />
+	<preference for="Freshbox\Subscription\Api\Data\PauseInterface" type="Freshbox\Subscription\Model\Pause" />
+    <preference for="Freshbox\Subscription\Api\PauseRepositoryInterface" type="Freshbox\Subscription\Model\PauseRepository" />
+	<preference for="Freshbox\Subscription\Api\Data\PrimarycardInterface" type="Freshbox\Subscription\Model\Primarycard" />
+    <preference for="Freshbox\Subscription\Api\PrimarycardRepositoryInterface" type="Freshbox\Subscription\Model\PrimarycardRepository" />
+</config>

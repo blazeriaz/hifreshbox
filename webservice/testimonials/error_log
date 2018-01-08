@@ -1,0 +1,12 @@
+[14-Sep-2017 17:43:29 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:43:37 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:43:37 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:44:28 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:44:30 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:46:49 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 37
+[14-Sep-2017 17:47:11 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/view.php on line 18
+[14-Sep-2017 17:47:11 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/view.php on line 18
+[14-Sep-2017 17:47:14 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/view.php on line 18
+[14-Sep-2017 17:54:47 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/view.php on line 18
+[23-Dec-2017 04:36:30 Pacific/Honolulu] PHP Warning:  http_build_query(): Parameter 1 expected to be Array or Object.  Incorrect value given in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 34
+[23-Dec-2017 04:36:30 Pacific/Honolulu] PHP Warning:  http_build_query(): Parameter 1 expected to be Array or Object.  Incorrect value given in /home/whitespacestudio/public_html/freshbox/webservices/testimonials/list.php on line 34

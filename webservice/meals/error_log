@@ -1,0 +1,10 @@
+[06-Nov-2017 14:30:58 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 22
+[06-Nov-2017 14:33:55 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 22
+[06-Nov-2017 14:36:09 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 22
+[06-Nov-2017 14:37:03 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 23
+[06-Nov-2017 14:39:47 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 23
+[06-Nov-2017 14:39:52 UTC] PHP Notice:  Undefined variable: slide in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_save.php on line 23
+[14-Nov-2017 15:59:06 UTC] PHP Notice:  Undefined variable: result in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_preference.php on line 32
+[14-Nov-2017 16:12:42 UTC] PHP Parse error:  syntax error, unexpected '"', expecting ',' or ')' in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_preference.php on line 33
+[14-Nov-2017 16:12:48 UTC] PHP Parse error:  syntax error, unexpected '"', expecting ',' or ')' in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_preference.php on line 33
+[14-Nov-2017 16:12:48 UTC] PHP Parse error:  syntax error, unexpected '"', expecting ',' or ')' in /home/whitespacestudio/public_html/freshbox/webservices/meals/user_meal_preference.php on line 33

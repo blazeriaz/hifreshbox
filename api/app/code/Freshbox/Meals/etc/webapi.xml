@@ -1,0 +1,108 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/meals/:preferenceId" method="GET">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="getById"/>
+        <resources>
+           <resource ref="Freshbox_Meals::preference" />
+        </resources>
+    </route>
+
+    <route url="/V1/meals/search" method="GET">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="getList"/>
+       <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	<route url="/V1/meals/user-meal-search" method="GET">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="getusermealList"/>
+       <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/meals/user-admin-meal-search/:customerId" method="GET">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="getadminusermealList"/>
+       <resources>
+           <resource ref="Freshbox_Meals::preference" />
+        </resources>
+    </route>
+	
+	
+	<route url="/V1/meals" method="POST">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="save"/>
+        <resources>
+           <resource ref="Freshbox_Meals::preference_save" />
+        </resources>
+    </route>
+	
+	<route url="/V1/meals-option" method="POST">
+        <service class="Freshbox\Meals\Api\PreferenceoptionRepositoryInterface" method="save"/>
+         <resources>
+           <resource ref="Freshbox_Meals::preference_save" />
+        </resources>
+       
+    </route>
+    <route url="/V1/meals-option/:Id" method="PUT">
+        <service class="Freshbox\Meals\Api\PreferenceoptionRepositoryInterface" method="save"/>
+         <resources>
+           <resource ref="Freshbox_Meals::preference_save" />
+        </resources>
+       
+    </route>
+	
+	<route url="/V1/meals/:preferenceId" method="PUT">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="save"/>
+         <resources>
+           <resource ref="Freshbox_Meals::preference_save" />
+        </resources>
+        
+    </route>
+
+    <route url="/V1/meals/:preferenceId" method="DELETE">
+        <service class="Freshbox\Meals\Api\PreferenceRepositoryInterface" method="deleteById"/>
+        <resources>
+           <resource ref="Freshbox_Meals::preference_delete" />
+        </resources>
+       
+    </route>
+	
+	 <route url="/V1/meals-option/:id" method="DELETE">
+        <service class="Freshbox\Meals\Api\PreferenceoptionRepositoryInterface" method="deleteById"/>
+         <resources>
+           <resource ref="Freshbox_Meals::preference_delete" />
+        </resources>
+    </route>
+	
+	<route url="/V1/meal-settings" method="POST">
+        <service class="Freshbox\Meals\Api\SubscribemealpreferenceRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/custom-order" method="GET">
+        <service class="Freshbox\Meals\Api\SubscribemealpreferenceRepositoryInterface" method="getcustomerorder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/meal-settings/search" method="GET">
+        <service class="Freshbox\Meals\Api\SubscribemealpreferenceRepositoryInterface" method="getList"/>
+       <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	
+	
+	
+</routes>

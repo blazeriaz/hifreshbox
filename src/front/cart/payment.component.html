@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="row py-2 mx-0" *ngIf="cards.length > 0 && !newCard">
-                <button class="btn btn-outline-green"(click)="selectedCard=null;newCard=1">New Card</button>
+                <button class="btn btn-outline-green"(click)="addNewCard()">New Card</button>
             </div>
             <div class="bg-light p-2" *ngIf="cards.length === 0 || newCard">
                 <div class="form-group row">                        

@@ -1,0 +1,2 @@
+[21-Sep-2017 16:53:01 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/faq/faq_view.php on line 18
+[21-Sep-2017 16:53:19 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/faq/faq_view.php on line 18

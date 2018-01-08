@@ -1,0 +1,4 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Faqs\Api\Data\FaqInterface" type="Freshbox\Faqs\Model\Faq" />
+    <preference for="Freshbox\Faqs\Api\FaqRepositoryInterface" type="Freshbox\Faqs\Model\FaqRepository" />
+</config>

@@ -1,0 +1,6 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Contact\Api\Data\EnquiryInterface" type="Freshbox\Contact\Model\Enquiry" />
+    <preference for="Freshbox\Contact\Api\EnquiryRepositoryInterface" type="Freshbox\Contact\Model\EnquiryRepository" />
+	<!--<preference for="Magento\Framework\Mail\Template\TransportBuilder"
+            type="Freshbox\Contact\Model\Mail\Template\TransportBuilder" />-->
+</config>

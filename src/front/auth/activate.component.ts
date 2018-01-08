@@ -29,7 +29,16 @@ export class checkActivateTokenResolve implements Resolve<any> {
 }
 
 @Component({
-  template: ''
+  template: `
+    <div class='overlay_loading text-success text-center py-5' style="position: static;">
+      <p>Checking with your data. Please wait...</p>
+      <div class='sk-three-bounce'>
+        <div class='sk-child sk-bounce1'></div>
+        <div class='sk-child sk-bounce2'></div>
+        <div class='sk-child sk-bounce3'></div>
+      </div>
+    </div>
+  `
 })
 export class ActivateComponent implements OnInit {
   resetForm: any;

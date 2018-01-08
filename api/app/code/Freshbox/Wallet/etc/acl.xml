@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Freshbox_Wallet::top" title="Freshbox Wallet">
+                    <resource id="Freshbox_Wallet::config" title="Freshbox wallet" sortOrder="10"/>
+                    <resource id="Freshbox_Wallet::wallet_save" title="Save wallet" sortOrder="20" />
+                    <resource id="Freshbox_Wallet::wallet_delete" title="Delete wallet" sortOrder="30" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

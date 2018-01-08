@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_cart_product_add_after">
+        <observer name="customprice" instance="Freshbox\Cookbook\Observer\CheckoutcustomPrice" />
+    </event>
+	<event name="sales_quote_load_after"> <observer name="quote_load_after" instance="Freshbox\Cookbook\Observer\SalesQuoteLoadAfter" /> </event>
+	<event name="sales_quote_save_after"> <observer name="old_cart_save" instance="Freshbox\Cookbook\Observer\OldcustomPrice" /> </event>
+	<event name="sales_quote_add_item"> <observer name="new_cart_save" instance="Freshbox\Cookbook\Observer\NewcustomPrice" /> </event>
+	<event name="sales_quote_product_add_after"> <observer name="cart_save" instance="Freshbox\Cookbook\Observer\CustomPrice" /> </event>
+	<event name="checkout_submit_before"> <observer name="checkout_cart_save" instance="Freshbox\Cookbook\Observer\CheckoutcartSave" /> </event>
+</config>

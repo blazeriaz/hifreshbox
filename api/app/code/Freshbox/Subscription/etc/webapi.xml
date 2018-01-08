@@ -1,0 +1,206 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/subscription/:subscriptionId" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/my-subscription" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getMysubscription"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/list/my-subscription-orders" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getsubscriptionorders"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	
+	<route url="/V1/un-subscribe-meal/:subscriptionId" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="unsubscribe"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/view-subscription-details/:subscriptionId" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="viewsubscription"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/subscription/search" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	<route url="/V1/subscription" method="POST">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/subscription/:subscriptionId" method="PUT">
+        <service class="Freshbox\Scription\Api\MainRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/subscription/:subscriptionId" method="DELETE">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+	
+	
+	
+	 <route url="/V1/recurring/:recurringId" method="GET">
+        <service class="Freshbox\Subscription\Api\RecurringRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+        
+    </route>
+
+    <route url="/V1/recurring/search" method="GET">
+        <service class="Freshbox\Subscription\Api\RecurringRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+		
+    </route>
+	<route url="/V1/recurring" method="POST">
+        <service class="Freshbox\Subscription\Api\RecurringRepositoryInterface" method="save"/>
+         <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	
+	<route url="/V1/recurring/:recurringId" method="PUT">
+        <service class="Freshbox\Scription\Api\RecurringRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/recurring/:recurringId" method="DELETE">
+        <service class="Freshbox\Subscription\Api\RecurringRepositoryInterface" method="deleteById"/>
+       <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	
+	 <route url="/V1/payment/listcreditcard" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="listcreditcard"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/payment/card/default" method="POST">
+        <service class="Freshbox\Subscription\Api\PrimarycardRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/payment/delete/card" method="POST">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="deletecard"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/payment/getpaymentnonce" method="POST">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getpaymentnonce"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/subscription/pause" method="POST">
+        <service class="Freshbox\Subscription\Api\PauseRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	
+    <route url="/V1/subscription/pause" method="GET">
+        <service class="Freshbox\Subscription\Api\PauseRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/subscription/resumesubscription/:pauseId" method="DELETE">
+        <service class="Freshbox\Subscription\Api\PauseRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/payment/customer-transcation" method="GET">
+        <service class="Freshbox\Subscription\Api\MainRepositoryInterface" method="getcustomertranscation"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+		<data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+</routes>

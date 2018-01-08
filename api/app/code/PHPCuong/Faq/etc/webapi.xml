@@ -1,0 +1,16 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/faq" method="POST">
+        <service class="PHPCuong\Faq\Api\FaqRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="PHPCuong_Faq::faq_create" />
+        </resources>
+    </route>
+	
+	<route url="/V1/faqlist" method="GET">
+        <service class="PHPCuong\Faq\Api\FaqRepositoryInterface" method="getlist"/>
+        <resources>
+           <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

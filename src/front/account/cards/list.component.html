@@ -1,55 +1,53 @@
-<div class="container-fluid">
-  <div class="container"> 
-    <div class="row py-2 mb-3">
-      <div class="col-12">
-          <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
-          <span class="font-xs">>></span>
-          <span class="font-weight-bold text-success">Your Cards</span>
-      </div>
-    </div>   
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card border-0">
-          <div class="card-header border-0 p-0 mb-2">
-            <h4 class="mb-4">Manage Saved Cards</h4>
-            <div>
-              <button type="button" class="btn btn-outline-green text-left pl-1 pr-3" (click)="openCardFormModal()">
-                <i class="fa fa fa-plus-circle px-1"></i> Add New Card              
-              </button>
+<div class="container"> 
+  <div class="row py-2 mb-3">
+    <div class="col-12">
+        <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
+        <span class="font-xs">>></span>
+        <span class="font-weight-bold text-success">Your Cards</span>
+    </div>
+  </div>   
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card border-0">
+        <div class="card-header border-0 p-0 mb-2">
+          <h4 class="mb-4">Manage Saved Cards</h4>
+          <div>
+            <button type="button" class="btn btn-outline-green text-left pl-1 pr-3" (click)="openCardFormModal()">
+              <i class="fa fa fa-plus-circle px-1"></i> Add New Card              
+            </button>
+          </div>
+        </div>
+        <div class="card-block p-0">
+          <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
+            <div class="col">
+              Loading cards...
             </div>
           </div>
-          <div class="card-block p-0">
-            <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
-              <div class="col">
-                Loading cards...
-              </div>
-            </div>
 
-            <div class="row mx-0 py-2 bg-info" *ngIf="!loadingList && cards.length == 0">
-              <div class="col">
-                No cards...
-              </div>
+          <div class="row mx-0 py-2 bg-info" *ngIf="!loadingList && cards.length == 0">
+            <div class="col">
+              No cards...
             </div>
+          </div>
 
-            <div class="card m-0" *ngFor="let card of cards; let odd= odd;">
-              <div class="row py-4 mx-0">
-                <div class="col px-0">
-                  <div class="row mx-0">
-                    <div class="col-auto my-auto pl-3">
-                      <i class="fa fa-credit-card-alt"></i>                      
-                    </div>
-                    <div class="col">
-                      {{card.details.type}} **** **** **** {{card.details.maskedCC}}<br />
-                      Expires on {{card.details.expirationDate}}
-                    </div>
+          <div class="card m-0" *ngFor="let card of cards; let odd= odd;">
+            <div class="row py-4 mx-0">
+              <div class="col px-0">
+                <div class="row mx-0">
+                  <div class="col-auto my-auto pl-3">
+                    <i class="fa fa-credit-card-alt"></i>                      
+                  </div>
+                  <div class="col">
+                    {{card.details.type}} **** **** **** {{card.details.maskedCC}}<br />
+                    Expires on {{card.details.expirationDate}}
                   </div>
                 </div>
-                <div class="col-auto px-3">  
-                  <div class="btn-group btn-group-sm">
-                    <a class="btn btn-secondary pointer" (click)="setDefaultCard(card)" title="Set Default" *ngIf="card.is_default != 1"><i class="fa fa-star-o"></i></a>
-                    <a class="btn btn-secondary" title="Default Card" *ngIf="card.is_default == 1"><i class="fa fa-star text-success"></i></a>
-                    <a class="btn btn-secondary pointer" (click)="deleteCard(card)" title="Delete"><i class="fa fa-trash-o text-warning"></i></a>
-                  </div>
+              </div>
+              <div class="col-auto px-3">  
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-secondary pointer" (click)="setDefaultCard(card)" title="Set Default" *ngIf="card.is_default != 1"><i class="fa fa-star-o"></i></a>
+                  <a class="btn btn-secondary" title="Default Card" *ngIf="card.is_default == 1"><i class="fa fa-star text-success"></i></a>
+                  <a class="btn btn-secondary pointer" (click)="deleteCard(card)" title="Delete"><i class="fa fa-trash-o text-warning"></i></a>
                 </div>
               </div>
             </div>

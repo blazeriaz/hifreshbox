@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { AlertService, Alert, AlertType } from 'services';
 
 
@@ -9,6 +9,7 @@ import { AlertService, Alert, AlertType } from 'services';
 })
 
 export class AlertComponent implements OnInit, AfterViewInit {
+    @Input() displayId: string;
     alerts: Alert[] = [];
 
     constructor(
@@ -17,12 +18,19 @@ export class AlertComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit() {
+        if(!this.displayId) {
+            this.displayId = 'default';
+        }console.log(this.displayId);
     }
     ngAfterViewInit() {
         this.alertService.getAlert().subscribe((alert: Alert) => {
             if (!alert) {
                 // clear alerts when an empty alert is received
                 this.alerts = [];
+                return;
+            }
+console.log(this.displayId, alert.displayId);
+            if(alert.displayId !== this.displayId) {
                 return;
             }
 

@@ -1,0 +1,9 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Meals\Api\Data\PreferenceInterface" type="Freshbox\Meals\Model\Preference" />
+    <preference for="Freshbox\Meals\Api\PreferenceRepositoryInterface" type="Freshbox\Meals\Model\PreferenceRepository" />
+	<preference for="Freshbox\Meals\Api\Data\SubscribemealpreferenceInterface" type="Freshbox\Meals\Model\Subscribemealpreference" />
+    <preference for="Freshbox\Meals\Api\SubscribemealpreferenceRepositoryInterface" type="Freshbox\Meals\Model\SubscribemealpreferenceRepository" />
+	<preference for="Freshbox\Meals\Api\Data\PreferenceoptionInterface" type="Freshbox\Meals\Model\Preferenceoption" />
+    <preference for="Freshbox\Meals\Api\PreferenceoptionRepositoryInterface" type="Freshbox\Meals\Model\PreferenceoptionRepository" />
+	
+</config>

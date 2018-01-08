@@ -1,22 +1,23 @@
 <form [formGroup]="registerForm" (submit)="register()">
   <h1 class="text-center">Registration</h1>
-  <div class="mb-3 px-2" [ngClass]="setContainerErrorClass('email')">    
+  <div class="mb-2" [ngClass]="setContainerErrorClass('email')">    
     <label class="font-xl">Email<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="email" [ngClass]="setInputErrorClass('email')" />
   </div>
-  <div class="mb-3 px-2" [ngClass]="setContainerErrorClass('firstname')">    
+  <div class="mb-2" [ngClass]="setContainerErrorClass('firstname')">    
     <label class="font-xl">First Name<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="firstname" [ngClass]="setInputErrorClass('firstname')" />
   </div>
-  <div class="mb-3 px-2" [ngClass]="setContainerErrorClass('lastname')">    
+  <div class="mb-2" [ngClass]="setContainerErrorClass('lastname')">    
     <label class="font-xl">Last Name<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="lastname" [ngClass]="setInputErrorClass('lastname')" />
   </div>
-  <div class="mb-4 px-2" [ngClass]="setContainerErrorClass('password')">
-    <label class="font-xl">Password<i tooltip="required" class="text-danger">*</i> <i tooltip="Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji." class="fa fa-info-circle"></i></label>
+  <div class="mb-1" [ngClass]="setContainerErrorClass('password')">
+    <label class="font-xl">Password<i tooltip="required" class="text-danger">*</i></label>
     <input type="password" class="form-control py-3" formControlName="password" [ngClass]="setInputErrorClass('password')" />
+    <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>
   </div>
-  <div class="mb-4 px-2" [ngClass]="setContainerErrorClass('confirmation')">
+  <div class="mb-2" [ngClass]="setContainerErrorClass('confirmation')">
     <label class="font-xl">Confirm Password<i tooltip="required" class="text-danger">*</i></label>
     <input type="password" class="form-control py-3" formControlName="confirmation" [ngClass]="setInputErrorClass('confirmation')" />
   </div>

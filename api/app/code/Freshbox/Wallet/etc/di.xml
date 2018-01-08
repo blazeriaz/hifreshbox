@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Freshbox\Wallet\Api\Data\WalletInterface" type="Freshbox\Wallet\Model\Wallet" />
+    <preference for="Freshbox\Wallet\Api\WalletRepositoryInterface" type="Freshbox\Wallet\Model\WalletRepository" />
+	<preference for="Freshbox\Wallet\Api\Data\RecordInterface" type="Freshbox\Wallet\Model\Record" />
+    <preference for="Freshbox\Wallet\Api\RecordRepositoryInterface" type="Freshbox\Wallet\Model\RecordRepository" />
+	<preference for="Freshbox\Wallet\Api\Data\TranscationInterface" type="Freshbox\Wallet\Model\Transcation" />
+    <preference for="Freshbox\Wallet\Api\TranscationRepositoryInterface" type="Freshbox\Wallet\Model\TranscationRepository" />
+</config>

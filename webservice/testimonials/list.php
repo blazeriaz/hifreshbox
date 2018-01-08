@@ -23,7 +23,12 @@ $searchCriteria = '{
         ],
         "current_page": 1,
         "page_size": 10,
-        "sort_orders": []
+       "sort_orders": [
+			{
+				"field":"sort_order",
+				"direction":"ASC"
+			}
+			]
     }
 }';
 

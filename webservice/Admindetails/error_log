@@ -1,0 +1,9 @@
+[26-Aug-2017 10:47:40 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/changepassword.php on line 29
+[26-Aug-2017 13:27:17 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/changepassword.php on line 29
+[26-Aug-2017 14:33:41 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/changepassword.php on line 29
+[26-Aug-2017 14:33:54 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/changepassword.php on line 29
+[02-Oct-2017 07:40:11 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/getemail_info.php on line 17
+[09-Oct-2017 16:56:20 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/validate_reset_pass.php on line 21
+[09-Oct-2017 16:56:39 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/validate_reset_pass.php on line 21
+[09-Oct-2017 16:57:13 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/validate_reset_pass.php on line 21
+[09-Oct-2017 16:57:49 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/Admindetails/validate_reset_pass.php on line 21

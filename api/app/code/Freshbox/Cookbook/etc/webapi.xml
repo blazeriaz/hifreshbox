@@ -1,0 +1,104 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/cookbook/:cookbookId" method="GET">
+        <service class="Freshbox\Cookbook\Api\BookRepositoryInterface" method="getById"/>
+        <resources>
+            <!-- <resource ref="anonymous" /> -->
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/cookbook/search" method="GET">
+        <service class="Freshbox\Cookbook\Api\BookRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	<route url="/V1/cookbook" method="POST">
+        <service class="Freshbox\Cookbook\Api\BookRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/cookbook-recipe" method="POST">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/cookbook/:cookbookId" method="PUT">
+        <service class="Freshbox\Cookbook\Api\BookRepositoryInterface" method="save"/>
+         <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/cookbook/:cookbookId" method="DELETE">
+        <service class="Freshbox\Cookbook\Api\BookRepositoryInterface" method="deleteById"/>
+         <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	 <route url="/V1/cookbook-recipe/:id" method="DELETE">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="deleteById"/>
+         <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	<route url="/V1/cart-add" method="POST">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="addtocartrecipe"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	<route url="/V1/cookbook/recipe-list/:cookbookId" method="POST">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="getcookbookrecipes"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	<route url="/V1/cart-list/:cartId" method="GET">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="listcartitems"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+	<route url="/V1/guest-customer-cart/:quoteId" method="POST">
+        <service class="Freshbox\Cookbook\Api\BookrecipeRepositoryInterface" method="guesttocustomer"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+	
+</routes>

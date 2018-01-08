@@ -1,0 +1,44 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/testimonials/:testimonialId" method="GET">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="getById"/>
+        <resources>
+            <!-- <resource ref="anonymous" /> -->
+            <resource ref="Credevlabz_Testimonials::testimonial" />
+        </resources>
+    </route>
+
+    <route url="/V1/testimonials/search" method="GET">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+	<route url="/V1/testimonials" method="POST">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Credevlabz_Testimonials::testimonial_save" />
+        </resources>
+    </route>
+	
+	<route url="/V1/testimonials/change-order" method="POST">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="changeorder"/>
+        <resources>
+            <resource ref="Credevlabz_Testimonials::testimonial_save" />
+        </resources>
+    </route>
+	
+	<route url="/V1/testimonials/:testimonialId" method="PUT">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Credevlabz_Testimonials::testimonial_save"/>
+        </resources>
+    </route>
+
+    <route url="/V1/testimonials/:testimonialId" method="DELETE">
+        <service class="Credevlabz\Testimonials\Api\TestimonialRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Credevlabz_Testimonials::testimonial_delete" />
+        </resources>
+    </route>
+</routes>

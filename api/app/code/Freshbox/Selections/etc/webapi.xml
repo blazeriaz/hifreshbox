@@ -1,0 +1,10 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/listselection" method="GET">
+        <service class="Freshbox\Selections\Api\SelectRepositoryInterface" method="getlistselection"/>
+        <resources>
+            <!-- <resource ref="anonymous" /> -->
+             <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

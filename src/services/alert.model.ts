@@ -1,5 +1,6 @@
 export class Alert {
     type: AlertType;
+    displayId: string;
     message: string;
 }
 

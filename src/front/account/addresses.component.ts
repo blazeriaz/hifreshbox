@@ -31,7 +31,6 @@ export class AddressesComponent implements OnInit, OnDestroy {
         private router: Router,
         private renderer: Renderer2
     ) {
-
     }
 
     ngOnInit(): void {

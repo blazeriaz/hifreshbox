@@ -1,0 +1,81 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/adminsettings" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="getadminsettings"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	 <route url="/V1/siteinfomation" method="GET">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="getsiteinformation"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	 <route url="/V1/emailinfomation" method="GET">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="getemailinformation"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+	<route url="/V1/forgotemail/:email" method="GET">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="forgotemail"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+	<route url="/V1/forgotemailvalidate" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="forgotemailvalidate"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+	<route url="/V1/forgotemailchange" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="forgotemailchange"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+	<route url="/V1/updatesiteinfo" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="updatesiteinformation"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	<route url="/V1/emailupdate" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="emailupdate"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	<route url="/V1/media-storage" method="GET">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="treestorage"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	<route url="/V1/media-content" method="GET">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="imagecontents"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+	<route url="/V1/media-insert" method="POST">
+        <service class="Freshbox\Configurations\Api\ConfigRepositoryInterface" method="imageinsert"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	<route url="/V1/customer/reset-password" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPasswordapi"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+	
+</routes>

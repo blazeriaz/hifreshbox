@@ -166,6 +166,7 @@
                 <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate>
                     <div class="row mx-0">
                         <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">
+                            <alert displayId="popup"></alert>
                             <label>Cookbook Title</label>
                             <input autofocus type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
                         </div>
