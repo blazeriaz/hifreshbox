@@ -15,39 +15,34 @@
                 <div class="col-md-6 py-3">
                     <div class="row mx-0">
                         <div class="col-12 text-center">
-                            <img class="img-fluid" [src]="backgrounds.recipe" />
+                            <img class="img-fluid" [src]="giftItem?.custom_attributes | mgCatalogAttribute : 'image'" />
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 py-3">
-                    <h6>Gift Amount</h6>
-                    <div class="btn-group mt-3">
-                        <button (click)="setProductOption(13, 23)" [ngClass]="getOptionButtonClass(13, 23)" type="button" class="btn rounded-0">
-                            {{'50' | currency:'USD':true:'1.0'}}</button>
-                        <button (click)="setProductOption(13, 24)" [ngClass]="getOptionButtonClass(13, 24)" type="button" class="btn rounded-0">
-                            {{'75' | currency:'USD':true:'1.0'}}</button>
-                        <button (click)="setProductOption(13, 25)" [ngClass]="getOptionButtonClass(13, 25)" type="button" class="btn rounded-0">
-                            {{'100' | currency:'USD':true:'1.0'}}</button>
-                        <button (click)="setProductOption(13, 26)" [ngClass]="getOptionButtonClass(13, 26)" type="button" class="btn rounded-0">
-                            {{'125' | currency:'USD':true:'1.0'}}</button>
+                <div class="col-md-6 py-3" *ngIf="giftItem.options">
+                    <div *ngFor="let opt of giftItem.dropDownOptions" class="mb-md-5 mb-3">
+                        <h6>{{opt.title}}</h6>
+                        <div class="btn-group mt-3">
+                            <button 
+                                *ngFor="let val of opt.values"
+                                (click)="setProductOption(opt.option_id, val.option_type_id)" 
+                                [ngClass]="getOptionButtonClass(opt.option_id, val.option_type_id)" 
+                                type="button" class="btn rounded-0">
+                                    {{val.title}}
+                            </button>
+                        </div>
                     </div>
 
-                    <h6 class="mt-md-5 mt-3">Gift Delivery</h6>
-                    <div class="btn-group mt-3">
-                        <button (click)="setProductOption(14, 27)" [ngClass]="getOptionButtonClass(14, 27)" type="button" class="btn rounded-0">
-                            Email to recipient</button>
-                        <button (click)="setProductOption(14, 28)" [ngClass]="getOptionButtonClass(14, 28)" type="button" class="btn rounded-0">
-                            Print at home</button>
+                    <div class="mb-md-5 mb-3">
+                        <h6>Quantity</h6>
+                        <div class="mt-3">
+                            <button (click)="decreseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">-</button>
+                            <span class="mx-2">{{giftProduct.cartItem.qty}}</span>
+                            <button (click)="increseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">+</button>
+                        </div>
                     </div>
 
-                    <h6 class="mt-md-5 mt-3">Quantity</h6>
-                    <div class="mt-3">
-                        <button (click)="decreseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">-</button>
-                        <span class="mx-2">{{giftProduct.cartItem.qty}}</span>
-                        <button (click)="increseQty()" type="button" class="btn btn-secondary bg-faded rounded-0">+</button>
-                    </div>
-
-                    <div class="mt-md-5 mt-3">
+                    <div>
                         <button (click)="goToNextStep()" [disabled]="!giftProduct.cartItem.quote_id" type="button" class="btn btn-outline-green px-5 rounded-0">NEXT</button>
                     </div>
                 </div>

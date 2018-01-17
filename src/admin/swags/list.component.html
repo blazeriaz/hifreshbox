@@ -62,8 +62,8 @@
               {{swag.price}} USD
             </div>
             <div class="col-md-4">
-              <button [disabled]="swag.statusLoading" type="button" class="btn btn-success" *ngIf="swag.status == 1" (click)="toggleStatus(swag, 2)" tooltip="Click to Disable">Enable</button>
-              <button [disabled]="swag.statusLoading" type="button" class="btn btn-danger" *ngIf="swag.status == 2" (click)="toggleStatus(swag, 1)" tooltip="Click to Enable">Disable</button>
+              <button [disabled]="swag.statusLoading" type="button" class="btn btn-success" *ngIf="swag.status == 1" (click)="toggleStatus(swag, 2)" tooltip="Click to In Active">Active</button>
+              <button [disabled]="swag.statusLoading" type="button" class="btn btn-danger" *ngIf="swag.status == 2" (click)="toggleStatus(swag, 1)" tooltip="Click to Active">In Active</button>
             </div>
           </div>
 

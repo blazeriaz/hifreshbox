@@ -116,6 +116,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             return;
         }
         
+        if(step == 'login' && this.auth.isLogin()) {
+            return true;
+        }
+        
         this.currentStep = step;
         window.scroll(0, 0);
     }

@@ -1,0 +1,31 @@
+<header class="app-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-outline-success py-3 navbar-toggler hidden-md-up" type="button" appMobileSidebarToggler>&#9776;</button>
+          <a class="navbar-brand border-0" [routerLink]="['/']"></a>
+        </div>
+        <div class="col-auto hidden-sm-down my-auto">
+            <topmenu></topmenu>
+        </div>
+      </div>      
+    </div>
+  </nav> 
+</header>
+<div class="app flex-row align-items-center" [ngStyle]="backgrounds.header">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <topmenu></topmenu>
+    </nav>
+  </div>
+  <div class="container main w-100">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-white mt-8 pt-2" style="background: rgba(2, 2, 2, 0.2)">
+        <div *ngFor="let alert of alerts">
+          <span [innerHTML]="alert.message"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

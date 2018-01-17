@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import * as GlobalVariable from 'global';
-import { RestService } from 'services';
+import { RestService, AlertService } from 'services';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -18,6 +18,7 @@ export class NewsletterComponent implements OnInit {
     constructor(
         private rest: RestService,
         private _fb: FormBuilder,
+        private alert: AlertService,
         private router: Router
     ) { }
 
@@ -39,7 +40,8 @@ export class NewsletterComponent implements OnInit {
 
     submit(): void {
         this.rest.saveItem('', this.nlForm.value, 'newsletter/add').subscribe(() => {
-            this.router.navigate(['/', 'success']);
+            this.alert.success("test", true);
+            this.router.navigate(['/', 'success', 'newsletter']);
         });
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService, CartService } from 'services';
+import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     backgrounds;
 
     loadedSwag;
+    errorSwag;
     loadedSwagMedia;
     swag;
     swagMediaImages;
@@ -21,6 +22,7 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     constructor(
         private alert: AlertService,
         private rest: RestService,
+        private auth: AuthService,
         private router: Router,
         private route: ActivatedRoute,
         private renderer: Renderer2,
@@ -83,8 +85,14 @@ export class SwagViewComponent implements OnInit, OnDestroy {
 
     loadSwag() {
         this.loadedSwag = false;
+        this.errorSwag = false;
         const swagSku = this.route.snapshot.params['sku'];
-        this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {
+        this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {console.log(swag);
+            if(swag[0] === 'error' || (swag.status === 2 && !this.auth.isAdminLogin())) {
+                this.alert.error("Swag information does not exists!");   
+                this.errorSwag = true;
+                return;
+            }
             this.swagProduct.cartItem.sku = swag.sku;
             this.cartService.getCartTotal().subscribe(res => {
                 if (res.guestCardId) {

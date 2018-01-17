@@ -19,10 +19,33 @@
         <div class="row text-center">
             <div class="col-12 mt-3">
                 <a class="btn btn-outline-green rounded-0 mr-md-8 mr-sm-3 mt-2" [routerLink]="['/', 'gift', 'product']">GIVE A GIFT</a>
-                <a class="btn btn-outline-green rounded-0 mt-2" [routerLink]="['/', 'gift', 'product']">REDEEM A GIFT</a>
+                <a class="btn btn-outline-green rounded-0 mt-2" href="javascript::void()" (click)="openRedeemForm()">REDEEM A GIFT</a>
             </div>
         </div>
     </div>
 </div>
 <testimonials></testimonials>
 <newsletter></newsletter>
+
+<ng-template #redeemcode>
+    <div class="modal-body">
+        <alert displayId="popup"></alert>
+        <form [formGroup]="redeemForm" (submit)="redeemGift()" novalidate>
+            <div class="row mx-0">
+                <div class="col-12" [ngClass]="setContainerErrorClass(redeemForm, 'redeemed_code')">
+                    <h5>Redeem A Gift</h5>
+                    <p>Please enter the Gift card code which you have.</p>
+                    <input type="text" class="form-control" formControlName="redeemed_code" [ngClass]="setInputErrorClass(redeemForm, 'redeemed_code')" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button (click)="modalRef.hide()" [disabled]="modelDisabled" type="button" class="btn btn-secondary">
+            Close
+        </button>
+        <button type="button" (click)="redeemGift()" [disabled]="redeemForm.invalid || modelDisabled" class="btn btn-outline-green">
+            Submit
+        </button>
+    </div>
+</ng-template>

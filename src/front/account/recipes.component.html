@@ -149,6 +149,7 @@
 </div>
 <ng-template #addcbmodal>
     <div class="modal-body" *ngIf="showExistingCB">
+        <alert displayId="popup"></alert>
         <tabset>
             <tab heading="Add to an existing cookbook">
                 <div class="row mx-0 mb-1" *ngFor="let cookbook of cookbooks">
@@ -163,10 +164,9 @@
                 </div>
             </tab>
             <tab heading="Make new one" (select)="showCBSubmitButton=true;" (deselect)="showCBSubmitButton=false;">
-                <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate>
+                <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate *ngIf="cbForm">
                     <div class="row mx-0">
-                        <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">
-                            <alert displayId="popup"></alert>
+                        <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">                            
                             <label>Cookbook Title</label>
                             <input autofocus type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
                         </div>
@@ -176,6 +176,7 @@
         </tabset>
     </div>
     <div class="modal-body" *ngIf="!showExistingCB">
+        <alert displayId="popup"></alert>
         <tabset>
             <tab heading="Make new one">
                 <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate>
@@ -197,7 +198,7 @@
             Submit
         </button>
     </div>
-  </ng-template>
+</ng-template>
 <ng-template #viewcbrecipes>
     <div class="modal-header bg-success text-white">
         <h5 class="m-0">

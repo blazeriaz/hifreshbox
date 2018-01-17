@@ -41,7 +41,7 @@ export class CardsListComponent implements OnInit {
         this.loadCardsList();
 
         this.auth.getUserInfo().subscribe(user => {
-            if (user) {
+            if (user && !user.loading) {
                 this.user = user;
             }
         });
@@ -99,10 +99,10 @@ export class CardsListComponent implements OnInit {
                 }
             }, err => {
                 this.modalRef.hide();
-                this.alert.error(err);
+                this.alert.error(err, false, 'popup');
             });
         } else {
-            this.alert.error('Please check the form to enter all required details');
+            this.alert.error('Please check the form to enter all required details', false, 'popup');
         }
     }
 

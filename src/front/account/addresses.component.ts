@@ -75,19 +75,14 @@ export class AddressesComponent implements OnInit, OnDestroy {
 
     loadFormData() {
         this.auth.getUserInfo().subscribe(user => {
-            if (user) {
+            if (!user) {
+                this.countLoadedFormReqs--;
+                this.loadedFormData = false;
+                this.auth.initLoggedInUserInfo();
+            } else if (!user.loading) {
                 this.user = user;
                 this.checkAllFormDataLoaded();
-            } else {
-                setTimeout(() => {
-                    if (!this.user || !this.user.id) {
-                        this.countLoadedFormReqs--;
-                        this.loadedFormData = false;
-                        this.auth.initLoggedInUserInfo();
-                        this.loadFormData();
-                    }
-                }, 2000);
-            }
+            } 
         });
         this.countLoadedFormReqs++;
     }
@@ -151,7 +146,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
                 'region': [(address.region)?address.region.region:'', Validators.required]
             }),
             'postcode' : [address.postcode, [Validators.required]],
-            'telephone' : [address.telephone, [Validators.required]],
+            'telephone' : [address.telephone, [Validators.required, Validators.minLength(10)]],
             'default_shipping' : address.default_shipping,
             'default_billing' : address.default_billing
         });
@@ -212,23 +207,23 @@ export class AddressesComponent implements OnInit, OnDestroy {
     }
 
     setInputErrorClass(input) {
-        const invalid = this.userForm.get(input).invalid && this.submitted;
+        const invalid = this.userForm.get(input).invalid;
         return (invalid) ? 'form-control-danger' : '';
     }
 
     setContainerErrorClass(input) {
-        const invalid = this.userForm.get(input).invalid && this.submitted;
+        const invalid = this.userForm.get(input).invalid;
         return (invalid) ? 'has-danger' : '';
     }
 
     setAddressInputClass(input) {
         const invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
-        return (invalid && this.submitted) ? 'form-control-danger' : '';
+        return (invalid) ? 'form-control-danger' : '';
     }
 
     setAddressDivClass(input) {
         const invalid = this.userForm.controls['addresses'].controls[this.indexEditAddress].get(input).invalid;
-        return (invalid && this.submitted) ? 'has-danger' : '';
+        return (invalid) ? 'has-danger' : '';
     }
 
     setDefaultAddress(i: number, first?) {

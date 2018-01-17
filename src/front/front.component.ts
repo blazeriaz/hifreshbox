@@ -36,6 +36,7 @@ export class FrontComponent implements OnInit, OnDestroy, AfterContentInit {
   constructor(private router: Router,
     private rest: RestService,
     private auth: AuthService,
+    private alert: AlertService,
     private elementRef: ElementRef ) {
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)

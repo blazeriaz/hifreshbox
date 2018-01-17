@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.auth.getUserInfo().subscribe(user => {
-            if (user) {
+            if (user && !user.loading) {
                 this.user = user;
             }
         })
@@ -29,6 +29,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     goToAccountMenu(menu) {
         this.router.navigate(['/', 'account', menu]);
+    }
+
+    goToMenu(menu) {
+        this.router.navigate(menu);
     }
 
     ngOnDestroy() {

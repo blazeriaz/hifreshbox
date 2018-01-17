@@ -28,6 +28,18 @@
                         {{ingredient.ingredient.text}} - {{ingredient.qty}} {{ingredient.portion.text}}
                     </li>
                 </ul>
+                <div class="row py-2 text-left">
+                    <div class="col-7">Created By</div>
+                    <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute : 'chef_name'}}</div>
+                </div>
+                <div class="row py-2 text-left">
+                    <div class="col-7">Serving Size</div>
+                    <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute : 'servings'}}</div>
+                </div>
+                <div class="row py-2 text-left mb-3">
+                    <div class="col-7">Prep &amp; Cook time</div>
+                    <div class="col-5">{{recipe.custom_attributes | mgCatalogAttribute : 'cooking_time'}}</div>
+                </div> 
             </div>
             <div class="col-sm-8">
                 <div class="row mb-3">

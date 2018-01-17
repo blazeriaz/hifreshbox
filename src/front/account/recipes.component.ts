@@ -69,22 +69,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
 
     loadFormData() {
-        this.auth.getUserInfo().subscribe(user => {
-            if (user) {
-                this.user = user;
-                this.cbForm = this._fb.group({
-                    'user_id': user.id,
-                    'is_active': 1,
-                    'title': ['', Validators.required]
-                });
-            }
-        });
-        setTimeout(() => {
-            if (!this.user || !this.user.id) {
+        this.auth.getUserInfo().subscribe(user => {     
+            if (!user) {
                 this.auth.initLoggedInUserInfo();
-                this.loadFormData();
-            }
-        }, 2000);
+            } else if (!user.loading) {
+                this.user = user;
+            } 
+        });
     }
 
     setInputErrorClass(form, input) {
@@ -110,6 +101,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.modelDisabled = true;
         this.alert.clear();
         this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
+            if(res[0] == 'error') {
+                this.modelDisabled = false;
+                this.alert.error(res[1], false, 'popup');
+                return;
+            }
             res.recipe = [];
             this.cookbooks.push(res);
             this.modelDisabled = false;
@@ -166,7 +162,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
 
     openAddCBModal() {
-        this.cbForm.reset();
+        this.cbForm = this._fb.group({
+            'user_id': this.user.id,
+            'is_active': 1,
+            'title': ['', Validators.required]
+        });
         this.modalRef = this.modalService.show(this.addcbmodal, {
             animated: true,
             keyboard: false,

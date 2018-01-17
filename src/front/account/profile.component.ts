@@ -14,6 +14,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     userForm: any;
     sentData: boolean;
     submitted: boolean;
+    customAttributes = [];
 
     changePasswordForm: any;
     cpsubmitted: boolean;
@@ -45,7 +46,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     loadFormData() {
         this.auth.getUserInfo().subscribe(user => {
-            if (user) {
+            if (!user) {
+                this.auth.initLoggedInUserInfo();
+            } else if (!user.loading) {
                 this.user = user;
                 this.initEditForm();
                 this.loadedFormData = true;
@@ -60,6 +63,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     initEditForm() {
+        const customAttributesArray = [];
+        ['customer_number'].map(attribute_code => {
+            let value: any = '';
+            if (this.user && this.user.custom_attributes) {
+                const attribute = this.user.custom_attributes.find(x => x.attribute_code === attribute_code);
+                value = attribute ? attribute.value : '';
+            };
+            this.customAttributes.push(attribute_code);
+            customAttributesArray.push(this.addCustomArrtibute(attribute_code, value, false));
+        });
         this.userForm = this._fb.group({
             'id': this.user.id,
             'store_id': 1,
@@ -67,7 +80,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
             'firstname': [this.user.firstname, Validators.required],
             'lastname': [this.user.lastname, [Validators.required]],
             'email': [this.user.email, [Validators.required, Validators.email]],
-            'gender': this.user.gender
+            'gender': this.user.gender,
+            'custom_attributes': this._fb.array(customAttributesArray)
+        });
+    }
+
+    getCustomAttributeIndex(attribute_code) {
+        return this.customAttributes.indexOf(attribute_code);
+    }
+
+    addCustomArrtibute(attribute_code, value, required) {
+        if(attribute_code == 'customer_number') {
+            value = [value, [Validators.required, Validators.minLength(10)]];
+        } else if (required) {
+            value = [value, Validators.required];
+        }
+        return this._fb.group({
+            attribute_code : attribute_code,
+            value : value
         });
     }
 
@@ -159,7 +189,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.alert.success('Password changed successfully!');
             }, err => {
                 this.sentData = false;
-                this.alert.error(err.message ? err.message : 'Server error!');
+                var e = err.json();
+                if(e.parameters) {
+                    for(let i=0; i < e.parameters.length; i++) {
+                        e.message = e.message.replace("%" + (i + 1), e.parameters[i])
+                    }
+                }
+                this.alert.error(e.message ? e.message : 'Server error!', false, 'popup');
             });
         } else {
             this.sentData = false;

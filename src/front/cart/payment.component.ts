@@ -71,6 +71,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
                 this.newCard = cards.length === 0;
                 this.cards = cards.map(x => {
                     x.details = JSON.parse(x.details);
+                    if(x.is_default == 1) {
+                        this.selectPaymentCard(x);
+                    }
                     return x;
                 });
         });

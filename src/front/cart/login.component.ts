@@ -88,20 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.rest.saveItem('', sendData, 'customers')
             .subscribe(
                 data => {
-                    this.router.navigate(['/', 'auth', 'confirm-register']);/**
-                    this.rest.showLoader();
-                    this.auth.login(this.checkoutLoginForm.value.email, this.checkoutLoginForm.value.password).subscribe(res => {
-                        this.next.emit('login');
-                        this.rest.hideLoader();
-                    },
-                    error => {
-                        if (error.status === 401) {
-                            this.alert.error('Please check the login details');
-                        } else {
-                            this.alert.error('Server Error');
-                        }
-                        this.rest.hideLoader();
-                    });**/
+                    this.router.navigate(['/', 'auth', 'confirm-register']);
                 },
                 error => {
                   const err = error.json();

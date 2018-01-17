@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class AuthService {
   module;
   baseUrl;
-  user;
+  user:any = null;
   private userInfo = new BehaviorSubject(null);
   private loginSubject = new BehaviorSubject({
     action: null
@@ -27,19 +27,26 @@ export class AuthService {
   }
 
   initLoggedInUserInfo() {
-    this.user = null;
+    if(this.user && this.user.loading) {
+      return;
+    }
     if (this.isLogin()) {
+      if(!this.user) {
+        this.user = {};
+      }
+      this.user.loading = true;
+      this.userInfo.next(this.user);
       this.getItem('customers/me').subscribe(user => {
         this.user = user;
+        this.user.loading = false;
         this.userInfo.next(user);
       });
+    } else {
+      this.user = null;
     }
   }
 
-  getUserInfo() {
-    if (!this.user) {
-      this.initLoggedInUserInfo();
-    }
+  getUserInfo() { 
     return this.userInfo.asObservable();
   }
 
@@ -72,6 +79,10 @@ export class AuthService {
 
   isLogin() {
     return localStorage.getItem(this.module + '_token') ? true : false;
+  }
+
+  isAdminLogin() {
+    return localStorage.getItem('admin_token') ? true : false;
   }
 
   getToken() {

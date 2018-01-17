@@ -1,6 +1,6 @@
 <?php
-//$userData = ["username" => "riaintouch+20@gmail.com", "password" => "Admin@123"];
-$userData = ["username" => "riaintouch+20@gmail.com", "password" => "Admin@123"];
+
+$userData = ["username" => "riaintouch+21@gmail.com", "password" => "Admin@123"];
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/rest/V1/integration/customer/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
@@ -9,13 +9,14 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
 
 $token = curl_exec($ch);
 
-$n_slide = json_encode(['primary_card' => [
-						'card_id' => 38
+$n_slide = json_encode(['order_comments' => [
+						'order_id' => 275,
+						'message'=>'I Love You'
 						
 						
 						]]);
 
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/payment/card/default");
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/order/comments-add");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $n_slide);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -1,5 +1,5 @@
 <?php
-$userData = array("username" => "admin", "password" => "admin@123");
+$userData = array("username" => "freshbox", "password" => "abc@123");
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
@@ -8,15 +8,19 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
  
 $token = curl_exec($ch);
 
+$custom_attribute[] =  array('attribute_code'=>'customer_number','value'=>'888888888');
+
 $customerData = [
     'customer' => [
-        "email" => "riaintouch+3@gmail.com",
+        "email" => "riaintouch+74@gmail.com",
         "firstname" => "Md",
         "lastname" => "Rafsan",
         "storeId" => 1,
-        "websiteId" => 1
+        "websiteId" => 1,
+		"custom_attributes" => $custom_attribute
     ],
     "password" => "Admin@123"
+	
 ];
  
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/customers");

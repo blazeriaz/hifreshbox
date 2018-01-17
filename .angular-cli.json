@@ -21,7 +21,8 @@
         "scss/style.scss",
         "assets/css/font-awesome.min.css",
         "assets/css/simple-line-icons.css",
-        "../node_modules/ng2-dnd/bundles/style.css"
+        "../node_modules/ng2-dnd/bundles/style.css",
+        "../node_modules/ngx-intl-tel-input/resource/intl-tel-input.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",
@@ -48,7 +49,8 @@
       "styles": [
         "scss/front.scss",
         "assets/css/font-awesome.min.css",
-        "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss"
+        "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss",
+        "../node_modules/ngx-intl-tel-input/resource/intl-tel-input.css"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

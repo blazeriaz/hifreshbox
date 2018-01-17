@@ -1,12 +1,13 @@
 <form [formGroup]="resetForm" (submit)="resetPassword()">
   <h1 class="text-center">Reset Password</h1>
-  <div class="mb-3">    
+  <div class="mb-3" [ngClass]="setContainerErrorClass('new_password')">    
     <label class="font-xl">New Password</label>
-    <input type="password" class="form-control" formControlName="new_password" />
+    <input type="password" class="form-control" formControlName="new_password" [ngClass]="setInputErrorClass('new_password')" />
+    <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>
   </div>
-  <div class="mb-3">    
+  <div class="mb-3" [ngClass]="setContainerErrorClass('confirmation')">    
     <label class="font-xl">Cofirmation Password</label>
-    <input type="password" class="form-control" formControlName="confirmation" />
+    <input type="password" class="form-control" formControlName="confirmation" [ngClass]="setInputErrorClass('confirmation')" />
   </div>
   <div class="row">
     <div class="col-12">

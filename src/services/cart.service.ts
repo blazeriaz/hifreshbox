@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Injectable()
-export class CartService {
+export class CartService { 
 
   private cartTotal = new BehaviorSubject({
     guestCardId: null,
@@ -149,18 +149,15 @@ export class CartService {
     } else {             
       this.initUserSubscription();
     }    
-    this.rest.getItem('', cartUrl).subscribe(res => {
-        this.cart = res;
-        this.cart.loading = false;
+    this.rest.getItem('', cartUrl).subscribe(cart => {      
+      this.rest.getItem('', cartUrl + '/totals').subscribe(totals => {
+        this.cart = cart;      
         this.showImages = true;
+        this.cart.loading = false;
+        this.totals = totals;
         this.loading = false;
         this.assignCartTotal();
-    });
-
-    this.rest.getItem('', cartUrl + '/totals').subscribe(res => {
-      this.totals = res;
-      this.loading = false;
-      this.assignCartTotal();
+      });
     });
   }
 
@@ -178,7 +175,7 @@ export class CartService {
   }
 
   assignCartTotal() {
-    if (this.cart && this.totals && this.totals.items.length > 0 && this.checkMealAddedInCart(this.cart.items)) {
+    if (this.cart && this.totals && this.totals.items.length > 0 && this.checkMealAddedInCart(this.cart.items) && this.auth.isLogin()) {
       if (!this.mealPreferences || this.mealPreferences.length === 0) {
         this.cart.mealPreferenceLoading = true;
         this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(res => {

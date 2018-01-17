@@ -22,6 +22,7 @@ import { TopmenuComponent } from './blocks/topmenu.component';
 import { ContactComponent } from './contact/contact.component';
 import { CheckoutSuccessComponent } from './cart/checkout-success.component';
 import { SuccessComponent } from './success.component';
+import { MessageLayoutComponent } from './layouts/message-layout.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { SuccessComponent } from './success.component';
   declarations: [
     FrontComponent,
     FullLayoutComponent,
+    MessageLayoutComponent,
     HomeComponent,
     MenuComponent,
     RecipeComponent,

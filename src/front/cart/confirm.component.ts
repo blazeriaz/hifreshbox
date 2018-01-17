@@ -24,6 +24,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     showCartItems;
     mealPreferences;
     loading;
+    additional_info;
 
     constructor(
         private alert: AlertService,
@@ -96,7 +97,17 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             billing_address: billingAddress
         };
         this.loading = true;
-        this.rest.saveItem(false, sendData, 'carts/mine/payment-information').subscribe(res => {
+        this.rest.saveItem(false, sendData, 'carts/mine/payment-information').subscribe(order_id => {
+            if(this.additional_info) {
+                const sendData = {
+                    order_comments: {
+                        order_id: order_id,
+                        message: this.additional_info
+                    }
+                };
+                this.rest.saveItem(false, sendData, 'order/comments-add').subscribe(x => {
+                });
+            }            
             this.next.emit('confirm');
             this.rest.saveItem(false, [], 'carts/mine').subscribe(x => {
                 this.cartService.setCartTotal(true);

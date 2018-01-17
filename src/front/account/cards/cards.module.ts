@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from 'shared.module';
 
 import { CardsListComponent } from './list.component';
 import { CardsRoutingModule } from './cards-routing.module';
@@ -10,7 +11,7 @@ import { CreditCardDirectivesModule } from 'angular-cc-library';
 
 @NgModule({
     imports: [
-        SelectModule, CardsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, CreditCardDirectivesModule
+        SharedModule, SelectModule, CardsRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, CreditCardDirectivesModule
     ],
     declarations: [ CardsListComponent ],
     providers: [ PagerService]

@@ -20,7 +20,7 @@ export class AlertComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         if(!this.displayId) {
             this.displayId = 'default';
-        }console.log(this.displayId);
+        }
     }
     ngAfterViewInit() {
         this.alertService.getAlert().subscribe((alert: Alert) => {
@@ -29,7 +29,6 @@ export class AlertComponent implements OnInit, AfterViewInit {
                 this.alerts = [];
                 return;
             }
-console.log(this.displayId, alert.displayId);
             if(alert.displayId !== this.displayId) {
                 return;
             }

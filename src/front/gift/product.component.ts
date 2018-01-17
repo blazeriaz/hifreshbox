@@ -10,6 +10,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class ProductComponent implements OnInit, OnDestroy {
     backgrounds;
+    giftItem;
     giftProduct;
     step = 1;
     customOptions = [];
@@ -71,9 +72,6 @@ export class ProductComponent implements OnInit, OnDestroy {
             productOption: null
         }};
 
-        this.setProductOption(13, 23);
-        this.setProductOption(14, 27);
-
         this.cartService.getCartTotal().subscribe(res => {
             if (res.guestCardId) {
                 this.giftProduct.cartItem.quote_id = res.guestCardId
@@ -88,6 +86,18 @@ export class ProductComponent implements OnInit, OnDestroy {
             'recipient_lastname': ['', [Validators.required]],
             'recipient_email': ['', [Validators.required, Validators.email]],
             'message': ['Because you like cooking so much and i like eating :)', Validators.required]
+        });
+
+        this.giftItem = {};
+        this.rest.getItem('freshbox-gift', 'recipedetail/' + 'freshbox-gift').subscribe(gift => {
+            this.giftItem = gift;
+            this.rest.getItem('freshbox-gift', 'products/' + 'freshbox-gift').subscribe(gift1 => {
+                this.giftItem.options = gift1.options;
+                this.giftItem.dropDownOptions = gift1.options.filter(x => x.type === 'drop_down');
+                this.giftItem.dropDownOptions.forEach(x => {
+                    this.setProductOption(x.option_id, x.values[0].option_type_id);
+                });
+            });
         });
     }
 
@@ -181,6 +191,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.step = 2;
         this.submitted = false;
         this.renderer.addClass(document.body, 'white-header');
+        window.scroll(0, 0);
     }
 
     ngOnDestroy() {

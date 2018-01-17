@@ -14,6 +14,7 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 import { ContactComponent } from './contact/contact.component';
 import { CheckoutSuccessComponent } from './cart/checkout-success.component';
 import { SuccessComponent } from './success.component';
+import { MessageLayoutComponent } from './layouts/message-layout.component';
 
 export const routes: Routes = [
   {
@@ -103,9 +104,12 @@ export const routes: Routes = [
       path: 'success',
       component: SimpleLayoutComponent,
       children : [{
-        path: '',
+        path: ':type',
         component: SuccessComponent,
       }]
+    }, {
+      path: 'message',
+      component: MessageLayoutComponent
     }, {
       path: 'auth',
       component: SimpleLayoutComponent,

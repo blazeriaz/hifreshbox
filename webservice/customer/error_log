@@ -4,3 +4,6 @@
 [11-Dec-2017 04:36:05 Pacific/Honolulu] PHP Warning:  http_build_query(): Parameter 1 expected to be Array or Object.  Incorrect value given in /home/whitespacestudio/public_html/freshbox/webservices/customer/email_verification.php on line 15
 [11-Dec-2017 04:37:36 Pacific/Honolulu] PHP Warning:  http_build_query(): Parameter 1 expected to be Array or Object.  Incorrect value given in /home/whitespacestudio/public_html/freshbox/webservices/customer/email_verification.php on line 15
 [11-Dec-2017 04:38:09 Pacific/Honolulu] PHP Warning:  http_build_query(): Parameter 1 expected to be Array or Object.  Incorrect value given in /home/whitespacestudio/public_html/freshbox/webservices/customer/email_verification.php on line 15
+[15-Jan-2018 07:46:22 Pacific/Honolulu] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/customer/add.php on line 18
+[15-Jan-2018 07:47:30 Pacific/Honolulu] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/customer/add.php on line 18
+[15-Jan-2018 07:47:50 Pacific/Honolulu] PHP Parse error:  syntax error, unexpected ':', expecting ']' in /home/whitespacestudio/public_html/freshbox/webservices/customer/add.php on line 18

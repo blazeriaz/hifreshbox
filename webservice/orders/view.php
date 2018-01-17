@@ -8,7 +8,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
  
 $token = curl_exec($ch);
  
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/orders/1" );
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/orders/276" );
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Authorization: Bearer " . json_decode($token)));

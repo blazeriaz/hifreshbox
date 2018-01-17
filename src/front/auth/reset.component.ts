@@ -21,7 +21,8 @@ export class checkRestTokenResolve implements Resolve<any> {
         this.router.navigate(['auth/forget']);
       }
     }, err => {
-      this.alert.error('Something went wrong!', true);
+      const e = err.json();
+      this.alert.error(e.message, true);
       this.router.navigate(['auth/forget']);
     })
   }
@@ -46,10 +47,11 @@ export class ResetComponent implements OnInit {
   ngOnInit() {
     const customerId = this.route.snapshot.params.customerId;
     const token = this.route.snapshot.params.token;
+    const regExPassword = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$';
     this.resetForm = this.formBuilder.group({
       'id': customerId,
       'reset_token': token,
-      'new_password': ['', [Validators.required]],
+      'new_password': ['', [Validators.required, Validators.pattern(regExPassword)]],
       'confirmation': ['', [Validators.required]]
     }, {validator: this.checkPasswords});
   }
@@ -65,13 +67,34 @@ export class ResetComponent implements OnInit {
     this.router.navigate(['auth/login']);
   }
 
+  isFieldInvalid(input) {
+    const field = this.resetForm.get(input);
+    if (this.resetForm.value.confirmation 
+        && input === 'confirmation' 
+        && this.resetForm.errors && this.resetForm.errors.notSame) {
+      return true;
+    }
+    return field.touched && field.invalid;
+  }
+
+  setInputErrorClass(input) {
+    if (this.isFieldInvalid(input)) {
+      return 'form-control-danger';
+    }
+  }
+
+  setContainerErrorClass(input) {
+    if (this.isFieldInvalid(input)) {
+      return 'has-danger';
+    }
+  }
+
   resetPassword() {
     this.alert.clear();
     if (this.resetForm.valid) {
       this.rest.showLoader();
       this.rest.saveItem('', this.resetForm.value, 'customer/reset-password').subscribe(
         data => {
-          console.log(data);
           if (data) {
             this.rest.hideLoader();
             this.alert.success('Please login with new password', true);
@@ -82,7 +105,8 @@ export class ResetComponent implements OnInit {
           }
         },
         error => {
-          this.alert.error('Something went wrong!');
+          const e = error.json();
+          this.alert.error(e.message);
           this.rest.hideLoader();
         });
     } else {

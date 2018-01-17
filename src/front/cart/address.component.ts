@@ -63,7 +63,9 @@ export class AddressComponent implements OnInit, OnDestroy {
         });
 
         this.auth.getUserInfo().subscribe(user => {
-            if (user) {
+            if (!user) {
+                this.auth.initLoggedInUserInfo();
+            } else if(!user.loading) {
                 this.checkoutAddressForm.controls['shipping_address'].patchValue({
                     firstname : user.firstname,
                     lastname : user.lastname,
@@ -103,9 +105,11 @@ export class AddressComponent implements OnInit, OnDestroy {
                     this.selectedBillingAddress = this.userAddress.find(x => x.id === data.billingAddress.customer_address_id);
                 } else if (data.billingAddress.country_id) {
                     this.newShippingAddress = true;
+                    this.selectedBillingAddress = null;
                     this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
                 }
             }
+            
             if (data.shippingAddress) {
                 this.sameAddress = data.shippingAddress.same_as_billing;
                 if (data.shippingAddress.customer_address_id && this.userAddress.length > 0) {
@@ -113,6 +117,7 @@ export class AddressComponent implements OnInit, OnDestroy {
                     this.selectedShippingAddress = this.userAddress.find(x => x.id === data.shippingAddress.customer_address_id);
                 } else if (data.shippingAddress.country_id) {
                     this.newBillingAddress = true;
+                    this.selectedShippingAddress = null;
                     this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
                 }
             }
@@ -227,13 +232,16 @@ export class AddressComponent implements OnInit, OnDestroy {
             });
             this.checkoutAddressForm.controls['billing_address'].patchValue(selectedBillingAddress);
         }
-        if (this.sameAddress) {
-            this.checkoutAddressForm.controls['billing_address'].patchValue(
-                this.checkoutAddressForm.controls['shipping_address'].value
-            );
+        this.checkoutAddressForm.controls['shipping_address'].patchValue({
+            same_as_billing: 0
+        });
+        if (this.sameAddress) {            
             this.checkoutAddressForm.controls['shipping_address'].patchValue({
                 same_as_billing: 1
             });
+            this.checkoutAddressForm.controls['billing_address'].patchValue(
+                this.checkoutAddressForm.controls['shipping_address'].value
+            );
         }
         if (!this.checkoutAddressForm.errors) {
             this.loading = true;

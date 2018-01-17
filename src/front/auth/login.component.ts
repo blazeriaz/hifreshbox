@@ -69,7 +69,8 @@ export class LoginComponent implements OnInit {
               if (error.status === 401) {
                 this.alert.error('Please check the login details');
               } else {
-                this.alert.error('Server Error');
+                var e = error.json();
+                this.alert.error(e.message);
               }
               this.rest.hideLoader();
             });
