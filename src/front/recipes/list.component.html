@@ -10,9 +10,10 @@
       <div class="col-md-12">
         <div class="card border-0">
           <div class="card-header border-0">
-            <h2 class="font-special">Cookbook</h2>
+            <h2 class="font-special">All Recipes</h2>
           </div>
           <div class="card-block">
+            <alert></alert>
             <form [formGroup]="searchForm">
             <div class="row py-2">
               <label class="col-md-2 col-sm-4">Search : </label>
@@ -37,13 +38,13 @@
             <div class="row py-2">
               <div class="col-md-4 col-12" *ngFor="let recipe of recipes">
                 <div class="card px-3 py-4 text-center">
-                  <div (click)="selectRecipe(recipe)">
+                  <div (click)="showRecipeDetails(recipe)">
                       <img class="img-avatar img-fluid" 
                         [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
                         (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />      
                   </div>
                   <div class="card-title my-3">
-                      <h5 (click)="selectRecipe(recipe)" class="text-uppercase">{{recipe.name}}</h5>
+                      <h5 (click)="showRecipeDetails(recipe)" class="text-uppercase">{{recipe.name}}</h5>
                   </div>
                   <div class="card-body" *ngIf="!recipe.showFacts">
                       <p>{{recipe.custom_attributes | mgCatalogAttribute:'description' | slice:0:80}}...</p>
@@ -84,7 +85,7 @@
                               <span class="font-special color-spl-green">{{recipe.custom_attributes | mgCatalogAttribute:'fat'}}g</span>
                           </div>                    
                       </div>                   
-                      <button type="button" (click)="selectRecipe(recipe)" class="btn btn-link">See full details >></button>
+                      <button type="button" (click)="showRecipeDetails(recipe)" class="btn btn-link">See full details >></button>
                       <div>
                           <a *ngIf="recipe.custom_attributes | mgCatalogAttribute : 'pdf_upload'"
                             href="{{recipe.custom_attributes | mgCatalogAttribute : 'pdf_upload'}}" 
@@ -95,8 +96,9 @@
                       </div>
                   </div>
                 </div>
-                <div class="favourite_star font-2xl" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
-                    <i class="fa fa-star" (click)="addToFavourite(recipe)" tooltip="Add to favourite"></i>
+                <div class="favourite_star font-sm" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
+                    <i class="fa fa-star float-right" (click)="addToFavourite(recipe)"  placement="left" tooltip="Add to favourite"></i>
+                    <i class="fa fa-book" (click)="addToCookbook(recipe)"  placement="right" tooltip="Add to Cookbook"></i>
                 </div>
               </div>
             </div>
@@ -120,3 +122,55 @@
     </div>
   </div>
 </div>
+<ng-template #addcbmodal>
+  <div class="modal-body" *ngIf="showExistingCB">
+      <alert displayId="popup"></alert>
+      <tabset>
+          <tab heading="Add to an existing cookbook">
+              <div class="row mx-0 mb-1" *ngFor="let cookbook of cookbooks">
+                  <div class="col-8">
+                      <span>{{cookbook.title}}</span>
+                  </div>
+                  <div class="col-4">
+                      <button (click)="addRecipeToCookBook(cookbook)" type="button" [disabled]="modelDisabled" class="btn btn-outline-green py-0 px-3 rounded-0 mx-2">
+                          Add
+                      </button>
+                  </div>
+              </div>
+          </tab>
+          <tab heading="Make new one" (select)="showCBSubmitButton=true;" (deselect)="showCBSubmitButton=false;">
+              <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate *ngIf="cbForm">
+                  <div class="row mx-0">
+                      <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">                            
+                          <label>Cookbook Title</label>
+                          <input autofocus type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
+                      </div>
+                  </div>
+              </form>
+          </tab>
+      </tabset>
+  </div>
+  <div class="modal-body" *ngIf="!showExistingCB">
+      <alert displayId="popup"></alert>
+      <tabset>
+          <tab heading="Make new one">
+              <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate>
+                  <div class="row mx-0">
+                      <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">
+                          <label>Cookbook Title</label>
+                          <input type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
+                      </div>
+                  </div>
+              </form>
+          </tab>
+      </tabset>
+  </div>
+  <div class="modal-footer">
+      <button (click)="modalRef.hide()" [disabled]="modelDisabled" type="button" class="btn btn-secondary">
+          Close
+      </button>
+      <button *ngIf="showCBSubmitButton" type="button" (click)="saveCookBook()" [disabled]="modelDisabled" class="btn btn-outline-green">
+          Submit
+      </button>
+  </div>
+</ng-template>

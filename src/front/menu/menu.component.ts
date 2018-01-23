@@ -1,5 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { RestService, AlertService, MealMenuService, AuthService, CartService } from 'services';
+
+import { FormBuilder, Validators, FormArray } from "@angular/forms";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
@@ -8,6 +11,8 @@ import { Router } from '@angular/router';
   templateUrl: 'menu.component.html'
 })
 export class MenuComponent implements OnInit, OnDestroy {
+    @ViewChild('addcbmodal') addcbmodal: TemplateRef<any>;
+
     backgrounds;
     globalVariable;
     startYear;
@@ -27,13 +32,27 @@ export class MenuComponent implements OnInit, OnDestroy {
     mealMenuProduct;
     orderSubscription;
 
+    modalRef: BsModalRef;
+    modalViewRef: BsModalRef;
+    loadedCookBooks;
+    cookbooks = [];
+    cbForm;
+    showExistingCB;
+    modelDisabled;
+    showCBSubmitButton;
+    selectRecipe;
+    singleCB;
+    user;
+
     constructor(
     private alert: AlertService,
     private rest: RestService,
     private router: Router,
     private mealMenuService: MealMenuService,
     private auth: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private _fb: FormBuilder,
+    private modalService: BsModalService
     ) { }
 
     ngOnInit(): void {
@@ -131,9 +150,23 @@ export class MenuComponent implements OnInit, OnDestroy {
             });
         });
 
-        if (this.auth.isLogin()) {
+        if(this.auth.isLogin()) {
+            this.auth.getUserInfo().subscribe(user => {     
+                if (!user) {
+                    this.auth.initLoggedInUserInfo();
+                } else if (!user.loading) {
+                    this.user = user;
+                } 
+            });
+
             this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(data => {
-                this.favRecipes = data;
+                this.favRecipes = data.map(x => x.product_id);
+            });
+
+            this.loadedCookBooks = false;
+            this.rest.getItems(1, '', 10, 'cookbook/search', 'criteria').subscribe(cb => {
+                this.cookbooks = cb.items;
+                this.loadedCookBooks = true;
             });
         }
     }    
@@ -217,7 +250,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.yearMonthSubs.unsubscribe();
     }
 
-    selectRecipe(recipe) {
+    showRecipeDetails(recipe) {
         this.router.navigate(['menu', recipe.url_key]);
     }
 
@@ -237,5 +270,94 @@ export class MenuComponent implements OnInit, OnDestroy {
         }
         const nextWeek = this.mealMenuService.getWeekNumber(nextTuesday);
         this.mealMenuService.setYearWeek(nextTuesday.getFullYear(), nextWeek);
+    }
+
+    setInputErrorClass(form, input) {
+        const field = form.get(input);
+        const invalid = field.invalid && field.touched;
+        if (invalid) {
+            return 'form-control-danger';
+        }
+    }
+
+    setContainerErrorClass(form, input) {
+        const field = form.get(input);
+        const invalid = field.invalid && field.touched;
+        if (invalid) {
+            return 'has-danger';
+        }
+    }
+
+    saveCookBook() {
+        if (this.cbForm.invalid) {
+            return;
+        }
+        this.modelDisabled = true;
+        this.alert.clear();
+        this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
+            if(res[0] == 'error') {
+                this.modelDisabled = false;
+                this.alert.error(res[1], false, 'popup');
+                return;
+            }
+            res.recipe = [];
+            this.cookbooks.push(res);
+            this.modelDisabled = false;
+            this.addRecipeToCookBook(res);
+            this.alert.success('Cookbook has been saved successfully!');
+        }, e => {
+            this.modelDisabled = false;
+            var err = e.json();
+            this.alert.error(err.message, false, 'popup');
+        });
+    }
+
+    addRecipeToCookBook(cookbook) {
+        this.modelDisabled = true;
+        if (!cookbook || !this.selectRecipe) {
+            this.modelDisabled = false;
+            this.modalRef.hide();
+            return;
+        }
+        const sendData = {cookbook_recipe : {
+            cookbook_id : cookbook.id,
+            recipe_id : this.selectRecipe.sku
+        }};
+        this.alert.clear();
+        this.rest.saveItem(false, sendData, 'cookbook-recipe').subscribe(res => {
+            const cbIndex = this.cookbooks.findIndex(x => x.id === res.cookbook_id);
+            this.selectRecipe.cookbook_recipe_id = res.id;
+            this.cookbooks[cbIndex].recipe.push(this.selectRecipe);
+            this.modelDisabled = false;
+            this.selectRecipe = null;
+            this.modalRef.hide();
+            this.alert.success('Recipe added to the Cookbook successfully!');
+        }, err => {
+            const e = err.json();
+            this.modelDisabled = false;
+            this.selectRecipe = null;
+            this.modalRef.hide();
+            this.alert.error(e.message);
+        });
+    }
+
+    addToCookbook(recipe) {
+        this.selectRecipe = recipe;
+        this.showExistingCB = this.cookbooks.length > 0;
+        this.showCBSubmitButton = !this.showExistingCB;
+        this.openAddCBModal();
+    }
+
+    openAddCBModal() {
+        this.cbForm = this._fb.group({
+            'user_id': this.user.id,
+            'is_active': 1,
+            'title': ['', Validators.required]
+        });
+        this.modalRef = this.modalService.show(this.addcbmodal, {
+            animated: true,
+            keyboard: false,
+            backdrop: true
+        });
     }
 }

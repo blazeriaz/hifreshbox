@@ -22,6 +22,7 @@ import { HoverClassDirective } from 'shared/hover-class.directive';
 import { NewsletterComponent } from 'front/blocks/newsletter.component';
 import { TestimonialComponent } from 'front/blocks/testimonial.component';
 import { SubscriptionInfoComponent } from 'front/blocks/subscription.info.component';
+import { TabsModule } from 'ngx-bootstrap';
 import { CarouselModule, BsDatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
@@ -34,7 +35,8 @@ import { CarouselModule, BsDatepickerModule } from 'ngx-bootstrap';
     ReactiveFormsModule,
     CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    TabsModule.forRoot()
   ],
   declarations: [
     NAV_DROPDOWN_DIRECTIVES,

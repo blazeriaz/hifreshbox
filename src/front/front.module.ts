@@ -23,6 +23,7 @@ import { ContactComponent } from './contact/contact.component';
 import { CheckoutSuccessComponent } from './cart/checkout-success.component';
 import { SuccessComponent } from './success.component';
 import { MessageLayoutComponent } from './layouts/message-layout.component';
+import { NotFoundComponent } from './layouts/404-layout.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { MessageLayoutComponent } from './layouts/message-layout.component';
     SimpleLayoutComponent,
     TopmenuComponent,
     CheckoutSuccessComponent,
-    SuccessComponent
+    SuccessComponent,
+    NotFoundComponent
   ],
   providers: [
     {

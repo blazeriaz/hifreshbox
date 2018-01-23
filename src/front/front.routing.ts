@@ -15,6 +15,7 @@ import { ContactComponent } from './contact/contact.component';
 import { CheckoutSuccessComponent } from './cart/checkout-success.component';
 import { SuccessComponent } from './success.component';
 import { MessageLayoutComponent } from './layouts/message-layout.component';
+import { NotFoundComponent } from './layouts/404-layout.component';
 
 export const routes: Routes = [
   {
@@ -125,6 +126,10 @@ export const routes: Routes = [
         loadChildren: './recipes/recipes.module#RecipesModule',
       }]
     }]
+  },
+  {
+    path: '**',
+    component: NotFoundComponent
   }
 ];
 

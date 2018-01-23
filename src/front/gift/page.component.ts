@@ -110,7 +110,7 @@ export class PageComponent implements OnInit {
                 this.alert.error(res[1], false, 'popup');
             } else {
                 this.modalRef.hide();
-                this.router.navigate(['/', 'success']);
+                this.router.navigate(['/', 'success', 'gift']);
             }
         }, e => {
             this.modelDisabled = false;

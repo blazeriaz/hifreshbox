@@ -11,7 +11,8 @@ import { TabsModule, TooltipModule } from 'ngx-bootstrap';
 
 import { CartComponent } from './cart.component';
 import { CheckoutComponent } from './checkout.component';
-import { AddressComponent } from './address.component';
+import { ShippingAddressComponent } from './shipping.address.component';
+import { BillingAddressComponent } from './billing.address.component';
 import { ConfirmComponent } from './confirm.component';
 import { MealComponent } from './meal.component';
 import { PaymentComponent } from './payment.component';
@@ -32,7 +33,8 @@ import { LoginComponent } from './login.component';
   declarations: [
     CartComponent,
     CheckoutComponent,
-    AddressComponent,
+    BillingAddressComponent,
+    ShippingAddressComponent,
     ConfirmComponent,
     MealComponent,
     PaymentComponent,

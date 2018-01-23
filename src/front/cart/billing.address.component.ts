@@ -6,10 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'checkout-address',
-    templateUrl: 'address.component.html'
+    selector: 'checkout-billing-address',
+    templateUrl: 'billing.address.component.html'
 })
-export class AddressComponent implements OnInit, OnDestroy {
+export class BillingAddressComponent implements OnInit, OnDestroy {
     @Output() back = new EventEmitter();
     @Output() next = new EventEmitter();
 
@@ -248,9 +248,11 @@ export class AddressComponent implements OnInit, OnDestroy {
             const formValues = this.checkoutAddressForm.value;
             if (!formValues['billing_address'].customer_address_id) {
                 delete formValues['billing_address'].customer_address_id;
+                formValues['billing_address'].save_in_address_book = 1;
             }
             if (!formValues['shipping_address'].customer_address_id) {
                 delete formValues['shipping_address'].customer_address_id;
+                formValues['shipping_address'].save_in_address_book = 1;
             }
             if (!formValues['billing_address'].customer_id) {
                 delete formValues['billing_address'].customer_id;
@@ -258,11 +260,9 @@ export class AddressComponent implements OnInit, OnDestroy {
             if (!formValues['shipping_address'].customer_id) {
                 delete formValues['shipping_address'].customer_id;
             }
-            formValues['billing_address'].save_in_address_book = 1;
-            formValues['shipping_address'].save_in_address_book = 1;
             const sendData = {addressInformation : formValues};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
-                this.next.emit('address');
+                this.next.emit('billing-address');
                 this.cartService.setCartTotal(true);
             }, e => {
                 this.loading = false;
@@ -275,7 +275,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     }
 
     goBack() {
-        this.back.emit('address');
+        this.back.emit('billing-address');
     }
 
     ngOnDestroy() {

@@ -35,8 +35,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             key: 'meal',
             title: 'Meal preference'
         }, {
-            key: 'address',
-            title: 'Address'
+            key: 'shipping-address',
+            title: 'Shipping Address'
+        }, {
+            key: 'billing-address',
+            title: 'Billing Address'
         }, {
             key: 'payment',
             title: 'Payment Info'
@@ -77,7 +80,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 this.currentStep = 'login';
 
                 if (this.auth.isLogin()) {
-                    this.goToStep('address', true);
+                    this.goToStep('shipping-address', true);
                 }
             })
         );
@@ -139,6 +142,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         const index = this.steps.findIndex(x => x.key === step);
         if (index === -1) {
             this.router.navigate(['/', 'cart']);
+            return;
         }
         const stepObj = this.steps[index + 1];
         if (stepObj && stepObj.key) {
@@ -161,7 +165,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
-        this.needDestroyServices.forEach(sub => {console.log(sub);
+        this.needDestroyServices.forEach(sub => {
             if (sub) {
                 sub.unsubscribe();
             }

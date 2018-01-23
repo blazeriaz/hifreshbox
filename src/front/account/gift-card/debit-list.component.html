@@ -1,0 +1,106 @@
+<div class="container"> 
+  <div class="row py-2 mb-3">
+    <div class="col-12">
+        <a class="text-muted" [routerLink]="['/', 'account', 'gift-cards']">Your Account</a>
+        <span class="font-xs">>></span>
+        <span class="font-weight-bold text-success">Your Gift Cards</span>
+    </div>
+  </div>   
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card border-0">
+        <div class="card-header border-0 p-0 mb-2">
+          <h4 class="mb-4">Debit Gift Cards</h4>
+        </div>
+        <div class="card-block p-0">
+          <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
+            <div class="col">
+              Loading Gift Cards...
+            </div>
+          </div>
+
+          <div class="row mx-0 py-2 bg-info" *ngIf="!loadingList && GiftCards.length == 0">
+            <div class="col">
+              No Gift Cards...
+            </div>
+          </div>
+
+          <div class="card py-4 m-0" *ngFor="let GiftCard of GiftCards; let odd= odd;">
+            <div class="row">
+              <div class="col-sm-4">
+                Gift Order Id: # {{GiftCard.order_id}}
+              </div>
+              <div class="col-sm-4">
+                Status: <b>{{GiftCard.status}}</b>
+              </div>
+              <div class="col-sm-4">
+                Amount: <b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #card_form_modal>
+  <form [formGroup]="userPaymentForm" (submit)="saveUserPayment()" novalidate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Add Credit Card</h4>
+    </div>
+    <div class="modal-body">
+        <alert displayId="popup"></alert>
+        <div class="bg-light p-2">
+            <div class="form-group row">                        
+                <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
+                    <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
+                    <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
+                        [ngClass]="setInputClass('card_holder_name')" />
+                </div>
+            </div>
+            <div class="form-group row">                        
+                <div class="col-12" [ngClass]="setInputDivClass('card_number')">
+                    <label for="card_number" class="form-control-label">Credit Card Number</label>
+                    <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
+                        autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
+                </div>
+            </div>
+            <div class="form-group row px-3">                        
+                <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
+                    <label for="card_month_year" class="form-control-label">Expiry Date</label>
+                    <input size="6" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" placeholder="MM / YYYY"
+                        autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
+                </div>
+                <div class="col"></div>
+                <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
+                    <label for="card_cvv" class="form-control-label">CVV</label>
+                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="password" placeholder="xxx"
+                        autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary pull-right" (click)="modalRef.hide()">
+          Close
+      </button>
+      <button type="submit" class="btn btn-primary pull-right">
+          Submit
+      </button>
+    </div>
+  </form>
+</ng-template>

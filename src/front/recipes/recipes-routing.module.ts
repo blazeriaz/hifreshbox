@@ -3,7 +3,6 @@ import { Routes,
          RouterModule }         from '@angular/router';
 
 import { RecipesListComponent } from './list.component';
-import { RecipeFormComponent } from "./form.component";
 
 const routes: Routes = [
     {
@@ -11,20 +10,6 @@ const routes: Routes = [
         component: RecipesListComponent,
         data: {
             title: 'Recipes'
-        }
-    },
-    {
-        path: 'add',
-        component: RecipeFormComponent,
-        data: {
-            title: 'Add'
-        }
-    },
-    {
-        path: 'edit/:sku',
-        component: RecipeFormComponent,
-        data: {
-            title: 'Edit'
         }
     }
     

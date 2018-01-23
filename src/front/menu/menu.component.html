@@ -50,14 +50,17 @@
             </div>
         </div>
         <div class="row py-3" *ngIf="loadedselectedRecipes">
+            <div class="col-12 mb-2">
+                <alert></alert>
+            </div>
             <div class="col-md-4 col-12" *ngFor="let recipe of recipes">
                 <div class="card px-3 py-4 text-center">
-                    <div class="pointer" (click)="selectRecipe(recipe)">
+                    <div class="pointer" (click)="showRecipeDetails(recipe)">
                         <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!recipe.default_image" />
                         <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
                     </div>
                     <div class="card-title my-3">
-                        <h5 (click)="selectRecipe(recipe)" class="pointer text-uppercase">{{recipe.name}}</h5>
+                        <h5 (click)="showRecipeDetails(recipe)" class="pointer text-uppercase">{{recipe.name}}</h5>
                     </div>
                     <div class="card-body" *ngIf="!recipe.showFacts">
                         <p>{{recipe.description}}</p>
@@ -110,7 +113,7 @@
                                 <span class="font-special color-spl-green">{{recipe.fat}}g</span>
                             </div>                    
                         </div>                   
-                        <button type="button" (click)="selectRecipe(recipe)" class="btn btn-link">See full details >></button>
+                        <button type="button" (click)="showRecipeDetails(recipe)" class="btn btn-link">See full details >></button>
                         <div>
                             <a *ngIf="recipe.pdf_upload" 
                                 href="{{globalVariable.BASE_MEDIA + 'recipe-pdf/' + recipe.pdf_upload}}" 
@@ -121,8 +124,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="favourite_star font-2xl btn p-0 border-0" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
-                    <i class="fa fa-star" (click)="toggleFavourite(recipe)" tooltip="Toggle favourite"></i>
+                <div class="favourite_star font-sm btn p-0 border-0 text-left" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
+                    <i class="fa fa-star float-right" placement="left" (click)="toggleFavourite(recipe)" tooltip="Toggle favourite"></i>
+                    <i class="fa fa-book" placement="right" (click)="addToCookbook(recipe)" tooltip="Add to Cookbook"></i>
                 </div>
             </div>
         </div>
@@ -148,3 +152,55 @@
 </div>
 <testimonials></testimonials>
 <newsletter></newsletter>
+<ng-template #addcbmodal>
+    <div class="modal-body" *ngIf="showExistingCB">
+        <alert displayId="popup"></alert>
+        <tabset>
+            <tab heading="Add to an existing cookbook">
+                <div class="row mx-0 mb-1" *ngFor="let cookbook of cookbooks">
+                    <div class="col-8">
+                        <span>{{cookbook.title}}</span>
+                    </div>
+                    <div class="col-4">
+                        <button (click)="addRecipeToCookBook(cookbook)" type="button" [disabled]="modelDisabled" class="btn btn-outline-green py-0 px-3 rounded-0 mx-2">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Make new one" (select)="showCBSubmitButton=true;" (deselect)="showCBSubmitButton=false;">
+                <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate *ngIf="cbForm">
+                    <div class="row mx-0">
+                        <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">                            
+                            <label>Cookbook Title</label>
+                            <input autofocus type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
+                        </div>
+                    </div>
+                </form>
+            </tab>
+        </tabset>
+    </div>
+    <div class="modal-body" *ngIf="!showExistingCB">
+        <alert displayId="popup"></alert>
+        <tabset>
+            <tab heading="Make new one">
+                <form [formGroup]="cbForm" (submit)="saveCookBook()" novalidate>
+                    <div class="row mx-0">
+                        <div class="col-12" [ngClass]="setContainerErrorClass(cbForm, 'title')">
+                            <label>Cookbook Title</label>
+                            <input type="text" class="form-control" formControlName="title" [ngClass]="setInputErrorClass(cbForm, 'title')" />
+                        </div>
+                    </div>
+                </form>
+            </tab>
+        </tabset>
+    </div>
+    <div class="modal-footer">
+        <button (click)="modalRef.hide()" [disabled]="modelDisabled" type="button" class="btn btn-secondary">
+            Close
+        </button>
+        <button *ngIf="showCBSubmitButton" type="button" (click)="saveCookBook()" [disabled]="modelDisabled" class="btn btn-outline-green">
+            Submit
+        </button>
+    </div>
+</ng-template>

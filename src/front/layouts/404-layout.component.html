@@ -22,7 +22,18 @@
   </div>
   <!-- Main content -->
   <main class="main">
-    <router-outlet></router-outlet>
+    <div class="container-fluid app flex-row align-items-center" [ngStyle]="backgrounds.header">
+      <div class="container">
+          <div class="row text-center justify-content-center p-2 mt-5">
+              <div class="col-sm-12">
+                  <h1 class="font-wild text-white text-uppercase display-3 mb-5">Ooops, something went wrong...</h1>
+                  <div>
+                      <a [routerLink]="''" class="btn btn-outline-white border-2 text-uppercase">Take me to home page</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
   </main>
 </div>
 

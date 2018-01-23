@@ -58,6 +58,12 @@ const routes: Routes = [
         data: {
           title: 'Cards'
         }
+      }, {
+        path: 'gift-cards',
+        loadChildren: './gift-card/gift.module#GiftCardsModule',
+        data: {
+          title: 'Gift Cards'
+        }
       }
     ]
   }

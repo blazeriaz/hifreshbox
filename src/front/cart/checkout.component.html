@@ -37,8 +37,11 @@
             <div class="col-12" *ngIf="currentStep == 'meal'">
                 <checkout-meal (back)="goBack($event)" (next)="goNext($event)"></checkout-meal>
             </div>
-            <div class="col-12" *ngIf="currentStep == 'address'">
-                <checkout-address (back)="goBack($event)" (next)="goNext($event)"></checkout-address>
+            <div class="col-12" *ngIf="currentStep == 'shipping-address'">
+                <checkout-shipping-address (back)="goBack($event)" (next)="goNext($event)"></checkout-shipping-address>
+            </div>
+            <div class="col-12" *ngIf="currentStep == 'billing-address'">
+                <checkout-billing-address (back)="goBack($event)" (next)="goNext($event)"></checkout-billing-address>
             </div>
             <div class="col-12" *ngIf="currentStep == 'payment'">
                 <checkout-payment (goStep)="goCheckoutStep($event)" (back)="goBack($event)" (next)="goNext($event)"></checkout-payment>

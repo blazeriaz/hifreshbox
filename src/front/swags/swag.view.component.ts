@@ -91,6 +91,7 @@ export class SwagViewComponent implements OnInit, OnDestroy {
             if(swag[0] === 'error' || (swag.status === 2 && !this.auth.isAdminLogin())) {
                 this.alert.error("Swag information does not exists!");   
                 this.errorSwag = true;
+                this.router.navigate(['/', '404']);
                 return;
             }
             this.swagProduct.cartItem.sku = swag.sku;
