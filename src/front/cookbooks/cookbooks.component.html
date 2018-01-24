@@ -1,0 +1,145 @@
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row text-center p-2">
+        </div>
+    </div>
+</div>
+<div class="container-fluid  mt-3 mb-5 p-0">
+    <div class="container">
+        <div class="row py-2">
+            <div class="col-md-8 col-sm-6">
+                <h4 class="m-0">Cookbooks</h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <form [formGroup]="searchForm">
+                    <div class="row py-2">
+                        <label class="col-auto">Search : </label>
+                        <div class="col">              
+                            <input type="text" class="form-control" formControlName="name" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 py-5 text-center" *ngIf="!loadedCookBooks">
+                Cookbook Loading...
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mt-3" *ngFor="let cookbook of cookbooks">
+                <div class="card p-0">
+                    <div class="card-title bg-success p-2 m-0">
+                        <h5 class="m-0">
+                            {{cookbook.title}}
+                        </h5>                        
+                    </div>
+                    <div class="card-body bg-light row mx-0">
+                        <div class="col-12 py-4" *ngIf="cookbook.recipe.length == 0">
+                            No recipes added!
+                        </div>
+                        <div class="col-12 p-0 mt-3" *ngFor="let recipe of cookbook.recipe | slice:0:3">
+                            <div class="card bg-light border-0 p-0 mb-0">
+                                <div class="card-body row mx-0">
+                                    <div class="col-sm-4 p-0">
+                                        <div class="text-center">
+                                            <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 px-2 my-auto">
+                                        <div class="row pb-1 text-left">
+                                            <div class="col-12"><b class="m-0">{{recipe.name}}</b></div>
+                                            <div class="col-12 font-xs">Prep time : {{recipe.cooking_time}}</div>                            
+                                            <div class="col-12 font-xs">
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 20" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 40" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 60" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 80" aria-hidden="true"></i>
+                                                <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 100" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 20" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 40" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 60" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 80" aria-hidden="true"></i>
+                                                <i class="fa fa-star" *ngIf="recipe.rating_summary < 100" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="col-12 text-left text-success font-xs">                        
+                                                <a class="text-success" (click)="modalViewRef.hide()" [routerLink]="['/', 'menu', recipe.url_key]">View</a>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center text-success my-3" *ngIf="cookbook.recipe.length > 0">
+                            <a href="javascript://" class="text-success">Send as Gift</a>&nbsp;|&nbsp;
+                            <span *ngIf="cookbook.recipe.length > 3">
+                                <a href="javascript://" (click)="viewCookbook(cookbook)" class="text-success">View</a>&nbsp;|&nbsp;
+                            </span>
+                            <a href="javascript://" class="text-success">Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2" *ngIf="pager && pager.totalPages > 1"><div class="col-md-12">
+            <ul class="pagination pull-right">
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+                <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                    <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+        </div></div>
+    </div>
+</div>
+<ng-template #viewcbrecipes>
+    <div class="modal-header bg-success text-white">
+        <h5 class="m-0">
+            {{singleCB.title}}            
+        </h5>
+    </div>
+    <div class="modal-body bg-light">
+        <div class="col-12 py-4" *ngIf="singleCB.recipe.length == 0">
+            No recipes added!
+        </div>
+        <div class="row p-0" *ngIf="singleCB.recipe.length > 0">
+            <div class="col-12 p-0 mt-3" *ngFor="let recipe of singleCB.recipe">
+                <div class="card bg-light border-0 p-0 mb-0">
+                    <div class="card-body row mx-0">
+                        <div class="col-sm-4 p-0">
+                            <div class="text-center">
+                                <img class="img-fluid" [src]="recipe.default_image" *ngIf="recipe.default_image" />
+                            </div>
+                        </div>
+                        <div class="col-sm-8 px-2 my-auto">
+                            <div class="row pb-1 text-left">
+                                <div class="col-12"><b class="m-0">{{recipe.name}}</b></div>
+                                <div class="col-12 font-xs">Prep time : {{recipe.cooking_time}}</div>                            
+                                <div class="col-12 font-xs">
+                                    <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 20" aria-hidden="true"></i>
+                                    <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 40" aria-hidden="true"></i>
+                                    <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 60" aria-hidden="true"></i>
+                                    <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 80" aria-hidden="true"></i>
+                                    <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 100" aria-hidden="true"></i>
+                                    <i class="fa fa-star" *ngIf="recipe.rating_summary < 20" aria-hidden="true"></i>
+                                    <i class="fa fa-star" *ngIf="recipe.rating_summary < 40" aria-hidden="true"></i>
+                                    <i class="fa fa-star" *ngIf="recipe.rating_summary < 60" aria-hidden="true"></i>
+                                    <i class="fa fa-star" *ngIf="recipe.rating_summary < 80" aria-hidden="true"></i>
+                                    <i class="fa fa-star" *ngIf="recipe.rating_summary < 100" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-12 text-left text-success font-xs">                        
+                                    <a class="text-success" (click)="modalViewRef.hide()" [routerLink]="['/', 'menu', recipe.url_key]">View</a>                                    
+                                </div>
+                            </div>
+                        </div>                                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button (click)="modalViewRef.hide()" type="button" class="btn btn-secondary">
+            Close
+        </button>
+    </div>
+</ng-template>

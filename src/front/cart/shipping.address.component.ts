@@ -246,7 +246,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
         if (!this.checkoutAddressForm.errors) {
             this.loading = true;
             const formValues = this.checkoutAddressForm.value;
-            if (formValues['billing_address'].customer_address_id) {
+            if (!formValues['billing_address'].customer_address_id) {
                 delete formValues['billing_address'].customer_address_id;
                 formValues['billing_address'].save_in_address_book = 1;
             }

@@ -26,23 +26,26 @@
           </div>
 
           <div class="card py-4 m-0" *ngFor="let GiftCard of GiftCards; let odd= odd;">
-            <div class="row">
+            <div class="row mx-0">
               <div class="col-sm-4">
-                Gift Order Id: # {{GiftCard.order_id}}
+                Gift Id: <br class="hidden-xs-down"/># {{GiftCard.order_id}}
               </div>
               <div class="col-sm-4">
-                Status: <b>{{GiftCard.status}}</b>
+                From: <br class="hidden-xs-down"/>{{GiftCard.from_name}}
               </div>
               <div class="col-sm-4">
-                Amount: <b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
+                Amount: <br class="hidden-xs-down"/><b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
+              </div>
+            </div>
+            <hr />
+            <div class="row mx-0 mt-2">
+              <div class="col-12">
+                Meesage: {{GiftCard.message}}
               </div>
             </div>
           </div>
 
           <div class="row mt-2"><div class="col-md-12">
-            <div>
-              <a [routerLink]="['/', 'account', 'gift-cards', 'debit']" class="btn btn-primary">Debit Gift Cards</a>
-            </div>
             <ul class="pagination pull-right" *ngIf="pager && pager.totalPages > 1">
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
@@ -54,9 +57,7 @@
               <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
                 <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
             </ul>
-          </div></div>
-
-          
+          </div></div>          
         </div>
       </div>
     </div>

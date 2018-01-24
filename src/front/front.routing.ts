@@ -119,11 +119,18 @@ export const routes: Routes = [
         loadChildren: './auth/auth.module#AuthModule',
       }]
     }, {
-      path: 'cookbook',
+      path: 'all-recipes',
       component: FullLayoutComponent,
       children : [{
         path: '',
         loadChildren: './recipes/recipes.module#RecipesModule',
+      }]
+    }, {
+      path: 'cookbooks',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './cookbooks/cookbooks.module#CookbooksModule',
       }]
     }]
   },
