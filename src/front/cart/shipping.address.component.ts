@@ -13,8 +13,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
     @Output() back = new EventEmitter();
     @Output() next = new EventEmitter();
 
-    cart;
-    totals;
+    cartData;
     US_regions;
     UsregionsAll;
     checkoutAddressForm;
@@ -26,6 +25,8 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
     newShippingAddress = false;
     selectedBillingAddress = null;
     newBillingAddress = false;
+    needToLoaded;
+    needToDestroyEvents = [];
 
 
     constructor(
@@ -41,10 +42,16 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-        this.loading = false;
+        this.loading = true;
         this.US_regions = [];
         this.UsregionsAll = [];
-        this.rest.getItems(1, [], 1000, 'directory/countries/US').subscribe(country => {
+        this.needToLoaded = {
+            'region': false,
+            'user': false,
+            'cart': false
+        };
+        this.rest.showLoader();
+        this.needToDestroyEvents.push(this.rest.getItems(1, [], 1000, 'directory/countries/US').subscribe(country => {
             if (country.available_regions) {
                 country.available_regions.filter(region => {
                     this.UsregionsAll.push(region);
@@ -53,7 +60,9 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
                     );
                 });
             }
-        })
+            this.needToLoaded.region = true;
+            this.checkAllLoaded();
+        }));
 
         this.checkoutAddressForm = this._fb.group({
             shipping_address: this.addNewAddress(),
@@ -62,51 +71,73 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
             shipping_method_code : 'bestway'
         });
 
-        this.auth.getUserInfo().subscribe(user => {
+        this.needToDestroyEvents.push(this.auth.getUserInfo().subscribe(user => {
             if (!user) {
                 this.auth.initLoggedInUserInfo();
-            } else if(!user.loading) {
-                this.checkoutAddressForm.controls['shipping_address'].patchValue({
-                    firstname : user.firstname,
-                    lastname : user.lastname,
-                    email : user.email
-                });
-                this.checkoutAddressForm.controls['billing_address'].patchValue({
-                    firstname : user.firstname,
-                    lastname : user.lastname,
-                    email : user.email
-                });
-                if (user.addresses.length > 0) {
-                    this.userAddress = user.addresses;
-                    this.selectedShippingAddress = this.userAddress.find(x => x.default_shipping);
-                    this.selectedBillingAddress = this.userAddress.find(x => x.default_billing);
-                    this.newShippingAddress = false;
-                    this.newBillingAddress = false;
-                } else {
-                    this.userAddress = [];
-                    this.selectedShippingAddress = null;
-                    this.selectedBillingAddress = null;
-                    this.newShippingAddress = true;
-                    this.newBillingAddress = true;
-                }
+                return;
             }
-        })
+            if(user.loading) {
+                this.needToLoaded.user = false;
+                this.loading = true;
+                return;
+            }
+            this.checkoutAddressForm.controls['shipping_address'].patchValue({
+                firstname : user.firstname,
+                lastname : user.lastname,
+                email : user.email
+            });
+            this.checkoutAddressForm.controls['billing_address'].patchValue({
+                firstname : user.firstname,
+                lastname : user.lastname,
+                email : user.email
+            });
+            if (user.addresses.length > 0) {
+                this.userAddress = user.addresses;
+                this.selectedShippingAddress = this.userAddress.find(x => x.default_shipping);
+                this.selectedBillingAddress = this.userAddress.find(x => x.default_billing);
+                this.newShippingAddress = false;
+                this.newBillingAddress = false;
+            } else {
+                this.userAddress = [];
+                this.selectedShippingAddress = null;
+                this.selectedBillingAddress = null;
+                this.newShippingAddress = true;
+                this.newBillingAddress = true;
+            }      
+            this.needToLoaded.user = true;
+            this.checkAllLoaded();   
+        }))
 
-        this.cartService.getCartTotal().subscribe(data => {
+        this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
             if (!data.cart) {
                 return;
             }
-            this.cart = data.cart;
-            this.totals = data.totals;
-            if (data.billingAddress) {
-                this.sameAddress = data.billingAddress.same_as_billing;
-                if (data.billingAddress.customer_address_id && this.userAddress.length > 0) {
+            if(data.cart.loading) {
+                this.needToLoaded.cart = false;
+                this.loading = true;
+                return;
+            }
+            this.cartData = data;
+            
+            this.needToLoaded.cart = true;
+            this.checkAllLoaded();  
+        }))
+    }
+
+    checkAllLoaded() {
+        if(this.needToLoaded.region && this.needToLoaded.user && this.needToLoaded.cart) {
+            this.loading = false;
+            this.rest.hideLoader();
+            let data = this.cartData;
+            if (this.cartData.billingAddress) {
+                this.sameAddress = this.cartData.billingAddress.same_as_billing;
+                if (this.cartData.billingAddress.customer_address_id && this.userAddress.length > 0) {
                     this.newShippingAddress = false;
-                    this.selectedBillingAddress = this.userAddress.find(x => x.id === data.billingAddress.customer_address_id);
-                } else if (data.billingAddress.country_id) {
+                    this.selectedBillingAddress = this.userAddress.find(x => x.id === this.cartData.billingAddress.customer_address_id);
+                } else if (this.cartData.billingAddress.country_id) {
                     this.newShippingAddress = true;
                     this.selectedBillingAddress = null;
-                    this.checkoutAddressForm.controls['billing_address'].patchValue(data.billingAddress);
+                    this.checkoutAddressForm.controls['billing_address'].patchValue(this.cartData.billingAddress);
                 }
             }
             
@@ -121,7 +152,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
                     this.checkoutAddressForm.controls['shipping_address'].patchValue(data.shippingAddress);
                 }
             }
-        });
+        }        
     }
 
     setAddressClass(address, i: number) {
@@ -213,12 +244,11 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
             Object.keys(this.selectedShippingAddress).forEach(x => {
                 if (x === 'region') {
                     Object.assign({}, selectedShippingAddress, this.selectedShippingAddress[x]);
-                } else if (x === 'id') {
-                    selectedShippingAddress['customer_address_id'] = this.selectedShippingAddress[x];
                 } else {
                     selectedShippingAddress[x] = this.selectedShippingAddress[x];
                 }
             });
+            selectedShippingAddress['customer_address_id'] = this.selectedShippingAddress.id;
             this.checkoutAddressForm.controls['shipping_address'].patchValue(selectedShippingAddress);
         }
         if (this.selectedBillingAddress) {
@@ -230,6 +260,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
                     selectedBillingAddress[x] = this.selectedBillingAddress[x];
                 }
             });
+            selectedBillingAddress['customer_address_id'] = this.selectedBillingAddress.id;
             this.checkoutAddressForm.controls['billing_address'].patchValue(selectedBillingAddress);
         }
         this.checkoutAddressForm.controls['shipping_address'].patchValue({
@@ -245,6 +276,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
         );
         if (!this.checkoutAddressForm.errors) {
             this.loading = true;
+            this.rest.showLoader();
             const formValues = this.checkoutAddressForm.value;
             if (!formValues['billing_address'].customer_address_id) {
                 delete formValues['billing_address'].customer_address_id;
@@ -260,14 +292,16 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
             if (!formValues['shipping_address'].customer_id) {
                 delete formValues['shipping_address'].customer_id;
             }
-            if (!this.sameAddress) { 
+            if (!this.sameAddress && !this.cartData.billingAddress.country_id) {
                 delete formValues['billing_address'];
             }
             const sendData = {addressInformation : formValues};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
+                this.rest.hideLoader();
                 this.next.emit('shipping-address');
                 this.cartService.setCartTotal(true);
             }, e => {
+                this.rest.hideLoader();
                 this.loading = false;
                 const err = e.json();
                 this.alert.error(err.message);
@@ -283,5 +317,6 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }

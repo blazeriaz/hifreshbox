@@ -25,6 +25,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     mealPreferences;
     loading;
     additional_info;
+    needToDestroyEvents = [];
 
     constructor(
         private alert: AlertService,
@@ -39,9 +40,11 @@ export class ConfirmComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-        this.loading = false;
-        this.cartService.getCartTotal().subscribe(data => {
-            if (!data.cart) {
+        this.loading = false;       
+        this.rest.showLoader(); 
+        this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
+            this.rest.showLoader();
+            if (!data.cart || !data.cart.loading) {
                 return;
             }
             this.cart = data.cart;
@@ -72,7 +75,8 @@ export class ConfirmComponent implements OnInit, OnDestroy {
                     }
                 });
             }
-        });
+            this.rest.hideLoader();
+        }))
         setTimeout(() => this.cartService.setCartTotal(true), 200);
 
         this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
@@ -97,6 +101,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             billing_address: billingAddress
         };
         this.loading = true;
+        this.rest.showLoader();
         this.rest.saveItem(false, sendData, 'carts/mine/payment-information').subscribe(order_id => {
             if(this.additional_info) {
                 const sendData = {
@@ -107,12 +112,14 @@ export class ConfirmComponent implements OnInit, OnDestroy {
                 };
                 this.rest.saveItem(false, sendData, 'order/comments-add').subscribe(x => {
                 });
-            }            
+            }  
+            this.rest.hideLoader();          
             this.next.emit('confirm');
             this.rest.saveItem(false, [], 'carts/mine').subscribe(x => {
                 this.cartService.setCartTotal(true);
             });
         }, e => {
+            this.rest.hideLoader();    
             const err = e.json();
             this.loading = false;
             this.alert.error(err.message);
@@ -121,5 +128,6 @@ export class ConfirmComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }

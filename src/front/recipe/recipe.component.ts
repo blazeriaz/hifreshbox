@@ -106,6 +106,10 @@ export class RecipeComponent implements OnInit, OnDestroy {
         this.loadedRecipe = false;
         const recipeSku = this.route.snapshot.params['sku'];
         this.rest.getItem(recipeSku, 'recipedetail/' + recipeSku).subscribe(recipe => {
+            if(recipe[0] == 'error') {
+                this.router.navigate(['/', '404']);
+                return;
+            }
             this.loadedRecipe = true;
             this.recipe = recipe;
             const currentMenuDays = this.mealMenuService.getCurrentyearMonth();

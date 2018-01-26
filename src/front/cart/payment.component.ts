@@ -30,6 +30,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     currentMenuDays;
     newCard;
     selectedCard;
+    needToDestroyEvents = [];
 
     constructor(
         private alert: AlertService,
@@ -52,8 +53,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
             'card_cvv': ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]]
         });
 
-        this.cartService.getCartTotal().subscribe(data => {
-            if (!data.cart) {
+        this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
+            if (!data.cart || !data.cart.loading) {
                 return;
             }
             this.cart = data.cart;
@@ -62,10 +63,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
             this.totals = data.totals;
             this.billingAddress = data.billingAddress;
             this.shippingAddress = data.shippingAddress;
-        });
+        }))
         
         this.newCard = true;
-        this.rest
+        this.needToDestroyEvents.push(this.rest
             .getItem(1, 'payment/listcreditcard')
             .subscribe(cards => {
                 this.newCard = cards.length === 0;
@@ -76,7 +77,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
                     }
                     return x;
                 });
-        });
+        }))
 
         this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
     }
@@ -120,13 +121,16 @@ export class PaymentComponent implements OnInit, OnDestroy {
                 year: mon_yr[1].trim(),
                 cvv: this.checkoutPaymentForm.value.card_cvv,
             }
+            this.rest.showLoader();
             this.rest.addCrditCard(data).subscribe(public_hash => {
                 if(public_hash.substring(0, 5).toLowerCase() === 'error') {
+                    this.rest.hideLoader();
                     this.alert.error(public_hash);
                 } else {
                     this.savePaymentInfoHash(public_hash)
                 }
             }, err => {
+                this.rest.hideLoader();
                 this.alert.error(err);
             });
         } else {
@@ -144,9 +148,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
                 public_hash: public_hash,
                 is_active_payment_token_enabler: true
             });
+            this.rest.hideLoader();
             this.next.emit('payment');
             this.loading = false;
         }, err => {
+            this.rest.hideLoader();
             this.loading = false;
             this.alert.error('Please check with administrator');
         }); 
@@ -162,5 +168,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }

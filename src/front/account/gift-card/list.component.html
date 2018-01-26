@@ -1,7 +1,7 @@
 <div class="container"> 
   <div class="row py-2 mb-3">
     <div class="col-12">
-        <a class="text-muted" [routerLink]="['/', 'account', 'gift-cards']">Your Account</a>
+        <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
         <span class="font-xs">>></span>
         <span class="font-weight-bold text-success">Your Gift Cards</span>
     </div>
@@ -13,6 +13,14 @@
           <h4 class="mb-4">Redeemed Gift Cards</h4>
         </div>
         <div class="card-block p-0">
+          <div class="row mx-0 py-1">
+            <div class="col">
+              <b>Wallet Amount:</b> {{walletAmount | currency:'USD':true:'1.2-2'}}              
+              <div class="pull-right">
+                <a class="btn btn-link" [routerLink]="['/', 'account', 'gift-cards', 'debit']">Ordered Gift cards</a>
+              </div>
+            </div>
+          </div>
           <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
             <div class="col">
               Loading Gift Cards...
@@ -27,17 +35,19 @@
 
           <div class="card py-4 m-0" *ngFor="let GiftCard of GiftCards; let odd= odd;">
             <div class="row mx-0">
-              <div class="col-sm-4">
+              <div class="col-md-3 col-sm-6">
                 Gift Id: <br class="hidden-xs-down"/># {{GiftCard.order_id}}
               </div>
-              <div class="col-sm-4">
+              <div class="col-md-3 col-sm-6">
                 From: <br class="hidden-xs-down"/>{{GiftCard.from_name}}
               </div>
-              <div class="col-sm-4">
+              <div class="col-md-3 col-sm-6">
+                Date: <br class="hidden-xs-down"/>{{GiftCard.transaction_at | date}}
+              </div>
+              <div class="col-md-3 col-sm-6">
                 Amount: <br class="hidden-xs-down"/><b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
               </div>
             </div>
-            <hr />
             <div class="row mx-0 mt-2">
               <div class="col-12">
                 Meesage: {{GiftCard.message}}
@@ -63,50 +73,3 @@
     </div>
   </div>
 </div>
-<ng-template #card_form_modal>
-  <form [formGroup]="userPaymentForm" (submit)="saveUserPayment()" novalidate>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Add Credit Card</h4>
-    </div>
-    <div class="modal-body">
-        <alert displayId="popup"></alert>
-        <div class="bg-light p-2">
-            <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('card_holder_name')">
-                    <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
-                    <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
-                        [ngClass]="setInputClass('card_holder_name')" />
-                </div>
-            </div>
-            <div class="form-group row">                        
-                <div class="col-12" [ngClass]="setInputDivClass('card_number')">
-                    <label for="card_number" class="form-control-label">Credit Card Number</label>
-                    <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
-                        autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
-                </div>
-            </div>
-            <div class="form-group row px-3">                        
-                <div class="col-auto mr-1" [ngClass]="setInputDivClass('card_month_year')">
-                    <label for="card_month_year" class="form-control-label">Expiry Date</label>
-                    <input size="6" class="form-control form-control-sm rounded-0" id="card_month_year" type="tel" placeholder="MM / YYYY"
-                        autocomplete="cc-exp" ccExp formControlName="card_month_year" [ngClass]="setInputClass('card_month_year')" />
-                </div>
-                <div class="col"></div>
-                <div class="col-auto ml-auto" [ngClass]="setInputDivClass('card_cvv')">
-                    <label for="card_cvv" class="form-control-label">CVV</label>
-                    <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="password" placeholder="xxx"
-                        autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary pull-right" (click)="modalRef.hide()">
-          Close
-      </button>
-      <button type="submit" class="btn btn-primary pull-right">
-          Submit
-      </button>
-    </div>
-  </form>
-</ng-template>

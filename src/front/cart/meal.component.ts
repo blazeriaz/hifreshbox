@@ -18,6 +18,7 @@ export class MealComponent implements OnInit, OnDestroy {
     preferences;
     MealProduct;
     loading;
+    needToDestroyEvents = [];
 
     constructor(
         private alert: AlertService,
@@ -47,8 +48,8 @@ export class MealComponent implements OnInit, OnDestroy {
             howmany_people: 1,
             meal_extra_notes: 1
         }};
-
-        this.cartService.getCartTotal().subscribe(data => {
+        this.rest.showLoader();
+        this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
             if (data.guestCardId) {
                 this.MealProduct.cart_item.quote_id = data.guestCardId
             } else if (data.cart && data.cart.id) {
@@ -66,8 +67,9 @@ export class MealComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.checkoutMealForm.patchValue(formValues);
+                this.rest.hideLoader();
             }
-        });
+        }))
     }
 
     parseInt(v) {
@@ -80,7 +82,6 @@ export class MealComponent implements OnInit, OnDestroy {
         if (!option.qty_enabled || option.qty_enabled === '0' || option.qty_enabled === 0) {
             option.selected_qty = 1;
         }
-        console.log(option);
     }
 
     decresePreference(preference, option) {
@@ -125,10 +126,13 @@ export class MealComponent implements OnInit, OnDestroy {
                 })
             });
             this.loading = true;
+            this.rest.showLoader();
             this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
+                this.rest.hideLoader();
                 this.next.emit('meal');
                 this.cartService.setCartTotal(true);
             }, e => {
+                this.rest.hideLoader();
                 const err = e.json();
                 this.loading = false;
                 this.alert.error(err.message);
@@ -144,5 +148,6 @@ export class MealComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }

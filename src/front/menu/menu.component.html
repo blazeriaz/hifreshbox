@@ -63,7 +63,7 @@
                         <h5 (click)="showRecipeDetails(recipe)" class="pointer text-uppercase">{{recipe.name}}</h5>
                     </div>
                     <div class="card-body" *ngIf="!recipe.showFacts">
-                        <p>{{recipe.description}}</p>
+                        <p>{{ (recipe.description.length>100)? (recipe.description | slice:0:100)+'..':(recipe.description) }}</p>
                         <div class="my-3">
                             <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 20" aria-hidden="true"></i>
                             <i class="fa fa-star color-spl-green" *ngIf="recipe.rating_summary >= 40" aria-hidden="true"></i>

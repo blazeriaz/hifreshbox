@@ -12,6 +12,7 @@ export class CartComponent implements OnInit, OnDestroy {
     cart;
     totals;
     showImages;
+    needToDestroyEvents = [];
 
     constructor(
         private alert: AlertService,
@@ -28,13 +29,13 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
     initCartPage() {
-        this.cartService.getCartTotal().subscribe(data => {
+        this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
             if (data.cart || data.totals) {
                 this.cart = data.cart;
                 this.showImages = data.showImages;
                 this.totals = data.totals;
             }
-        });
+        }))
     }
 
     getImageFromCart(item_id) {
@@ -51,12 +52,15 @@ export class CartComponent implements OnInit, OnDestroy {
         if (!confirm('Are you sure want remove item from cart?')) {
             return;
         }
+        this.rest.showLoader();
         this.cartService.removeCartItem(item_id).subscribe(res => {
+            this.rest.hideLoader();
             this.cartService.decreaseCartItem(item_id);
         });
     }
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }

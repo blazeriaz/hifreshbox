@@ -23,6 +23,7 @@ export class GiftCardsListComponent implements OnInit {
     userPaymentForm;
     userPaymentSubmitted;
     user;
+    walletAmount;
 
     constructor(
         private alert: AlertService,
@@ -37,6 +38,12 @@ export class GiftCardsListComponent implements OnInit {
     ngOnInit(): void {
         this.deleteItems = [];
         this.loadGiftCardsList(1);
+        
+        this.rest.getItems(1, [], 1000, 'wallet-detail', 'criteria').subscribe(res => {
+            if(res.items && res.items[0]) {
+                this.walletAmount = res.items[0].remaining_amount;
+            }
+        });
     }
 
     loadGiftCardsList(pageNo) {

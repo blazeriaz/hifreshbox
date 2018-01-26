@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild, TemplateRef } from '@angular/core';
 import { RestService, AlertService, MealMenuService, AuthService, PagerService } from 'services';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-export const pageSize = 2;
+export const pageSize = 12;
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
 import { Validators, FormBuilder } from '@angular/forms';

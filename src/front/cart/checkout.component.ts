@@ -49,6 +49,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }];
 
         this.needDestroyServices = [];
+        this.rest.showLoader();
         this.needDestroyServices.push(
             this.cartService.getCartTotal().subscribe(data => {
                 this.cart = data.cart;
@@ -59,6 +60,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 }
 
                 if (!this.validateHaveCartItems(data)) {
+                    this.rest.hideLoader();
                     this.alert.error('No items added for checkout.', true);
                     this.router.navigate(['/', 'cart']);
                 }
@@ -69,6 +71,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                     this.steps = this.allSteps.filter(x => {
                         if (x.key === 'meal' && x.complete !== 1 && this.currentStep !== 'login') {
                             this.goToStep('meal', true);
+                            this.rest.hideLoader();
                         }
                         return true;
                     });
@@ -82,6 +85,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 if (this.auth.isLogin()) {
                     this.goToStep('shipping-address', true);
                 }
+                this.rest.hideLoader();
             })
         );
     }

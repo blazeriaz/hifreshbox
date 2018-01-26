@@ -1,7 +1,7 @@
 <div class="container"> 
   <div class="row py-2 mb-3">
     <div class="col-12">
-        <a class="text-muted" [routerLink]="['/', 'account', 'gift-cards']">Your Account</a>
+        <a class="text-muted" [routerLink]="['/', 'account']">Your Account</a>
         <span class="font-xs">>></span>
         <span class="font-weight-bold text-success">Your Gift Cards</span>
     </div>
@@ -13,6 +13,13 @@
           <h4 class="mb-4">Debit Gift Cards</h4>
         </div>
         <div class="card-block p-0">
+          <div class="row mx-0 py-1">
+            <div class="col">         
+              <div class="pull-right">
+                <a class="btn btn-link" [routerLink]="['/', 'account', 'gift-cards']">Redeemed Gift cards</a>
+              </div>
+            </div>
+          </div>
           <div class="row mx-0 py-2 bg-info" *ngIf="loadingList">
             <div class="col">
               Loading Gift Cards...
@@ -26,15 +33,15 @@
           </div>
 
           <div class="card py-4 m-0" *ngFor="let GiftCard of GiftCards; let odd= odd;">
-            <div class="row">
+            <div class="row mx-0">
               <div class="col-sm-4">
-                Gift Order Id: # {{GiftCard.order_id}}
+                Gift Id: <br class="hidden-xs-down"/># {{GiftCard.order_id}}
               </div>
               <div class="col-sm-4">
-                Status: <b>{{GiftCard.status}}</b>
+                Date: <br class="hidden-xs-down"/>{{GiftCard.transaction_at | date}}
               </div>
               <div class="col-sm-4">
-                Amount: <b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
+                Amount: <br class="hidden-xs-down"/><b>{{GiftCard.amount | currency:'USD':true:'1.2-2'}}</b>
               </div>
             </div>
           </div>

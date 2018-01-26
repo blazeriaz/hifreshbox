@@ -149,7 +149,7 @@ export class CartService {
     } else {             
       this.initUserSubscription();
     }    
-    this.rest.getItem('', cartUrl).subscribe(cart => {      
+    this.rest.getItem('', cartUrl).subscribe(cart => {
       this.rest.getItem('', cartUrl + '/totals').subscribe(totals => {
         this.cart = cart;      
         this.showImages = true;
