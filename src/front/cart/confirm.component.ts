@@ -40,11 +40,10 @@ export class ConfirmComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-        this.loading = false;       
-        this.rest.showLoader(); 
+        this.loading = false;  
         this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
             this.rest.showLoader();
-            if (!data.cart || !data.cart.loading) {
+            if (!data.cart || data.cart.loading) {
                 return;
             }
             this.cart = data.cart;

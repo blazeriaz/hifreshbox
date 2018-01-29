@@ -137,6 +137,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'cart']);
         } else {
             const stepObj = this.steps[index - 1];
+            if(stepObj.key == 'login' && this.auth.isLogin()) {
+                return true;
+            }
             this.currentStep = stepObj.key;
         }
         window.scroll(0, 0);

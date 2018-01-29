@@ -220,11 +220,11 @@ export class RestService {
   }
 
   private onSuccess(res: Response): void {
-    console.log('Request successful');
+    
   }
 
   private onError(res: Response): void {
-    console.log('Error, status code: ' + res.status);
+    
   }
 
   private onEnd(): void {

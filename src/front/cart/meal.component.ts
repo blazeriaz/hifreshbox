@@ -55,6 +55,9 @@ export class MealComponent implements OnInit, OnDestroy {
             } else if (data.cart && data.cart.id) {
                 this.MealProduct.cart_item.quote_id = data.cart.id
             }
+            if(!data.cart || data.cart.loading || data.cart.mealPreferenceLoading) {
+                return;
+            }
             if (data.mealPreferences && data.mealPreferences.length > 0) {
                 const formValues = {};
                 data.mealPreferences.forEach((x, i) => {

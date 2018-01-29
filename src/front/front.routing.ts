@@ -132,6 +132,13 @@ export const routes: Routes = [
         path: '',
         loadChildren: './cookbooks/cookbooks.module#CookbooksModule',
       }]
+    }, {
+      path: 'testimonials',
+      component: FullLayoutComponent,
+      children : [{
+        path: '',
+        loadChildren: './testimonials/testimonials.module#TestimonialsModule',
+      }]
     }]
   },
   {

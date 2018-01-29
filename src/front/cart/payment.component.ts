@@ -54,7 +54,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         });
 
         this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {
-            if (!data.cart || !data.cart.loading) {
+            if (!data.cart || data.cart.loading) {
                 return;
             }
             this.cart = data.cart;

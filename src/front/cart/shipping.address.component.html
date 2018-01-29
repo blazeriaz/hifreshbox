@@ -6,7 +6,7 @@
     <div class="col-12 mt-5" *ngIf="userAddress.length > 0">
         <div class="row">
             <div class="col-md-4 col-sm-6" *ngFor="let address of userAddress; let index = index;">
-              <div class="card card-faded" (click)="newShippingAddress= false; selectedShippingAddress=address;">
+              <div class="card card-faded" (click)="selectAddress(address)">
                 <div class="card-block" [ngClass]="setAddressClass(address, index)">
                   <address>
                     <strong>{{address.firstname}} {{address.lastname}}</strong><br>
@@ -24,7 +24,7 @@
     <div class="col-12 mt-0 px-0" *ngIf="userAddress.length > 0">
         <button type="button" class="btn btn-outline-green" (click)="selectedShippingAddress = null; newShippingAddress= true;">Add New Address</button>
     </div>
-    <div class="col-12 mt-5">
+    <div class="col-12 mt-5" #newAddress>
         <form [formGroup]="checkoutAddressForm" (submit)="saveCheckoutAddress()" novalidate>
             <div class="form-group row" formGroupName='shipping_address' *ngIf="newShippingAddress">                        
                 <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname', 'shipping_address')">

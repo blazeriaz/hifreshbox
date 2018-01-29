@@ -6,6 +6,7 @@ import { PofileFormComponent, profileEditResolve } from './profile.component';
 import { EmailsFormComponent, emailsFormResolve } from './emails.component';
 import { StoreFormComponent, storeFormResolve } from './store_info.component';
 import { emptyLayoutComponent } from '../layouts/empty-layout.component';
+import { OthersFormComponent } from './others.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,12 @@ const routes: Routes = [
             },
             data: {
                 title: 'Store Details'
+            }
+        },{
+            path: 'others',
+            component: OthersFormComponent,
+            data: {
+                title: 'Others Details'
             }
         }]
     }
