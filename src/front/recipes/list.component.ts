@@ -35,6 +35,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     selectRecipe;
     singleCB;
     user;
+    backgrounds;
 
     constructor(private rest: RestService,
         private auth: AuthService,
@@ -48,6 +49,9 @@ export class RecipesListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.backgrounds = {
+            recipe : GlobalVariable.htmlImages + 'each-recipe-img.png'
+        };
         this.globalVariable = GlobalVariable;
         this.deleteItems = [];
         this.initLoad = true;

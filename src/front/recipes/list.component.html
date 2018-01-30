@@ -41,7 +41,8 @@
                   <div (click)="showRecipeDetails(recipe)">
                       <img class="img-avatar img-fluid" 
                         [src]="recipe.custom_attributes | mgCatalogAttribute:'thumbnail'"
-                        (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />      
+                        (error)="recipe.imageHide=1" *ngIf="!recipe.imageHide" />   
+                      <img class="img-avatar img-fluid" [src]="backgrounds.recipe" *ngIf="recipe.imageHide==1" />  
                   </div>
                   <div class="card-title my-3">
                       <h5 (click)="showRecipeDetails(recipe)" class="text-uppercase">{{recipe.name}}</h5>

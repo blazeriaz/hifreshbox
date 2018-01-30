@@ -4,7 +4,7 @@
         <p>This billing address will be printed in order Invoice</p>
     </div>                     
     <div class="col-12">
-        <i class="fa pointer" (click)="sameAddress = !sameAddress" [ngClass]="{'fa-check-square-o' : sameAddress, 'fa-square-o' : !sameAddress}"></i>&nbsp;
+        <i class="fa pointer" (click)="toogleSameAsBilling()" [ngClass]="{'fa-check-square-o' : sameAddress, 'fa-square-o' : !sameAddress}"></i>&nbsp;
         <span class="pointer" (click)="sameAddress = !sameAddress">Same as my shipping info</span>
     </div>
     <div class="col-12" *ngIf="sameAddress">
@@ -34,54 +34,54 @@
     <div class="col-12 mt-5" #newAddress>
         <form [formGroup]="checkoutAddressForm" (submit)="saveCheckoutAddress()" novalidate>
             <div class="form-group row" formGroupName='address' *ngIf="!sameAddress && newBillingAddress">
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname', 'billing_address')">
-                    <label for="billing_address_first_name" class="form-control-label">First Name</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_first_name" formControlName="firstname" 
-                        [ngClass]="setAddressInputClass('firstname', 'billing_address')" />
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname', 'address')">
+                    <label for="address_first_name" class="form-control-label">First Name</label>
+                    <input type="text" class="form-control rounded-0" id="address_first_name" formControlName="firstname" 
+                        [ngClass]="setAddressInputClass('firstname', 'address')" />
                 </div>
                 
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('lastname', 'billing_address')">
-                    <label for="billing_address_last_name" class="form-control-label">Last Name</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_last_name" formControlName="lastname" 
-                        [ngClass]="setAddressInputClass('lastname', 'billing_address')" />
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('lastname', 'address')">
+                    <label for="address_last_name" class="form-control-label">Last Name</label>
+                    <input type="text" class="form-control rounded-0" id="address_last_name" formControlName="lastname" 
+                        [ngClass]="setAddressInputClass('lastname', 'address')" />
                 </div>
             </div>
             <div class="form-group row" formGroupName='address' *ngIf="!sameAddress && newBillingAddress">                        
-                <div formArrayName="street" class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('street', 'billing_address')">
-                    <label for="billing_address_street_0" class="form-control-label">Street Address</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_street_0" formControlName="0" 
-                        [ngClass]="setAddressInputClass('street', 'billing_address')" />
+                <div formArrayName="street" class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('street', 'address')">
+                    <label for="address_street_0" class="form-control-label">Street Address</label>
+                    <input type="text" class="form-control rounded-0" id="address_street_0" formControlName="0" 
+                        [ngClass]="setAddressInputClass('street', 'address')" />
                 </div>
                 
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('city', 'billing_address')">
-                    <label for="billing_address_city" class="form-control-label">City</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_city" formControlName="city" 
-                        [ngClass]="setAddressInputClass('city', 'billing_address')" />
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('city', 'address')">
+                    <label for="address_city" class="form-control-label">City</label>
+                    <input type="text" class="form-control rounded-0" id="address_city" formControlName="city" 
+                        [ngClass]="setAddressInputClass('city', 'address')" />
                 </div>
             </div>
             <div class="form-group row" formGroupName='address' *ngIf="!sameAddress && newBillingAddress">                        
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'billing_address')" >
-                    <label for="billing_address_region" class="form-control-label">Region</label>
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'address')" >
+                    <label for="address_region" class="form-control-label">Region</label>
                     <ng-select [allowClear]="true" [multiple]="false"
                         [items]="US_regions" 
-                        [active]="getActiveRegion('billing_address')" 
-                        (data)="refreshRegionValue('billing_address', $event)"
+                        [active]="getActiveRegion('address')" 
+                        (data)="refreshRegionValue('address', $event)"
                         placeholder="No region selected" *ngIf="US_regions.length > 0">
                     </ng-select>
                 </div>
                 
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('telephone', 'billing_address')">
-                    <label for="billing_address_telephone" class="form-control-label">Phone Number</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_telephone" formControlName="telephone" 
-                        [ngClass]="setAddressInputClass('telephone', 'billing_address')" />
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('telephone', 'address')">
+                    <label for="address_telephone" class="form-control-label">Phone Number</label>
+                    <input type="text" class="form-control rounded-0" id="address_telephone" formControlName="telephone" 
+                        [ngClass]="setAddressInputClass('telephone', 'address')" />
                     <span class="font-sm">We will notify you when the box is delivered</span>
                 </div>
             </div>
             <div class="form-group row" formGroupName='address' *ngIf="!sameAddress && newBillingAddress">                        
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'billing_address')">
-                    <label for="billing_address_postcode" class="form-control-label">Zip Code</label>
-                    <input type="text" class="form-control rounded-0" id="billing_address_postcode" formControlName="postcode" 
-                        [ngClass]="setAddressInputClass('postcode', 'billing_address')" />
+                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode', 'address')">
+                    <label for="address_postcode" class="form-control-label">Zip Code</label>
+                    <input type="text" class="form-control rounded-0" id="address_postcode" formControlName="postcode" 
+                        [ngClass]="setAddressInputClass('postcode', 'address')" />
                 </div>
             </div>
             <div class="form-group row mt-5">

@@ -253,7 +253,10 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
                 formValues['shipping_address'].save_in_address_book = 1;
             } else {
                 formValues['shipping_address'].save_in_address_book = 0;
-            }       
+            }    
+            if(this.sameAddress) {
+                formValues['billing_address'] = formValues['shipping_address'];
+            }   
             const sendData = {addressInformation : formValues};
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.rest.hideLoader();

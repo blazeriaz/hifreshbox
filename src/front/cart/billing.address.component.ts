@@ -232,17 +232,11 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
         return (invalid && this.checkoutAddressSubmitted) ? 'has-danger' : '';
     }
 
-    saveCheckoutAddress() {
-        this.checkoutAddressSubmitted = true;
-        this.alert.clear();
-        /**if(this.sameAddress && this.cartData.shippingAddress.same_as_billing) {
-            this.rest.hideLoader();
-            this.next.emit('billing-address');
-            this.cartService.setCartTotal(true);
-            return;
-        }**/
+    toogleSameAsBilling() {
+        this.sameAddress = !this.sameAddress;
         if(this.sameAddress) {
-            if (this.cartData.shippingAddress && this.cartData.shippingAddress.country_id) {            
+            let tmp = Object.assign({}, this.selectedBillingAddress);
+            if (this.cartData.shippingAddress && this.cartData.shippingAddress.country_id) {
                 if (this.cartData.shippingAddress.customer_address_id && this.userAddress.length > 0) {
                     let address = this.userAddress.find(x => x.id === this.cartData.shippingAddress.customer_address_id);
                     if(address) {
@@ -251,14 +245,40 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
                 }
                 if (!this.selectedBillingAddress) {
                     delete this.cartData.shippingAddress.customer_address_id;
-                    this.checkoutAddressForm.controls['address'].patchValue(this.cartData.shippingAddress);
+                    this.selectedBillingAddress = Object.assign({}, this.cartData.shippingAddress);
                 }
+                let address = Object.assign({}, this.selectedBillingAddress, {same_as_billing: 1});
+                this.selectedBillingAddress = Object.assign({}, tmp);
+                let formValues = {
+                    shipping_address: address,
+                    billing_address: address,
+                    shipping_carrier_code : 'tablerate',
+                    shipping_method_code : 'bestway'
+                };
+                const sendData = {addressInformation : formValues};
+                this.rest.showLoader();
+                this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
+                    this.rest.hideLoader();
+                    this.next.emit('billing-address');
+                    this.cartService.setCartTotal(true);
+                }, e => {
+                    this.rest.hideLoader();
+                    this.goBack();
+                    const err = e.json();
+                    this.alert.error(err.message, true);
+                })
             } else {
-                this.rest.hideLoader();
                 this.goBack();
-                this.cartService.setCartTotal(true);
                 return;
             }
+        }
+    }
+
+    saveCheckoutAddress() {
+        this.checkoutAddressSubmitted = true;
+        this.alert.clear();
+        if(this.sameAddress) {
+            return;
         }
         if (this.selectedBillingAddress) {
             this.checkoutAddressForm.controls['address'].patchValue(this.selectedBillingAddress);
