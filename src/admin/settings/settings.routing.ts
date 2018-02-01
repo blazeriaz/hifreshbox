@@ -6,7 +6,7 @@ import { PofileFormComponent, profileEditResolve } from './profile.component';
 import { EmailsFormComponent, emailsFormResolve } from './emails.component';
 import { StoreFormComponent, storeFormResolve } from './store_info.component';
 import { emptyLayoutComponent } from '../layouts/empty-layout.component';
-import { OthersFormComponent } from './others.component';
+import { OthersFormComponent, missEditResolve } from './others.component';
 
 
 const routes: Routes = [
@@ -46,6 +46,9 @@ const routes: Routes = [
         },{
             path: 'others',
             component: OthersFormComponent,
+            resolve: {
+                data: missEditResolve
+            },
             data: {
                 title: 'Others Details'
             }

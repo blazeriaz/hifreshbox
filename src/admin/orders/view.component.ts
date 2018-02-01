@@ -25,8 +25,26 @@ export class OrderViewComponent implements OnInit {
         let orderId = this.route.snapshot.params['id'];
         this.loadViewRequest = this.rest.getItem('', "orders/" + orderId).subscribe(res => {
             this.orderItem = res;
-            this.modalViewRef.hide();
         });
+
+        this.rest.getItem('', "orders/" + orderId + "/comments").subscribe(res => {
+            
+        });
+    }
+
+    shipTheOrder() {
+        this.rest.showLoader();
+        let sendData = {
+            items: [],
+            notify: true
+        };
+        this.rest.saveItem(false, sendData, 'order/' + this.orderItem.entity_id + '/ship').subscribe(res => {
+            this.orderItem.status = 'complete';
+            this.rest.hideLoader();
+            this.loadViewRequest = this.rest.getItem('', "orders/" + this.orderItem.entity_id).subscribe(res => {
+                this.orderItem = res;                
+            });
+        }, e => this.rest.hideLoader());
     }
     
     openEditModal() {

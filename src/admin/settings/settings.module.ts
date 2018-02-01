@@ -8,7 +8,7 @@ import { SharedModule } from 'shared.module';
 import { PofileFormComponent, profileEditResolve } from './profile.component';
 import { EmailsFormComponent, emailsFormResolve } from './emails.component';
 import { StoreFormComponent, storeFormResolve } from './store_info.component';
-import { OthersFormComponent } from './others.component';
+import { OthersFormComponent, missEditResolve } from './others.component';
 import { PagerService, UsersService } from "services";
 
 import {SelectModule} from 'ng2-select';
@@ -18,6 +18,6 @@ import {SelectModule} from 'ng2-select';
         MenuRoutingModule, SelectModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule
     ],
     declarations: [PofileFormComponent, EmailsFormComponent, StoreFormComponent, OthersFormComponent],
-    providers: [DatePipe, PagerService, UsersService, profileEditResolve, emailsFormResolve, storeFormResolve]
+    providers: [DatePipe, PagerService, UsersService, profileEditResolve, emailsFormResolve, storeFormResolve, missEditResolve]
 })
 export class SettingsModule { } 

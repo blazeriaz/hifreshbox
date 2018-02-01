@@ -94,16 +94,20 @@
                 <table class="table table-clear">
                     <tbody>
                         <tr>
-                            <td class="left"><strong>Subtotal</strong></td>
-                            <td class="right">{{orderItem.subtotal}} {{orderItem.order_currency_code}}</td>
+                          <td class="left"><strong>Subtotal</strong></td>
+                          <td class="right">{{orderItem.subtotal}} {{orderItem.order_currency_code}}</td>
                         </tr>
                         <tr>
-                            <td class="left"><strong>Tax</strong></td>
-                            <td class="right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
+                          <td class="left"><strong>Shipping</strong></td>
+                          <td class="right">{{orderItem.shipping_amount}} {{orderItem.order_currency_code}}</td>
                         </tr>
                         <tr>
-                            <td class="left"><strong>Total</strong></td>
-                            <td class="right"><strong>{{orderItem.grand_total}} {{orderItem.order_currency_code}}</strong></td>
+                          <td class="left"><strong>Tax</strong></td>
+                          <td class="right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
+                        </tr>
+                        <tr>
+                          <td class="left"><strong>Total</strong></td>
+                          <td class="right"><strong>{{orderItem.grand_total}} {{orderItem.order_currency_code}}</strong></td>
                         </tr>
                     </tbody>
                 </table>

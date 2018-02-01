@@ -1,7 +1,18 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Router, Resolve, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { ProductsService, AlertService, RestService, UsersService } from "services";
+
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
+
+@Injectable()
+export class missEditResolve implements Resolve<any> {
+  
+  constructor(private rest: RestService) {}
+  
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.rest.getItem(false, 'miscellaneous-information');
+  }
+}
 
 @Component({
     templateUrl: 'others.component.html'
@@ -9,6 +20,7 @@ import { FormBuilder, Validators, FormArray } from "@angular/forms";
 export class OthersFormComponent implements OnInit {
     forms:any = [];
     submitted;
+    formData;
 
     constructor(
       private usersService: UsersService,
@@ -19,17 +31,19 @@ export class OthersFormComponent implements OnInit {
       private _fb : FormBuilder
     ) { }
     
-    ngOnInit(): void {      
+    ngOnInit(): void {  
+      this.formData = this.route.snapshot.data['data'];
+
       this.forms['mailchimp'] = this._fb.group({
-        api_key : ['', [Validators.required]],
-        list_id : ['', [Validators.required]]
+        api_key : [this.formData[1].api_key, [Validators.required]],
+        list_id : [this.formData[1].list_id, [Validators.required]]
       });
       this.forms['social_info'] = this._fb.group({
-        facebook : ['', [Validators.required]],
-        twitter : ['', [Validators.required]],
-        instagram : ['', [Validators.required]],
-        pinterest : ['', [Validators.required]]
-      });
+        facebook : [this.formData[0].facebook, [Validators.required]],
+        twitter : [this.formData[0].twitter, [Validators.required]],
+        instagram : [this.formData[0].instagram, [Validators.required]],
+        pinterest : [this.formData[0].pinterest, [Validators.required]]
+      });      
     }
 
     setInputErrorClass(form, input) {

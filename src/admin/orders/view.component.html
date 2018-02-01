@@ -4,6 +4,9 @@
       <div class="card" *ngIf="orderItem">
         <div class="card-header">
             Invoice <strong>#{{orderItem.increment_id}}</strong>
+            <div class="btn-group pull-right" *ngIf="orderItem.status == 'processing'">
+              <button class="btn btn-primary" (click)="shipTheOrder()">Ship</button>
+            </div>
         </div>
         <div class="card-block">
           <div class="row mb-4">              
@@ -52,7 +55,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of orderItem.items;let index = index;">
-                    <td class="center">{{index}}</td>
+                    <td class="center">{{index + 1}}</td>
                     <td class="left">{{item.name}}</td>
                     <td class="left">{{item.sku}}</td>
                     <td class="center">{{item.qty_ordered}}</td>
@@ -77,6 +80,10 @@
                       <tr>
                           <td class="left"><strong>Subtotal</strong></td>
                           <td class="right">{{orderItem.subtotal}} {{orderItem.order_currency_code}}</td>
+                      </tr>
+                      <tr>
+                          <td class="left"><strong>Shipping</strong></td>
+                          <td class="right">{{orderItem.shipping_amount}} {{orderItem.order_currency_code}}</td>
                       </tr>
                       <tr>
                           <td class="left"><strong>Tax</strong></td>
