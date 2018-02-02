@@ -55,22 +55,34 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of orderItem.items;let index = index;">
-                    <td class="center">{{index + 1}}</td>
-                    <td class="left">{{item.name}}</td>
-                    <td class="left">{{item.sku}}</td>
-                    <td class="center">{{item.qty_ordered}}</td>
-                    <td class="right">{{item.price}} {{orderItem.order_currency_code}}</td>
-                    <td class="right">{{item.row_total}} {{orderItem.order_currency_code}}</td>
+                  <td class="center">{{index + 1}}</td>
+                  <td class="left">
+                    {{item.name}}
+                    <ul class="list-unstyled mt-1" *ngIf="orderOptions[index]">
+                      <li *ngFor="let option of orderOptions[index]?.options">
+                        <span>{{option.label}}</span>
+                        &nbsp;-&nbsp;
+                        <span *ngIf="option.option_id == 92">{{option.value | date}}</span>
+                        <span *ngIf="option.option_id != 92">{{option.value}}</span>
+                      </li>
+                    </ul>
+                  </td>
+                  <td class="left">{{item.sku}}</td>
+                  <td class="center">{{item.qty_ordered}}</td>
+                  <td class="right">{{item.price}} {{orderItem.order_currency_code}}</td>
+                  <td class="right">{{item.row_total}} {{orderItem.order_currency_code}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
     
-          <div class="row">
-  
-            <div class="col-lg-4 col-sm-5">
-              <div class="well">
-                  
+          <div class="row">  
+            <div class="col-lg-4 col-sm-5 hidden-xs-down">
+              <h6>Order History:</h6>
+              <div class="card p-2 mb-0" *ngFor="let history of orderItem.status_histories;">
+                  <p class="mb-0">{{history?.comment}}</p>  
+                  <span>{{histroy?.status}}</span>
+                  <span class="pull-right">{{histroy?.created_at | date}}</span>
               </div>
             </div><!--/.col-->
 
@@ -78,24 +90,33 @@
               <table class="table table-clear">
                   <tbody>
                       <tr>
-                          <td class="left"><strong>Subtotal</strong></td>
-                          <td class="right">{{orderItem.subtotal}} {{orderItem.order_currency_code}}</td>
+                          <td class="text-left"><strong>Subtotal</strong></td>
+                          <td class="text-right">{{orderItem.subtotal}} {{orderItem.order_currency_code}}</td>
                       </tr>
                       <tr>
-                          <td class="left"><strong>Shipping</strong></td>
-                          <td class="right">{{orderItem.shipping_amount}} {{orderItem.order_currency_code}}</td>
+                          <td class="text-left"><strong>Shipping</strong></td>
+                          <td class="text-right">{{orderItem.shipping_amount}} {{orderItem.order_currency_code}}</td>
                       </tr>
                       <tr>
-                          <td class="left"><strong>Tax</strong></td>
-                          <td class="right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
+                          <td class="text-left"><strong>Tax</strong></td>
+                          <td class="text-right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
                       </tr>
                       <tr>
-                          <td class="left"><strong>Total</strong></td>
-                          <td class="right"><strong>{{orderItem.grand_total}} {{orderItem.order_currency_code}}</strong></td>
+                          <td class="text-left"><strong>Total</strong></td>
+                          <td class="text-right"><strong>{{orderItem.grand_total}} {{orderItem.order_currency_code}}</strong></td>
                       </tr>
                   </tbody>
               </table>
             </div><!--/.col-->
+
+            <div class="col-12 hidden-sm-up">
+              <h6>Order History:</h6>
+              <div class="card p-2 mb-0" *ngFor="let history of orderItem.status_histories">
+                  <p>{{history?.comment}}</p>
+                  <span>{{histroy?.status}}</span>
+                  <span class="pull-right">{{histroy?.created_at | date}}</span>
+              </div>
+            </div>
   
           </div><!--/.row-->
         </div>

@@ -10,6 +10,7 @@ export class OrderViewComponent implements OnInit {
     @ViewChild('viewLoadModal') viewLoadModal: TemplateRef<any>;
     modalViewRef: BsModalRef;
     orderItem;
+    orderOptions = [];
     loadViewRequest;
 
     constructor(
@@ -22,8 +23,11 @@ export class OrderViewComponent implements OnInit {
 
     ngOnInit(): void {
         const orderId = this.route.snapshot.params['id'];
-        this.loadViewRequest = this.rest.getItem('', 'customer-orders/' + orderId).subscribe(res => {
+        this.rest.getItem('', 'customer-orders/' + orderId).subscribe(res => {
             this.orderItem = res;
         });
+        this.rest.getItem('', "order/customoption/" + orderId).subscribe(res => {
+            this.orderOptions = res;
+        })
     }
 }

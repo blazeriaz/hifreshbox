@@ -10,7 +10,8 @@ export class OrderViewComponent implements OnInit {
     @ViewChild('viewLoadModal') viewLoadModal: TemplateRef<any>;
     modalViewRef: BsModalRef;
     orderItem;
-    loadViewRequest;
+    orderOptions = [];
+    needToDestroyEvents = [];
 
     constructor(
         private alert: AlertService,
@@ -23,27 +24,31 @@ export class OrderViewComponent implements OnInit {
     
     ngOnInit(): void {
         let orderId = this.route.snapshot.params['id'];
-        this.loadViewRequest = this.rest.getItem('', "orders/" + orderId).subscribe(res => {
-            this.orderItem = res;
-        });
-
-        this.rest.getItem('', "orders/" + orderId + "/comments").subscribe(res => {
-            
-        });
+        this.needToDestroyEvents.push(this.rest.getItem('', "orders/" + orderId).subscribe(res => {
+            this.orderItem = res;            
+        }))
+        this.needToDestroyEvents.push(this.rest.getItem('', "order/customoption/" + orderId).subscribe(res => {
+            this.orderOptions = res;
+        }))
     }
 
     shipTheOrder() {
         this.rest.showLoader();
         let sendData = {
             items: [],
-            notify: true
+            notify: true,
+            appendComment: true,
+            comment: {
+                comment: "Order has been shipped!",
+                is_visible_on_front: 1
+            }
         };
         this.rest.saveItem(false, sendData, 'order/' + this.orderItem.entity_id + '/ship').subscribe(res => {
             this.orderItem.status = 'complete';
             this.rest.hideLoader();
-            this.loadViewRequest = this.rest.getItem('', "orders/" + this.orderItem.entity_id).subscribe(res => {
+            this.needToDestroyEvents.push(this.rest.getItem('', "orders/" + this.orderItem.entity_id).subscribe(res => {
                 this.orderItem = res;                
-            });
+            }))
         }, e => this.rest.hideLoader());
     }
     
@@ -58,14 +63,15 @@ export class OrderViewComponent implements OnInit {
     }
     
     abortView() {
-      if(this.loadViewRequest) {
-        this.loadViewRequest.map(sub=>sub?sub.unsubscribe():'');
-      }
       this.modalViewRef.hide();
       this.goToList();
     }
 
     goToList() {
         this.router.navigate(['recipes']);
+    }
+
+    ngonDestroy(): void {
+        this.needToDestroyEvents.forEach(x => x ? x.unsubscribe() : '');
     }
 }
