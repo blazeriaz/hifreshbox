@@ -70,7 +70,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 } else if (data.mealPreferences && data.mealPreferences.length > 0) {
                     this.steps = this.allSteps.filter(x => {
                         if (x.key === 'meal' && x.complete !== 1 && this.currentStep !== 'login') {
-                            this.goToStep('meal', true);
+                            this.currentStep = 'meal';
                             this.rest.hideLoader();
                         }
                         return true;
@@ -83,7 +83,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 this.currentStep = 'login';
 
                 if (this.auth.isLogin()) {
-                    this.goToStep('shipping-address', true);
+                    this.currentStep = 'shipping-address';
                 }
                 this.rest.hideLoader();
             })
@@ -126,7 +126,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         if(step == 'login' && this.auth.isLogin()) {
             return true;
         }
-        
+        this.cartService.setCartTotal(true);
         this.currentStep = step;
         window.scroll(0, 0);
     }
@@ -137,10 +137,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'cart']);
         } else {
             const stepObj = this.steps[index - 1];
-            if(stepObj.key == 'login' && this.auth.isLogin()) {
-                return true;
-            }
-            this.currentStep = stepObj.key;
+            this.goToStep(stepObj.key);
         }
         window.scroll(0, 0);
     }
@@ -153,8 +150,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }
         const stepObj = this.steps[index + 1];
         if (stepObj && stepObj.key) {
-            this.steps[index].complete = 1;
-            this.currentStep = stepObj.key;
+            for(let i=0; i <= index; i++) {
+                this.steps[i].complete = 1;
+            }          
+            this.goToStep(stepObj.key);
         } else {
             this.router.navigate(['/', 'checkout-success']);
         }
@@ -167,7 +166,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.router.navigate(['/', 'cart']);
             return;
         }
-        this.currentStep = step;
+        this.goToStep(step);
     }
 
     ngOnDestroy() {

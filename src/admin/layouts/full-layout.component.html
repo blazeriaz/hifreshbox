@@ -40,10 +40,14 @@
                   <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'preference']">
                     <i class="icon-list"></i> Meal Preferences</a>
                 </li>
-               <li class="nav-item">
+                <li class="nav-item">
                   <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'menu']">
                     <i class="icon-list"></i> Week Menu</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'menu', 'subscriptions']">
+                      <i class="icon-list"></i> Subscriptions</a>
+                  </li>
                 <li class="nav-item">
                   <a class="nav-link" routerLinkActive="active" [routerLink]="['/', 'meal', 'recipes']">
                     <i class="icon-list"></i> Recipes</a>
@@ -66,22 +70,13 @@
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/reviews']">
             <i class="icon-list"></i> Reviews</a>
         </li>
-		<li class="nav-item">
+		    <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/faqs']">
             <i class="icon-list"></i> FAQ</a>
         </li>
-		<li class="nav-item">
+		    <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/testimonials']">
             <i class="icon-list"></i> Testimonal</a>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle><i class="icon-star"></i> Newsletter</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/newsletter']">
-                <i class="icon-list"></i> Subscribers</a>
-            </li>
-          </ul>
         </li>
         <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
           <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle><i class="icon-star"></i> Masters</a>

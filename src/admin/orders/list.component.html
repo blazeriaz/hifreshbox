@@ -53,6 +53,8 @@
             <div class="col-md-12">  
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>
+                <span *ngIf="order.status == 'processing' || order.status == 'complete'"> | </span>
+                <a target="_blank" [href]="order.pdf_url" class="btn btn-link" *ngIf="order.status == 'processing' || order.status == 'complete'">PDF</a>
               </div>
             </div>
           </div>

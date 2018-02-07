@@ -133,7 +133,6 @@ export class MealComponent implements OnInit, OnDestroy {
             this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
                 this.rest.hideLoader();
                 this.next.emit('meal');
-                this.cartService.setCartTotal(true);
             }, e => {
                 this.rest.hideLoader();
                 const err = e.json();

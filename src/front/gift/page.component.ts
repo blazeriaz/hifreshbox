@@ -111,7 +111,7 @@ export class PageComponent implements OnInit {
             } else {
                 this.modalRef.hide();
                 this.alert.error("Gift card coupon was successfully redeemed!", true);
-                this.router.navigate(['/', 'my-account', 'gift-cards']);
+                this.router.navigate(['/', 'account', 'gift-cards']);
             }
         }, e => {
             this.modelDisabled = false;

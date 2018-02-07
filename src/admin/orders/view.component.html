@@ -4,8 +4,10 @@
       <div class="card" *ngIf="orderItem">
         <div class="card-header">
             Invoice <strong>#{{orderItem.increment_id}}</strong>
-            <div class="btn-group pull-right" *ngIf="orderItem.status == 'processing'">
-              <button class="btn btn-primary" (click)="shipTheOrder()">Ship</button>
+            <div class="btn-group pull-right">
+              <button class="btn btn-primary" (click)="location.back()">Go back</button>
+              <a *ngIf="orderItem.status == 'processing' || orderItem.status == 'complete'" target="_blank" [href]="orderItem.pdf_url" class="btn btn-primary">PDF</a>
+              <button class="btn btn-primary" (click)="shipTheOrder()" *ngIf="orderItem.status == 'processing'">Ship</button>
             </div>
         </div>
         <div class="card-block">
@@ -45,18 +47,18 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                    <th class="center">#</th>
+                    <th class="text-center">#</th>
                     <th>Item</th>
                     <th>SKU</th>
-                    <th class="center">Quantity</th>
-                    <th class="right">Unit Cost</th>
-                    <th class="right">Total</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-right">Unit Cost</th>
+                    <th class="text-right">Total</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of orderItem.items;let index = index;">
-                  <td class="center">{{index + 1}}</td>
-                  <td class="left">
+                  <td class="text-center">{{index + 1}}</td>
+                  <td class="text-left">
                     {{item.name}}
                     <ul class="list-unstyled mt-1" *ngIf="orderOptions[index]">
                       <li *ngFor="let option of orderOptions[index]?.options">
@@ -67,10 +69,10 @@
                       </li>
                     </ul>
                   </td>
-                  <td class="left">{{item.sku}}</td>
-                  <td class="center">{{item.qty_ordered}}</td>
-                  <td class="right">{{item.price}} {{orderItem.order_currency_code}}</td>
-                  <td class="right">{{item.row_total}} {{orderItem.order_currency_code}}</td>
+                  <td class="text-left">{{item.sku}}</td>
+                  <td class="text-center">{{item.qty_ordered}}</td>
+                  <td class="text-right">{{item.price}} {{orderItem.order_currency_code}}</td>
+                  <td class="text-right">{{item.row_total}} {{orderItem.order_currency_code}}</td>
                 </tr>
               </tbody>
             </table>
@@ -97,9 +99,17 @@
                           <td class="text-left"><strong>Shipping</strong></td>
                           <td class="text-right">{{orderItem.shipping_amount}} {{orderItem.order_currency_code}}</td>
                       </tr>
-                      <tr>
-                          <td class="text-left"><strong>Tax</strong></td>
-                          <td class="text-right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
+                      <tr *ngIf="orderItem.tax_amount">
+                        <td class="text-left"><strong>Tax</strong></td>
+                        <td class="text-right">{{orderItem.tax_amount}} {{orderItem.order_currency_code}}</td>
+                      </tr>
+                      <tr *ngIf="orderItem.discount_amount">
+                        <td class="text-left"><strong>Discount</strong></td>
+                        <td class="text-right">- {{orderItem.discount_amount}} {{orderItem.order_currency_code}}</td>
+                      </tr>                      
+                      <tr *ngIf="orderItem.wallet_balance">
+                        <td class="text-left"><strong>Wallet Balance</strong></td>
+                        <td class="text-right">- {{orderItem.wallet_balance}} {{orderItem.order_currency_code}}</td>
                       </tr>
                       <tr>
                           <td class="text-left"><strong>Total</strong></td>

@@ -13,12 +13,13 @@ import { PagerService, MealMenuService } from 'services';
 
 import {SelectModule} from 'ng2-select';
 import { MealComponent } from './meal.component';
+import { SubscriptionListComponent } from './subscriptions.component';
 
 @NgModule({
     imports: [
         SelectModule, MealRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, SharedModule, DndModule
     ],
-    declarations: [MealComponent, MenuComponent, RecipesListComponent, MenuListComponent],
+    declarations: [MealComponent, MenuComponent, RecipesListComponent, MenuListComponent, SubscriptionListComponent],
     providers: [DatePipe, PagerService, MealMenuService]
 })
 export class MealModule {

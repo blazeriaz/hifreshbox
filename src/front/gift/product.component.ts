@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { RestService, AlertService, CartService } from 'services';
+import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router } from '@angular/router';
@@ -19,6 +19,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     sentData;
     constructor(
         private alert: AlertService,
+        private auth: AuthService,
         private rest: RestService,
         private router: Router,
         private renderer: Renderer2,
@@ -88,6 +89,14 @@ export class ProductComponent implements OnInit, OnDestroy {
             'message': ['Because you like cooking so much and i like eating :)', Validators.required]
         });
 
+        this.auth.getUserInfo().subscribe(user => {
+            if (user && user.loading) {
+                this.recipientForm.patchValue({
+                    your_name: user.firstname + ' ' + user.lastname
+                });
+            } 
+        });
+
         this.giftItem = {};
         this.rest.getItem('freshbox-gift', 'recipedetail/' + 'freshbox-gift').subscribe(gift => {
             this.giftItem = gift;
@@ -116,16 +125,18 @@ export class ProductComponent implements OnInit, OnDestroy {
                     customOptions: this.customOptions
                 }
             };
-
+            this.rest.showLoader();
             this.cartService.addItemToCart(this.giftProduct).subscribe(res => {
                 this.sentData = false;
                 this.alert.success('Gift added to cart');
                 this.cartService.increaseCartItem(res);
+                this.rest.hideLoader();
                 this.router.navigate(['/', 'cart']);
             }, err => {
                 this.sentData = false;
                 const e = err.json();
                 this.alert.error(e.message);
+                this.rest.hideLoader();
             });
         } else {
             this.sentData = false;

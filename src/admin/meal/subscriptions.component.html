@@ -1,0 +1,70 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-list"></i> Menu Subscriptions
+          <div class="pull-right">
+            <button type="button" (click)="goToBack()" class="btn btn-primary">Go to Menu</button>
+            <button type="button" (click)="exportMenuSub()" class="btn btn-primary" *ngIf="subscriptions.length > 0">Export</button>
+          </div>
+        </div>
+        <div class="card-block">   
+          <div class="row py-2 bg-primary">
+            <div class="col-md-3">Customer</div>
+            <div class="col-md-3">Order</div>
+            <div class="col-md-3">Recipes</div>
+            <div class="col-md-3">Rating</div>
+          </div>
+
+          <div class="row py-2" *ngIf="subscriptions.length == 0">
+            No subscriptions!
+          </div>
+
+          <div class="row py-2" *ngFor="let sub of subscriptions;let odd=odd;" [ngClass]="{'bg-faded': odd}">
+            <div class="col-md-3">
+                {{sub.customer_firstname}} {{sub.customer_lastname}} <br/>
+                {{sub.customer_email}}
+            </div>
+            <div class="col-md-3">
+                #{{sub.order_id}} at <br />
+                {{sub.creation_time | date}}<br />
+                Status: {{sub.status}}
+                <div class="btn-group btn-group-sm">
+                  <a [routerLink]="['/', 'orders', 'view', sub.entity_id]" class="btn btn-link pl-0">View Order</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+              <div *ngFor="let pro of sub.product_list">
+                {{pro.name}}
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="text-muted" *ngFor="let prod of sub.product_list">
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 20}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 40}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 60}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 80}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 100}"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2"><div class="col-md-12" *ngIf="pager && subscriptions.length > 0">
+            <ul class="pagination pull-right">
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(1);">First</a></li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage - 1);">Prev</a></li>
+              <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(page);">{{page}}</a>
+              </li>
+              <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a class="page-link" href="javascript:void(0);" (click)="setPage(pager.currentPage + 1);">Next</a></li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

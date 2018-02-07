@@ -8,8 +8,29 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Co
  
 $token = curl_exec($ch);
 
-					
-$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/order/customoption/306");
+$searchCriteria = '{
+    "criteria": {
+        "filter_groups": [
+            {
+                "filters": [
+                    {
+                        "field": "week_no",
+                        "value": "6",
+                        "condition_type": "eq"
+                    }
+                ]
+            }
+        ],
+        "current_page": 1,
+        "page_size": 10,
+        "sort_orders": []
+    }
+}';
+
+$searchCriteriaString = http_build_query(json_decode($searchCriteria));
+
+						
+$ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/weekly/orders?".$searchCriteriaString);
 
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
@@ -18,7 +39,6 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
  
 $result = curl_exec($ch);
 echo '<pre>';
-print_r($result);
 print_r(json_decode($result)); 
 echo '</pre>';
 //var_dump($result);

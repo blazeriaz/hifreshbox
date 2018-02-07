@@ -41,14 +41,18 @@
               </div>
             </div>
             <div class="col-md-2 my-auto">{{sub.grand_total | currency:'USD':true:'1.2-2'}}</div>
-            <div class="col-md-3">
-              <div class="text-muted" *ngFor="let pro of sub.product_list">
-                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
-                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
-                <i class="fa fa-star" [ngClass]="{'text-success': true}"></i>&nbsp;
-                <i class="fa fa-star" [ngClass]="{'text-success': false}"></i>&nbsp;
-                <i class="fa fa-star" [ngClass]="{'text-success': false}"></i>
+            <div class="col-md-3" *ngIf="sub.ratedOrder">
+              <div class="text-muted" *ngFor="let prod of sub.product_list">
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 20}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 40}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 60}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 80}"></i>&nbsp;
+                <i class="fa fa-star" [ngClass]="{'text-success': prod.week_rating >= 100}"></i>
               </div>
+              <button type="button" class="btn btn-primary" (click)="openFeedbackForm(sub)">View Feedback</button>
+            </div>
+            <div class="col-md-3" *ngIf="!sub.ratedOrder">
+              <button type="button" class="btn btn-primary" (click)="openFeedbackForm(sub)">Add Feedback</button>
             </div>
           </div>
 
@@ -108,6 +112,8 @@
             <div class="col-md-2">  
               <div class="btn-group btn-group-sm">
                 <a [routerLink]="['view', order.entity_id]" class="btn btn-link pl-0">View</a>
+                <span *ngIf="order.status == 'processing' || order.status == 'complete'"> | </span>
+                <a target="_blank" [href]="order.pdf_url" class="btn btn-link" *ngIf="order.status == 'processing' || order.status == 'complete'">PDF</a>
               </div>
             </div>
           </div>
@@ -130,3 +136,35 @@
     </div>
   </div>
 </div>
+<ng-template #rateSubscription>
+  <form [formGroup]="feedBackForm" (submit)="saveMenuFeedBack()" novalidate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"><i class="fa fa-list"></i> Week {{feedBackSub.week_no}} - {{feedBackSub.weekDate}}, {{feedBackSub.year}}</h4>
+    </div>
+    <div class="modal-body" formArrayName="reviews">
+      <alert displayId="popup"></alert>
+      <p *ngIf="!feedBackSub.ratedOrder">Click the star to give review for the menu.</p>
+      <div class="form-group row" *ngFor="let prod of feedBackForm.get('reviews').controls; let index = index;">
+        <label class="col-12 form-control-label">{{feedBackSub.product_list[index].name}}</label>
+        <div class="col-12" [formGroupName]="index">
+          <textarea class="form-control" formControlName="detail" [readonly]="feedBackSub.ratedOrder"></textarea>
+          <span class="text-muted">
+            <i class="fa fa-star" (click)="setSubProductRate(index, 20)" [ngClass]="ratingStarClass(index, 20)"></i>
+            <i class="fa fa-star" (click)="setSubProductRate(index, 40)" [ngClass]="ratingStarClass(index, 40)"></i>
+            <i class="fa fa-star" (click)="setSubProductRate(index, 60)" [ngClass]="ratingStarClass(index, 60)"></i>
+            <i class="fa fa-star" (click)="setSubProductRate(index, 80)" [ngClass]="ratingStarClass(index, 80)"></i>
+            <i class="fa fa-star" (click)="setSubProductRate(index, 100)" [ngClass]="ratingStarClass(index, 100)"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="modalRef.hide()" [disabled]="sentData" type="button" class="btn btn-secondary">
+          Close
+      </button>
+      <button type="submit" [disabled]="sentData" class="btn btn-outline-green" *ngIf="!feedBackSub.ratedOrder">
+          Submit
+      </button>
+    </div>
+  </form>
+</ng-template>

@@ -3,11 +3,13 @@
 $review_data =  json_encode([
 						'productId' => 	2121,					
 						'nickname' => 'nickname sample',					
-						'title' => 'test title',					
-						'detail' => 'test detail',					
+						'title' => 'test title',				
+						'detail' => 'test detail',
+						'customerId'=> 113,
 						'ratingValue' => 4,					
 						'storeId' => 1,	
-						'weekNo' => 50, 
+						'weekNo' => 6,
+						'year'	=>'2018'
 						]);
 
  

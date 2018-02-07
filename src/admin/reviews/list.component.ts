@@ -53,17 +53,29 @@ export class ReviewsListComponent implements OnInit {
         let searchValues = this.searchForm.value;
         let filters = [];
         if(searchValues && searchValues.nickname) {
-            let searchNameFilter = {
+            let searchNameFilter1 = {
                 filters : [{
                     field : "nickname",
                     value : "%" + searchValues.nickname + "%",
                     condition_type : 'like'
                 }]
             };
-            filters.push(searchNameFilter);
+            filters.push(searchNameFilter1);
+            let searchNameFilter2 = {
+                filters : [{
+                    field : "title",
+                    value : "%" + searchValues.nickname + "%",
+                    condition_type : 'like'
+                }]
+            };
+            filters.push(searchNameFilter2);
         }
         this.loadingList = true;
-        this.searchSubscripe = this.rest.getItems(1, filters, pageSize, 'review/search', 'criteria')
+        const sortOrders = [{
+            field: 'review_id',
+            direction: 'DESC'
+        }];
+        this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'review/search', 'criteria', sortOrders)
             .subscribe(reviews => {
             this.initLoad = false;
             this.loadingList = false;

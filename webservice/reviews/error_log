@@ -8,3 +8,5 @@
 [26-Sep-2017 08:46:27 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/reviews/add_review.php on line 28
 [26-Sep-2017 08:47:01 UTC] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/reviews/add_review.php on line 28
 [13-Dec-2017 08:12:12 Pacific/Honolulu] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/reviews/add_review.php on line 27
+[03-Feb-2018 07:35:18 Pacific/Honolulu] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/reviews/bulk_add_review.php on line 48
+[03-Feb-2018 08:49:04 Pacific/Honolulu] PHP Catchable fatal error:  Object of class stdClass could not be converted to string in /home/whitespacestudio/public_html/freshbox/webservices/reviews/get_all_reviews.php on line 40

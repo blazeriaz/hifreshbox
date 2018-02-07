@@ -46,6 +46,10 @@ export class AuthService {
     }
   }
 
+  setUserInfo(user) {
+    this.userInfo.next(user);
+  }
+
   getUserInfo() { 
     return this.userInfo.asObservable();
   }

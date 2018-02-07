@@ -9,6 +9,8 @@ export const pdfDataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAD
 
 export const htmlImages = 'http://freshbox.white-space-studio-dev.com/images/';
 
+export const ORDER_PDF_URL = "http://freshbox.white-space-studio-dev.com/api/pdf_invoice_frontend/invoice/pdfdownload/?order_id=";
+export const EXPORT_MEAL_SUB = "http://freshbox.white-space-studio-dev.com/api/pdf_invoice_frontend/export/exceldownload/";
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -76,7 +76,6 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             }
             this.rest.hideLoader();
         }))
-        setTimeout(() => this.cartService.setCartTotal(true), 200);
 
         this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
     }

@@ -1,12 +1,56 @@
 import { Component, OnInit }    from '@angular/core';
-import { Router }               from '@angular/router';
+import * as GlobalVariable from 'global';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AlertService, RestService } from "services";
+import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 @Component({
     templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
+    orders;
+    users;
+    constructor(
+        private alert: AlertService,
+        private rest: RestService,
+        public route: ActivatedRoute,
+        public router: Router,
+        private _fb: FormBuilder
+    ) {}
 
-    constructor( ) { }
+    ngOnInit(): void {
+        this.loadOrdersList();
+        this.loadUsersList();
+    }
+
+    loadOrdersList() {
+        const filters = [];
+        const sortOrders = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
+        this.rest.getItems(1, filters, 5, 'orders', false, sortOrders).subscribe(orders => {
+            this.orders = orders.items.map(x => {
+                x.pdf_url = GlobalVariable.ORDER_PDF_URL + x.entity_id;
+                return x;
+            });
+        });
+    }
+
+    loadUsersList() {
+        const filters = [];
+        const sortOrders = [{
+            field: 'created_at',
+            direction: 'DESC'
+        }];
+        this.rest.getItems(1, filters, 5, 'customers/search', false, sortOrders).subscribe(users => {
+            this.users = users.items.map(user => {
+                user.default_shipping = user.addresses.find(x => x.default_shipping == 1);
+                user.default_billing = user.addresses.find(x => x.default_shipping == 1);
+                return user;
+            });
+        });
+    }
 
     public brandPrimary:string =  '#20a8d8';
     public brandSuccess:string =  '#4dbd74';
@@ -272,7 +316,4 @@ export class DashboardComponent implements OnInit {
 
     public sparklineChartLegend:boolean = false;
     public sparklineChartType:string = 'line';
-
-
-    ngOnInit(): void { }
 }

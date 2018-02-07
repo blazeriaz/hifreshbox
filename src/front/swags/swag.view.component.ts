@@ -87,8 +87,10 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         this.loadedSwag = false;
         this.errorSwag = false;
         const swagSku = this.route.snapshot.params['sku'];
+        this.rest.showLoader();
         this.rest.getItem(swagSku, 'recipedetail/' + swagSku).subscribe(swag => {console.log(swag);
             if(swag[0] === 'error' || (swag.status === 2 && !this.auth.isAdminLogin())) {
+                this.rest.hideLoader();
                 this.alert.error("Swag information does not exists!");   
                 this.errorSwag = true;
                 this.router.navigate(['/', '404']);
@@ -105,6 +107,7 @@ export class SwagViewComponent implements OnInit, OnDestroy {
             this.loadedSwag = true;
             this.swag = swag;
             this.loadMediaImages(swag.sku);
+            this.rest.hideLoader();
         });
     }
 
@@ -133,12 +136,15 @@ export class SwagViewComponent implements OnInit, OnDestroy {
 
     addSwagToCart() {
         this.alert.clear();
+        this.rest.showLoader();
         this.cartService.addItemToCart(this.swagProduct).subscribe(res => {
             this.cartService.increaseCartItem(res);
             this.alert.success('Swag added to cart.');
+            this.rest.hideLoader();
         }, err => {
             const e = err.json();
             this.alert.error(e.message);
+            this.rest.hideLoader();
         });
     }
 }

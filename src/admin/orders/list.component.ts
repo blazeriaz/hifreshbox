@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService, PagerService, RestService } from "services";
-
+import * as GlobalVariable from 'global';
 import { FormBuilder, Validators, FormArray } from "@angular/forms";
 
 export const pageSize = 10;
@@ -68,7 +68,10 @@ export class OrdersListComponent implements OnInit {
     }
 
     initOrdersList(orders, page?) {
-        this.orders = orders.items;
+        this.orders = orders.items.map(x => {
+            x.pdf_url = GlobalVariable.ORDER_PDF_URL + x.entity_id;
+            return x;
+        });
         // get pager object from service
         page = page ? page : 1;
         this.pager = this.pagerService.getPager(orders.total_count, page, pageSize);

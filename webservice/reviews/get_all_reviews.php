@@ -1,5 +1,5 @@
 <?php
-$userData = array("username" => "admin", "password" => "admin@123");
+$userData = array("username" => "freshbox", "password" => "abc@123");
 $ch = curl_init("http://freshbox.white-space-studio-dev.com/api/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
@@ -21,7 +21,7 @@ $searchCriteria = '{
                 ]
             }
         ],
-        "current_page": 1,
+        "current_page": 2,
         "page_size": 10,
         "sort_orders": [
 				{

@@ -6,6 +6,7 @@ import { MenuComponent } from './menu.component';
 import { MenuListComponent } from './list.component';
 import { RecipesListComponent } from './recipes.component';
 import { MealComponent } from './meal.component';
+import { SubscriptionListComponent } from './subscriptions.component';
 import { AuthService } from 'services';
 
 const routes: Routes = [{
@@ -20,6 +21,9 @@ const routes: Routes = [{
     children: [{
         path: '',
         component: MenuListComponent,
+    },{
+        path: 'subscriptions',
+        component: SubscriptionListComponent,
     }, {
         path: 'add-recipe',
         component: RecipesListComponent
