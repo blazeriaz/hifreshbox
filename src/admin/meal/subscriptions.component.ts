@@ -57,7 +57,12 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             }]
         });
 
-        this.listSubscription = this.rest.getItems(pageNo, filters, pageSize, 'weekly/orders', 'criteria').subscribe(subscriptions => {
+        const sortOrders = [{
+            field: 'creation_time',
+            direction: 'DESC'
+        }];
+
+        this.listSubscription = this.rest.getItems(pageNo, filters, pageSize, 'weekly/orders', 'criteria', sortOrders).subscribe(subscriptions => {
             this.initSubscriptionsList(subscriptions, pageNo);
         });
     }

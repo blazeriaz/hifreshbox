@@ -97,8 +97,8 @@
                       </div>
                   </div>
                 </div>
-                <div class="favourite_star font-sm" [ngClass]="recipeFavouriteClass(recipe)" *ngIf="isLogin()">
-                    <i class="fa fa-star float-right" (click)="addToFavourite(recipe)"  placement="left" tooltip="Add to favourite"></i>
+                <div class="favourite_star font-sm" *ngIf="isLogin()">
+                    <i class="fa fa-star float-right" (click)="toggleFavourite(recipe)"  placement="left" tooltip="Toggle favourite" [ngClass]="recipeFavouriteClass(recipe)"></i>
                     <i class="fa fa-book" (click)="addToCookbook(recipe)"  placement="right" tooltip="Add to Cookbook"></i>
                 </div>
               </div>

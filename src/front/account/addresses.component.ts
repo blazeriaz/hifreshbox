@@ -16,6 +16,8 @@ export class AddressesComponent implements OnInit, OnDestroy {
     indexDefaultAddress: number;
     submitted: boolean;
     saveLoading: boolean;
+
+    doDeleteAddress: boolean;
     
     loadedFormData;
     countLoadedFormReqs;
@@ -251,6 +253,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     deleteAddress(i: number) {
         if (confirm('Are you sure want to delete the address?')) {
             this.userForm.controls['addresses'].removeAt(i);
+            this.doDeleteAddress = true;
             this.saveUser();
         }
     }
@@ -295,18 +298,28 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.submitted = true;
         if (this.userForm.valid) {
             this.saveLoading = true;
+            this.rest.showLoader();
             this.rest.saveItem('me', {customer: this.userForm.value}, 'customers/me').subscribe(data => {
                 this.auth.initLoggedInUserInfo();
                 this.indexEditAddress = -1;
-                this.alert.success('The customer addressess have been saved successfully!');
+                if(this.doDeleteAddress) {
+                    this.alert.success('The customer addressess have been deleted successfully!');
+                } else {
+                    this.alert.success('The customer addressess have been saved successfully!');
+                }
                 this.saveLoading = false;
+                this.doDeleteAddress = false;
+                this.rest.hideLoader();
             }, e => {
                 const err = e.json();
                 this.alert.error(err.message);
                 this.saveLoading = false
+                this.doDeleteAddress = false;
+                this.rest.hideLoader();
             });
         } else {
             this.alert.error('Please check the form to enter all required details');
+            this.doDeleteAddress = false;
         }
     }
 

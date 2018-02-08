@@ -98,6 +98,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         });
 
         this.giftItem = {};
+        this.rest.showLoader();
         this.rest.getItem('freshbox-gift', 'recipedetail/' + 'freshbox-gift').subscribe(gift => {
             this.giftItem = gift;
             this.rest.getItem('freshbox-gift', 'products/' + 'freshbox-gift').subscribe(gift1 => {
@@ -106,8 +107,9 @@ export class ProductComponent implements OnInit, OnDestroy {
                 this.giftItem.dropDownOptions.forEach(x => {
                     this.setProductOption(x.option_id, x.values[0].option_type_id);
                 });
-            });
-        });
+                this.rest.hideLoader();
+            }, e => this.rest.hideLoader());
+        }, e => this.rest.hideLoader());
     }
 
     addGiftToCart() {

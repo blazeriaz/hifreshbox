@@ -128,27 +128,54 @@ export class RecipesListComponent implements OnInit, OnDestroy {
             direction: 'DESC'
         }];
         this.loadingList = true;
+        this.rest.showLoader();
         this.searchSubscripe = this.rest.getItems(pageNo, filters, pageSize, 'products', false, sortOrders).subscribe(recipes => {
             this.initLoad = false;
             this.loadingList = false;
             this.initRecipesList(recipes, pageNo);
-        });        
+            this.rest.hideLoader();
+        }, e => this.rest.hideLoader());        
     }
 
     recipeFavouriteClass(recipe) {
-        if (this.favRecipes.indexOf(recipe.id) !== -1) {
-            return 'text-success';
+        let className = [];
+        if (recipe.statusLoading) {
+            className.push('disabled');
         }
-        return '';
+        if (this.inFavRecipe(recipe.entity_id)) {
+            className.push('text-success');
+        }
+        return className;
     }
 
-    addToFavourite(recipe) {
-        if (!this.isLogin()) {
+    inFavRecipe(id) {
+        return this.favRecipes.findIndex(x => x.product_id == id) !== -1;
+    }
+
+    toggleFavourite(recipe) {
+        if (recipe.statusLoading) {
             return;
         }
-        this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.id).subscribe(data => {
-            this.favRecipes.push(recipe.id);
-        });
+        if (!this.auth.isLogin()) {
+            return;
+        }
+        this.alert.clear();
+        if (this.inFavRecipe(recipe.entity_id)) {
+            const item = this.favRecipes.find(x => x.product_id === recipe.entity_id);
+            this.removeFromFavuorite(item);
+        } else {
+            recipe.statusLoading = true;
+            this.rest.showLoader();
+            this.rest.saveItem('', {}, 'ipwishlist/add/' + recipe.entity_id).subscribe(data => {                
+                this.favRecipes.push(data[0]);
+                this.alert.success('Recipe had been added to favourite!');
+                recipe.statusLoading = false;
+                this.rest.hideLoader();
+            }, e => {
+                recipe.statusLoading = false;
+                this.rest.hideLoader();
+            });
+        }    
     }    
 
     showRecipeDetails(recipe) {
@@ -208,6 +235,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
         }
         this.modelDisabled = true;
         this.alert.clear();
+        this.rest.showLoader();
         this.rest.saveItem(false, {cookbook: this.cbForm.value}, 'cookbook').subscribe(res => {
             if(res[0] == 'error') {
                 this.modelDisabled = false;
@@ -217,9 +245,13 @@ export class RecipesListComponent implements OnInit, OnDestroy {
             res.recipe = [];
             this.cookbooks.push(res);
             this.modelDisabled = false;
+            this.rest.hideLoader();
             this.addRecipeToCookBook(res);
-            this.alert.success('Cookbook has been saved successfully!');
+            if(!this.selectRecipe) {
+                this.alert.success('Cookbook has been saved successfully!');
+            }
         }, e => {
+            this.rest.hideLoader();
             this.modelDisabled = false;
             var err = e.json();
             this.alert.error(err.message, false, 'popup');
@@ -238,6 +270,7 @@ export class RecipesListComponent implements OnInit, OnDestroy {
             recipe_id : this.selectRecipe.sku
         }};
         this.alert.clear();
+        this.rest.showLoader();
         this.rest.saveItem(false, sendData, 'cookbook-recipe').subscribe(res => {
             const cbIndex = this.cookbooks.findIndex(x => x.id === res.cookbook_id);
             this.selectRecipe.cookbook_recipe_id = res.id;
@@ -246,12 +279,14 @@ export class RecipesListComponent implements OnInit, OnDestroy {
             this.selectRecipe = null;
             this.modalRef.hide();
             this.alert.success('Recipe added to the Cookbook successfully!');
+            this.rest.hideLoader();
         }, err => {
             const e = err.json();
             this.modelDisabled = false;
             this.selectRecipe = null;
             this.modalRef.hide();
             this.alert.error(e.message);
+            this.rest.hideLoader();
         });
     }
 
@@ -287,9 +322,13 @@ export class RecipesListComponent implements OnInit, OnDestroy {
             return;
         }
         this.alert.clear();
+        this.rest.showLoader();
         this.rest.deleteItem(wishlist_item_id, 'ipwishlist/delete/' + wishlist_item_id).subscribe(res => {
             this.recipes = this.recipes.filter(x => x.wishlist_item_id !== wishlist_item_id);
             this.alert.success('Recipe had been removed from favourite!');
+            this.rest.hideLoader();
+        }, e => {
+            this.rest.hideLoader();
         });
     }
 }
