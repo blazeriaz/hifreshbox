@@ -107,7 +107,6 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
             if (this.userData.addresses.length > 0) {
                 this.userAddress = this.userData.addresses;
             }
-            console.log(this.cartData.shippingAddress);
             if (this.cartData.shippingAddress && this.cartData.shippingAddress.country_id) {
                 if (this.cartData.shippingAddress.customer_address_id && this.userAddress.length > 0) {
                     let address = this.userAddress.find(x => x.id === this.cartData.shippingAddress.customer_address_id);
@@ -265,16 +264,16 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
                 shipping_carrier_code : 'tablerate',
                 shipping_method_code : 'bestway'
             };
-            if(!same_as_billing) {
+            if(!same_as_billing && this.cartData.billingAddress && this.cartData.billingAddress.country_id) {
                 delete formValues.billing_address;
             }
             const sendData = {addressInformation : formValues};            
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.rest.hideLoader();
-                if(!same_as_billing) {
-                    this.next.emit('shipping-address');
-                } else {
+                if(same_as_billing == 1) {
                     this.next.emit('billing-address');
+                } else {
+                    this.next.emit('shipping-address');
                 }
             }, e => {
                 this.rest.hideLoader();

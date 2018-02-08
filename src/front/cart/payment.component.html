@@ -64,7 +64,7 @@
                         <span>{{shippingAddress.firstname}} {{shippingAddress.lastname}}</span><br>
                         <span *ngFor="let str of shippingAddress.street">{{str}}<br *ngIf="str" /></span>
                         <span *ngIf="shippingAddress.city">{{shippingAddress.city}}, </span>
-                        <span *ngIf="shippingAddress.region.region">{{shippingAddress.region.region}}, </span>
+                        <span *ngIf="shippingAddress.region">{{shippingAddress.region}}, </span>
                         <span>{{shippingAddress.country_id}} {{shippingAddress.postcode}}</span><br />
                         <abbr title="Phone" *ngIf="shippingAddress.telephone">P:</abbr> {{shippingAddress.telephone}}
                     </address>
@@ -80,8 +80,8 @@
                     <address class="m-0" *ngIf="billingAddress">
                         <span>{{billingAddress.firstname}} {{billingAddress.lastname}}</span><br>
                         <span *ngFor="let str of billingAddress.street">{{str}}<br *ngIf="str" /></span>
-                        <span *ngIf="billingAddress.city">{{shippingAddress.city}}, </span>
-                        <span *ngIf="billingAddress.region.region">{{billingAddress.region.region}}, </span>
+                        <span *ngIf="billingAddress.city">{{billingAddress.city}}, </span>
+                        <span *ngIf="billingAddress.region">{{billingAddress.region}}, </span>
                         <span>{{billingAddress.country_id}} {{billingAddress.postcode}}</span><br />
                         <abbr title="Phone" *ngIf="billingAddress.telephone">P:</abbr> {{billingAddress.telephone}}
                     </address>
