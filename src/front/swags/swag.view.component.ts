@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, HostListener } from '@angular/core';
 import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
@@ -18,6 +18,12 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     mainImgSrc;
     zoomedImgSrc;
     swagProduct;
+    allowImageZoom;
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.allowZoom();
+    }
 
     constructor(
         private alert: AlertService,
@@ -67,8 +73,6 @@ export class SwagViewComponent implements OnInit, OnDestroy {
         };
 
         this.renderer.addClass(document.body, 'white-header');
-        /**this.mainImgSrc = this.backgrounds.recipe;
-        this.zoomedImgSrc = this.backgrounds.recipe;**/
         this.loadSwag();
 
         this.swagProduct = {cartItem: {
@@ -81,6 +85,14 @@ export class SwagViewComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.renderer.removeClass(document.body, 'white-header');
+    }
+
+    allowZoom() {
+        if(window.innerWidth < 768) {
+            this.allowImageZoom = false;
+        } else {
+            this.allowImageZoom = true;
+        }
     }
 
     loadSwag() {
@@ -130,8 +142,12 @@ export class SwagViewComponent implements OnInit, OnDestroy {
     }
 
     changeMainImage(image) {
-        this.mainImgSrc = image.file.medium_file;
-        this.zoomedImgSrc = image.file.original_file_fullpath;
+        this.allowImageZoom = false;
+        setTimeout(() => {
+            this.mainImgSrc = image.file.medium_file;
+            this.zoomedImgSrc = image.file.original_file_fullpath;
+            this.allowZoom();
+        }, 100);        
     }
 
     addSwagToCart() {

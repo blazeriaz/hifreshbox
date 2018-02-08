@@ -270,7 +270,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
             const sendData = {addressInformation : formValues};            
             this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
                 this.rest.hideLoader();
-                if(same_as_billing == 1) {
+                if(this.sameAddress) {
                     this.next.emit('billing-address');
                 } else {
                     this.next.emit('shipping-address');

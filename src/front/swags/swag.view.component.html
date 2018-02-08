@@ -26,9 +26,9 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col" *ngIf="mainImgSrc">
-                        <img class="img-fluid" [src]="mainImgSrc" imageZoom="zoomedImgSrc" />
-                    </div>
+                    <div class="col" *ngIf="mainImgSrc"><div>
+                        <img class="img-fluid" [src]="mainImgSrc" [imageZoom]="zoomedImgSrc" clickToZoom="true" allowZoom="allowImageZoom" />
+                    </div></div>
                 </div>
             </div>
             <div class="col-md-6" *ngIf="loadedSwag">

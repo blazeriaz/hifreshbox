@@ -7,6 +7,8 @@ import { HttpModule } from "@angular/http";
 import { SharedModule } from "shared.module";
 import { FrontRoutingModule } from "./front.routing";
 
+import {ImageZoomModule} from 'angular2-image-zoom';
+
 import { AuthService, AlertService, RestService } from "services";
 import { HomeComponent } from "./home/home.component";
 import { MenuComponent } from "./menu/menu.component";
@@ -39,7 +41,8 @@ import { NotFoundComponent } from './layouts/404-layout.component';
     HttpModule,
     FrontRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ImageZoomModule
   ],
   declarations: [
     FrontComponent,
