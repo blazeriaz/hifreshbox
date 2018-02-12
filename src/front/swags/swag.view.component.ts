@@ -133,8 +133,13 @@ export class SwagViewComponent implements OnInit, OnDestroy {
             .subscribe(images => {
             this.swagMediaImages = images;
             this.loadedSwagMedia = true;
-            if (images.length > 0) {
-                this.changeMainImage(images[0]);
+            if (images.length > 1) {
+                this.changeMainImage(images[1]);
+            }
+            if (images.length > 0) {                
+                setTimeout(() => {
+                    this.changeMainImage(images[0]);
+                }, 1500);
             }
         },
         error => {

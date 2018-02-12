@@ -28,7 +28,7 @@ export class RestService {
   ) {
     this.criteria = 'searchCriteria';
     this.baseUrl = GlobalVariable.BASE_API_URL;
-    this.baseAPICard = GlobalVariable.BASE_URL;
+    this.baseAPICard = GlobalVariable.API_URL;
   }
 
   changeBaseUrl(url) {
@@ -56,7 +56,7 @@ export class RestService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Bearer ' + this.auth.getToken());
     let options = new RequestOptions({ headers: headers });
-    const url = this.baseAPICard + 'api/add_card.php';
+    const url = this.baseAPICard + 'add_card.php';
     return this.http.post(url, data, options)
       .map((response: Response) => {
         return response.text();

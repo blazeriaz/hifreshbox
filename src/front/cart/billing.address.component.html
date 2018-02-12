@@ -10,9 +10,9 @@
     <div class="col-12" *ngIf="sameAddress">
         <p>If you want the billing address diffrerent as shipping address, click the above box</p>
     </div>
-    <div class="col-12 mt-5" *ngIf="userAddress.length > 0 && !sameAddress && !newBillingAddress">
+    <div class="col-12 mt-5" *ngIf="userData && userData.addresses.length > 0 && !sameAddress && !newBillingAddress">
         <div class="row">
-            <div class="col-md-4 col-sm-6" *ngFor="let address of userAddress; let index = index;">
+            <div class="col-md-4 col-sm-6" *ngFor="let address of userData.addresses; let index = index;">
               <div class="card card-faded" (click)="selectAddress(address)">
                 <div class="card-block" [ngClass]="setBillingAddressClass(address, index)">
                   <address>
@@ -28,10 +28,10 @@
             </div>
         </div>
     </div>
-    <div class="col-12 mt-0" *ngIf="!sameAddress && userAddress.length > 0 && !newBillingAddress">
+    <div class="col-12 mt-0" *ngIf="!sameAddress && userData && userData.addresses.length > 0 && !newBillingAddress">
         <button type="button" class="btn btn-outline-green" (click)="addNewAddress()">Add New Address</button>
     </div>
-    <div class="col-12 mt-0" *ngIf="!sameAddress && userAddress.length > 0 && newBillingAddress">
+    <div class="col-12 mt-0" *ngIf="!sameAddress && userData && userData.addresses.length > 0 && newBillingAddress">
         <button type="button" class="btn btn-outline-green" (click)="newBillingAddress= false;">Existing Addresses</button>
     </div>
     <div class="col-12 mt-5" #newAddress>
@@ -91,11 +91,10 @@
         <div class="form-group row mt-5">
             <div class="col-12"><hr /></div>                        
             <div class="col text-left">
-                <button type="button" [disabled]="loading" class="btn btn-outline-green" (click)="goBack()">Back</button>
+                <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
             </div>
             <div class="col-auto text-right">
-                <button type="button" class="btn btn-outline-green" *ngIf="!loading" (click)="saveCheckoutAddress()">Continue</button>
-                <button type="button" class="btn btn-outline-green" disabled *ngIf="loading" >Loading...</button>
+                <button type="button" class="btn btn-outline-green" (click)="saveCheckoutAddress()">Continue</button>
             </div>
         </div>
     </div>

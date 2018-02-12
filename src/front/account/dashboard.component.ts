@@ -24,7 +24,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             if (user && !user.loading) {
                 this.user = user;
             }
-        })
+        });
+        setTimeout(() =>{
+            if(!this.user) {
+                this.auth.initLoggedInUserInfo();
+            }
+        }, 5000);
     }
 
     goToAccountMenu(menu) {

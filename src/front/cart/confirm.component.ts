@@ -59,16 +59,20 @@ export class ConfirmComponent implements OnInit, OnDestroy {
             this.mealPreferences = {};
             if (data.mealPreferences && data.mealPreferences.length > 0) {
                 data.mealPreferences.forEach((x, i) => {
-                    if (i === 0) {
-                        const selected_options = [];
+                    let selected_preferences = [];
+                    if (i === 0) {                
                         x.forEach(y => {
+                            const selected_options = [];
                             y.options.forEach(z => {
                                 if (z.is_selected) {
                                     selected_options.push(z);
                                 }
                             });
-                        });
-                        this.mealPreferences = Object.assign({}, this.mealPreferences, {selected_options: selected_options});
+                            if(selected_options.length > 0) {
+                                selected_preferences.push(Object.assign({}, y, {selected_options: selected_options}));
+                            }
+                        });console.log(selected_preferences);
+                        this.mealPreferences = Object.assign({}, this.mealPreferences, {selected_preferences: selected_preferences});
                     } else {
                         this.mealPreferences = Object.assign({}, this.mealPreferences, x);
                     }

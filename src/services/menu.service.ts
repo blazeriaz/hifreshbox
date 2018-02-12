@@ -15,7 +15,7 @@ export class MealMenuService {
 		private datePipe: DatePipe
 		) {
 		const data = this.getCurrentyearMonth();
-	    this.setYearWeek(data.year, data.week);
+		this.setYearWeek(data.year, data.week);
 	}
 
 	getCurrentyearMonth() {
@@ -23,7 +23,7 @@ export class MealMenuService {
 	    const currentYear = date.getFullYear();
 		let currentWeek = this.getWeekNumber(date);
 		currentWeek++;
-	    if (date.getDay() >= 5) {
+	    if (date.getDay() > 4) {
 	    	currentWeek++;
 	    }
 		return {

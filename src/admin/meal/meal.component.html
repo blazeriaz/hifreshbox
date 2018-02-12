@@ -77,47 +77,48 @@
     <h4 class="modal-title pull-left">Preference Option</h4>
   </div>
   <div class="modal-body">
+		<alert displayId="popup"></alert>
     <form [formGroup]="optionForm" (submit)="saveMealOption()">
-		<div class="form-group row">
-			<label for="option_title" class="col-12 form-control-label">Name</label>
-			<div class="col-12" [ngClass]="setContainerErrorClass('title', optionForm)">
-				<input type="text" class="form-control" id="option_title" 
-					formControlName="title"  [ngClass]="setInputErrorClass('title', optionForm)" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label for="option_price" class="col-12 form-control-label">Price</label>
-			<div class="col-12" [ngClass]="setContainerErrorClass('price', optionForm)">
-				<input type="number" class="form-control" id="option_price"
-					formControlName="price"  [ngClass]="setInputErrorClass('price', optionForm)" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label for="option_sort_order" class="col-12 form-control-label">Sort Order</label>
-			<div class="col-12" [ngClass]="setContainerErrorClass('sort_order', optionForm)">
-				<input type="number" min="1" class="form-control" id="option_sort_order"
-					formControlName="sort_order" [ngClass]="setInputErrorClass('sort_order', optionForm)" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-12 form-control-label">Need Quantity</label>
-			<div class="col-12">
-				<div class="btn-group">
-					<button type="button" class="btn" (click)="setFormFieldButton('qty_enabled', optionForm, 1)" [ngClass]="getClassFieldButton('qty_enabled', optionForm, 1)">Yes</button>
-					<button type="button" class="btn" (click)="setFormFieldButton('qty_enabled', optionForm, 0)" [ngClass]="getClassFieldButton('qty_enabled', optionForm, 0)">No</button>
+			<div class="form-group row">
+				<label for="option_title" class="col-12 form-control-label">Name</label>
+				<div class="col-12" [ngClass]="setContainerErrorClass('title', optionForm)">
+					<input type="text" class="form-control" id="option_title" 
+						formControlName="title"  [ngClass]="setInputErrorClass('title', optionForm)" />
 				</div>
 			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-12 form-control-label">Status</label>
-			<div class="col-12">
-				<div class="btn-group">
-					<button type="button" class="btn" (click)="setFormFieldButton('is_active', optionForm, 1)" [ngClass]="getClassFieldButton('is_active', optionForm, 1)">Active</button>
-					<button type="button" class="btn" (click)="setFormFieldButton('is_active', optionForm, 0)" [ngClass]="getClassFieldButton('is_active', optionForm, 0)">In-Active</button>
+			<div class="form-group row">
+				<label for="option_price" class="col-12 form-control-label">Price</label>
+				<div class="col-12" [ngClass]="setContainerErrorClass('price', optionForm)">
+					<input type="number" class="form-control" id="option_price"
+						formControlName="price"  [ngClass]="setInputErrorClass('price', optionForm)" />
 				</div>
 			</div>
-		</div>
-	</form>
+			<div class="form-group row">
+				<label for="option_sort_order" class="col-12 form-control-label">Sort Order</label>
+				<div class="col-12" [ngClass]="setContainerErrorClass('sort_order', optionForm)">
+					<input type="number" min="1" class="form-control" id="option_sort_order"
+						formControlName="sort_order" [ngClass]="setInputErrorClass('sort_order', optionForm)" />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-12 form-control-label">Need Quantity</label>
+				<div class="col-12">
+					<div class="btn-group">
+						<button type="button" class="btn" (click)="setFormFieldButton('qty_enabled', optionForm, 1)" [ngClass]="getClassFieldButton('qty_enabled', optionForm, 1)">Yes</button>
+						<button type="button" class="btn" (click)="setFormFieldButton('qty_enabled', optionForm, 0)" [ngClass]="getClassFieldButton('qty_enabled', optionForm, 0)">No</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-12 form-control-label">Status</label>
+				<div class="col-12">
+					<div class="btn-group">
+						<button type="button" class="btn" (click)="setFormFieldButton('is_active', optionForm, 1)" [ngClass]="getClassFieldButton('is_active', optionForm, 1)">Active</button>
+						<button type="button" class="btn" (click)="setFormFieldButton('is_active', optionForm, 0)" [ngClass]="getClassFieldButton('is_active', optionForm, 0)">In-Active</button>
+					</div>
+				</div>
+			</div>
+		</form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary pull-right" [disabled]="loading"(click)="closeEditModal(modalOptionFormRef)">
@@ -137,24 +138,32 @@
     <h4 class="modal-title pull-left">Meal Preference</h4>
   </div>
   <div class="modal-body">
+		<alert displayId="popup"></alert>
     <form [formGroup]="mealPrefForm" (submit)="saveMealPref()">
-		<div class="form-group row">
-			<label for="option_title" class="col-12 form-control-label">Title</label>
-			<div class="col-12" [ngClass]="setContainerErrorClass('title', mealPrefForm)">
-				<input type="text" class="form-control" id="option_title" 
-					formControlName="title"  [ngClass]="setInputErrorClass('title', mealPrefForm)" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-12 form-control-label">Status</label>
-			<div class="col-12">
-				<div class="btn-group">
-					<button type="button" class="btn" (click)="setFormFieldButton('is_active', mealPrefForm, 1)" [ngClass]="getClassFieldButton('is_active', mealPrefForm, 1)">Active</button>
-					<button type="button" class="btn" (click)="setFormFieldButton('is_active', mealPrefForm, 0)" [ngClass]="getClassFieldButton('is_active', mealPrefForm, 0)">In-Active</button>
+			<div class="form-group row">
+				<label for="option_title" class="col-12 form-control-label">Title</label>
+				<div class="col-12" [ngClass]="setContainerErrorClass('title', mealPrefForm)">
+					<input type="text" class="form-control" id="option_title" 
+						formControlName="title"  [ngClass]="setInputErrorClass('title', mealPrefForm)" />
 				</div>
 			</div>
-		</div>
-	</form>
+			<div class="form-group row">
+				<label for="option_display_title" class="col-12 form-control-label">Display Title</label>
+				<div class="col-12" [ngClass]="setContainerErrorClass('display_title', mealPrefForm)">
+					<input type="text" class="form-control" id="option_display_title" 
+						formControlName="display_title"  [ngClass]="setInputErrorClass('display_title', mealPrefForm)" />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-12 form-control-label">Status</label>
+				<div class="col-12">
+					<div class="btn-group">
+						<button type="button" class="btn" (click)="setFormFieldButton('is_active', mealPrefForm, 1)" [ngClass]="getClassFieldButton('is_active', mealPrefForm, 1)">Active</button>
+						<button type="button" class="btn" (click)="setFormFieldButton('is_active', mealPrefForm, 0)" [ngClass]="getClassFieldButton('is_active', mealPrefForm, 0)">In-Active</button>
+					</div>
+				</div>
+			</div>
+		</form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary pull-right" [disabled]="loading" (click)="closeEditModal(modalPrefFormRef)">

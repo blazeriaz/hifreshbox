@@ -19,9 +19,8 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
     UsregionsAll;
     checkoutAddressForm;
     checkoutAddressSubmitted;
-    userAddress = [];
-    loading;
     sameAddress = true;
+    selectedShippingAddress = null;
     selectedBillingAddress = null;
     newBillingAddress = false;
     needToLoaded;
@@ -41,7 +40,6 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.renderer.addClass(document.body, 'white-header');
-        this.loading = true;
         this.US_regions = [];
         this.UsregionsAll = [];
         this.needToLoaded = {
@@ -70,7 +68,6 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
             }
             if(user.loading) {
                 this.needToLoaded.user = false;
-                this.loading = true;
                 return;
             }
             this.userData = user;
@@ -84,7 +81,6 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
             }
             if(data.cart.loading) {
                 this.needToLoaded.cart = false;
-                this.loading = true;
                 return;
             }
             this.cartData = data;
@@ -96,60 +92,35 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
 
     checkAllLoaded() {
         if(this.needToLoaded.region && this.needToLoaded.user && this.needToLoaded.cart) {
-            this.loading = false;
-            this.userAddress = [];
             this.selectedBillingAddress = null;
             this.newBillingAddress = false;
-            this.rest.hideLoader();
-            if (this.userData.addresses.length > 0) {
-                this.userAddress = this.userData.addresses;
-            }
-
-            if (this.cartData.shippingAddress && this.cartData.shippingAddress.country_id) {
-                this.sameAddress = this.cartData.shippingAddress.same_as_billing
-            }
             
-            if (this.cartData.billingAddress && this.cartData.billingAddress.country_id) {
-                if (this.cartData.billingAddress.customer_address_id && this.userAddress.length > 0) {
-                    let address = this.userAddress.find(x => x.id === this.cartData.billingAddress.customer_address_id);
+            this.selectedShippingAddress = this.checkCartAddressValid(this.cartData.shippingAddress);
+            if(!this.selectedShippingAddress) {
+                this.goBack();
+                return;
+            }
+            this.sameAddress = this.cartData.shippingAddress.same_as_billing == 1 ? true : false;
+
+            this.selectedBillingAddress = this.checkCartAddressValid(this.cartData.billingAddress);
+
+            if(!this.selectedBillingAddress) {
+                if(this.userData.addresses.length > 0) {
+                    let address = this.userData.addresses.find(x => x.default_billing);
                     if(address) {
-                        this.selectAddress(address);
+                        this.selectedBillingAddress = address;
                     }
-                } 
-            } else if (this.userData.addresses.length > 0) {
-                let address = this.userAddress.find(x => x.default_billing);
-                if(address) {
-                    this.selectAddress(address);
+                } else {
+                    this.addNewAddress();
                 }
             }
-            if (!this.selectedBillingAddress || this.userData.addresses.length == 0) {
-                this.addNewAddress();
-            }
-
-            if(this.newBillingAddress) {
-                setTimeout(()=>this.newAddress.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' }))
-            }
+            this.rest.hideLoader();
         }        
-    }
-
-    selectAddress(address) {
-        this.newBillingAddress= false;
-        let selectedBillingAddress = {};
-        selectedBillingAddress['customer_address_id'] = address.id;
-        Object.keys(address).forEach(x => {
-            let ignoreFields = ['id', 'default_billing', 'default_shipping'];
-            if (x === 'region') {
-                Object.assign({}, selectedBillingAddress, address[x]);
-            } else if(ignoreFields.indexOf(x) == -1) {
-                selectedBillingAddress[x] = address[x];
-            }
-        });
-        this.selectedBillingAddress = selectedBillingAddress;
     }
 
     setBillingAddressClass(address, i: number) {
         return {
-            'bg-primary text-white' : this.selectedBillingAddress && this.selectedBillingAddress.customer_address_id === address.id
+            'bg-primary text-white' : this.selectedBillingAddress && this.selectedBillingAddress.id === address.id
         };
     }
 
@@ -226,50 +197,80 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
         return (invalid && this.checkoutAddressSubmitted) ? 'has-danger' : '';
     }
 
+    selectAddress(adddress) {
+        this.newBillingAddress= false;
+        this.selectedBillingAddress = adddress;
+    }
+
+    convertUserAddress(address) {
+        let convertedAddress = {};
+        convertedAddress['customer_address_id'] = address.id;        
+        let ignoreFields = ['id', 'default_billing', 'default_shipping', 'region', 'region_id'];
+        Object.keys(address).forEach(x => {
+            if(ignoreFields.indexOf(x) == -1) {
+                convertedAddress[x] = address[x];
+            }
+        });
+        convertedAddress['customer_id'] = this.userData.id;
+        convertedAddress['same_as_billing'] = this.sameAddress ? 1 : 0;
+        return Object.assign({}, convertedAddress, address['region']);
+    }
+
     toogleSameAsBilling() {
         this.sameAddress = !this.sameAddress;
         if(this.sameAddress) {
-            let tmp = Object.assign({}, this.selectedBillingAddress);
-            if (this.cartData.shippingAddress && this.cartData.shippingAddress.country_id) {
-                if (this.cartData.shippingAddress.customer_address_id && this.userAddress.length > 0) {
-                    let address = this.userAddress.find(x => x.id === this.cartData.shippingAddress.customer_address_id);
-                    if(address) {
-                        this.selectAddress(address);
-                    }
-                }
-                if (!this.selectedBillingAddress) {
-                    delete this.cartData.shippingAddress.customer_address_id;
-                    this.selectedBillingAddress = Object.assign({}, this.cartData.shippingAddress);
-                }
-                let address = Object.assign({}, this.selectedBillingAddress, {same_as_billing: 1});
-                this.selectedBillingAddress = Object.assign({}, tmp);
-                let formValues = {
-                    shipping_address: address,
-                    billing_address: address,
-                    shipping_carrier_code : 'tablerate',
-                    shipping_method_code : 'bestway'
-                };
-                const sendData = {addressInformation : formValues};
-                this.rest.showLoader();
-                this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
-                    this.rest.hideLoader();
-                    this.next.emit('billing-address');
-                }, e => {
-                    this.rest.hideLoader();
-                    this.goBack();
-                    const err = e.json();
-                    this.alert.error(err.message, true);
-                })
-            } else {
-                this.goBack();
-                return;
+            this.saveShipBillAddress();
+        }
+    }
+
+    checkCartAddressValid(address) {
+        if (address && address.country_id) {
+            if (address.customer_address_id && this.userData.addresses.length > 0) {
+                let returnAddress = this.userData.addresses.find(x => x.id == address.customer_address_id);
+                return returnAddress;
             }
         }
+        return false;
+    }
+
+    saveShipBillAddress() {
+        let shipping_address = this.selectedShippingAddress;
+        let billing_address = this.selectedBillingAddress;
+        let same_as_billing = this.sameAddress;
+        if(same_as_billing) {
+            billing_address = shipping_address;
+        }
+        let formValues = {
+            shipping_address: this.convertUserAddress(shipping_address),
+            billing_address: this.convertUserAddress(billing_address),
+            shipping_carrier_code : 'tablerate',
+            shipping_method_code : 'bestway'
+        };
+        const sendData = {addressInformation : formValues};
+        this.rest.showLoader();
+        this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
+            this.rest.hideLoader();
+            if(this.newBillingAddress) {
+                this.auth.setUserInfo(this.userData);
+            }
+            this.next.emit('billing-address');
+        }, e => {
+            this.rest.hideLoader();
+            if(this.newBillingAddress) {
+                this.auth.setUserInfo(this.userData);
+            }
+            this.goBack();
+            const err = e.json();
+            if(err.message == 'Carrier with such method not found: %1, %2') {
+                this.alert.error('We can\'t ship the order to your location');
+            } else {                
+                this.alert.error(err.message);
+            }
+        })
     }
 
     saveUserAddress() {
         if (this.checkoutAddressForm.valid) {
-            this.loading = true;
             let sentUserData = {
                 'id': this.userData.id,
                 'store_id': 1,
@@ -282,9 +283,9 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
             };
             sentUserData.addresses.push(this.checkoutAddressForm.value);
             this.rest.saveItem('me', {customer: sentUserData}, 'customers/me').subscribe(user => {
-                this.auth.setUserInfo(user);
-                this.selectAddress(user.addresses[user.addresses.length - 1]);
-                this.saveBillingAddress();
+                this.userData = user;
+                this.selectedBillingAddress = user.addresses[user.addresses.length - 1];
+                this.saveShipBillAddress();
             }, e => {
                 const err = e.json();
                 this.alert.error(err.message);
@@ -296,45 +297,23 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
         }
     }
 
-    saveBillingAddress() {
-        if (this.selectedBillingAddress) {
-            let same_as_billing = this.sameAddress ? 1 : 0;
-            this.selectedBillingAddress = Object.assign({}, this.selectedBillingAddress, {
-                same_as_billing: same_as_billing,
-                customer_id: this.userData.id
-            });
-
-            let formValues = {
-                address: this.selectedBillingAddress,
-                useForShipping: this.sameAddress
-            };  
-            this.rest.saveItem(false, formValues, 'carts/mine/billing-address').subscribe(res => {
-                this.rest.hideLoader();
-                this.next.emit('billing-address');
-            }, e => {
-                this.rest.hideLoader();
-                this.loading = false;
-                const err = e.json();
-                this.alert.error(err.message);
-            })       
-        } else {
-            this.rest.hideLoader();
-            this.alert.error('Please select the address for shipping!');
-        }
-    }
-
     saveCheckoutAddress() {
-        this.alert.clear();
-        if(this.sameAddress) {
-            this.next.emit('billing-address');
-            return;
-        }
-        this.checkoutAddressSubmitted = true;
+        this.alert.clear();              
         this.rest.showLoader();
+        if(this.sameAddress) {
+            this.saveShipBillAddress();
+            return;
+        }  
         if(this.newBillingAddress) {
+            this.checkoutAddressSubmitted = true;
             this.saveUserAddress();
         } else {
-            this.saveBillingAddress();
+            if(this.selectedBillingAddress) {
+                this.saveShipBillAddress();
+            } else {
+                this.alert.error('Please select the billing address!');
+                this.rest.hideLoader();
+            }
         }
     }
 

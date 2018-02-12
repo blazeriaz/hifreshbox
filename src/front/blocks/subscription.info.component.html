@@ -1,6 +1,6 @@
 <div class="row" *ngIf="!orderSubscription">
     <div class="col-12">
-        No subscription found. <a [routerLink]="['/','menu']">Click here</a> to subscripe the meal.
+        No subscription found. <button [disabled]="!mealMenuProduct.cartItem.quote_id" type="button" class="btn btn-link px-0" (click)="addMealToCart()">Click here</button> to subscribe the meal.
     </div>
 </div>
 <div class="row" *ngIf="orderSubscription">
@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-4 mb-md-0 mb-2">
                 <div class="row mb-2">
-                    <div class="col-sm"><h5 class="m-0">Upcoming Subscription:</h5></div>
+                    <div class="col-sm"><h5 class="m-0">Upcoming Subscribtion:</h5></div>
                     <div class="col-sm-auto px-sm-1 px-3 my-auto">{{orderSubscription.next_order_date | date: 'MMM d'}}</div>
                 </div>
                 <div class="row mb-2">
@@ -33,7 +33,7 @@
                         <button [disabled]="loading" 
                             (click)="retriveSub(orderSubscription.paused_id)" 
                             class="btn btn-outline-green text-uppercase font-sm py-1 mb-2">Retrive</button>
-                        <p class="mb-0 font-xs">*You can retrive the cancelled subscription before the Friday of the week before</p>
+                        <p class="mb-0 font-xs">*You can retrive the cancelled subscribtion before the Friday of the week before</p>
                     </div>
                 </div>
                 <div class="row" *ngIf="orderSubscription.disable_cancel_button">

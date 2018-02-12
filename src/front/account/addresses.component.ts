@@ -16,6 +16,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
     indexDefaultAddress: number;
     submitted: boolean;
     saveLoading: boolean;
+    dataLoading;
 
     doDeleteAddress: boolean;
     
@@ -39,14 +40,20 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.loadFormRequests = [];
         this.countLoadedFormReqs = 0;
         this.loadedFormData = false;
+        this.dataLoading = {
+            country: false,
+            user: false
+        };
+        this.rest.showLoader();
         this.loadCountries();
         this.loadFormData();
     }
 
     checkAllFormDataLoaded() {
-      if (--this.countLoadedFormReqs === 0) {
-        this.initEditForm();
+      if (this.dataLoading.country && this.dataLoading.user) {
+        this.initEditForm();        
         this.loadedFormData = true;
+        this.rest.hideLoader();
       }
     }
 
@@ -54,6 +61,7 @@ export class AddressesComponent implements OnInit, OnDestroy {
         this.countries = [];
         this.regionsAll = [];
         this.available_regions = [];
+        this.dataLoading.country = false;
         this.loadFormRequests.push(
             this.rest.getItems(1, [], 1000, 'directory/countries').subscribe(countries => {
                 countries.filter(country => {
@@ -68,21 +76,22 @@ export class AddressesComponent implements OnInit, OnDestroy {
                         });
                     }
                     this.countries.push({id: country.id, text: country.full_name_locale});
+                    this.dataLoading.country = true;
                 });
                 this.checkAllFormDataLoaded();
             })
         );
-        this.countLoadedFormReqs++;
     }
 
     loadFormData() {
+        this.dataLoading.user = false;
         this.auth.getUserInfo().subscribe(user => {
             if (!user) {
-                this.countLoadedFormReqs--;
                 this.loadedFormData = false;
                 this.auth.initLoggedInUserInfo();
             } else if (!user.loading) {
                 this.user = user;
+                this.dataLoading.user = true;
                 this.checkAllFormDataLoaded();
             } 
         });

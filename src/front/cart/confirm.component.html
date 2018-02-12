@@ -20,21 +20,24 @@
                 <hr />
             </div>
         </div>
-        <div class="row mx-0 bg-light pt-3 pb-md-5 pb-3 px-md-5 px-4" *ngIf="mealPreferences && mealPreferences.selected_options">    
-            <div class="col-12">
-                <h6>Dietary Preferences</h6>
+        <div class="row mx-0 bg-light pt-3 pb-md-5 pb-3 px-md-5 px-4" *ngIf="mealPreferences && mealPreferences.selected_preferences">    
+            <div class="col-12 mb-1" *ngFor="let preference of mealPreferences.selected_preferences; let last = last;">
+                <div class="row mx-0">
+                    <div class="col-12">
+                        <h6 class="font-weight-bold">{{preference.display_title}}</h6>
+                    </div>
+                    <div class="col">               
+                        <ul class="list-unstyled mb-0">
+                            <li *ngFor="let option of preference.selected_options">
+                                {{option.title}} <span *ngIf="option.qty_enabled == 1">* {{option.selected_qty}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-auto mt-auto" *ngIf="last">
+                        <button (click)="goCheckoutStep('meal')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
+                    </div>
+                </div>
             </div>            
-            <div class="col">               
-                <ul class="list-unstyled mb-0">
-                    <li *ngFor="let option of mealPreferences.selected_options">
-                        {{option.title}} <span *ngIf="option.qty_enabled == 1">* {{option.selected_qty}}</span>
-                    </li>
-                    <li *ngIf="!mealCartItem.meal_preference">NA</li>
-                </ul>
-            </div>
-            <div class="col-auto mt-auto">
-                <button (click)="goCheckoutStep('meal')" type="button" class="btn btn-secondary bg-light pl-4 pr-3 border-top-0 border-bottom-0 border-right-0 text-success">Edit</button>
-            </div>
         </div>
         <div class="row mt-5 mx-0 pt-3 pb-0 bg-light" *ngIf="showCartItems">   
             <div class="col mx-auto">

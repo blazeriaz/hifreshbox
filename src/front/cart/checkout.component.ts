@@ -59,6 +59,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                     return;
                 }
 
+                if(data.mealAdded && this.cart.mealPreferenceLoading) {
+                    return;
+                }
+
                 if (!this.validateHaveCartItems(data)) {
                     this.rest.hideLoader();
                     this.alert.error('No items added for checkout.', true);
@@ -75,6 +79,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                         }
                         return true;
                     });
+                } else {
+                    return;
                 }
 
                 if (!data.cart || this.currentStep) {

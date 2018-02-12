@@ -12,7 +12,7 @@ export class FullLayoutComponent implements OnInit {
         private router: Router
     ) {
         router.events.subscribe((event: RouterEvent) => {
-        this.navigationInterceptor(event)
+            this.navigationInterceptor(event)
         })
     }
 

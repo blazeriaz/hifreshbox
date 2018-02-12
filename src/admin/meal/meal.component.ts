@@ -50,6 +50,7 @@ export class MealComponent implements OnInit {
     this.mealPrefForm = this._fb.group({
       id: 0,
       title: ['', [Validators.required]],
+      display_title: ['', [Validators.required]],
       is_active: 1
     });
 
@@ -117,7 +118,7 @@ export class MealComponent implements OnInit {
           this.loading = false;
         })
       } else {
-          // this.alert.error('Please check the form to enter all required details');
+        this.alert.error('Please check the form to enter all required details', false, "popup");
       }
   }
   
@@ -157,6 +158,7 @@ export class MealComponent implements OnInit {
       this.mealPrefForm.patchValue({
         id: preference.id,
         title: preference.title,
+        display_title: preference.display_title,
         is_active: parseInt(preference.is_active, 10)
       });
     } else {
@@ -197,7 +199,7 @@ export class MealComponent implements OnInit {
         this.loading = false;
       })
     } else {
-        // this.alert.error('Please check the form to enter all required details');
+        this.alert.error('Please check the form to enter all required details', false, 'popup');
     }
   }
   

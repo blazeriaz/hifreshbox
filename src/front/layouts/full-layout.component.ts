@@ -1,4 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router, Event as RouterEvent, NavigationStart, 
+    NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import * as GlobalVariable from "global";
 
 @Component({
@@ -8,7 +10,13 @@ import * as GlobalVariable from "global";
 export class FullLayoutComponent implements OnInit {
     backgrounds;
 
-    constructor() { }
+    constructor(
+        private router: Router
+    ) {        
+        router.events.subscribe((event: RouterEvent) => {
+            this.navigationInterceptor(event)
+        })
+    }
 
     ngOnInit(): void {
         this.backgrounds = {
@@ -24,5 +32,20 @@ export class FullLayoutComponent implements OnInit {
             },
             footer_logo: GlobalVariable.htmlImages + 'footer-logo.png'
         };
+    }
+
+    navigationInterceptor(event: RouterEvent): void {
+        if (event instanceof NavigationStart) {
+            document.querySelector('body').classList.remove('sidebar-mobile-show');
+        }
+        if (event instanceof NavigationEnd) {
+            document.querySelector('body').classList.remove('sidebar-mobile-show');
+        }
+
+        // Set loading state to false in both of the below events to hide the spinner in case a request fails
+        if (event instanceof NavigationCancel) {
+        }
+        if (event instanceof NavigationError) {
+        }
     }
 }

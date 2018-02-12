@@ -15,6 +15,7 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
     loading;
     needToUnsubscribe = [];
     minDate;
+    mealMenuProduct;
 
     constructor(
         private alert: AlertService,
@@ -29,9 +30,21 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.minDate = new Date();
-        this.loading = true;        
+        this.loading = true;          
+
+        this.mealMenuProduct = {cartItem: {
+            quote_id: null,
+            sku: 'freshbox-subscription',
+            qty: 1,
+            productOption: null
+        }};    
         this.needToUnsubscribe.push(this.cartService.getCartTotal().subscribe(data => {
             this.orderSubscription = null;
+            if (data.guestCardId) {
+                this.mealMenuProduct.cartItem.quote_id = data.guestCardId
+            } else if (data.cart && data.cart.id) {
+                this.mealMenuProduct.cartItem.quote_id = data.cart.id
+            }
             if(data.subscription && data.subscription.has_subscription) {
                 this.orderSubscription = data.subscription;
                 if (data.subscription.blocked_week_start && data.subscription.blocked_week_end) {
@@ -42,6 +55,22 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
             }            
             this.loading = false;
         }));
+        this.needToUnsubscribe.push(this.cartService.getCartTotal().subscribe(res => {
+            
+        }));
+    }
+    
+    addMealToCart() {
+        this.alert.clear();
+        this.rest.showLoader();
+        this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
+            this.rest.hideLoader();
+            this.cartService.increaseCartItem(res);
+            this.router.navigate(['/', 'cart', 'checkout']);
+        }, err => {
+            this.rest.hideLoader();
+            this.alert.error(err);
+        });
     }
 
     modifyBlockDates() {

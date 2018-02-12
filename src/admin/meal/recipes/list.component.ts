@@ -42,7 +42,7 @@ export class RecipesListComponent implements OnInit {
     recipePreviewLink(recipe) {
         const i = recipe.custom_attributes.findIndex(x => x.attribute_code === 'url_key');
         const url_key = recipe.custom_attributes[i].value;
-        return BASE_URL + '#' + 'menu/' + url_key;
+        return BASE_URL + 'menu/' + url_key;
     }
 
     loadRecipesList(pageNo?) {
