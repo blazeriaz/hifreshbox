@@ -27,6 +27,7 @@ export class OrderViewComponent implements OnInit {
     ngOnInit(): void {
         const orderId = this.route.snapshot.params['id'];        
         this.pdf_url = GlobalVariable.ORDER_PDF_URL + orderId;
+        this.rest.showLoader();
         this.rest.getItem('', 'customer-orders/' + orderId).subscribe(res => {
             this.orderItem = res;
             let orignal_total = 0;
@@ -34,10 +35,23 @@ export class OrderViewComponent implements OnInit {
             orignal_total += this.orderItem.shipping_amount
             orignal_total += this.orderItem.tax_amount
             orignal_total -= this.orderItem.discount_amount
-            this.orderItem.wallet_balance = orignal_total - this.orderItem.grand_total;            
+            this.orderItem.wallet_balance = orignal_total - this.orderItem.grand_total;    
+            this.rest.hideLoader();        
+        }, e => {
+            this.router.navigate(['/', 'account', 'orders']);
         });
         this.rest.getItem('', "order/customoption/" + orderId).subscribe(res => {
-            this.orderOptions = res;
+            this.orderOptions = res.map((x) => {
+                x.options.map(opt => {
+                    opt.isJson = false;
+                    if(opt.value && opt.value.substring(0, 2) == "[{") {
+                        opt.isJson = true;
+                        opt.option_value = JSON.parse(opt.option_value);
+                    }
+                    return opt;
+                });                
+                return x;
+            });
         })
     }
 }

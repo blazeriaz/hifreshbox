@@ -44,7 +44,7 @@ import {SharedModule} from "shared.module";
   providers: [
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
+      useClass: PathLocationStrategy    
     }
   ],
   bootstrap: [ AdminComponent ]

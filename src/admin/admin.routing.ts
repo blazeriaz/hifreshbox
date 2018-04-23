@@ -9,18 +9,13 @@ import { AuthService } from "services/auth.service";
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-  },
-  {
-    path: '',
     component: FullLayoutComponent,
     data: {
       title: 'Home'
     },
     children: [
       {
-        path: 'dashboard',
+        path: '',
         canActivate: [AuthService],
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },

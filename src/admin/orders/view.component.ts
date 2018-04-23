@@ -39,7 +39,17 @@ export class OrderViewComponent implements OnInit {
             this.orderItem.wallet_balance = orignal_total - this.orderItem.grand_total;            
         }))
         this.needToDestroyEvents.push(this.rest.getItem('', "order/customoption/" + orderId).subscribe(res => {
-            this.orderOptions = res;
+            this.orderOptions = res.map((x) => {
+                x.options.map(opt => {
+                    opt.isJson = false;
+                    if(opt.value && opt.value.substring(0, 2) == "[{") {
+                        opt.isJson = true;
+                        opt.option_value = JSON.parse(opt.option_value);
+                    }
+                    return opt;
+                });                
+                return x;
+            });
         }))
     }
 

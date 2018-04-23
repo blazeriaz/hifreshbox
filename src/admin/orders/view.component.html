@@ -60,14 +60,29 @@
                   <td class="text-center">{{index + 1}}</td>
                   <td class="text-left">
                     {{item.name}}
-                    <ul class="list-unstyled mt-1" *ngIf="orderOptions[index]">
-                      <li *ngFor="let option of orderOptions[index]?.options">
-                        <span>{{option.label}}</span>
-                        &nbsp;-&nbsp;
-                        <span *ngIf="option.option_id == 92">{{option.value | date}}</span>
-                        <span *ngIf="option.option_id != 92">{{option.value}}</span>
-                      </li>
-                    </ul>
+                    <ul class="list-unstyled mt-1" *ngIf="orderOptions.length > 0 && orderOptions[index]">
+                        <li *ngFor="let option of orderOptions[index].options">
+                          <div *ngIf="!option.isJson">
+                            <span class="font-weight-bold" *ngIf="!option.isJson">{{option.label}}</span>
+                            <span *ngIf="!option.isJson">&nbsp;-&nbsp;</span>
+                            <span *ngIf="!option.isJson">{{option.value}}</span>
+                          </div>
+                          <div *ngIf="option.isJson">
+                            <div class="row mb-1" *ngFor="let preference of option.option_value;">
+                                <div class="col-12">
+                                    <span class="font-weight-bold">{{preference.display_title}}</span>
+                                </div>
+                                <div class="col-12">               
+                                    <ul class="list-unstyled mb-0">
+                                        <li *ngFor="let option of preference.options">
+                                            {{option.title}} * {{option.qty}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
                   </td>
                   <td class="text-left">{{item.sku}}</td>
                   <td class="text-center">{{item.qty_ordered}}</td>
