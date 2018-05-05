@@ -117,11 +117,11 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.sentData = true;
         this.alert.clear();
         if (this.recipientForm.valid) {
-            this.setProductOption(15, this.recipientForm.value.your_name);
-            this.setProductOption(16, this.recipientForm.value.recipient_firstname);
-            this.setProductOption(17, this.recipientForm.value.recipient_lastname);
-            this.setProductOption(18, this.recipientForm.value.recipient_email);
-            this.setProductOption(19, this.recipientForm.value.message);
+            this.setProductOption(119, this.recipientForm.value.your_name);
+            this.setProductOption(120, this.recipientForm.value.recipient_firstname);
+            this.setProductOption(121, this.recipientForm.value.recipient_lastname);
+            this.setProductOption(122, this.recipientForm.value.recipient_email);
+            this.setProductOption(123, this.recipientForm.value.message);
             this.giftProduct.cartItem.productOption =  {
                 extensionAttributes: {
                     customOptions: this.customOptions

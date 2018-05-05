@@ -23,6 +23,9 @@
             <div class="col-12 py-5 text-center" *ngIf="!loadedCookBooks">
                 Cookbook Loading...
             </div>
+            <div class="col-12 py-5 text-center" *ngIf="loadedCookBooks && cookbooks.length == 0">
+                No Cookbook found!
+            </div>
             <div class="col-md-4 col-sm-6 col-12 mt-3" *ngFor="let cookbook of cookbooks">
                 <div class="card p-0">
                     <div class="card-title bg-success p-2 m-0">
