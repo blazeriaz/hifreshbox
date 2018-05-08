@@ -4,10 +4,22 @@
     <label class="font-xl">New Password</label>
     <input type="password" class="form-control" formControlName="new_password" [ngClass]="setInputErrorClass('new_password')" />
     <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>
+    <div *ngIf="submitted && resetForm.controls['new_password'].invalid && resetForm.controls['new_password'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Password is required!
+    </div>
+    <div *ngIf="submitted && resetForm.controls['new_password'].invalid && resetForm.controls['new_password'].errors?.pattern" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Password is not valid pattern!
+    </div>
   </div>
   <div class="mb-3" [ngClass]="setContainerErrorClass('confirmation')">    
     <label class="font-xl">Cofirmation Password</label>
     <input type="password" class="form-control" formControlName="confirmation" [ngClass]="setInputErrorClass('confirmation')" />
+    <div *ngIf="submitted && resetForm.controls['confirmation'].invalid && resetForm.controls['confirmation'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Confirmation password is required!
+    </div>
+    <div *ngIf="submitted && !resetForm.controls['confirmation'].errors?.required && resetForm.errors?.notSame" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Passwords are not match!
+    </div>
   </div>
   <div class="row">
     <div class="col-12">

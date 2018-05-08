@@ -34,8 +34,8 @@ export class MealComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'white-header');
         this.loading = false;
         this.checkoutMealForm = this._fb.group({
-            howmuch_meals_week: [1, [Validators.required]],
-            howmany_people: [1, [Validators.required]],
+            howmuch_meals_week: [2, [Validators.required]],
+            howmany_people: [3, [Validators.required]],
             meal_extra_notes: '',
         });
 
@@ -44,8 +44,8 @@ export class MealComponent implements OnInit, OnDestroy {
             product_id: 2078,
             qty: 1,
             preferences: null,
-            howmuch_meals_week: 1,
-            howmany_people: 1,
+            howmuch_meals_week: 2,
+            howmany_people: 3,
             meal_extra_notes: 1
         }};
         this.rest.showLoader();

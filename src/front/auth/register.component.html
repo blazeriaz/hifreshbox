@@ -3,23 +3,47 @@
   <div class="mb-2" [ngClass]="setContainerErrorClass('email')">    
     <label class="font-xl">Email<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="email" [ngClass]="setInputErrorClass('email')" />
+    <div *ngIf="submitted && registerForm.controls['email'].invalid && registerForm.controls['email'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Email is required!
+    </div>
+    <div *ngIf="submitted && registerForm.controls['email'].invalid && !registerForm.controls['email'].errors?.required && registerForm.controls['email'].errors?.email" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Email is not valid pattern!
+    </div>
   </div>
   <div class="mb-2" [ngClass]="setContainerErrorClass('firstname')">    
     <label class="font-xl">First Name<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="firstname" [ngClass]="setInputErrorClass('firstname')" />
+    <div *ngIf="submitted && registerForm.controls['firstname'].invalid && registerForm.controls['firstname'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      First Name is required!
+    </div>
   </div>
   <div class="mb-2" [ngClass]="setContainerErrorClass('lastname')">    
     <label class="font-xl">Last Name<i tooltip="required" class="text-danger">*</i></label>
     <input type="text" class="form-control py-3" formControlName="lastname" [ngClass]="setInputErrorClass('lastname')" />
+    <div *ngIf="submitted && registerForm.controls['lastname'].invalid && registerForm.controls['lastname'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Last Name is required!
+    </div>
   </div>
   <div class="mb-1" [ngClass]="setContainerErrorClass('password')">
     <label class="font-xl">Password<i tooltip="required" class="text-danger">*</i></label>
     <input type="password" class="form-control py-3" formControlName="password" [ngClass]="setInputErrorClass('password')" />
     <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>
+    <div *ngIf="submitted && registerForm.controls['password'].invalid && registerForm.controls['password'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Password is required!
+    </div>
+    <div *ngIf="submitted && registerForm.controls['password'].invalid && registerForm.controls['password'].errors?.pattern" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Password is not valid pattern!
+    </div>
   </div>
   <div class="mb-2" [ngClass]="setContainerErrorClass('confirmation')">
     <label class="font-xl">Confirm Password<i tooltip="required" class="text-danger">*</i></label>
     <input type="password" class="form-control py-3" formControlName="confirmation" [ngClass]="setInputErrorClass('confirmation')" />
+    <div *ngIf="submitted && registerForm.controls['confirmation'].invalid && registerForm.controls['confirmation'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Confirmation password is required!
+    </div>
+    <div *ngIf="submitted && !registerForm.controls['confirmation'].errors?.required && registerForm.errors?.notSame" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+      Passwords are not match!
+    </div>
   </div>
   <div class="row">
     <div class="col-12">

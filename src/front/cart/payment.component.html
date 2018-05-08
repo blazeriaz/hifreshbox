@@ -25,13 +25,22 @@
                         <label for="card_holder_name" class="form-control-label">Card Holder's Name</label>
                         <input type="text" class="form-control rounded-0" id="card_holder_name" formControlName="card_holder_name" 
                             [ngClass]="setInputClass('card_holder_name')" />
+                        <div *ngIf="checkoutPaymentSubmitted && checkoutPaymentForm.controls['card_holder_name'].invalid && checkoutPaymentForm.controls['card_holder_name'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+                            Card Holder's Name is required!
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">                        
                     <div class="col-12" [ngClass]="setInputDivClass('card_number')">
                         <label for="card_number" class="form-control-label">Credit Card Number</label>
                         <input  class="form-control rounded-0" id="card_number" type="tel"  formControlName="card_number"
-                            autocomplete="cc-number" ccNumber [ngClass]="setInputClass('card_number')">        
+                            autocomplete="cc-number" [ngClass]="setInputClass('card_number')">        
+                        <div *ngIf="checkoutPaymentSubmitted && checkoutPaymentForm.controls['card_number'].invalid && checkoutPaymentForm.controls['card_number'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+                            Credit Card Number is required!
+                        </div>
+                        <div *ngIf="checkoutPaymentSubmitted && checkoutPaymentForm.controls['card_number'].invalid && !checkoutPaymentForm.controls['card_number'].errors?.required && checkoutPaymentForm.controls['card_number'].errors?.ccNumber" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+                            Credit Card Number is not valid format!
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row px-3">                        

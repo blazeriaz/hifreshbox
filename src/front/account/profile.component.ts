@@ -151,9 +151,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     initChangePasswordForm() {
+        const regExPassword = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$';
         this.changePasswordForm = this._fb.group({
-            'currentPassword': ['', [Validators.required]],
-            'newPassword' : ['', [Validators.required]],
+            'currentPassword': ['', [Validators.required, Validators.pattern(regExPassword)]],
+            'newPassword' : ['', [Validators.required, Validators.pattern(regExPassword)]],
             'confirmation': ['', [Validators.required]]
         }, {validator: this.checkPasswords});
     }

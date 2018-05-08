@@ -94,6 +94,12 @@
         <div class="col-12" [ngClass]="setContainerErrorClass('currentPassword')">
           <input type="password" class="form-control" id="currentPassword" formControlName="currentPassword" 
             [ngClass]="setInputErrorClass('currentPassword')" />
+          <div *ngIf="submitted && changePasswordForm.controls['currentPassword'].invalid && changePasswordForm.controls['currentPassword'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            Current password is required!
+          </div>
+          <div *ngIf="submitted && changePasswordForm.controls['currentPassword'].invalid && changePasswordForm.controls['currentPassword'].errors?.pattern" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            Current password is not valid pattern!
+          </div>
         </div>
       </div>
       <div class="form-group row">
@@ -101,6 +107,12 @@
         <div class="col-12" [ngClass]="setContainerErrorClass('newPassword')">
           <input type="password" class="form-control" id="newPassword" formControlName="newPassword" 
             [ngClass]="setInputErrorClass('newPassword')" />
+          <div *ngIf="submitted && changePasswordForm.controls['newPassword'].invalid && changePasswordForm.controls['newPassword'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            New password is required!
+          </div>
+          <div *ngIf="submitted && changePasswordForm.controls['newPassword'].invalid && changePasswordForm.controls['newPassword'].errors?.pattern" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            New password is not valid pattern!
+          </div>
         </div>
       </div>
       <div class="form-group row">
@@ -108,6 +120,12 @@
         <div class="col-12" [ngClass]="setContainerErrorClass('confirmation')">
           <input type="password" class="form-control" id="confirmation" formControlName="confirmation" 
             [ngClass]="setInputErrorClass('confirmation')" />
+          <div *ngIf="submitted && changePasswordForm.controls['confirmation'].invalid && changePasswordForm.controls['confirmation'].errors?.required" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            Confirmation password is required!
+          </div>
+          <div *ngIf="submitted && !changePasswordForm.controls['confirmation'].errors?.required && changePasswordForm.errors?.notSame" class="alert alert-danger px-2 py-1 mt-1 mb-0 font-sm">
+            Passwords are not match!
+          </div>
         </div>
       </div>
       <p class="font-xs p-1 mt-1 mb-0"><i class="fa fa-info-circle"></i>**Your password must be 8-20 characters long, contain letters, numbers and special characters, and must not contain spaces or emoji.</p>

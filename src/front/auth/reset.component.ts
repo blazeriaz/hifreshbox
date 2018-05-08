@@ -34,6 +34,7 @@ export class checkRestTokenResolve implements Resolve<any> {
 export class ResetComponent implements OnInit {
   resetForm: any;
   loading = false;
+  submitted = false;
   returnUrl: string;
 
   constructor(private router: Router,
@@ -91,6 +92,7 @@ export class ResetComponent implements OnInit {
 
   resetPassword() {
     this.alert.clear();
+    this.submitted = true;
     if (this.resetForm.valid) {
       this.rest.showLoader();
       this.rest.saveItem('', this.resetForm.value, 'customer/reset-password').subscribe(

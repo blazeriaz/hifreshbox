@@ -19,7 +19,7 @@
                             <label for="howmuch_meals_week" class="w-100 form-control-label">How many meals would <br class="hidden-sm-down" />you like each week?</label>
                             <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmuch_meals_week" formControlName="howmuch_meals_week" 
                                 [ngClass]="setInputClass('howmuch_meals_week')">
-                                <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="parseInt(opt)">{{opt}}</option>
+                                <option *ngFor="let opt of [2,4,6,8]" [ngValue]="parseInt(opt)">{{opt}}</option>
                             </select>
                         </div>
                         
@@ -27,7 +27,7 @@
                             <label for="howmany_people" class="w-100 form-control-label">How many people are <br class="hidden-sm-down" />you cooking for?</label>
                             <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmany_people" formControlName="howmany_people" 
                                 [ngClass]="setInputClass('howmany_people')">
-                                <option *ngFor="let opt of [1,2,3,4,5]" [ngValue]="parseInt(opt)">{{opt}}</option>
+                                <option *ngFor="let opt of [3]" [ngValue]="parseInt(opt)">{{opt}}</option>
                             </select>
                         </div>
                     </div>

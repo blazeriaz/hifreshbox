@@ -48,7 +48,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.checkoutPaymentForm = this._fb.group({
             'card_holder_name': ['', [Validators.required]],
-            'card_number': ['', [Validators.required]],
+            'card_number': ['', [Validators.required, CreditCardValidator.validateCCNumber]],
             'card_month_year': ['', [CreditCardValidator.validateExpDate]],
             'card_cvv': ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]]
         });

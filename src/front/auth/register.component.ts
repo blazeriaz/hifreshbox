@@ -57,7 +57,7 @@ export class RegisterComponent implements OnInit {
         && this.registerForm.errors && this.registerForm.errors.notSame) {
       return true;
     }
-    return field.touched && field.invalid;
+    return this.submitted && field.invalid;
   }
 
   setInputErrorClass(input) {
@@ -98,7 +98,7 @@ export class RegisterComponent implements OnInit {
               this.alert.error(err.message);
               this.rest.hideLoader();
             });
-    } else {
+    } else {console.log(this.registerForm);
       this.alert.error('Please enter the all details correctly');
     }
   }
