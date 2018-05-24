@@ -192,7 +192,6 @@ export class CartService {
       this.mealAdded = true;
       this.mealCartItem = this.getMealItemFromCart();
       this.mealCartItem = Object.assign({}, this.mealCartItem, this.totals.items.filter(x => x.item_id === this.mealCartItem.item_id)[0]);
-      console.log(this.mealCartItem.options);
       if(this.mealCartItem.options) {
         this.mealCartItem.options = JSON.parse(this.mealCartItem.options);
         this.mealCartItem.options.forEach(x => {

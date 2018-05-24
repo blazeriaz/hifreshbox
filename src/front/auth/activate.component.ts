@@ -12,9 +12,11 @@ export class checkActivateTokenResolve implements Resolve<any> {
     const sendData = {confirmationKey: route.params.token, customerId: route.params.id};
     const url = 'customers/activateuser';
     return this.rest.saveItem(true, sendData, url).subscribe(res => {
-      if (res) {        
-        this.alert.success('Please login to proceed further', true);
-        this.router.navigate(['/', 'auth', 'login']);
+      if (res) {                
+        setTimeout(() => {
+          this.alert.success('Please login to proceed further', true);
+          this.router.navigate(['/', 'auth', 'login']);
+        }, 3000);
         return res;
       } else {
         this.alert.error(res, true);

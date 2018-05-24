@@ -89,6 +89,7 @@ export class SubscriptionInfoComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.needToUnsubscribe.push(this.rest.saveItem(false, sendData, 'subscription/pause').subscribe(r => {
             this.cartService.initUserSubscription();
+            this.loading = false;
             this.alert.success("The blocked dates for meal order had been updated successfully");
         }));
     }

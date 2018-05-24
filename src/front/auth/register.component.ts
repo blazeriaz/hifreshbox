@@ -13,6 +13,8 @@ export class RegisterComponent implements OnInit {
   loading = false;
   returnUrl: string;
   submitted = false;
+  passwordType = 'password';
+  confirmPasswordType = 'password';
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -52,7 +54,7 @@ export class RegisterComponent implements OnInit {
 
   isFieldInvalid(input) {
     const field = this.registerForm.get(input);
-    if (this.registerForm.value.confirmation 
+    if (this.submitted && this.registerForm.value.confirmation 
         && input === 'confirmation' 
         && this.registerForm.errors && this.registerForm.errors.notSame) {
       return true;
@@ -69,6 +71,22 @@ export class RegisterComponent implements OnInit {
   setContainerErrorClass(input) {
     if (this.isFieldInvalid(input)) {
       return 'has-danger';
+    }
+  }
+
+  changePasswordType() {
+    if(this.passwordType == 'password') {
+      this.passwordType = 'text';
+    }else if(this.passwordType == 'text') {
+      this.passwordType = 'password';
+    }
+  }
+
+  changeConfirmPasswordType() {
+    if(this.confirmPasswordType == 'password') {
+      this.confirmPasswordType = 'text';
+    }else if(this.confirmPasswordType == 'text') {
+      this.confirmPasswordType = 'password';
     }
   }
 

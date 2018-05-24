@@ -34,8 +34,8 @@ export class MealComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'white-header');
         this.loading = false;
         this.checkoutMealForm = this._fb.group({
-            howmuch_meals_week: [2, [Validators.required]],
-            howmany_people: [3, [Validators.required]],
+            howmuch_meals_week: [3, [Validators.required]],
+            howmany_people: [2, [Validators.required]],
             meal_extra_notes: '',
         });
 
@@ -44,8 +44,8 @@ export class MealComponent implements OnInit, OnDestroy {
             product_id: 2078,
             qty: 1,
             preferences: null,
-            howmuch_meals_week: 2,
-            howmany_people: 3,
+            howmuch_meals_week: 3,
+            howmany_people: 2,
             meal_extra_notes: 1
         }};
         this.rest.showLoader();
@@ -113,7 +113,7 @@ export class MealComponent implements OnInit, OnDestroy {
         this.checkoutMealSubmitted = true;
         this.alert.clear();
         if (this.checkoutMealForm.valid) {
-            this.MealProduct.cart_item.howmuch_meals_week = this.checkoutMealForm.value.howmuch_meals_week,
+            this.MealProduct.cart_item.howmuch_meals_week = 3;//this.checkoutMealForm.value.howmuch_meals_week,
             this.MealProduct.cart_item.howmany_people = this.checkoutMealForm.value.howmany_people,
             this.MealProduct.cart_item.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
             this.MealProduct.cart_item.preferences = [];

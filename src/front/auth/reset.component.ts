@@ -36,6 +36,8 @@ export class ResetComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
+  passwordType = 'password';
+  confirmPasswordType = 'password';
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -87,6 +89,22 @@ export class ResetComponent implements OnInit {
   setContainerErrorClass(input) {
     if (this.isFieldInvalid(input)) {
       return 'has-danger';
+    }
+  }
+
+  changePasswordType() {
+    if(this.passwordType == 'password') {
+      this.passwordType = 'text';
+    }else if(this.passwordType == 'text') {
+      this.passwordType = 'password';
+    }
+  }
+
+  changeConfirmPasswordType() {
+    if(this.confirmPasswordType == 'password') {
+      this.confirmPasswordType = 'text';
+    }else if(this.confirmPasswordType == 'text') {
+      this.confirmPasswordType = 'password';
     }
   }
 

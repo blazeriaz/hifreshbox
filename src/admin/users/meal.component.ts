@@ -27,8 +27,8 @@ export class MealComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.loading = false;
         this.userMealPrefForm = this._fb.group({
-            howmuch_meals_week: [2, [Validators.required]],
-            howmany_people: [3, [Validators.required]],
+            howmuch_meals_week: [3, [Validators.required]],
+            howmany_people: [2, [Validators.required]],
             meal_extra_notes: '',
         });
 
@@ -36,8 +36,8 @@ export class MealComponent implements OnInit, OnDestroy {
         this.userMealPrefData = {
             subscribepreference: {
                 meal_preference_setting: null,
-                howmuch_meals_week: 1,
-                howmany_people: 1,
+                howmuch_meals_week: 3,
+                howmany_people: 2,
                 meal_extra_notes: ''
             },
             customer_id: userId
@@ -103,7 +103,7 @@ export class MealComponent implements OnInit, OnDestroy {
         this.userMealPrefSubmitted = true;
         this.alert.clear();
         if (this.userMealPrefForm.valid) {
-            this.userMealPrefData.subscribepreference.howmuch_meals_week = this.userMealPrefForm.value.howmuch_meals_week,
+            this.userMealPrefData.subscribepreference.howmuch_meals_week = 3;//this.userMealPrefForm.value.howmuch_meals_week,
             this.userMealPrefData.subscribepreference.howmany_people = this.userMealPrefForm.value.howmany_people,
             this.userMealPrefData.subscribepreference.meal_extra_notes = this.userMealPrefForm.value.meal_extra_notes;
             this.userMealPrefData.subscribepreference.meal_preference_setting = [];

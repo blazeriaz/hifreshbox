@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   loginForm: any;
   loading = false;
   returnUrl: string;
+  passwordType = 'password';
   
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -56,6 +57,14 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['auth/forget']);
   }
 
+  changePasswordType() {
+    if(this.passwordType == 'password') {
+      this.passwordType = 'text';
+    }else if(this.passwordType == 'text') {
+      this.passwordType = 'password';
+    }
+  }
+
   login() {
     this.alert.clear();
     if (this.loginForm.dirty && this.loginForm.valid) {
@@ -63,7 +72,7 @@ export class LoginComponent implements OnInit {
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password)
         .subscribe(
             data => {
-                this.router.navigate([this.returnUrl]);
+              this.router.navigate([this.returnUrl]);
             },
             error => {
               if (error.status === 401) {

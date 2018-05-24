@@ -6,7 +6,13 @@
   </div>
   <div class="mb-4">
     <label class="font-xl">Password</label>
-    <input type="password" class="form-control py-3" formControlName="password" />
+    <div class="input-group">
+      <input type="{{passwordType}}" class="form-control py-3" formControlName="password" />
+      <div class="input-group-append bg-inverse p-3" (click)="changePasswordType()">
+        <i class="input-group-text fa fa-eye" *ngIf="passwordType == 'password'"></i>
+        <i class="input-group-text fa fa-eye-slash" *ngIf="passwordType == 'text'"></i>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-12">
