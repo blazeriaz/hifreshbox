@@ -47,7 +47,7 @@ export class ForgetComponent implements OnInit {
           this.goToLogin();
         },
         error => {
-          this.alert.error('Server Error');
+          this.alert.error('We can\'t proceed your request.');
           this.rest.hideLoader();
         });
     } else {
