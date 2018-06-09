@@ -57,6 +57,10 @@ export class MealComponent implements OnInit, OnDestroy {
                         });
                     }
                 });
+                formValues['howmuch_meals_week'] = 3;
+                if(!formValues['howmany_people']) {
+                    formValues['howmany_people'] = 2;
+                }
                 this.userMealPrefForm.patchValue(formValues);
             }
         });
