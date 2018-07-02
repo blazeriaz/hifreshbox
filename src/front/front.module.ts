@@ -64,7 +64,7 @@ import { NotFoundComponent } from './layouts/404-layout.component';
   providers: [
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy
+      useClass: HashLocationStrategy
     }, DatePipe
   ],
   bootstrap: [ FrontComponent ]

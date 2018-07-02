@@ -29,16 +29,20 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row mt-5" *ngFor="let preference of preferences;">
+                    <div class="row mt-5" *ngFor="let preference of preferences; let prefIndex = index;">
                         <div class="col-12">
                             <label class="w-100 form-control-label">{{preference.title}}</label>
                             <div class="row">                        
                                 <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let opt of preference.options">                            
                                     <div class="mx-auto pointer" style="max-width:100%; width: 120px; height: 120px;">
-                                        <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.selected_qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt)">
+                                        <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.selected_qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt, prefIndex)">
                                             <div class="circle_text_container">
                                                 <div class="circle_text">
                                                     {{opt.title}}
+                                                    <div>
+                                                        <span *ngIf="prefIndex > 0 && opt.price > 0">+ </span>
+                                                        {{displayOptionPrice(opt.price, prefIndex) | currency:'USD':true:'1.0-2'}}
+                                                    </div>
                                                     <div *ngIf="opt.qty_enabled == 1 && opt.selected_qty > 0">
                                                         {{opt.selected_qty}} x
                                                     </div>

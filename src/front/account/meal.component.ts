@@ -70,11 +70,22 @@ export class MealComponent implements OnInit, OnDestroy {
         return parseInt(v, 10);
     }
 
-    selectPreference(preference, option) {
-        option.is_selected = 1;
+    selectPreference(preference, option, prefIndex) {
         option.selected_qty = option.selected_qty ? (option.selected_qty + 1) : 1;
         if (!option.qty_enabled || option.qty_enabled === '0' || option.qty_enabled === 0) {
             option.selected_qty = 1;
+            if(option.is_selected) {
+                this.removePreference(preference, option);
+                return;
+            }
+        }
+        option.is_selected = 1;
+        if(prefIndex === 0) {
+            preference.options.forEach(opt => {
+                if(opt.preference_option_id != option.preference_option_id) {
+                    this.removePreference(preference, opt);
+                }
+            });            
         }
     }
 
@@ -130,6 +141,14 @@ export class MealComponent implements OnInit, OnDestroy {
             })
         } else {
             this.alert.error('Please check the form to enter all required details');
+        }
+    }
+
+    displayOptionPrice(opt_price, prefIndex) {
+        if(prefIndex == 0) {
+            return 72 + parseInt(opt_price, 10);
+        } else if(opt_price > 0) {
+            return opt_price;
         }
     }
 
