@@ -3,98 +3,132 @@
         <h2 class="text-uppercase">Your Shipping Details</h2>
         <p>Free shipping anywhere on Oahu and $8 for neighbor island</p>
     </div>
-    <div class="col-12 mt-5" *ngIf="userData && userData.addresses.length > 0 && !newShippingAddress">
-        <div class="row">
-            <div class="col-md-4 col-sm-6" *ngFor="let address of userData.addresses; let index = index;">
-              <div class="card card-faded" (click)="selectAddress(address)">
-                <div class="card-block" [ngClass]="setAddressClass(address, index)">
-                  <address>
-                    <strong>{{address.firstname}} {{address.lastname}}</strong><br>
-                    <span *ngFor="let str of address.street">{{str}}<br *ngIf="str" /></span>
-                    <span *ngIf="address.city">{{address.city}}, </span>
-                    <span *ngIf="address.region.region">{{address.region.region}}, </span>
-                    <span>{{address.country_id}} {{address.postcode}}</span><br />
-                    <abbr title="Phone" *ngIf="address.telephone">P:</abbr> {{address.telephone}}
-                  </address>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 mt-0" *ngIf="userData && userData.addresses.length > 0 && !newShippingAddress">
-        <button type="button" class="btn btn-outline-green" (click)="addNewAddress()">Add New Address</button>
-    </div>
-    <div class="col-12 mt-0" *ngIf="userData && userData.addresses.length > 0 && newShippingAddress">
-        <button type="button" class="btn btn-outline-green" (click)="newShippingAddress= false;">Existing Addresses</button>
-    </div>
-    <div class="col-12 mt-5" #newAddress>
-        <form [formGroup]="checkoutAddressForm" (submit)="saveCheckoutAddress()" novalidate *ngIf="newShippingAddress">
-            <div class="form-group row">                        
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('firstname')">
-                    <label for="address_first_name" class="form-control-label">First Name</label>
-                    <input type="text" class="form-control rounded-0" id="address_first_name" formControlName="firstname" 
-                        [ngClass]="setAddressInputClass('firstname')" />
-                </div>
-                
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('lastname')">
-                    <label for="address_last_name" class="form-control-label">Last Name</label>
-                    <input type="text" class="form-control rounded-0" id="address_last_name" formControlName="lastname" 
-                        [ngClass]="setAddressInputClass('lastname')" />
-                </div>
-            </div>
-            <div class="form-group row">                        
-                <div formArrayName="street" class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('street')">
-                    <label for="address_street_0" class="form-control-label">Street Address</label>
-                    <input type="text" class="form-control rounded-0" id="address_street_0" formControlName="0" 
-                        [ngClass]="setAddressInputClass('street')" />
-                </div>
-                
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('city')">
-                    <label for="address_city" class="form-control-label">City</label>
-                    <input type="text" class="form-control rounded-0" id="address_city" formControlName="city" 
-                        [ngClass]="setAddressInputClass('city')" />
-                </div>
-            </div>
-            <div class="form-group row">                        
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode')" >
-                    <label for="address_region" class="form-control-label">Region</label>
-                    <ng-select [allowClear]="true" [multiple]="false"
-                        [items]="US_regions" 
-                        [active]="getActiveRegion()" 
-                        (data)="refreshRegionValue($event)"
-                        placeholder="No region selected" *ngIf="US_regions.length > 0">
-                    </ng-select>
-                </div>
-                
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('telephone')">
-                    <label for="address_telephone" class="form-control-label">Phone Number</label>
-                    <input type="text" class="form-control rounded-0" id="address_telephone" formControlName="telephone" 
-                        [ngClass]="setAddressInputClass('telephone')" />
-                    <span class="font-sm">We will notify you when the box is delivered</span>
-                </div>
-            </div>
-            <div class="form-group row">                        
-                <div class="col-md-6 col-sm-12" [ngClass]="setAddressDivClass('postcode')">
-                    <label for="address_postcode" class="form-control-label">Zip Code</label>
-                    <input type="text" class="form-control rounded-0" id="address_postcode" formControlName="postcode" 
-                        [ngClass]="setAddressInputClass('postcode')" />
-                </div>
-            </div>
-        </form>
-        <div class="form-group row">                        
-            <div class="col-12">
-                <i class="fa pointer" (click)="sameAddress = !sameAddress" [ngClass]="{'fa-check-square-o' : sameAddress, 'fa-square-o' : !sameAddress}"></i>&nbsp;
-                <span class="pointer" (click)="sameAddress = !sameAddress">Use this as my bill info</span>
-            </div>
-        </div>
-        <div class="form-group row mt-5">
-            <div class="col-12"><hr /></div>                        
-            <div class="col text-left">
-                <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
-            </div>
-            <div class="col-auto text-right">
-                <button type="button" class="btn btn-outline-green" (click)="saveCheckoutAddress()">Continue</button>
-            </div>
-        </div>        
-    </div>
 </div>
+<form [formGroup]="userForm" (submit)="saveUser()" novalidate *ngIf="loadedFormData">
+    <div class="animated fadeIn">  
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-0 border-0">
+                    <div class="card-block pt-3 pb-0 px-0">
+                        <div class="row" *ngIf="indexEditAddress < 0">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card card-faded">
+                                <div class="card-block text-center pointer py-7" (click)="addNewAddress()">
+                                    Add New Address
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6" *ngFor="let address of userForm.get('addresses').value; let index = index;">
+                                <div class="card card-faded">
+                                <div class="card-block pointer" (click)="selectAddress(address)" [ngClass]="setAddressClass(address, index)">
+                                    <address>
+                                    <strong>{{address.firstname}} {{address.lastname}}</strong><br>
+                                    <span *ngFor="let str of address.street">{{str}}<br *ngIf="str" /></span>
+                                    <span *ngIf="address.city">{{address.city}}, </span>
+                                    <span *ngIf="address.region.region">{{address.region.region}}, </span>
+                                    <span>{{address.country_id}} {{address.postcode}}</span><br />
+                                    <abbr title="Phone" *ngIf="address.telephone">P:</abbr> {{address.telephone}}
+                                    </address>
+                                </div>
+                                <div class="card-footer p-0">
+                                    <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary border-0" 
+                                        (click)="doEditAddress(index)" [disabled]="saveLoading">
+                                        <i class="fa fa-edit"></i> Edit</button>
+                                    <button type="button" class="btn btn-secondary border-0" 
+                                        (click)="deleteAddress(index)" [disabled]="saveLoading">
+                                        <i class="fa fa-remove"></i> Delete</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="indexEditAddress >= 0">
+                            <div class="col-md-12" formArrayName="addresses">
+                                <div *ngFor="let address of userForm.get('addresses').controls; let index = index;">
+                                    <div class="card m-0 border-0" [formGroupName]="index" *ngIf="index == indexEditAddress">
+                                        <div class="card-block">
+                                            <div class="form-group row" *ngIf="user && user.addresses.length > 0">
+                                                <button type="button" class="btn btn-outline-green" (click)="cancelSave()">Existing Addresses</button>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 mb-sm-3">
+                                                    <label for="address_first_name" class="form-control-label">First Name</label>
+                                                    <div [ngClass]="setAddressDivClass('firstname')">
+                                                        <input type="text" class="form-control" id="address_first_name" formControlName="firstname" [ngClass]="setAddressInputClass('firstname')" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="address_last_name" class="col-md-2 col-sm-4 form-control-label">Last Name</label>
+                                                    <div [ngClass]="setAddressDivClass('lastname')">
+                                                    <input type="text" class="form-control" id="address_last_name" formControlName="lastname" [ngClass]="setAddressInputClass('lastname')" /></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 mb-sm-3" formArrayName="street">
+                                                    <label for="address_street_0" class="form-control-label">Street Address</label>
+                                                    <div [ngClass]="setAddressDivClass('street')">
+                                                        <input type="text" class="form-control" id="address_street_0" formControlName="0" [ngClass]="setAddressInputClass('street')" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="address_city" class="form-control-label">City</label>
+                                                    <div class="col-md-10" [ngClass]="setAddressDivClass('city')">
+                                                        <input type="text" class="form-control" id="address_city" formControlName="city"  [ngClass]="setAddressInputClass('city')" />
+                                                    </div>
+                                                </div>
+                                            </div>                                
+                                            <div class="form-group row">
+                                                <div class="col-md-6 mb-sm-3">
+                                                    <label for="address_region" class="form-control-label">Region</label>
+                                                    <div *ngIf="getActiveCountryRegions()">
+                                                        <ng-select [allowClear]="true" [multiple]="false"
+                                                            [items]="getActiveCountryRegions()" 
+                                                            [active]="getActiveRegion()" 
+                                                            (data)="refreshRegionValue($event)"
+                                                            placeholder="No region selected">
+                                                        </ng-select>
+                                                    </div>
+                                                    <div *ngIf="!getActiveCountryRegions()" formGroupName="region">
+                                                        <input type="text" class="form-control" id="address_region" formControlName="region" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="address_telephone" class="form-control-label">Phone</label>
+                                                    <div [ngClass]="setAddressDivClass('telephone')">
+                                                    <input type="text" class="form-control" id="address_telephone" formControlName="telephone" 
+                                                        [ngClass]="setAddressInputClass('telephone')" pattern="[0-9\+\-\ ]+" /></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="address_postcode" class="form-control-label">Zip Code</label>
+                                                <div class="col-md-10" [ngClass]="setAddressDivClass('postcode')">
+                                                <input type="number" class="form-control" id="address_postcode" formControlName="postcode" 
+                                                    [ngClass]="setAddressInputClass('postcode')" pattern="[0-9]+"/></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="row">                        
+                            <div class="col-12">
+                                <i class="fa pointer" (click)="sameAddress = !sameAddress" [ngClass]="{'fa-check-square-o' : sameAddress, 'fa-square-o' : !sameAddress}"></i>&nbsp;
+                                <span class="pointer" (click)="sameAddress = !sameAddress">Use this as my bill info</span>
+                            </div>
+                        </div>                    
+                        <div class="row mt-5">
+                            <div class="col-12"><hr /></div>                        
+                            <div class="col text-left">
+                                <button type="button" class="btn btn-outline-green" (click)="goBack()">Back</button>
+                            </div>
+                            <div class="col-auto text-right">
+                                <button type="button" class="btn btn-outline-green" (click)="saveUser()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
