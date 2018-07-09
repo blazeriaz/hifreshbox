@@ -441,11 +441,7 @@ export class BillingAddressComponent implements OnInit, OnDestroy {
         this.rest.showLoader();
         this.rest.saveItem(false, sendData, 'carts/mine/shipping-information').subscribe(res => {
             this.rest.hideLoader();
-            if(this.sameAddress) {
-                this.next.emit('billing-address');
-            } else {
-                this.next.emit('shipping-address');
-            }
+            this.next.emit('billing-address');
         }, e => {
             this.rest.hideLoader();
             const err = e.json();

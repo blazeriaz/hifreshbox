@@ -5,14 +5,26 @@
         </div>
         
         <div class="col-md-6 mt-5 px-0">
-            <div class="mb-5 bg-light" *ngIf="cards.length > 0">
-                <div class="row py-2 mx-0 pointer" *ngFor="let card of cards; let odd= odd;" 
-                        [ngClass]="{'bg-faded': odd, 'bg-primary': selectedCard && card.entity_id == selectedCard.entity_id}" (click)="selectPaymentCard(card)">
-                    <div class="col-12">
-                        <i class="fa fa-square text-muted" *ngIf="!selectedCard || card.entity_id != selectedCard.entity_id"></i>
-                        <i class="fa fa-check-square text-white" *ngIf="selectedCard && card.entity_id == selectedCard.entity_id"></i>
-                        {{card.details.type}} ending in {{card.details.maskedCC}}<br />
-                        {{card.details.expirationDate}}
+            <div class="mb-3 bg-light" *ngIf="cards.length > 0">
+                <div class="card m-0" *ngFor="let card of cards; let odd= odd;"
+                        [class.bg-primary]="selectedCard && card.entity_id == selectedCard.entity_id">
+                    <div class="row py-2 mx-0">
+                        <div class="col px-0 pointer" (click)="selectPaymentCard(card)">
+                            <div class="row mx-0">
+                                <div class="col-auto my-auto pl-3">
+                                    <i class="fa fa-credit-card-alt"></i>                      
+                                </div>
+                                <div class="col">
+                                    {{card.details.type}} **** **** **** {{card.details.maskedCC}}<br />
+                                    Expires on {{card.details.expirationDate}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto px-3 my-auto">  
+                            <div class="btn-group btn-group-sm">
+                                <a class="btn btn-secondary pointer" (click)="deleteCard(card)" title="Delete"><i class="fa fa-trash-o text-warning"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

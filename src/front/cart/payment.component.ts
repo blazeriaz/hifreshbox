@@ -66,6 +66,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
         }))
         
         this.newCard = true;
+        this.loadCardsList();
+
+        this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
+    }
+
+    loadCardsList() {        
         this.needToDestroyEvents.push(this.rest
             .getItem(1, 'payment/listcreditcard')
             .subscribe(cards => {
@@ -78,14 +84,39 @@ export class PaymentComponent implements OnInit, OnDestroy {
                     return x;
                 });
         }))
-
-        this.currentMenuDays = this.mealMenuService.getCurrentMenuDays();
     }
 
     selectPaymentCard(card) {
         card.cvc = '';
         this.selectedCard = card;
         this.newCard = false;
+    }
+
+    setDefaultCard(card) {
+        if(!confirm("Are you sure want to change the default card?")) {
+            return;
+        }
+        this.alert.clear();
+        this.rest.saveItem(false, {primary_card: {card_id: card.entity_id}}, 'payment/card/default').subscribe(res => {
+            this.alert.success('The default card was changed succesfully!');
+            card.is_default = 1;
+            this.loadCardsList();
+        }, err => {
+            this.alert.error('Server error!');            
+        })
+    }
+
+    deleteCard(card) {
+        if(!confirm("Are you sure want to delete the card detail?")) {
+            return;
+        }
+        this.alert.clear();
+        this.rest.saveItem(false, {public_hash: card.public_hash}, 'payment/delete/card').subscribe(res => {
+            this.alert.success('The card details deleted succesfully!');
+            this.loadCardsList();
+        }, err => {
+            this.alert.error('Server error!');            
+        })
     }
 
     setInputClass(input) {
