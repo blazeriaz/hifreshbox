@@ -141,11 +141,14 @@ export class OrdersListComponent implements OnInit {
             direction: 'DESC'
         }];
         this.loadingList = true;
+        this.orders = [];
         this.needToDestroyEvents.push(
             this.rest.getItems(pageNo, filters, pageSize, 'custom-order', 'criteria', sortOrders)
                 .subscribe(orders => {
                     this.loadingList = false;
                     this.initOrdersList(orders, pageNo);
+            }, e => {
+                this.loadingList = false;
             })
         );
     }

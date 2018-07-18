@@ -70,9 +70,7 @@ export class MealComponent implements OnInit, OnDestroy {
     }
 
     displayOptionPrice(opt_price, prefIndex) {
-        if(prefIndex == 0) {
-            return 72 + parseInt(opt_price, 10);
-        } else if(opt_price > 0) {
+        if(opt_price > 0) {
             return opt_price;
         }
     }
