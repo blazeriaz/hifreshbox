@@ -18,6 +18,7 @@ export class ConfirmComponent implements OnInit, OnDestroy {
     totals;
     showImages;
     mealCartItem;
+    cartMealProduct;
     billingAddress;
     shippingAddress;
     currentMenuDays;
@@ -57,7 +58,26 @@ export class ConfirmComponent implements OnInit, OnDestroy {
                 this.showCartItems = false;
             }
             this.mealPreferences = {};
-            if (data.mealPreferences && data.mealPreferences.length > 0) {
+            this.cartMealProduct = data.cartMealProduct;
+            this.mealPreferences.selected_preferences = [];
+            this.cartMealProduct.options.forEach((proOpt, optIndex) => {
+                if(proOpt.title == 'how much meals week') {
+                    this.mealPreferences['howmuch_meals_week'] = proOpt.option_value;
+                } else if(proOpt.title == 'how many people') {
+                    this.mealPreferences['howmany_people'] = parseInt(proOpt.option_value, 10);
+                } else if(proOpt.title == 'meal extra notes') {
+                    this.mealPreferences['meal_extra_notes'] = proOpt.option_value ? proOpt.option_value: '';
+                } else if(optIndex >= 6) {
+                    const selValues = proOpt.values.filter(x => x.selected);
+                    if(selValues.length > 0) {
+                        this.mealPreferences.selected_preferences.push({
+                            display_title: proOpt.title,
+                            selected_options: selValues
+                        });
+                    }
+                }
+            });
+            /**if (data.mealPreferences && data.mealPreferences.length > 0) {
                 data.mealPreferences.forEach((x, i) => {
                     let selected_preferences = [];
                     if (i === 0) {                
@@ -71,13 +91,13 @@ export class ConfirmComponent implements OnInit, OnDestroy {
                             if(selected_options.length > 0) {
                                 selected_preferences.push(Object.assign({}, y, {selected_options: selected_options}));
                             }
-                        });console.log(selected_preferences);
+                        });
                         this.mealPreferences = Object.assign({}, this.mealPreferences, {selected_preferences: selected_preferences});
                     } else {
                         this.mealPreferences = Object.assign({}, this.mealPreferences, x);
                     }
                 });
-            }
+            }**/
             this.rest.hideLoader();
         }))
 

@@ -100,6 +100,36 @@ export class MenuComponent implements OnInit, OnDestroy {
             productOption: null
         }};
 
+        this.rest.getItem('freshbox-subscription', 'products/' + 'freshbox-subscription').subscribe(menuItem => {
+            var customOptions = [];
+            menuItem.options.forEach((option, i) => {
+                if(option.title == 'Is Recurring Menu?' || i == 6) {
+                    let option_type_id = option.values[0].option_type_id;
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: option_type_id
+                    });
+                }
+                if(option.title == 'how much meals week') {
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: 3
+                    });
+                }
+                if(option.title == 'how many people') {
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: 2
+                    });
+                }
+            });
+            this.mealMenuProduct.cartItem.productOption =  {
+                extensionAttributes: {
+                    customOptions: customOptions
+                }
+            };
+        });
+
         this.orderSubscription = null;
         this.cartService.getCartTotal().subscribe(res => {
             if (res.guestCardId) {
@@ -179,12 +209,14 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.alert.clear();
         this.rest.showLoader();
         this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
+        //this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
             this.rest.hideLoader();
             this.cartService.increaseCartItem(res);
             this.router.navigate(['/', 'cart', 'checkout']);
         }, err => {
             this.rest.hideLoader();
-            this.alert.error(err);
+            const e = err.json();
+            this.alert.error(e.message);
         });
         window.scroll(0, 0);
     }

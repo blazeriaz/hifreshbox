@@ -6,41 +6,40 @@
     <div class="col-12 mt-5">
         <form [formGroup]="checkoutMealForm" (submit)="saveCheckoutMeal()" novalidate>
             <div class="form-group row">                        
-                <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmuch_meals_week')">
+                <div class="col-md-6 col-sm-12 text-center">
                     <label for="howmuch_meals_week" class="w-100 form-control-label">How many meals would <br class="hidden-sm-down" />you like each week?</label>
                     <div class="pl-3 pr-5 pt-3 font-weight-bold">3</div>
                 </div>
                 
-                <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmany_people')">
+                <div class="col-md-6 col-sm-12 text-center" [ngClass]="setInputDivClass('howmany_people')" formGroupName="howmany_people">
                     <label for="howmany_people" class="w-100 form-control-label">How many people are <br class="hidden-sm-down" />you cooking for?</label>
-                    <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmany_people" formControlName="howmany_people" 
+                    <select class="form-control-lg pl-3 pr-5 rounded-0" id="howmany_people" formControlName="optionValue" 
                         [ngClass]="setInputClass('howmany_people')">
                         <option *ngFor="let opt of [2,4,6,8]" [ngValue]="parseInt(opt)">{{opt}}</option>
                     </select>
                 </div>
             </div>
-            <div class="row mt-5" *ngFor="let preference of preferences; let prefIndex = index;">
-                <div class="col-12">
-                    <label class="w-100 form-control-label">{{preference.title}}</label>
+            <div class="row" *ngFor="let proOpt of cartMealProduct?.options; let optIndex = index;">
+                <div class="col-12 mt-5" *ngIf="optIndex >= 6 && proOpt?.values.length > 0">
+                    <label class="w-100 form-control-label">{{proOpt.title}}</label>
                     <div class="row">                        
-                        <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let opt of preference.options">                            
+                        <div class="col-md-2 col-sm-3 col-6 px-1 py-3 font-sm" *ngFor="let optVal of proOpt?.values">                            
                             <div class="mx-auto pointer" style="max-width:100%; width: 120px; height: 120px;">
-                                <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': opt.selected_qty > 0}" [hoverClass]="'bg-light'" (click)="selectPreference(preference, opt, prefIndex)">
+                                <div class="circle_main px-1 py-3" [ngClass]="{'bg-green': optVal.selected}" [hoverClass]="'bg-light'" (click)="setProductOption(proOpt, optVal.option_type_id)">
                                     <div class="circle_text_container">
                                         <div class="circle_text">
-                                            {{opt.title}}
-                                            <div>
-                                                <span *ngIf="prefIndex > 0 && opt.price > 0">+ </span>
-                                                {{displayOptionPrice(opt.price, prefIndex) | currency:'USD':true:'1.0-2'}}
+                                            {{optVal.title}}
+                                            <div *ngIf="optVal.price > 0">
+                                                {{optVal.price | currency:'USD':true:'1.0-2'}}
                                             </div>
-                                            <div *ngIf="opt.qty_enabled == 1 && opt.selected_qty > 0">
+                                            <!--<div *ngIf="opt.qty_enabled == 1 && opt.selected_qty > 0">
                                                 {{opt.selected_qty}} x
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center mt-1" *ngIf="opt.selected_qty > 0">
+                            <div class="text-center mt-1" *ngIf="false && opt.selected_qty > 0">
                                 <div class="btn-group btn-group-sm">
                                     <button type="button" class="btn btn-secondary" tooltip="Decrease Quantity" (click)="decresePreference(preference, opt)" *ngIf="opt.qty_enabled == 1 && opt.selected_qty > 1">-</button>
                                     <button type="button" class="btn btn-secondary" tooltip="Deselect Preference" (click)="removePreference(preference, opt)">x</button>
@@ -51,9 +50,9 @@
                 </div>
             </div>
             <div class="form-group row mt-3">
-                <div class="col-sm-12 mt-3" [ngClass]="setInputDivClass('meal_extra_notes')">
+                <div class="col-sm-12 mt-3" [ngClass]="setInputDivClass('meal_extra_notes')" formGroupName="meal_extra_notes">
                     <textarea rows="5" type="text" class="form-control rounded-0" placeholder="Didn’t find any"
-                        formControlName="meal_extra_notes" [ngClass]="setInputClass('meal_extra_notes')"></textarea>
+                        formControlName="optionValue" [ngClass]="setInputClass('meal_extra_notes')"></textarea>
                 </div>
             </div>
             <div class="form-group row mt-3">

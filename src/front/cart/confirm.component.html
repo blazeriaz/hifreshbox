@@ -28,8 +28,8 @@
                     </div>
                     <div class="col">               
                         <ul class="list-unstyled mb-0">
-                            <li *ngFor="let option of preference.selected_options">
-                                {{option.title}} <span *ngIf="option.qty_enabled == 1">* {{option.selected_qty}}</span>
+                            <li *ngFor="let optVal of preference.selected_options">
+                                {{optVal.title}} <b *ngIf="optVal.price > 0">{{optVal.price | currency:'USD':true:'1.0-2'}}</b>
                             </li>
                         </ul>
                     </div>

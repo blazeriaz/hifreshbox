@@ -141,7 +141,7 @@
             <div class="px-5 py-4" *ngIf="!isLogin() || !this.orderSubscription?.has_subscription">
                 <img class="mb-3" [src]="backgrounds.cap" />
                 <h5>All orders must be placed by {{currentMenuDays.friday | date : 'EEEE, MMMM d'}} for {{currentMenuDays.tuesday | date : 'EEEE, MMMM d'}}</h5>
-                <button [disabled]="!mealMenuProduct.cartItem.quote_id" type="button" class="btn btn-outline-green" (click)="addMealToCart()">Order Now</button>
+                <button [disabled]="!(mealMenuProduct.cartItem?.quote_id || mealMenuProduct.cartItem.productOption?.extensionAttributes)" type="button" class="btn btn-outline-green" (click)="addMealToCart()">Order Now</button>
             </div>
             <div class="px-5 py-4" *ngIf="isLogin() && this.orderSubscription?.has_subscription">
                 <img class="mb-3" [src]="backgrounds.cap" />

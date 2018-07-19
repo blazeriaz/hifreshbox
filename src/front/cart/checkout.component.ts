@@ -54,12 +54,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.cartService.getCartTotal().subscribe(data => {
                 this.cart = data.cart;
                 this.totals = data.totals;
-
-                if(!this.cart || this.cart.loading || this.cart.mealPreferenceLoading) {
+                
+                if(!this.cart || data.loading || data.mealPreferenceLoading) {
                     return;
                 }
 
-                if(data.mealAdded && this.cart.mealPreferenceLoading) {
+                if(data.mealAdded && data.mealPreferenceLoading) {
                     return;
                 }
 
@@ -71,7 +71,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
                 if (!data.mealAdded) {
                     this.steps = this.allSteps.filter(x => x.key !== 'meal');
-                } else if (data.mealPreferences && data.mealPreferences.length > 0) {
+                } else if (data.mealCartItem) {
                     this.steps = this.allSteps.filter(x => {
                         if (x.key === 'meal' && x.complete !== 1 && this.currentStep !== 'login') {
                             this.currentStep = 'meal';

@@ -20,9 +20,10 @@ export class CartService {
     showImages: false,
     totals: null,
     loading: true,
+    cartMealProduct: null,
     mealAdded: false,
     mealCartItem: null,
-    mealPreferences: null,
+    mealPreferenceLoading: true,
     billingAddress: null,
     shippingAddress: null,
     subscription: null
@@ -32,11 +33,12 @@ export class CartService {
   totals = null;
   showImages = false;
   loading = true;
+  cartMealProduct = null;
   mealAdded = false;
   mealCartItem = null;
   billingAddress = null;
   shippingAddress = null;
-  mealPreferences = null;
+  mealPreferenceLoading = true;
   paymentInfo = null;
   subscription = null;
 
@@ -111,7 +113,7 @@ export class CartService {
     this.totals = null;
     this.loading = true;
     this.mealAdded = false
-    this.mealPreferences = null;
+    this.mealPreferenceLoading = true;
     this.mealCartItem = null;
     this.billingAddress = null;
     this.shippingAddress = null;
@@ -166,17 +168,71 @@ export class CartService {
     this.assignCartTotal();
   }
 
-  checkMealAddedInCart(items) {
-    return items.findIndex(x => x.sku === 'freshbox-subscription') !== -1;
+  getMenuList() {
+    const filters = [];
+    filters.push({
+        filters : [{
+            field : 'category_id',
+            value : 43,
+            condition_type : 'eq'
+        }]
+    });
+
+    filters.push({
+        filters : [{
+            field : 'status',
+            value : 1,
+            condition_type : 'eq'
+        }]
+    });
+    
+    return this.rest.getItems(1, filters, 1000, 'products');
   }
 
-  getMealItemFromCart() {
-    return this.cart.items.filter(x => x.sku === 'freshbox-subscription')[0];
+  getMealItemFromCart(sku) {
+    return this.cart.items.find(x => x.sku === sku);
   }
 
   assignCartTotal() {
-    if (this.cart && this.totals && this.totals.items.length > 0 && this.checkMealAddedInCart(this.cart.items) && this.auth.isLogin()) {
-      if (!this.mealPreferences || this.mealPreferences.length === 0) {
+    if (this.cart && this.totals && this.totals.items.length > 0 && this.auth.isLogin()) {
+      this.mealPreferenceLoading = true;      
+      this.mealAdded = false;
+      this.getMenuList().subscribe(res => {
+        this.cart.items.forEach(cartItem => {
+          const menuItem = res.items.find(menu => cartItem.sku.indexOf(menu.sku) === 0);
+          if(menuItem) {
+            this.mealAdded = true;
+            this.rest.getItem(menuItem.sku, 'products/' + menuItem.sku).subscribe(menuProd => {
+              this.mealCartItem = cartItem;
+              this.mealCartItem = Object.assign({}, this.mealCartItem, this.totals.items.filter(x => x.item_id === this.mealCartItem.item_id)[0]);
+              if(this.mealCartItem.options) {                
+                const cartOptions = JSON.parse(this.mealCartItem.options);
+                menuProd.options.forEach((proOpt, optIndex) => {
+                  const cartOpt = cartOptions.find(x => proOpt.title == x.label);
+                  if(cartOpt) {
+                    if(proOpt.values && proOpt.values.length > 0) {
+                      const splitVal = cartOpt.value.split(",").map(x => x.trim());
+                      proOpt.values.forEach((x, i) => {
+                        x.selected = splitVal.indexOf(x.title) !== -1;
+                      });
+                    } else {
+                      proOpt.option_value = cartOpt.value;
+                    }
+                  }
+                });
+              }
+              this.cartMealProduct = menuProd;
+              this.mealPreferenceLoading = false;
+              this.assignCartVariables();
+            });            
+          }
+        });  
+        if(!this.mealAdded) {
+          this.mealPreferenceLoading = false;
+        }
+        this.assignCartVariables(); 
+      });
+      /**if (!this.mealPreferences || this.mealPreferences.length === 0) {
         this.cart.mealPreferenceLoading = true;
         this.rest.getItems(1, [], 1000, 'meals/user-meal-search', 'criteria').subscribe(res => {
           this.mealPreferences = res;
@@ -189,9 +245,7 @@ export class CartService {
           this.assignCartTotal();
         });
       }
-      this.mealAdded = true;
-      this.mealCartItem = this.getMealItemFromCart();
-      this.mealCartItem = Object.assign({}, this.mealCartItem, this.totals.items.filter(x => x.item_id === this.mealCartItem.item_id)[0]);
+      
       if(this.mealCartItem.options) {
         this.mealCartItem.options = JSON.parse(this.mealCartItem.options);
         this.mealCartItem.options.forEach(x => {
@@ -201,7 +255,7 @@ export class CartService {
           }
           this.mealCartItem[key] = x.value;
         });
-      }
+      }**/
     }
     if (this.cart) {
       this.billingAddress = this.cart.billing_address;
@@ -209,7 +263,10 @@ export class CartService {
         this.shippingAddress = this.cart.extension_attributes.shipping_assignments[0].shipping.address;
       }
     }
+    this.assignCartVariables();
+  }
 
+  assignCartVariables() {
     this.cartTotal.next({
       guestCardId: this.guestCardId,
       cart: this.cart,
@@ -217,8 +274,9 @@ export class CartService {
       totals: this.totals,
       loading: this.loading,
       mealAdded: this.mealAdded,
+      cartMealProduct: this.cartMealProduct,
       mealCartItem: this.mealCartItem,
-      mealPreferences: this.mealPreferences,
+      mealPreferenceLoading: this.mealPreferenceLoading,
       billingAddress: this.billingAddress,
       shippingAddress: this.shippingAddress,
       subscription: this.subscription
