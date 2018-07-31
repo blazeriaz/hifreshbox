@@ -25,19 +25,12 @@
 </div>
 <div class="container-fluid p-0" [ngStyle]="backgrounds.gray">
     <div class="container">
-        <div class="row py-3" *ngIf="loadedselectedRecipes && recipes.length == 0">
-            <div class="col-12">
-                <div class="card px-3 py-4 text-center">         
-                    <div class="card-title my-3">
-                        <h5 class="text-uppercase">No Recipes.</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Please check after sometime...</p>
-                    </div>
-                </div>
+        <div class="row">            
+            <div class="col-12 mb-2">
+                <alert></alert>
             </div>
         </div>
-        <div class="row py-3" *ngIf="!loadedselectedRecipes">
+        <div class="row py-3"*ngIf="!loadedselectedRecipes">
             <div class="col-12">
                 <div class="card px-3 py-4 text-center">         
                     <div class="card-title my-3">
@@ -49,11 +42,32 @@
                 </div>
             </div>
         </div>
-        <div class="row py-3" *ngIf="loadedselectedRecipes">
-            <div class="col-12 mb-2">
-                <alert></alert>
+    </div>
+    <div class="container" *ngFor="let mealMenu of mealMenus?.items">
+        <div class="row py-3" *ngIf="mealMenu.recipes.length == 0">
+            <div class="col-12">
+                <div class="card px-3 py-4 text-center">         
+                    <div class="card-title my-3">
+                        <h5 class="text-uppercase">No Recipes.</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Please check after sometime...</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 col-12" *ngFor="let recipe of recipes">
+        </div>
+        <div class="row py-3" *ngIf="mealMenu.recipes.length > 0">
+            <div class="col-12">
+                <div class="row">
+                    <h5 class="col text-uppercase color-spl-green">{{mealMenu.name}}</h5>
+                    <div class="col-auto">
+                        <button (click)="addMealToCart(mealMenu.sku)" type="button" class="btn btn-outline-green">ORDER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row py-3" *ngIf="mealMenu.recipes.length > 0">            
+            <div class="col-md-4 col-12" *ngFor="let recipe of mealMenu.recipes">
                 <div class="card px-3 py-4 text-center">
                     <div class="pointer" (click)="showRecipeDetails(recipe)">
                         <img class="img-fluid" [src]="backgrounds.recipe" *ngIf="!recipe.default_image" />
@@ -141,7 +155,6 @@
             <div class="px-5 py-4" *ngIf="!isLogin() || !this.orderSubscription?.has_subscription">
                 <img class="mb-3" [src]="backgrounds.cap" />
                 <h5>All orders must be placed by {{currentMenuDays.friday | date : 'EEEE, MMMM d'}} for {{currentMenuDays.tuesday | date : 'EEEE, MMMM d'}}</h5>
-                <button [disabled]="!(mealMenuProduct.cartItem?.quote_id || mealMenuProduct.cartItem.productOption?.extensionAttributes)" type="button" class="btn btn-outline-green" (click)="addMealToCart()">Order Now</button>
             </div>
             <div class="px-5 py-4" *ngIf="isLogin() && this.orderSubscription?.has_subscription">
                 <img class="mb-3" [src]="backgrounds.cap" />

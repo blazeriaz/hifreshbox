@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
-import {Location} from '@angular/common';
-import * as GlobalVariable from 'global';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import * as GlobalVariable from 'global';
 import { AlertService, RestService, AuthService, CartService, MealMenuService } from 'services';
 
 @Component({
@@ -23,8 +22,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
         private renderer: Renderer2,
         private auth: AuthService,
         private mealMenuService: MealMenuService,
-        private cartService: CartService,
-        private location: Location
+        private cartService: CartService
     ) { }
 
     ngOnInit(): void {

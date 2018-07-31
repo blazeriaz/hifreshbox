@@ -3,7 +3,6 @@ import { RestService, AlertService, CartService, AuthService } from 'services';
 
 import * as GlobalVariable from 'global';
 import { Router, ActivatedRoute } from '@angular/router';
-import { concat } from 'rxjs/operator/concat';
 
 @Component({
   templateUrl: 'checkout.component.html'

@@ -1,4 +1,4 @@
-<form [formGroup]="checkoutPaymentForm" (submit)="saveCheckoutPayment()" novalidate>
+<form [formGroup]="checkoutPaymentForm" (submit)="saveCardInfo()" novalidate>
     <div class="row">
         <div class="col-12 text-center">
             <h2 class="text-uppercase">Credit Card Info</h2>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="row py-2 mx-0" *ngIf="cards.length > 0 && !newCard">
-                <button class="btn btn-outline-green"(click)="addNewCard()">New Card</button>
+                <button class="btn btn-outline-green" (click)="addNewCard()">New Card</button>
             </div>
             <div class="bg-light p-2" *ngIf="cards.length === 0 || newCard">
                 <div class="form-group row">                        
@@ -67,6 +67,10 @@
                         <input size="3" class="form-control form-control-sm rounded-0" id="card_cvv" type="password" placeholder="xxx"
                             autocomplete="off" ccCVC formControlName="card_cvv" [ngClass]="setInputClass('card_cvv')" />
                     </div>
+                </div>
+                <div class="row py-2 mx-0">
+                    <button type="submit" class="btn btn-outline-green">Save</button>
+                    <button type="button" class="btn btn-outline-green mx-2" (click)="cancelSaveCard()">Cancel</button>
                 </div>
             </div>
         </div>
@@ -119,7 +123,7 @@
                     <button type="button" [disabled]="loading" class="btn btn-outline-green" (click)="goBack()">Back</button>
                 </div>
                 <div class="col-auto text-right">
-                    <button type="submit" class="btn btn-outline-green" *ngIf="!loading">Continue</button>
+                    <button type="button" class="btn btn-outline-green" *ngIf="!loading" click)="saveCheckoutPayment()">Continue</button>
                     <button type="button" class="btn btn-outline-green" disabled *ngIf="loading">Loading...</button>
                 </div>
             </div>

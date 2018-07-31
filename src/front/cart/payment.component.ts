@@ -140,8 +140,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if(this.selectedCard) {
             this.loading = true;
             this.savePaymentInfoHash(this.selectedCard.public_hash);
-            return;
+        } else {
+            this.alert.error('Please select any one of the card for payment');
         }
+    }
+
+    cancelSaveCard() {
+        this.alert.clear();
+        this.checkoutPaymentSubmitted = false;
+        this.checkoutPaymentForm.reset();
+        this.newCard = false;
+    }
+
+    saveCardInfo() {
+        this.alert.clear();
         this.checkoutPaymentSubmitted = true;
         if (this.checkoutPaymentForm.valid) {
             const mon_yr = this.checkoutPaymentForm.value.card_month_year.split("/");
@@ -158,7 +170,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
                     this.rest.hideLoader();
                     this.alert.error(public_hash);
                 } else {
-                    this.savePaymentInfoHash(public_hash)
+                    //this.savePaymentInfoHash(public_hash)
                 }
             }, err => {
                 this.rest.hideLoader();

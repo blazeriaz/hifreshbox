@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, TemplateRef } from '@angular/core';
-import { RestService, AlertService, MealMenuService, AuthService } from 'services';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
-import * as GlobalVariable from 'global';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { RestService, AlertService, AuthService } from 'services';
 
 @Component({
   templateUrl: 'recipes.component.html'
@@ -15,7 +12,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
     modalRef: BsModalRef;
     modalViewRef: BsModalRef;
-    globalVariable;
     loadRecipesSub;
     loadedselectedRecipes;
     recipes;
@@ -32,28 +28,16 @@ export class RecipesComponent implements OnInit, OnDestroy {
     constructor(
         private alert: AlertService,
         private rest: RestService,
-        private route: Router,
-        private mealMenuService: MealMenuService,
         private auth: AuthService,
-        private renderer: Renderer2,
         private modalService: BsModalService,
         private _fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
-        this.globalVariable = GlobalVariable;
-
-        // Get recipes of Menu
-        const sendData = {week_data : {
-            sku : 'freshbox-subscription',
-            week_no : 44,
-            year : 2017
-        }}
         this.loadedselectedRecipes = false;
         if (this.loadRecipesSub) {
             this.loadRecipesSub.unsubscribe();
         }
-
         this.rest.showLoader();
         this.rest.getItems('', '', '', 'ipwishlist/items').subscribe(recipes => {
             this.recipes = recipes;

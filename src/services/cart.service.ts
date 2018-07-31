@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import * as GlobalVariable from '../global';
-import { AuthService, RestService, RestDefaultService } from 'services';
+import { AuthService, RestService } from 'services';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
@@ -43,8 +38,6 @@ export class CartService {
   subscription = null;
 
   constructor(
-    private http: Http,
-    private router: Router,
     private auth: AuthService,
     private rest: RestService
   ) {
@@ -288,9 +281,6 @@ export class CartService {
   }
 
   increaseCartItem(item) {
-    if (item.sku === 'freshbox-subscription') {
-      this.mealAdded = true;
-    }
     if (this.cart && this.cart.items) {
       this.cart.items_count += 1;
       this.cart.items.push(item);

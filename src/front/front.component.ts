@@ -53,7 +53,7 @@ export class FrontComponent implements OnInit, OnDestroy, AfterContentInit {
     this.auth.setAuthModule('customer');
     this.bodyclass = 'app header-fixed sidebar-hidden aside-menu-fixed aside-menu-hidden'.split(' ');
     this.subscription = this.rest.loaderState
-        .subscribe((state: any) => {
+        .subscribe((state: any) => {console.log(state);
             this.loading = state.show;
         });
   }

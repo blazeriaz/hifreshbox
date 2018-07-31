@@ -1,8 +1,5 @@
 import { Component, OnInit, OnDestroy, Renderer2, Output, EventEmitter } from '@angular/core';
 import { RestService, AlertService, CartService } from 'services';
-
-import * as GlobalVariable from 'global';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
@@ -25,8 +22,6 @@ export class MealComponent implements OnInit, OnDestroy {
     constructor(
         private alert: AlertService,
         private rest: RestService,
-        private router: Router,
-        private route: ActivatedRoute,
         private renderer: Renderer2,
         private _fb: FormBuilder,
         private cartService: CartService
@@ -49,38 +44,30 @@ export class MealComponent implements OnInit, OnDestroy {
                 optionValue: ['', [Validators.required]]
             })
         });
-
-        /**this.MealProduct = {cart_item: {
-            quote_id: null,
-            product_id: 2078,
-            qty: 1,
-            preferences: null,
-            howmuch_meals_week: 3,
-            howmany_people: 2,
-            meal_extra_notes: 1
-        }};**/
-
-        this.mealMenuProduct = {cartItem: {
-            quote_id: null,
-            itemId: null,
-            sku: 'freshbox-subscription',
-            qty: 1,
-            productOption: null
-        }};
+        
         this.rest.showLoader();
         this.needToDestroyEvents.push(this.cartService.getCartTotal().subscribe(data => {            
             this.customOptions = [];
+            this.mealMenuProduct = null;
             if(!data.cart || data.cart.loading || data.cart.mealPreferenceLoading) {
                 return;
             }
-            if (data.guestCardId) {
-                this.mealMenuProduct.cartItem.quote_id = data.guestCardId
-            } else if (data.cart && data.cart.id) {
-                this.mealMenuProduct.cartItem.quote_id = data.cart.id
-            }
             if (data.mealCartItem) {
                 const formValues = {};
-                this.mealMenuProduct.cartItem.itemId = data.mealCartItem.item_id;
+                let quote_id = null;
+                if (data.guestCardId) {
+                    quote_id = data.guestCardId
+                } else if (data.cart && data.cart.id) {
+                    quote_id = data.cart.id
+                }
+                this.mealMenuProduct = {cartItem: {
+                    quote_id: quote_id,
+                    itemId: data.mealCartItem.item_id,
+                    sku: data.mealCartItem.sku,
+                    qty: 1,
+                    productOption: null
+                }};
+                
                 data.cartMealProduct.options.forEach((proOpt, optIndex) => {
                     if(proOpt.values && proOpt.values.length > 0) {
                         proOpt.values.filter(x => x.selected).forEach(optVal => {
@@ -92,13 +79,13 @@ export class MealComponent implements OnInit, OnDestroy {
                     if(proOpt.title == 'how much meals week') {
                         formValues['howmuch_meals_week'] = {
                             optionId: proOpt.option_id,
-                            optionValue: proOpt.option_value
+                            optionValue: proOpt.option_value ? parseInt(proOpt.option_value, 10) : 3
                         };
                     }
                     if(proOpt.title == 'how many people') {
                         formValues['howmany_people'] = {
                             optionId: proOpt.option_id,
-                            optionValue: parseInt(proOpt.option_value, 10)
+                            optionValue: proOpt.option_value ? parseInt(proOpt.option_value, 10) : 2
                         };
                     }
                     if(proOpt.title == 'meal extra notes') {
@@ -109,15 +96,7 @@ export class MealComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.cartMealProduct = data.cartMealProduct;
-                /**data.mealPreferences.forEach((x, i) => {
-                    if (i === 0) {
-                        this.preferences = x;
-                    } else {
-                        Object.keys(x).forEach((key) => {
-                            formValues[key] = parseInt(x[key], 10) ? parseInt(x[key], 10) : x[key];
-                        });
-                    }
-                });**/
+
                 this.checkoutMealForm.patchValue(formValues);
                 this.rest.hideLoader();
             }
@@ -206,22 +185,9 @@ export class MealComponent implements OnInit, OnDestroy {
     saveCheckoutMeal() {
         this.checkoutMealSubmitted = true;
         this.alert.clear();
-        if (this.checkoutMealForm.valid) {
-            /**this.MealProduct.cart_item.howmuch_meals_week = 3;//this.checkoutMealForm.value.howmuch_meals_week,
-            this.MealProduct.cart_item.howmany_people = this.checkoutMealForm.value.howmany_people,
-            this.MealProduct.cart_item.meal_extra_notes = this.checkoutMealForm.value.meal_extra_notes;
-            this.MealProduct.cart_item.preferences = [];
-            this.preferences.forEach(x => {
-                x.options.forEach(y => {
-                    if (y.is_selected) {
-                        this.MealProduct.cart_item.preferences.push({
-                            question_id: y.preference_id,
-                            option_id: y.preference_option_id,
-                            qty: y.selected_qty
-                        });
-                    }
-                })
-            });**/
+        if(!this.mealMenuProduct) {
+            this.goBack();
+        } else if (this.checkoutMealForm.valid) {
             Object.keys(this.checkoutMealForm.value).forEach(key => {
                 const opt = this.checkoutMealForm.value[key];
                 if(opt.optionValue) {
@@ -240,7 +206,6 @@ export class MealComponent implements OnInit, OnDestroy {
                 this.mealMenuProduct.cartItem.qty = parseInt(this.checkoutMealForm.value.howmany_people.optionValue, 10) / 2;
             }
             this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
-            //this.cartService.addMealToCart(this.MealProduct).subscribe(res => {
                 this.rest.hideLoader();
                 this.next.emit('meal');
             }, e => {

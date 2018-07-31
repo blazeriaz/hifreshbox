@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     disableNextWeek;
     loadRecipesSub;
     loadedselectedRecipes;
-    recipes = [];
+    mealMenus = null;
     favRecipes = [];
     selectedRecipe;
     currentMenuDays;
@@ -95,40 +95,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
         this.mealMenuProduct = {cartItem: {
             quote_id: null,
-            sku: 'freshbox-subscription',
+            sku: null,
             qty: 1,
             productOption: null
         }};
-
-        this.rest.getItem('freshbox-subscription', 'products/' + 'freshbox-subscription').subscribe(menuItem => {
-            var customOptions = [];
-            menuItem.options.forEach((option, i) => {
-                if(option.title == 'Is Recurring Menu?' || i == 6) {
-                    let option_type_id = option.values[0].option_type_id;
-                    customOptions.push({
-                        optionId: option.option_id,
-                        optionValue: option_type_id
-                    });
-                }
-                if(option.title == 'how much meals week') {
-                    customOptions.push({
-                        optionId: option.option_id,
-                        optionValue: 3
-                    });
-                }
-                if(option.title == 'how many people') {
-                    customOptions.push({
-                        optionId: option.option_id,
-                        optionValue: 2
-                    });
-                }
-            });
-            this.mealMenuProduct.cartItem.productOption =  {
-                extensionAttributes: {
-                    customOptions: customOptions
-                }
-            };
-        });
 
         this.orderSubscription = null;
         this.cartService.getCartTotal().subscribe(res => {
@@ -164,19 +134,28 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (data.year === this.endYear && !nextTuesday) {
                 this.disableNextWeek = true;
             }
-            // Get recipes of Menu
-            const sendData = {week_data : {
-                sku : 'freshbox-subscription',
-                week_no : data.week,
-                year : data.year
-            }}
+            
             this.loadedselectedRecipes = false;
             if (this.loadRecipesSub) {
                 this.loadRecipesSub.unsubscribe();
             }
-            this.loadRecipesSub = this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
-                this.recipes = recipes.map(res => res.recipe_detail);
-                this.loadedselectedRecipes = true;
+            this.mealMenus = null;
+            this.loadRecipesSub = this.cartService.getMenuList().subscribe(mealMenus => {
+                // Get recipes of Menu
+                const sendData = {week_data : {
+                    sku : '',
+                    week_no : data.week,
+                    year : data.year
+                }}
+                this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
+                    mealMenus.items.map(mealMenu => {
+                        const mealRecipes = recipes.filter(x => x.product_sku === mealMenu.sku);
+                        mealMenu.recipes = mealRecipes.map(res => res.recipe_detail);
+                        return mealMenu;
+                    });
+                    this.mealMenus = mealMenus;
+                    this.loadedselectedRecipes = true;
+                });
             });
         });
 
@@ -205,20 +184,50 @@ export class MenuComponent implements OnInit, OnDestroy {
         return this.auth.isLogin();
     }
 
-    addMealToCart() {
+    addMealToCart(menuSku) {
         this.alert.clear();
         this.rest.showLoader();
-        this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
-        //this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
-            this.rest.hideLoader();
-            this.cartService.increaseCartItem(res);
-            this.router.navigate(['/', 'cart', 'checkout']);
-        }, err => {
-            this.rest.hideLoader();
-            const e = err.json();
-            this.alert.error(e.message);
+        this.mealMenuProduct.cartItem.sku = menuSku;
+        this.rest.getItem(menuSku, 'products/' + menuSku).subscribe(menuItem => {
+            var customOptions = [];
+            menuItem.options.forEach((option, i) => {
+                if(option.title == 'Is Recurring Menu?' || i == 6) {
+                    let option_type_id = option.values[0].option_type_id;
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: option_type_id
+                    });
+                }
+                if(option.title == 'how much meals week') {
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: 3
+                    });
+                }
+                if(option.title == 'how many people') {
+                    customOptions.push({
+                        optionId: option.option_id,
+                        optionValue: 2
+                    });
+                }
+            });
+            this.mealMenuProduct.cartItem.productOption =  {
+                extensionAttributes: {
+                    customOptions: customOptions
+                }
+            };
+            
+            this.cartService.addItemToCart(this.mealMenuProduct).subscribe(res => {
+                this.rest.hideLoader();
+                this.cartService.increaseCartItem(res);
+                this.router.navigate(['/', 'cart', 'checkout']);
+            }, err => {
+                this.rest.hideLoader();
+                const e = err.json();
+                this.alert.error(e.message);
+            });
+            window.scroll(0, 0);
         });
-        window.scroll(0, 0);
     }
     
     inFavRecipe(id) {

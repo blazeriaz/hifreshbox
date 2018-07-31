@@ -1,6 +1,6 @@
 <div class="row" *ngIf="!orderSubscription">
     <div class="col-12">
-        No subscription found. <button [disabled]="!mealMenuProduct.cartItem.quote_id" type="button" class="btn btn-link px-0" (click)="addMealToCart()">Click here</button> to subscribe to a meal plan.
+        No subscription found. <button type="button" class="btn btn-link px-0" (click)="addMealToCart()">Click here</button> to subscribe to a meal plan.
     </div>
 </div>
 <div class="row" *ngIf="orderSubscription">
