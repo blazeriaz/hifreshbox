@@ -10,7 +10,7 @@ import { SubscriptionListComponent } from './subscriptions.component';
 import { AuthService } from 'services';
 
 const routes: Routes = [{
-    path: 'preference',
+    path: 'edit/:sku',
     component: MealComponent
 }, {
     path: 'menu',

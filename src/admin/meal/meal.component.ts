@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
-import {Router} from '@angular/router';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
-import { RestService, AlertService, MealMenuService } from 'services';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { ActivatedRoute} from '@angular/router';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { RestService, AlertService } from 'services';
 import { BsModalService } from 'ngx-bootstrap';
 
 @Component({
@@ -11,31 +11,31 @@ export class MealComponent implements OnInit {
   @ViewChild('optionFormTpl') optionFormTpl: TemplateRef<any>;
   @ViewChild('mealPrefFormTpl') mealPrefFormTpl: TemplateRef<any>;
 
-  menuForm;
+  customOptionForm: FormGroup;
+  customOptionValueForm: FormGroup;
+  menuForm: FormGroup;
   menuItem;
   preferences;
   submitted;
   optionForm;
-  mealPrefForm;
   modalOptionFormRef;
   modalPrefFormRef;
   loading;
 
   constructor(
-    private router: Router,
     private _fb: FormBuilder,
     private alert: AlertService,
     private rest: RestService,
-    private mealMenuService: MealMenuService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit() {
-    this.menuForm = this._fb.group({
+    /**this.menuForm = this._fb.group({
         name : ['', [Validators.required]],
         price: ['', [Validators.required]],
-    });
+    });**/
 
     this.optionForm = this._fb.group({
       preference_option_id: 0,
@@ -46,45 +46,50 @@ export class MealComponent implements OnInit {
       sort_order: 0,
       is_active: 1
     });
-
-    this.mealPrefForm = this._fb.group({
-      id: 0,
-      title: ['', [Validators.required]],
-      display_title: ['', [Validators.required]],
-      is_active: 1
+    
+    const mealSku = this.route.snapshot.params['sku'];
+    this.customOptionForm = this._fb.group({
+      'product_sku': mealSku,
+      'option_id': null,
+      'type': 'checkbox',
+      'is_require': 0,
+      'title': ['', [Validators.required]],
+      'display_title': ['', [Validators.required]]
     });
-
-    this.rest.getItem('', 'products/freshbox-subscription').subscribe(data => {
+    this.customOptionValueForm = this._fb.group({
+      'option_id': null,
+      'option_type_id': null,
+      'price_type': 'fixed',
+      'sort_order': 0,
+      'title': ['', [Validators.required]],
+      'price': ['', [Validators.required]]
+    });
+    this.rest.getItem('', 'products/' + mealSku).subscribe(data => {
         this.menuItem = data;
-        this.menuForm.patchValue({name: data.name, price: data.price});
+        //this.menuForm.patchValue({name: data.name, price: data.price});
     });
 
-    this.rest.getItems(1, [], 1000, 'meals/search', 'criteria').subscribe(res => {
+    /**this.rest.getItems(1, [], 1000, 'meals/search', 'criteria').subscribe(res => {
         this.preferences = res.items;
-    });
+    });**/
   }
 
-  openOptionForm(preference_id, option?) {
-    this.optionForm.patchValue({
-      preference_id: preference_id
-    });
+  openOptionForm(preference, option?) {
     if (option) {
-      this.optionForm.patchValue({
-        preference_option_id: option.preference_option_id,
+      this.customOptionValueForm.patchValue({
+        option_id: preference.option_id,
+        option_type_id: option.option_type_id,
         title: option.title,
         price: option.price,
-        qty_enabled: parseInt(option.qty_enabled, 10),
-        sort_order: parseInt(option.sort_order, 10),
-        is_active: parseInt(option.is_active, 10)
+        sort_order: parseInt(option.sort_order, 10)
       });
     } else {
-      this.optionForm.patchValue({
-        preference_option_id: 0,
+      this.customOptionValueForm.patchValue({
+        option_id: preference.option_id,
+        option_type_id: null,
         title: '',
         price: 0,
-        qty_enabled: 1,
-        sort_order: 0,
-        is_active: 1
+        sort_order: 0
       });
     }
     this.modalOptionFormRef = this.modalService.show(this.optionFormTpl, {
@@ -98,28 +103,41 @@ export class MealComponent implements OnInit {
   saveMealOption() {
       this.alert.clear();
       this.submitted = true;
-      if (this.optionForm.valid) {
-        const sendData = Object.assign({}, this.optionForm.value);
-        const option_id = sendData.preference_option_id;
-        let url = 'meals-option';
-        if (option_id) {
-          url += '/' + option_id;
+      if (this.customOptionValueForm.valid) {
+        const optionValue = Object.assign({}, this.customOptionValueForm.value);
+        const optionData = {
+          preference: Object.assign({}, this.menuItem.options.find(x => x.option_id === optionValue.option_id)),
+          modalRef: this.modalOptionFormRef,
+          successMsg: 'The meal preference option saved successfully!'
+        };
+        
+        delete optionValue.option_id;
+        let valIndex = -1;
+        if(optionValue.option_type_id) {
+          valIndex = optionData.preference.values.findIndex(x => x.option_type_id === optionValue.option_type_id);
         }
-        delete sendData.preference_option_id;
-        this.loading = true;
-        this.rest.saveItem(option_id, {preference_options : sendData}, url).subscribe(data => {
-          this.alert.success('The preference option saved successfully!', true);
-          this.rest.getItems(1, [], 1000, 'meals/search', 'criteria').subscribe(res => {
-            this.preferences = res.items;
-            this.loading = false;
-            this.closeEditModal(this.modalOptionFormRef);
-          });
-        }, e => {
-          this.loading = false;
-        })
+        if(valIndex !== -1) {
+          optionData.preference.values[valIndex] = optionValue;
+        } else {
+          optionData.preference.values.push(optionValue);
+        }
+        this.saveCustomOption(optionData);      
       } else {
         this.alert.error('Please check the form to enter all required details', false, "popup");
       }
+  }
+
+  deleteMealOption(preference, option) {    
+    this.alert.clear();
+    if (!confirm('Are you sure want to delete the option?')) {
+      return;
+    }
+    const optionData = {
+      preference: Object.assign({}, preference),
+      successMsg: 'The meal preference option deleted successfully!'
+    };
+    optionData.preference.values = optionData.preference.values.filter(x => x.option_type_id !== option.option_type_id);
+    this.saveCustomOption(optionData); 
   }
   
   toggleMealOptionStatus(preference, mealOption, status) {
@@ -139,33 +157,24 @@ export class MealComponent implements OnInit {
     });
   }
 
-  deleteMealOption(preference_id, option) {
-    if (!confirm('Are you sure want to delete the option?')) {
-      return;
-    }
-    const option_id = option.preference_option_id;
-    this.rest.deleteItem(option_id, 'meals-option/' + option_id).subscribe(x => {
-      const index = this.preferences.findIndex(y => y.id === preference_id);
-      if (index !== -1) {
-        this.preferences[index].options = this.preferences[index].options.filter(z => z.preference_option_id !== option_id);
-      }
-      this.alert.success('The preference options delete successfully!', true);
-    });
-  }
-
   openMealPrefForm(preference?) {
     if (preference) {
-      this.mealPrefForm.patchValue({
-        id: preference.id,
-        title: preference.title,
-        display_title: preference.display_title,
-        is_active: parseInt(preference.is_active, 10)
+      const title = preference.title.split("|");
+      this.customOptionForm.patchValue({
+        option_id: preference.option_id,
+        sort_order: preference.sort_order,
+        title: title.length > 0 ? title[0] : '',
+        display_title: title.length > 1 ? title[1] : '',
+        type: preference.type,
+        is_require: preference.is_require ? '1' : '0'
       });
     } else {
-      this.optionForm.patchValue({
-        id: 0,
+      this.customOptionForm.patchValue({
+        option_id: 0,
         title: '',
-        is_active: 1
+        display_title: '',
+        type: 'checkbox',
+        is_require: '0'
       });
     }
     this.modalPrefFormRef = this.modalService.show(this.mealPrefFormTpl, {
@@ -179,28 +188,92 @@ export class MealComponent implements OnInit {
   saveMealPref() {
     this.alert.clear();
     this.submitted = true;
-    if (this.mealPrefForm.valid) {
-      const sendData = this.mealPrefForm.value;
-      const preference_id = sendData.id;
-      let url = 'meals';
-      if (preference_id) {
-        url += '/' + preference_id;
+    if (this.customOptionForm.valid) {
+      const sendData = Object.assign({}, this.customOptionForm.value);
+      const optionId = sendData.option_id;
+      let menuOption = null; let options;
+      if(optionId) {        
+        menuOption = this.menuItem.options.find(x => x.option_id === optionId);        
       }
-      delete sendData.id;
-      this.loading = true;
-      this.rest.saveItem(preference_id, {preference : sendData}, url).subscribe(data => {
-        this.alert.success('The meal preference saved successfully!', true);
-        this.rest.getItems(1, [], 1000, 'meals/search', 'criteria').subscribe(res => {
-          this.preferences = res.items;
-          this.loading = false;
-          this.closeEditModal(this.modalPrefFormRef);
-        });
-      }, e => {
-        this.loading = false;
-      })
+      if(!menuOption) {
+        sendData.sort_order = this.menuItem.options.length + 1;
+        options = [{
+          title: 'Option',
+          price: 0,
+          price_type: 'fixed'
+        }];
+      } else {
+        options = menuOption.values;
+      }
+      sendData.title += "|" + sendData.display_title;
+      delete sendData.display_title;
+      const optionData = {
+        preference: sendData,
+        modalRef: this.modalPrefFormRef,
+        successMsg: 'The meal preference saved successfully!'
+      };
+      optionData.preference.values = options;
+      this.saveCustomOption(optionData);
     } else {
         this.alert.error('Please check the form to enter all required details', false, 'popup');
     }
+  }
+
+  deleteMealPref(preference_id, force?) {
+    if (!force && !confirm('Are you sure want to delete the preference?')) {
+      return;
+    }
+    if(!force) this.alert.clear();
+    this.rest.showLoader();
+    this.rest.deleteItem(preference_id, 'products/' + this.menuItem.sku + '/options/' + preference_id).subscribe(x => {
+      this.menuItem.options = this.menuItem.options.filter(y => y.option_id !== preference_id);
+      if(!force) this.alert.success('The meal preference delete successfully!', true);
+      this.rest.hideLoader();
+    });
+  }
+
+  saveCustomOption(optionData) {
+    let url = 'products/options';
+    const optionId = optionData.preference.option_id;
+    if (optionId) {
+      url += '/' + optionId;
+      if(optionData.preference.values.length <= 0) {
+        this.deleteMealPref(optionId, true);
+        this.alert.success(optionData.successMsg, true);
+        return;
+      }
+    }
+    optionData.preference.values.map(x => {
+      x.price_type = 'fixed';
+      x.price = parseInt(x.price, 10);
+      return x;
+    });
+    this.loading = true;
+    this.rest.showLoader();
+    this.rest.saveItem(optionId, {option: optionData.preference}, url).subscribe(resData => {
+      if(optionId && resData.option_id !== optionId) {      
+        this.rest.deleteItem(optionId, 'products/' + this.menuItem.sku + '/options/' + optionId).subscribe(x => {
+          this.rest.getItem('', 'products/' + this.menuItem.sku).subscribe(proData => {        
+            this.alert.success(optionData.successMsg, true);
+            this.loading = false;
+            this.menuItem = proData;
+            if(optionData.modalRef) this.closeEditModal(optionData.modalRef);
+            this.rest.hideLoader();
+          });
+        });    
+      } else {
+        this.rest.getItem('', 'products/' + this.menuItem.sku).subscribe(proData => {        
+          this.alert.success(optionData.successMsg, true);
+          this.loading = false;
+          this.menuItem = proData;
+          if(optionData.modalRef) this.closeEditModal(optionData.modalRef);
+          this.rest.hideLoader();
+        });
+      }
+    }, e => {
+      this.loading = false;
+      this.rest.hideLoader();
+    })
   }
   
   toggleMealPreftatus(preference, status) {
@@ -219,24 +292,13 @@ export class MealComponent implements OnInit {
     });
   }
 
-  deleteMealPref(preference_id) {
-    if (!confirm('Are you sure want to delete the preference?')) {
-      return;
-    }
-    this.alert.clear();
-    this.rest.deleteItem(preference_id, 'meals/' + preference_id).subscribe(x => {
-      this.preferences = this.preferences.filter(y => y.id !== preference_id);
-      this.alert.success('The meal preference delete successfully!', true);
-    });
-  }
-
   saveMealMenu() {
       this.alert.clear();
       this.submitted = true;
       if (this.menuForm.valid) {
         const sendData = this.menuForm.value;
         this.loading = true;
-        this.rest.saveItem('freshbox-subscription', {product : sendData}, 'products/freshbox-subscription').subscribe(data => {
+        this.rest.saveItem('category-1', {product : sendData}, 'products/category-1').subscribe(data => {
           this.submitted = false;
           this.alert.success('The menu details are updated successfully!', true);
           this.loading = false;
