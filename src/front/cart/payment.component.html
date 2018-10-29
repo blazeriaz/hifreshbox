@@ -123,7 +123,7 @@
                     <button type="button" [disabled]="loading" class="btn btn-outline-green" (click)="goBack()">Back</button>
                 </div>
                 <div class="col-auto text-right">
-                    <button type="button" class="btn btn-outline-green" *ngIf="!loading" click)="saveCheckoutPayment()">Continue</button>
+                    <button type="button" class="btn btn-outline-green" *ngIf="!loading" (click)="saveCheckoutPayment()">Continue</button>
                     <button type="button" class="btn btn-outline-green" disabled *ngIf="loading">Loading...</button>
                 </div>
             </div>

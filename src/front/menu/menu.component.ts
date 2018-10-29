@@ -149,8 +149,9 @@ export class MenuComponent implements OnInit, OnDestroy {
                 }}
                 this.rest.saveItem(false, sendData, 'menus/weeklist').subscribe(recipes => {
                     mealMenus.items.map(mealMenu => {
-                        const mealRecipes = recipes.filter(x => x.product_sku === mealMenu.sku);
-                        mealMenu.recipes = mealRecipes.map(res => res.recipe_detail);
+                        /**const mealRecipes = recipes.filter(x => x.product_sku === mealMenu.sku);
+                        mealMenu.recipes = mealRecipes.map(res => res.recipe_detail);**/
+                        mealMenu.recipes = recipes.map(res => res.recipe_detail);
                         return mealMenu;
                     });
                     this.mealMenus = mealMenus;
