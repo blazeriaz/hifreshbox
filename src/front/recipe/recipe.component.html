@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <img class="img-fluid" [src]="recipe.custom_attributes | mgCatalogAttribute : 'image'" />
+            <img class="img-fluid" [src]="recipe.custom_attributes | mgCatalogAttribute : 'image'" *ngIf="recipe.custom_attributes | mgCatalogAttribute : 'image'" />
         </div>
     </div>
 </div>
@@ -103,7 +103,10 @@
                     <div class="col-auto px-3">
                         <h1 class="text-uppercase color-spl-green font-special mb-3 display-4">{{(index + 1) | zeropad : 2}}</h1>
                     </div>
-                    <div class="col mt-2">{{step}}</div>
+                    <div class="col mt-2">
+                        <img class="col-auto px-1 mb-1" *ngIf="step && step.image" [src]="stepImageBaseUrl + step.image" [style.width.px]="150" [style.height]="'auto'" />
+                        <div>{{step && step.content ? step.content : step}}</div>
+                    </div>
                 </div>                
             </div>
         </div>

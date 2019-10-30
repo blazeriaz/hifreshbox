@@ -13,7 +13,7 @@ export class mgCatalogAttribute implements PipeTransform {
     let attr_vlue = (attr) ? attr.value : '';
 
     if (attr_vlue && ['image', 'small_image', 'thumbnail'].indexOf(attribute_code) !== -1) {
-        attr_vlue = GlobalVariable.BASE_MEDIA_URL + attr_vlue;
+        attr_vlue = (attr_vlue === 'no_selection') ? '' : GlobalVariable.BASE_MEDIA_URL + attr_vlue;
     }
 
     if (attr_vlue && attribute_code === 'pdf_upload' && attr_vlue) {

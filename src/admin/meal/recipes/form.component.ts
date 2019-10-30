@@ -15,6 +15,7 @@ import { SelectComponent } from 'ng2-select';
 })
 export class RecipeFormComponent implements OnInit, OnDestroy {
   @ViewChild('savemodal') saveModal: TemplateRef<any>;
+  @ViewChild('stepModal') stepModal: TemplateRef<any>;
   @ViewChild('editLoadModal') editLoadModal: TemplateRef<any>;
   @ViewChild('ingredientsOptionsSelect') ingredientsOptionsSelect: SelectComponent;
   
@@ -44,6 +45,11 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   abortModalClose;
   saveRequests;
   public modalRef: BsModalRef;
+  public modalStepRef: BsModalRef;
+
+  stepImageBaseUrl = GlobalVariable.BASE_MEDIA + 'recipe-steps/';
+  stepImage;
+  stepImageUploadConfig: DropzoneConfigInterface;
 
   pdfUploadConfig: DropzoneConfigInterface;
   serverPDFLoading;
@@ -360,6 +366,23 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
         }
       })(this)
     };
+
+    this.stepImageUploadConfig = {
+      acceptedFiles: 'image/*',
+      addRemoveLinks: false,
+      accept : (function(ctrl) {
+        return function(file) {
+          ctrl.stepImage = file;
+          ctrl.removeFileSizeElement(file);
+
+          this.files.map(f => {
+            if (f !== file) {
+              this.removeFile(f);
+            }
+          });
+        }
+      })(this)
+    };
   }
 
   attachMediaImagesToDropzone(imagesDropZone) {
@@ -472,12 +495,33 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
   }
 
   addRecipeStep() {
-    this.recipeSteps.push(this.newRecipeStep);
-    this.newRecipeStep = '';
+    if (!this.stepImage || !this.stepImage.dataURL) {
+      return;
+    }
+    const base64 = this.stepImage.dataURL.split('base64,');
+    const stepImage = {
+      media_type: 'image',
+      label: this.stepImage.name,
+      file: this.stepImage.name,
+      content: {
+        base64_encoded_data: base64[1],
+        type: this.stepImage.type,
+        name: this.stepImage.name
+      }
+    };
+    this.rest.saveItem('', {image : stepImage}, 'freshboxstepimageupload').subscribe(sImage => {
+      this.recipeSteps.push({
+        image: sImage,
+        content: this.newRecipeStep
+      });
+      this.newRecipeStep = '';
+      this.stepImage = null;
+      this.modalStepRef.hide();
+    });
   }
 
-  removeRecipeStep(i: number) {
-    this.recipeSteps.splice(i, 1);
+  removeRecipeStep(step) {
+    this.recipeSteps = this.recipeSteps.filter(x => x !== step);
   }
 
   addYouNeeds() {
@@ -633,11 +677,11 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
         name: this.pdfDocument.name
       }
     };
-    this.saveRequests.push(this.rest.saveItem('', {pdfdata : pdfdata}, 'freshboxrecipespdf').subscribe(pdf => {
+    this.saveRequests.push(this.rest.saveItem('', {pdfdata : pdfdata}, 'freshboxrecipespdf').subscribe(pdfName => {
       this.imagesDropZone.emit('success', this.pdfDocument);
       this.imagesDropZone.emit('complete', this.pdfDocument);
       this.removeFileSizeElement(this.pdfDocument);
-      this.appendPDFDownloaLink(this.pdfDocument, pdf[3]);
+      this.appendPDFDownloaLink(this.pdfDocument, pdfName);
       this.pdfDocument = null;
       if (this.images.length === 0 && !this.pdfDocument) {
         this.noticeRecipeSaved();
@@ -700,5 +744,15 @@ export class RecipeFormComponent implements OnInit, OnDestroy {
 
   goToList() {
     this.router.navigate(['/', 'meal', 'recipes']);
+  }
+
+  openStepModal() {
+    const config = {
+      animated: true,
+      keyboard: false,
+      backdrop: true,
+      ignoreBackdropClick: true
+    };
+    this.modalStepRef = this.modalService.show(this.stepModal, config);
   }
 }

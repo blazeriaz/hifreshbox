@@ -7,24 +7,24 @@ import { AlertComponent } from "components";
 
 @Injectable()
 export class checkRestTokenResolve implements Resolve<any> {
-  
+
   constructor(private rest: RestService, private alert: AlertService, private router: Router) {}
-  
+
   resolve(route: ActivatedRouteSnapshot) {
-    let sendData  = {
+    const sendData  = {
       id: route.params.customerId,
       token: route.params.token
     };
 
     return this.rest.saveItem('', {email_validation : sendData}, 'forgotemailvalidate').subscribe(res => {
-      if(res == 'success') {
+      if (res === 'success') {
         return res;
       } else {
         this.alert.error(res, true);
         this.router.navigate(['auth/forget']);
       }
     }, err => {
-      this.alert.error("Something went wrong!", true);
+      this.alert.error('Something went wrong!', true);
       this.router.navigate(['auth/forget']);
     })
   }
@@ -37,7 +37,7 @@ export class ResetComponent implements OnInit {
   resetForm: any;
   loading = false;
   returnUrl: string;
-  
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private auth: AuthService,

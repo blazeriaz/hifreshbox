@@ -41,14 +41,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.auth.isLogin()) {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['/']);
     } else {
       // reset login status
       this.auth.logout();
     }
 
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   goToForgetPass() {

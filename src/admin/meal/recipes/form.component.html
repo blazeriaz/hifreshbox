@@ -135,9 +135,10 @@
       <div class="card">
         <div class="card-header">
           Steps
+          <button class="btn btn-primary pull-right" type="button" (click)="openStepModal()">Add</button>
         </div>
         <div class="card-block">         
-          <div class="form-group row mb-1">
+          <!-- <div class="form-group row mb-1">
             <div class="col-md-12">
               <div class="input-group">
                 <textarea type="text" class="form-control" rows="5" 
@@ -147,14 +148,15 @@
                 </span>
               </div>
             </div>
-          </div>
+          </div> -->
           <div dnd-sortable-container [sortableData]="recipeSteps">
             <ul class="list-group" *ngFor="let step of recipeSteps; let i = index;" dnd-sortable [sortableIndex]="i">
               <li class="list-group-item row p-1 mx-0" tooltip="Drag to sort items">
                 <span class="col-auto px-1"><i class="fa fa-arrows"></i></span>
-                <p class="col">{{step}}</p>
+                <img class="col-auto px-1" *ngIf="step && step.image" [src]="stepImageBaseUrl + step.image" [style.width.px]="50" [style.height]="'auto'" />
+                <span class="col">{{step && step.content ? step.content : step}}</span>
                 <span class="col-auto px-1">
-                  <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(index)">
+                  <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(step)">
                     <i class="fa fa-remove"></i>
                   </button>
                 </span>
@@ -330,6 +332,28 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-danger pull-right" (click)="abortEdit()">
         Abort
+    </button>
+  </div>
+</ng-template>
+<ng-template #stepModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Step</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group row mb-1">
+      <div class="col-md-12">
+        <textarea type="text" class="form-control" rows="5" 
+            [(ngModel)]="newRecipeStep" [ngModelOptions]="{standalone: true}"></textarea>
+      </div>
+    </div>
+    <dropzone [config]="stepImageUploadConfig" [message]="'Click or drag image here to upload'"></dropzone>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary pull-right" (click)="modalStepRef.hide()">
+        Close
+    </button>
+    <button type="button" class="btn btn-primary pull-right" (click)="addRecipeStep()">
+        Save
     </button>
   </div>
 </ng-template>

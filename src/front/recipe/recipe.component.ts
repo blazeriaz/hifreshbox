@@ -13,6 +13,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
     currentMenuRecipes;
     mealMenuProduct;
     orderSubscription;
+    stepImageBaseUrl = GlobalVariable.BASE_MEDIA + 'recipe-steps/';
 
     constructor(
         private alert: AlertService,
