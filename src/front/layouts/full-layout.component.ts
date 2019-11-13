@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, Event as RouterEvent, NavigationStart, 
     NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import * as GlobalVariable from "global";
+import { LayoutService } from 'services/layout.service';
 
 @Component({
     selector: 'app-front',
@@ -11,7 +12,8 @@ export class FullLayoutComponent implements OnInit {
     backgrounds;
 
     constructor(
-        private router: Router
+        private router: Router,
+        private layoutService: LayoutService
     ) {        
         router.events.subscribe((event: RouterEvent) => {
             this.navigationInterceptor(event)
@@ -19,6 +21,7 @@ export class FullLayoutComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.layoutService.layoutInit();
         this.backgrounds = {
             recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
             cap : GlobalVariable.htmlImages+'chef-cap-green.png',

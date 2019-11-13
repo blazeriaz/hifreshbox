@@ -55,6 +55,9 @@ body {
 .bg-light {
     background-color: #FAFAFA;
 }
+.bg-black {
+    background-color: #000000;
+}
 
 .overlay_loading {
     position: fixed;
@@ -145,7 +148,15 @@ body {
         color: $brand-success;
     }
 }
+.black-bg-header:not(.scrolled-down) {
+    .app-header {
+        background-color: $black;
+    }
+}
 .white-header:not(.scrolled-down) {
+    .navbar-toggler {
+        color: $black;
+    }
     .navbar-brand {
         background-image: $navbar-brand-logo-alt;
     }

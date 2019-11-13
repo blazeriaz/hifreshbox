@@ -12,7 +12,7 @@ import {DndModule} from 'ng2-dnd';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService, AlertService, RestService, MealMenuService, RestDefaultService, CartService } from "services";
+import { AuthService, AlertService, RestService, MealMenuService, RestDefaultService, CartService } from 'services';
 
 import { emptyLayoutComponent } from './admin/layouts/empty-layout.component';
 
@@ -24,6 +24,8 @@ import { TestimonialComponent } from 'front/blocks/testimonial.component';
 import { SubscriptionInfoComponent } from 'front/blocks/subscription.info.component';
 import { TabsModule } from 'ngx-bootstrap';
 import { CarouselModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { LayoutService } from 'services/layout.service';
+import { WINDOW_PROVIDERS } from 'services/window.services';
 
 @NgModule({
   imports: [
@@ -73,7 +75,10 @@ export class SharedModule {
   static forRoot() {
     return {
       ngModule: SharedModule,
-      providers: [ AuthService, RestService, RestDefaultService, AlertService, MealMenuService, CartService ]
+      providers: [
+        AuthService, RestService, RestDefaultService,
+        AlertService, MealMenuService, CartService, LayoutService, WINDOW_PROVIDERS
+      ]
     }
   }
 }

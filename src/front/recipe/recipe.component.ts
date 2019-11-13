@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as GlobalVariable from 'global';
 import { AlertService, RestService, AuthService, CartService, MealMenuService } from 'services';
+import { LayoutService } from 'services/layout.service';
 
 @Component({
     templateUrl: 'recipe.component.html'
@@ -14,6 +15,7 @@ export class RecipeComponent implements OnInit, OnDestroy {
     mealMenuProduct;
     orderSubscription;
     stepImageBaseUrl = GlobalVariable.BASE_MEDIA + 'recipe-steps/';
+    resBP;
 
     constructor(
         private alert: AlertService,
@@ -23,28 +25,46 @@ export class RecipeComponent implements OnInit, OnDestroy {
         private renderer: Renderer2,
         private auth: AuthService,
         private mealMenuService: MealMenuService,
-        private cartService: CartService
+        private cartService: CartService,
+        private layoutService: LayoutService
     ) { }
 
     ngOnInit(): void {
-        this.renderer.addClass(document.body, 'white-header');
         this.backgrounds = {
             header: {
-                'background-image': 'url('+GlobalVariable.htmlImages+'top-banner-single-recipe.png)',
-                'background-position' : 'top left',
-                'background-size': 'cover', 
-                'background-repeat' : 'no-repeat'
+                'position': 'absolute',
+                'top': '-100px',
+                'left': '0px',
+                'width': '80%',
+                'height': 'calc(100% + 100px)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'desktop-brush.png)',
+                'background-position' : 'top right',
+                'background-size': 'cover',
+                'background-repeat' : 'no-repeat',
+                'z-index': 2
             },
-            recipe : GlobalVariable.htmlImages+'each-recipe-img.png',
-            singlerecipe : GlobalVariable.htmlImages+'single-recipe.png',
-            cap : GlobalVariable.htmlImages+'chef-cap-green.png',
-            culinery : GlobalVariable.htmlImages+'culinery.png',
-            whatfreshbox : GlobalVariable.htmlImages+'what-is-freshbox.png',
+            headerM: {
+                'position': 'absolute',
+                'top': '-75px',
+                'left': '-15px',
+                'width': 'calc(100% + 30px)',
+                'height': '100%',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'mobile-brush.png)',
+                'background-position' : 'top right',
+                'background-size': '100% auto',
+                'background-repeat' : 'no-repeat',
+                'z-index': 2
+            },
+            recipe : GlobalVariable.htmlImages + 'each-recipe-img.png',
+            singlerecipe : GlobalVariable.htmlImages + 'single-recipe.png',
+            cap : GlobalVariable.htmlImages + 'chef-cap-green.png',
+            culinery : GlobalVariable.htmlImages + 'culinery.png',
+            whatfreshbox : GlobalVariable.htmlImages + 'what-is-freshbox.png',
             gray : {
-                'background-image': 'url('+GlobalVariable.htmlImages+'hiw-bg.png)',
+                'background-image': 'url(' + GlobalVariable.htmlImages + 'hiw-bg.png)',
                 'background-position' : 'bottom',
                 'background-color' : '#DFDFDF',
-                'background-size': 'cover', 
+                'background-size': 'cover'
             },
             testimonials : {
                 'background-image': 'url('+GlobalVariable.htmlImages+'testimonials.png)',
@@ -83,6 +103,22 @@ export class RecipeComponent implements OnInit, OnDestroy {
             }
         });
         this.loadRecipe();
+
+        this.layoutService.getCurrentBreakPointState().subscribe(bp => {
+            this.removeAllBodyClassDeclar();
+            if (['xs', 'sm'].indexOf(bp) !== -1) {
+                this.renderer.addClass(document.body, 'black-bg-header');
+                this.resBP = 'm';
+            } else {
+                this.renderer.addClass(document.body, 'white-header');
+                this.resBP = 'd';
+            }
+        })
+    }
+
+    removeAllBodyClassDeclar() {
+        this.renderer.removeClass(document.body, 'black-bg-header');
+        this.renderer.removeClass(document.body, 'white-header');
     }
 
     isLogin() {
@@ -132,6 +168,6 @@ export class RecipeComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.renderer.removeClass(document.body, 'white-header');
+        this.removeAllBodyClassDeclar();
     }
 }
