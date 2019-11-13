@@ -156,6 +156,9 @@
                 <img class="col-auto px-1" *ngIf="step && step.image" [src]="stepImageBaseUrl + step.image" [style.width.px]="50" [style.height]="'auto'" />
                 <span class="col">{{step && step.content ? step.content : step}}</span>
                 <span class="col-auto px-1">
+                  <button class="btn btn-link p-0" type="button" (click)="editRecipeStep(i)">
+                    <i class="fa fa-edit"></i>
+                  </button>
                   <button class="btn btn-link p-0" type="button" (click)="removeRecipeStep(step)">
                     <i class="fa fa-remove"></i>
                   </button>
