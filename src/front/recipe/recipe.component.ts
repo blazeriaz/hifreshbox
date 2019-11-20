@@ -34,8 +34,8 @@ export class RecipeComponent implements OnInit, OnDestroy {
             header: {
                 'position': 'absolute',
                 'top': '-100px',
-                'left': '0px',
-                'width': '80%',
+                'left': '-15px',
+                'width': '85%',
                 'height': 'calc(100% + 100px)',
                 'background-image': 'url(' + GlobalVariable.htmlImages + 'desktop-brush.png)',
                 'background-position' : 'top right',
